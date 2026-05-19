@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Product" ADD COLUMN     "profitAmount" DECIMAL(10,2) NOT NULL DEFAULT 0,
+ADD COLUMN     "profitMargin" DECIMAL(5,2) NOT NULL DEFAULT 0;

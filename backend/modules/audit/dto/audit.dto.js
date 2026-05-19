@@ -1,0 +1,2 @@
+exports.auditDTO =
+(data) => data;

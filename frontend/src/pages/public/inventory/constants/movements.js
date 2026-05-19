@@ -1,0 +1,38 @@
+export const movements = [
+  {
+    id: 1,
+    product: "Laptop Dell XPS",
+    type: "Entrada",
+    quantity: "+15",
+    warehouse: "Almacén Principal",
+    date: "Hace 10 min",
+    status: "Completado",
+  },
+  {
+    id: 2,
+    product: "Mouse Logitech MX",
+    type: "Salida",
+    quantity: "-8",
+    warehouse: "Sucursal Norte",
+    date: "Hace 25 min",
+    status: "Completado",
+  },
+  {
+    id: 3,
+    product: "Monitor Samsung 27”",
+    type: "Transferencia",
+    quantity: "12 uds",
+    warehouse: "Central → Tienda",
+    date: "Hace 1 hora",
+    status: "En proceso",
+  },
+  {
+    id: 4,
+    product: "Teclado Mecánico",
+    type: "Entrada",
+    quantity: "+20",
+    warehouse: "Almacén Principal",
+    date: "Hace 2 horas",
+    status: "Pendiente",
+  },
+];

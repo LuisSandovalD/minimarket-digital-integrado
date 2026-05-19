@@ -1,0 +1,2 @@
+exports.formatBranch =
+(data) => data;

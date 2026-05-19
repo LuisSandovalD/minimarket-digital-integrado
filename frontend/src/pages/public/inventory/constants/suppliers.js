@@ -1,0 +1,47 @@
+import {
+  Star,
+  TrendingUp,
+  Clock,
+  Shield,
+  MapPin,
+  Phone,
+} from "lucide-react";
+
+export const suppliers = [
+  {
+    id: 1,
+    name: "Distribuidora Premium",
+    location: "Lima, Perú",
+    rating: 4.8,
+    reviews: 234,
+    deliveryTime: "2-3 días",
+    reliability: "99.5%",
+    phone: "+51 999 123 456",
+    status: "Activo",
+    color: "from-[#274c77] to-[#6096ba]",
+  },
+  {
+    id: 2,
+    name: "Imports Global",
+    location: "Miami, USA",
+    rating: 4.6,
+    reviews: 189,
+    deliveryTime: "5-7 días",
+    reliability: "98.2%",
+    phone: "+1 305 555 0123",
+    status: "Activo",
+    color: "from-[#6096ba] to-[#a3cef1]",
+  },
+  {
+    id: 3,
+    name: "ProduccionesLocal",
+    location: "Callao, Perú",
+    rating: 4.7,
+    reviews: 156,
+    deliveryTime: "1-2 días",
+    reliability: "99.8%",
+    phone: "+51 987 654 321",
+    status: "Activo",
+    color: "from-[#89c2d9] to-[#6096ba]",
+  },
+];

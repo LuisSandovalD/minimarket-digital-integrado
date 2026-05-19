@@ -1,0 +1,32 @@
+const router = require("express").Router();
+
+const auth = require("../../../middleware/auth");
+
+const roleCheck =
+  require("../../../middleware/roleCheck");
+
+const controller =
+  require("../controllers/system.controller");
+
+router.get(
+  "/performance",
+  auth,
+  roleCheck("ADMIN"),
+  controller.performance
+);
+
+router.get(
+  "/memory",
+  auth,
+  roleCheck("ADMIN"),
+  controller.memoryUsage
+);
+
+router.get(
+  "/cpu",
+  auth,
+  roleCheck("ADMIN"),
+  controller.cpuUsage
+);
+
+module.exports = router;

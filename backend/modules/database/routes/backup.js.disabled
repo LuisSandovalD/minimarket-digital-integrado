@@ -1,0 +1,17 @@
+const router = require("express").Router();
+
+const auth = require("../../../middleware/auth");
+
+const roleCheck = require("../../../middleware/roleCheck");
+
+const controller =
+  require("../controllers/database.controller");
+
+router.post(
+  "/",
+  auth,
+  roleCheck("ADMIN"),
+  controller.createBackup
+);
+
+module.exports = router;

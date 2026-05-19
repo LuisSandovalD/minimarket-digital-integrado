@@ -1,0 +1,25 @@
+const router = require("express").Router();
+
+const auth = require("../../../middleware/auth");
+
+const controller = require("../controllers/twoFactorController");
+
+router.post(
+  "/generate",
+  auth,
+  controller.generate2FA
+);
+
+router.post(
+  "/verify",
+  auth,
+  controller.verify2FA
+);
+
+router.post(
+  "/disable",
+  auth,
+  controller.disable2FA
+);
+
+module.exports = router;

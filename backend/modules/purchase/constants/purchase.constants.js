@@ -1,0 +1,17 @@
+const PURCHASE_STATUS = {
+
+  PENDING: "PENDING",
+
+  COMPLETED: "COMPLETED",
+
+  CANCELLED: "CANCELLED",
+
+  PARTIAL: "PARTIAL",
+
+  RECEIVED: "RECEIVED"
+
+};
+
+module.exports = {
+  PURCHASE_STATUS
+};

@@ -1,0 +1,37 @@
+const router = require("express").Router();
+
+const auth = require("../../../middleware/auth");
+
+const roleCheck = require("../../../middleware/roleCheck");
+
+const controller = require("../controllers/database.controller");
+
+router.patch(
+  "/user/:id",
+  auth,
+  roleCheck("ADMIN"),
+  controller.restoreUser
+);
+
+router.patch(
+  "/product/:id",
+  auth,
+  roleCheck("ADMIN"),
+  controller.restoreProduct
+);
+
+router.patch(
+  "/category/:id",
+  auth,
+  roleCheck("ADMIN"),
+  controller.restoreCategory
+);
+
+router.patch(
+  "/branch/:id",
+  auth,
+  roleCheck("ADMIN"),
+  controller.restoreBranch
+);
+
+module.exports = router;

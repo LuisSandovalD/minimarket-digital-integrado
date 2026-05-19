@@ -1,0 +1,118 @@
+// ========================================
+// components/BarcodeHeader.jsx
+// ========================================
+
+import {
+  Barcode,
+  FileText,
+  Printer,
+  CheckSquare,
+  Plus,
+} from "lucide-react";
+
+import {
+  PageHeader,
+} from "@/components/ui";
+import ModernButton from "../../../components/buttons/ModernButton";
+
+export default function BarcodeHeader({
+
+  products,
+
+  selectedProducts,
+
+  onSelectAll,
+
+  onExportPDF,
+
+  onPrint,
+
+}) {
+
+  return (
+
+    <div className="space-y-5">
+
+      {/* MAIN HEADER */}
+
+      <PageHeader
+
+        icon={Barcode}
+
+        badge="Sistema de etiquetado"
+
+        title="Gestión de códigos de barras"
+
+        description="
+          Genera, imprime y exporta
+          etiquetas profesionales para
+          tus productos y automatiza
+          el escaneo en ventas.
+        "
+
+        action={{
+          label:
+            "Seleccionar todo",
+
+          icon:
+            CheckSquare,
+
+          onClick:
+            onSelectAll,
+        }}
+
+        headerActions={
+            <>
+                <ModernButton 
+                    onClick={onExportPDF}
+                    icon={FileText}
+                    text="Exportar PDF"
+                />
+                <ModernButton 
+                    onClick={onPrint}
+                    icon={Printer}
+                    text="Imprimir"
+                />
+            </>
+            
+        }
+        stats={[
+
+          {
+            icon: Barcode,
+
+            label:
+              "Productos",
+
+            value:
+              `${products.length} registrados`,
+          },
+
+          {
+            icon: CheckSquare,
+
+            label:
+              "Seleccionados",
+
+            value:
+              `${selectedProducts.length} activos`,
+          },
+
+          
+
+          {
+            icon: FileText,
+
+            label:
+              "Exportación",
+
+            value:
+              "PDF profesional",
+          },
+
+        ]}
+      />
+
+    </div>
+  );
+}
