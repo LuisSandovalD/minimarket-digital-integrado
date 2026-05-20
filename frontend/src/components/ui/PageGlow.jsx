@@ -1,8 +1,21 @@
 // components/ui/PageGlow.jsx
 
+import { motion } from "framer-motion";
+
 export default function PageGlow() {
   return (
-    <div className="pointer-events-none absolute inset-0 overflow-hidden">
+    <motion.div
+      className="pointer-events-none absolute inset-0 overflow-hidden"
+      animate={{
+        opacity: [0.3, 0.6, 0.3],
+        scale: [1, 1.08, 1],
+      }}
+      transition={{
+        duration: 8,
+        repeat: Infinity,
+        ease: "easeInOut",
+      }}
+    >
       {/* HERO TOP */}
       <div
         className="
@@ -117,7 +130,7 @@ export default function PageGlow() {
           h-[700px]
           w-[700px]
 
-          rounded-full
+          rounded-full    
 
           bg-blue-400/10
 
@@ -126,6 +139,6 @@ export default function PageGlow() {
           dark:bg-blue-500/10
         "
       />
-    </div>
+    </motion.div>
   );
 }

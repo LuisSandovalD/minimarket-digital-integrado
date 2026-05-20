@@ -20,6 +20,8 @@ module.exports = (app) => {
 
       origin: [
 
+        "http://localhost",
+
         "http://localhost:5173",
 
         "https://minimarket-digital-integrado.vercel.app",

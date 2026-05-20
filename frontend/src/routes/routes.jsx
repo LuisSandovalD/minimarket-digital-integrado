@@ -9,19 +9,19 @@ from "../layout/public/PublicLayout";
 /* ================= PUBLIC ================= */
 
 import Home
-from "../pages/public/home/Home";
+from "../features/public/home/Home";
 
 import Features
-from "../pages/public/features/Features";
+from "../features/public/features/Features";
 
 import Modules
-from "../pages/public/modules/Modules";
+from "../features/public/modules/Modules";
 
 import Contact
-from "../pages/public/contact/Contact";
+from "../features/public/contact/Contact";
 
 import Inventory
-from "../pages/public/inventory/Inventory";
+from "../features/public/inventory/Inventory";
 
 /* ================= APP ================= */
 
@@ -29,22 +29,22 @@ import AppLayout
 from "../layout/app-layout/AppLayout";
 
 import Dashboard
-from "../pages/dashboard/DashboardPage";
+from "../features/dashboard/pages/DashboardPage";
 
 import BranchesPage
-from "../pages/branch/BranchesPage";
+from "../features/branches/pages/BranchesPage";
 
 import CompaniesPage
-from "../pages/company/CompaniesPage";
+from "../features/company/pages/CompaniesPage";
 
 import RequireAuth
 from "../features/auth/guards/RequireAuth";
 
 import UsersPage
-from "../pages/users/UsersPage";
+from "../features/users/pages/UsersPage";
 
 import CategoriesPage
-from "../pages/categories/CategoriesPage";
+from "../features/categories/pages/CategoriesPage";
 
 import UnitPage
 from "../features/units";

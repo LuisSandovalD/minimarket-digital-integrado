@@ -18,6 +18,9 @@ from "@/store/store";
 
 import "./styles/global.css";
 
+// IMPORTA AQUÍ
+import "./styles/animations.css";
+
 // ========================================
 // REACT QUERY
 // ========================================

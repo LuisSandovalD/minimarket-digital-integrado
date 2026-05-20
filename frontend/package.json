@@ -13,7 +13,7 @@
     "@tailwindcss/vite": "^4.3.0",
     "@tanstack/react-query": "^5.100.10",
     "axios": "^1.16.0",
-    "framer-motion": "^12.38.0",
+    "framer-motion": "^12.39.0",
     "jsbarcode": "^3.12.3",
     "jspdf": "^4.2.1",
     "lucide-react": "^1.14.0",
