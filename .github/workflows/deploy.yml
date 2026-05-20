@@ -11,13 +11,17 @@ jobs:
       - name: Descargar codigo
         uses: actions/checkout@v4
 
-      # Aquí GitHub crea el .env usando los Secrets seguros
+      # Usamos $GITHUB_WORKSPACE para asegurar la ruta absoluta correcta
       - name: Crear archivo .env real
         run: |
-          mkdir -p backend
-          echo 'DATABASE_URL="${{ secrets.DATABASE_URL }}"' > backend/.env
-          echo 'JWT_SECRET="${{ secrets.JWT_SECRET }}"' >> backend/.env
-          echo "PORT=5000" >> backend/.env
+          mkdir -p "$GITHUB_WORKSPACE/backend"
+          echo 'DATABASE_URL="${{ secrets.DATABASE_URL }}"' > "$GITHUB_WORKSPACE/backend/.env"
+          echo 'JWT_SECRET="${{ secrets.JWT_SECRET }}"' >> "$GITHUB_WORKSPACE/backend/.env"
+          echo "PORT=5000" >> "$GITHUB_WORKSPACE/backend/.env"
+
+      # Verificamos rápido en la consola si el archivo realmente se creó ahí
+      - name: Verificar archivo .env
+        run: ls -la "$GITHUB_WORKSPACE/backend"
 
       - name: Levantar Docker
         run: docker compose up -d
