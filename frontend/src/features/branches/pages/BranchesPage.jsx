@@ -2,29 +2,20 @@
 // pages/BranchesPage.jsx
 // ========================================
 
-import {
-  useState,
-} from "react";
+import { useState } from "react";
 
-import useBranches
-  from "../hooks/useBranches";
+import useBranches from "../hooks/useBranches";
 
-import BranchCard
-  from "../components/BranchCard";
+import BranchCard from "../components/BranchCard";
 
-import BranchHeader
-  from "../components/BranchHeader";
+import BranchHeader from "../components/BranchHeader";
 
-import BranchEmpty
-  from "../components/BranchEmpty";
+import BranchEmpty from "../components/BranchEmpty";
 
-import BranchModal
-  from "../components/BranchModal";
+import BranchModal from "../components/BranchModal";
 
 export default function BranchesPage() {
-
   const {
-
     branches,
 
     loading,
@@ -34,29 +25,24 @@ export default function BranchesPage() {
     addBranch,
 
     updateBranchLocal,
-
   } = useBranches();
 
   /* ========================================
    * MODAL STATE
    * ====================================== */
 
-  const [openModal, setOpenModal] =
-    useState(false);
+  const [openModal, setOpenModal] = useState(false);
 
-  const [selectedBranch, setSelectedBranch] =
-    useState(null);
+  const [selectedBranch, setSelectedBranch] = useState(null);
 
   /* ========================================
    * CREATE
    * ====================================== */
 
   const handleCreate = () => {
-
     setSelectedBranch(null);
 
     setOpenModal(true);
-
   };
 
   /* ========================================
@@ -64,11 +50,9 @@ export default function BranchesPage() {
    * ====================================== */
 
   const handleEdit = (branch) => {
-
     setSelectedBranch(branch);
 
     setOpenModal(true);
-
   };
 
   /* ========================================
@@ -76,15 +60,11 @@ export default function BranchesPage() {
    * ====================================== */
 
   const handleCloseModal = () => {
-
     setOpenModal(false);
 
     setTimeout(() => {
-
       setSelectedBranch(null);
-
     }, 150);
-
   };
 
   /* ========================================
@@ -92,9 +72,7 @@ export default function BranchesPage() {
    * ====================================== */
 
   if (loading) {
-
     return (
-
       <div
         className="
           flex
@@ -103,7 +81,6 @@ export default function BranchesPage() {
           justify-center
         "
       >
-
         <p
           className="
             text-sm
@@ -113,11 +90,8 @@ export default function BranchesPage() {
         >
           Cargando sucursales...
         </p>
-
       </div>
-
     );
-
   }
 
   /* ========================================
@@ -125,9 +99,7 @@ export default function BranchesPage() {
    * ====================================== */
 
   if (error) {
-
     return (
-
       <div
         className="
           flex
@@ -136,7 +108,6 @@ export default function BranchesPage() {
           justify-center
         "
       >
-
         <div
           className="
             rounded-2xl
@@ -158,11 +129,8 @@ export default function BranchesPage() {
         >
           {error}
         </div>
-
       </div>
-
     );
-
   }
 
   /* ========================================
@@ -170,23 +138,16 @@ export default function BranchesPage() {
    * ====================================== */
 
   return (
-
     <div className="space-y-6">
-
       {/* HEADER */}
 
-      <BranchHeader
-        onCreate={handleCreate}
-      />
+      <BranchHeader onCreate={handleCreate} />
 
       {/* EMPTY */}
 
       {branches.length === 0 ? (
-
         <BranchEmpty />
-
       ) : (
-
         <div
           className="
             grid
@@ -196,63 +157,27 @@ export default function BranchesPage() {
             xl:grid-cols-3
           "
         >
-
           {branches.map((branch) => (
-
-            <BranchCard
-              key={branch.id}
-
-              branch={branch}
-
-              onEdit={handleEdit}
-            />
-
+            <BranchCard key={branch.id} branch={branch} onEdit={handleEdit} />
           ))}
-
         </div>
-
       )}
 
       {/* MODAL */}
 
       <BranchModal
-        key={
-          selectedBranch?.id ||
-          "create"
-        }
-
+        key={selectedBranch?.id || "create"}
         open={openModal}
-
-        onClose={
-          handleCloseModal
-        }
-
-        onSuccess={(
-          branch,
-          isEdit
-        ) => {
-
+        onClose={handleCloseModal}
+        onSuccess={(branch, isEdit) => {
           if (isEdit) {
-
-            updateBranchLocal(
-              branch
-            );
-
+            updateBranchLocal(branch);
           } else {
-
-            addBranch(
-              branch
-            );
-
+            addBranch(branch);
           }
-
         }}
-
         branch={selectedBranch}
       />
-
     </div>
-
   );
-
 }

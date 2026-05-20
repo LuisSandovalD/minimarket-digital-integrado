@@ -2,49 +2,32 @@
 // features/purchase/pages/PurchasePage.jsx
 // ========================================
 
-import React, {
-  useMemo,
-  useState,
-} from "react";
+import React, { useMemo, useState } from "react";
 
-import usePurchase
-  from "../hooks/usePurchase";
+import usePurchase from "../hooks/usePurchase";
 
-import useSuppliers
-  from "@/features/supplier/hooks/useSuppliers";
+import useSuppliers from "@/features/supplier/hooks/useSuppliers";
 
-import useProducts
-  from "@/features/product/hooks/useProducts";
+import useProducts from "@/features/product/hooks/useProducts";
 
-import PurchaseHeader
-  from "../components/PurchaseHeader";
+import PurchaseHeader from "../components/PurchaseHeader";
 
-import PurchaseFormModal
-  from "../components/PurchaseFormModal";
+import PurchaseFormModal from "../components/PurchaseFormModal";
 
-import PurchaseTable
-  from "../components/PurchaseTable";
+import PurchaseTable from "../components/PurchaseTable";
 
-import {
-  initialPurchaseForm
-} from "../utils/purchase-form.util";
+import { initialPurchaseForm } from "../utils/purchase-form.util";
 
-import {
-  mapPurchaseToForm
-} from "../utils/purchase-form.mapper";
+import { mapPurchaseToForm } from "../utils/purchase-form.mapper";
 
-import {
-  getPurchaseStats
-} from "../utils/purchase-stats.util";
+import { getPurchaseStats } from "../utils/purchase-stats.util";
 
 export default function PurchasePage() {
-
   // ========================================
   // HOOKS
   // ========================================
 
   const {
-
     purchases,
 
     loading,
@@ -56,80 +39,50 @@ export default function PurchasePage() {
     updatePurchase,
 
     deletePurchase,
-
   } = usePurchase();
 
   const {
-
     suppliers,
 
-    loading:
-      loadingSuppliers,
-
+    loading: loadingSuppliers,
   } = useSuppliers();
 
   const {
-
     products,
 
-    loading:
-      loadingProducts,
-
+    loading: loadingProducts,
   } = useProducts();
 
   // ========================================
   // STATES
   // ========================================
 
-  const [
-    editingId,
-    setEditingId
-  ] = useState(null);
+  const [editingId, setEditingId] = useState(null);
 
-  const [
-    openModal,
-    setOpenModal
-  ] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
 
-  const [
-    form,
-    setForm
-  ] = useState(
-    initialPurchaseForm
-  );
+  const [form, setForm] = useState(initialPurchaseForm);
 
   // ========================================
   // STATS
   // ========================================
 
-  const stats =
-    useMemo(() => {
-
-      return getPurchaseStats(
-        purchases
-      );
-
-    }, [purchases]);
+  const stats = useMemo(() => {
+    return getPurchaseStats(purchases);
+  }, [purchases]);
 
   // ========================================
   // HANDLE CHANGE
   // ========================================
 
   function handleChange(e) {
+    const { name, value } = e.target;
 
-    const {
-      name,
-      value
-    } = e.target;
-
-    setForm(prev => ({
-
+    setForm((prev) => ({
       ...prev,
 
       [name]: value,
-
     }));
-
   }
 
   // ========================================
@@ -137,15 +90,11 @@ export default function PurchasePage() {
   // ========================================
 
   function resetForm() {
-
     setEditingId(null);
 
-    setForm(
-      initialPurchaseForm
-    );
+    setForm(initialPurchaseForm);
 
     setOpenModal(false);
-
   }
 
   // ========================================
@@ -153,7 +102,6 @@ export default function PurchasePage() {
   // ========================================
 
   function handleCreate() {
-
     setEditingId(null);
 
     setForm({
@@ -164,90 +112,47 @@ export default function PurchasePage() {
     });
 
     setOpenModal(true);
-
   }
 
   // ========================================
   // SUBMIT
   // ========================================
 
-  async function handleSubmit(
-    payload
-  ) {
-
+  async function handleSubmit(payload) {
     try {
-
       // ========================================
       // BACKEND PAYLOAD
       // ========================================
 
       const finalPayload = {
+        supplierId: Number(payload.supplierId),
 
-        supplierId:
-          Number(
-            payload.supplierId
-          ),
+        branchId: Number(payload.branchId),
 
-        branchId:
-          Number(
-            payload.branchId
-          ),
+        notes: payload.notes || "",
 
-        notes:
-          payload.notes || "",
+        details: payload.details.map((item) => ({
+          productId: Number(item.productId),
 
-        details:
-          payload.details.map(
-            item => ({
+          quantity: Number(item.quantity),
 
-              productId:
-                Number(
-                  item.productId
-                ),
-
-              quantity:
-                Number(
-                  item.quantity
-                ),
-
-              // 🔥 BACKEND EXPECTS costPrice
-              costPrice:
-                Number(
-                  item.costPrice
-                ),
-
-            })
-          ),
-
+          // 🔥 BACKEND EXPECTS costPrice
+          costPrice: Number(item.costPrice),
+        })),
       };
 
-      console.log(
-        "FINAL PURCHASE PAYLOAD:",
-        finalPayload
-      );
+      console.log("FINAL PURCHASE PAYLOAD:", finalPayload);
 
       // ========================================
       // CREATE / UPDATE
       // ========================================
 
-      let success =
-        false;
+      let success = false;
 
       if (editingId) {
-
-        success =
-          await updatePurchase(
-            editingId,
-            finalPayload
-          );
-
+        success = await updatePurchase(editingId, finalPayload);
       } else {
-
-        success =
-          await createPurchase(
-            finalPayload
-          );
-
+        success = await createPurchase(finalPayload);
       }
 
       // ========================================
@@ -255,83 +160,43 @@ export default function PurchasePage() {
       // ========================================
 
       if (success) {
-
         resetForm();
-
       }
-
     } catch (error) {
+      console.error("SUBMIT PURCHASE ERROR:", error);
 
-      console.error(
-        "SUBMIT PURCHASE ERROR:",
-        error
-      );
-
-      alert(
-        "Error guardando compra"
-      );
-
+      alert("Error guardando compra");
     }
-
   }
 
   // ========================================
   // EDIT
   // ========================================
 
-  function handleEdit(
-    purchase
-  ) {
+  function handleEdit(purchase) {
+    setEditingId(purchase.id);
 
-    setEditingId(
-      purchase.id
-    );
-
-    setForm(
-      mapPurchaseToForm(
-        purchase
-      )
-    );
+    setForm(mapPurchaseToForm(purchase));
 
     setOpenModal(true);
-
   }
 
   // ========================================
   // DELETE
   // ========================================
 
-  async function handleDelete(
-    purchase
-  ) {
+  async function handleDelete(purchase) {
+    const confirmDelete = window.confirm("¿Eliminar compra?");
 
-    const confirmDelete =
-      window.confirm(
-        "¿Eliminar compra?"
-      );
-
-    if (!confirmDelete)
-      return;
+    if (!confirmDelete) return;
 
     try {
-
-      await deletePurchase(
-        purchase.id
-      );
-
+      await deletePurchase(purchase.id);
     } catch (error) {
+      console.error("DELETE PURCHASE ERROR:", error);
 
-      console.error(
-        "DELETE PURCHASE ERROR:",
-        error
-      );
-
-      alert(
-        "Error eliminando compra"
-      );
-
+      alert("Error eliminando compra");
     }
-
   }
 
   // ========================================
@@ -339,103 +204,39 @@ export default function PurchasePage() {
   // ========================================
 
   return (
-
     <div className="space-y-6">
-
       {/* HEADER */}
 
       <PurchaseHeader
-
-        total={
-          stats.total
-        }
-
-        pending={
-          stats.pending
-        }
-
-        completed={
-          stats.completed
-        }
-
-        onCreate={
-          handleCreate
-        }
-
+        total={stats.total}
+        pending={stats.pending}
+        completed={stats.completed}
+        onCreate={handleCreate}
       />
 
       {/* TABLE */}
 
       <PurchaseTable
-
-        purchases={
-          purchases
-        }
-
-        loading={
-          loading
-        }
-
-        onEdit={
-          handleEdit
-        }
-
-        onDelete={
-          handleDelete
-        }
-
+        purchases={purchases}
+        loading={loading}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
       />
 
       {/* MODAL */}
 
       <PurchaseFormModal
-
-        open={
-          openModal
-        }
-
-        onClose={
-          resetForm
-        }
-
-        onSubmit={
-          handleSubmit
-        }
-
-        form={
-          form
-        }
-
-        setForm={
-          setForm
-        }
-
-        onChange={
-          handleChange
-        }
-
-        suppliers={
-          suppliers
-        }
-
-        products={
-          products
-        }
-
-        loading={
-          actionLoading ||
-          loadingSuppliers ||
-          loadingProducts
-        }
-
-        isEdit={
-          !!editingId
-        }
-
+        open={openModal}
+        onClose={resetForm}
+        onSubmit={handleSubmit}
+        form={form}
+        setForm={setForm}
+        onChange={handleChange}
+        suppliers={suppliers}
+        products={products}
+        loading={actionLoading || loadingSuppliers || loadingProducts}
+        isEdit={!!editingId}
       />
-
     </div>
-
   );
-
 }

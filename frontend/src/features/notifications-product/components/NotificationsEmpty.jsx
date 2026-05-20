@@ -2,9 +2,7 @@
 // features/notifications/components/NotificationsEmpty.jsx
 // ========================================
 
-import {
-  CheckCircle2,
-} from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
 
 export default function NotificationsEmpty() {
   return (
@@ -69,8 +67,7 @@ export default function NotificationsEmpty() {
             text-slate-400
           "
         >
-          No tienes notificaciones
-          pendientes en este momento
+          No tienes notificaciones pendientes en este momento
         </p>
       </div>
 

@@ -28,7 +28,6 @@ export default function InventoryReports() {
             <img
               src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop"
               alt="Reports"
-
               className="
                 h-[620px]
                 w-full
@@ -61,8 +60,7 @@ export default function InventoryReports() {
                 dark:text-white
               "
             >
-              Analiza tu inventario
-              con datos en tiempo real
+              Analiza tu inventario con datos en tiempo real
             </h2>
 
             <p
@@ -77,11 +75,8 @@ export default function InventoryReports() {
                 dark:text-[#cbd5e1]
               "
             >
-              Obtén métricas,
-              movimientos de stock,
-              productos más vendidos,
-              alertas y estadísticas
-              empresariales avanzadas.
+              Obtén métricas, movimientos de stock, productos más vendidos,
+              alertas y estadísticas empresariales avanzadas.
             </p>
           </div>
         </div>

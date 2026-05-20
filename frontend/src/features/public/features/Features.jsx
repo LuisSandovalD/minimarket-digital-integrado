@@ -41,28 +41,27 @@ export default function Features() {
 
       {/* CONTENT */}
       <div className="relative z-10">
-          <FeaturesHeroSection />
+        <FeaturesHeroSection />
 
-          <FeatureStats />
+        <FeatureStats />
 
-          <FeaturesGrid />
+        <FeaturesGrid />
 
-          <AutomationSection />
+        <AutomationSection />
 
-          <ReportsSection />
+        <ReportsSection />
 
-          <SecurityFeatures />
+        <SecurityFeatures />
 
-          <IntegrationsFeatures />
+        <IntegrationsFeatures />
 
-          <MobileFeatures />
+        <MobileFeatures />
 
-          <PerformanceSection />
+        <PerformanceSection />
 
-          <FeatureWorkflow />
+        <FeatureWorkflow />
 
-          <FAQFeatures />
-
+        <FAQFeatures />
       </div>
     </main>
   );

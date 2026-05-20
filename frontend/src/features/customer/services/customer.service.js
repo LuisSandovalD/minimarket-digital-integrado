@@ -9,17 +9,12 @@ import api from "../../../api/axios";
 // ========================================
 
 const customerService = {
-
   // ========================================
   // GET ALL
   // ========================================
 
   getAll: () => {
-
-    return api.get(
-      "/customer"
-    );
-
+    return api.get("/customer");
   },
 
   // ========================================
@@ -27,11 +22,7 @@ const customerService = {
   // ========================================
 
   getById: (id) => {
-
-    return api.get(
-      `/customer/${id}`
-    );
-
+    return api.get(`/customer/${id}`);
   },
 
   // ========================================
@@ -39,12 +30,7 @@ const customerService = {
   // ========================================
 
   create: (data) => {
-
-    return api.post(
-      "/customer",
-      data
-    );
-
+    return api.post("/customer", data);
   },
 
   // ========================================
@@ -52,12 +38,7 @@ const customerService = {
   // ========================================
 
   update: (id, data) => {
-
-    return api.put(
-      `/customer/${id}`,
-      data
-    );
-
+    return api.put(`/customer/${id}`, data);
   },
 
   // ========================================
@@ -65,13 +46,8 @@ const customerService = {
   // ========================================
 
   remove: (id) => {
-
-    return api.delete(
-      `/customer/${id}`
-    );
-
+    return api.delete(`/customer/${id}`);
   },
-
 };
 
 export default customerService;

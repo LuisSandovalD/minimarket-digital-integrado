@@ -2,171 +2,109 @@
 // features/product/services/product.service.js
 // ========================================
 
-import api
-  from "../../../api/axios";
+import api from "../../../api/axios";
 
 // ========================================
 // CONSTANTS
 // ========================================
 
-const ENDPOINT =
-  "/product";
+const ENDPOINT = "/product";
 
 // ========================================
 // GET ALL PRODUCTS
 // ========================================
 
-const getProducts =
-  async () => {
+const getProducts = async () => {
+  const { data } = await api.get(ENDPOINT);
 
-    const {
-      data,
-    } = await api.get(
-      ENDPOINT
-    );
-
-    return data;
-  };
+  return data;
+};
 
 // ========================================
 // GET PRODUCT BY ID
 // ========================================
 
-const getProductById =
-  async (id) => {
+const getProductById = async (id) => {
+  const { data } = await api.get(`${ENDPOINT}/${id}`);
 
-    const {
-      data,
-    } = await api.get(
-      `${ENDPOINT}/${id}`
-    );
-
-    return data;
-  };
+  return data;
+};
 
 // ========================================
 // CREATE PRODUCT
 // ========================================
 
-const createProduct =
-  async (payload) => {
+const createProduct = async (payload) => {
+  const { data } = await api.post(ENDPOINT, payload);
 
-    const {
-      data,
-    } = await api.post(
-      ENDPOINT,
-      payload
-    );
-
-    return data;
-  };
+  return data;
+};
 
 // ========================================
 // UPDATE PRODUCT
 // ========================================
 
-const updateProduct =
-  async (
-    id,
-    payload
-  ) => {
+const updateProduct = async (id, payload) => {
+  const { data } = await api.put(`${ENDPOINT}/${id}`, payload);
 
-    const {
-      data,
-    } = await api.put(
-      `${ENDPOINT}/${id}`,
-      payload
-    );
-
-    return data;
-  };
+  return data;
+};
 
 // ========================================
 // DELETE PRODUCT
 // ========================================
 
-const deleteProduct =
-  async (id) => {
+const deleteProduct = async (id) => {
+  const { data } = await api.delete(`${ENDPOINT}/${id}`);
 
-    const {
-      data,
-    } = await api.delete(
-      `${ENDPOINT}/${id}`
-    );
-
-    return data;
-  };
+  return data;
+};
 
 // ========================================
 // RESTORE PRODUCT
 // ========================================
 
-const restoreProduct =
-  async (id) => {
+const restoreProduct = async (id) => {
+  const { data } = await api.patch(`${ENDPOINT}/${id}/restore`);
 
-    const {
-      data,
-    } = await api.patch(
-      `${ENDPOINT}/${id}/restore`
-    );
-
-    return data;
-  };
+  return data;
+};
 
 // ========================================
 // FEATURED PRODUCTS
 // ========================================
 
-const getFeaturedProducts =
-  async () => {
+const getFeaturedProducts = async () => {
+  const { data } = await api.get(`${ENDPOINT}/featured`);
 
-    const {
-      data,
-    } = await api.get(
-      `${ENDPOINT}/featured`
-    );
-
-    return data;
-  };
+  return data;
+};
 
 // ========================================
 // LOW STOCK PRODUCTS
 // ========================================
 
-const getLowStockProducts =
-  async () => {
+const getLowStockProducts = async () => {
+  const { data } = await api.get(`${ENDPOINT}/low-stock`);
 
-    const {
-      data,
-    } = await api.get(
-      `${ENDPOINT}/low-stock`
-    );
-
-    return data;
-  };
+  return data;
+};
 
 // ========================================
 // EXPIRING PRODUCTS
 // ========================================
 
-const getExpiringProducts =
-  async () => {
+const getExpiringProducts = async () => {
+  const { data } = await api.get(`${ENDPOINT}/expiring`);
 
-    const {
-      data,
-    } = await api.get(
-      `${ENDPOINT}/expiring`
-    );
-
-    return data;
-  };
+  return data;
+};
 
 // ========================================
 // EXPORTS
 // ========================================
 
 const productService = {
-
   getProducts,
 
   getProductById,
@@ -184,8 +122,6 @@ const productService = {
   getLowStockProducts,
 
   getExpiringProducts,
-
 };
 
-export default
-  productService;
+export default productService;

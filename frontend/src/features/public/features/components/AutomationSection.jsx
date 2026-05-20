@@ -1,19 +1,12 @@
 // features/components/AutomationSection.jsx
 
-import {
-  Bot,
-  BellRing,
-  RefreshCcw,
-  MailCheck,
-  Sparkles,
-} from "lucide-react";
+import { Bot, BellRing, RefreshCcw, MailCheck, Sparkles } from "lucide-react";
 
 import { automation } from "../constants/automation";
 
 export default function AutomationSection() {
   return (
     <section className="relative py-20 max-w-7xl mx-auto px-6">
-      
       {/* HEADER */}
       <div
         className="
@@ -28,7 +21,6 @@ export default function AutomationSection() {
       >
         {/* LEFT */}
         <div className="max-w-3xl">
-          
           {/* BADGE */}
           <div
             className="
@@ -58,7 +50,6 @@ export default function AutomationSection() {
             "
           >
             <Sparkles size={16} />
-
             Automatización Inteligente
           </div>
 
@@ -79,9 +70,7 @@ export default function AutomationSection() {
               md:text-5xl
             "
           >
-            Automatiza procesos
-            empresariales
-
+            Automatiza procesos empresariales
             <span
               className="
                 mt-2
@@ -116,11 +105,9 @@ export default function AutomationSection() {
               md:text-lg
             "
           >
-            Reduce tareas manuales,
-            mejora la productividad y
-            optimiza operaciones mediante
-            automatizaciones inteligentes
-            integradas dentro del ERP.
+            Reduce tareas manuales, mejora la productividad y optimiza
+            operaciones mediante automatizaciones inteligentes integradas dentro
+            del ERP.
           </p>
         </div>
 
@@ -152,10 +139,8 @@ export default function AutomationSection() {
               dark:text-[#cbd5e1]
             "
           >
-            Automatizaciones conectadas
-            con inventario, ventas,
-            reportes y notificaciones
-            empresariales.
+            Automatizaciones conectadas con inventario, ventas, reportes y
+            notificaciones empresariales.
           </p>
         </div>
       </div>

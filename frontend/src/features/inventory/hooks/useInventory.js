@@ -2,22 +2,13 @@
 // hooks/useInventory.js
 // ========================================
 
-import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 import {
-
   getInventoriesService,
-
   addStockService,
-
   removeStockService,
-
   damagedStockService,
-
 } from "../services/inventory.service";
 
 // ========================================
@@ -25,179 +16,109 @@ import {
 // ========================================
 
 export function useInventory() {
-
   // ========================================
   // QUERY CLIENT
   // ========================================
 
-  const queryClient =
-    useQueryClient();
+  const queryClient = useQueryClient();
 
   // ========================================
   // GET INVENTORIES
   // ========================================
 
   const {
-
     data,
 
     isLoading,
 
     refetch,
-
   } = useQuery({
+    queryKey: ["inventories"],
 
-    queryKey: [
-      "inventories",
-    ],
+    queryFn: getInventoriesService,
 
-    queryFn:
-      getInventoriesService,
+    staleTime: 1000 * 30,
 
-    staleTime:
-      1000 * 30,
+    refetchOnWindowFocus: true,
 
-    refetchOnWindowFocus:
-      true,
-
-    refetchInterval:
-      1000 * 10,
-
+    refetchInterval: 1000 * 10,
   });
 
   // ========================================
   // STOCK ACTION MUTATION
   // ========================================
 
-  const stockMutation =
-    useMutation({
+  const stockMutation = useMutation({
+    mutationFn: async ({ inventoryId, type, body }) => {
+      // ADD
 
-      mutationFn:
-        async ({
-          inventoryId,
-          type,
-          body,
-        }) => {
+      if (type === "ADD") {
+        return await addStockService(inventoryId, body);
+      }
 
-          // ADD
+      // REMOVE
 
-          if (type === "ADD") {
+      if (type === "REMOVE") {
+        return await removeStockService(inventoryId, body);
+      }
 
-            return await addStockService(
-              inventoryId,
-              body
-            );
+      // DAMAGED
 
-          }
+      if (type === "DAMAGED") {
+        return await damagedStockService(inventoryId, body);
+      }
+    },
 
-          // REMOVE
+    // ========================================
+    // AUTO REFRESH
+    // ========================================
 
-          if (type === "REMOVE") {
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["inventories"],
+      });
 
-            return await removeStockService(
-              inventoryId,
-              body
-            );
-
-          }
-
-          // DAMAGED
-
-          if (type === "DAMAGED") {
-
-            return await damagedStockService(
-              inventoryId,
-              body
-            );
-
-          }
-
-        },
-
-      // ========================================
-      // AUTO REFRESH
-      // ========================================
-
-      onSuccess: () => {
-
-        queryClient.invalidateQueries({
-
-          queryKey: [
-            "inventories",
-          ],
-
-        });
-
-        queryClient.invalidateQueries({
-
-          queryKey: [
-            "notifications",
-          ],
-
-        });
-
-      },
-
-    });
+      queryClient.invalidateQueries({
+        queryKey: ["notifications"],
+      });
+    },
+  });
 
   // ========================================
   // EXECUTE STOCK ACTION
   // ========================================
 
-  const executeStockAction =
-    async (
-      inventoryId,
-      type,
-      body
-    ) => {
+  const executeStockAction = async (inventoryId, type, body) => {
+    try {
+      await stockMutation.mutateAsync({
+        inventoryId,
 
-      try {
+        type,
 
-        await stockMutation.mutateAsync({
+        body,
+      });
 
-          inventoryId,
+      return true;
+    } catch (error) {
+      console.error("Stock action error:", error);
 
-          type,
-
-          body,
-
-        });
-
-        return true;
-
-      } catch (error) {
-
-        console.error(
-          "Stock action error:",
-          error
-        );
-
-        return false;
-
-      }
-
-    };
+      return false;
+    }
+  };
 
   // ========================================
   // RETURN
   // ========================================
 
   return {
+    inventories: data?.data || [],
 
-    inventories:
-      data?.data || [],
+    loading: isLoading,
 
-    loading:
-      isLoading,
+    actionLoading: stockMutation.isPending,
 
-    actionLoading:
-      stockMutation.isPending,
-
-    loadInventories:
-      refetch,
+    loadInventories: refetch,
 
     executeStockAction,
-
   };
-
 }

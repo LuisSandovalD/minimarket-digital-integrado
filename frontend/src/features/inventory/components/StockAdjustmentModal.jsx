@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import { 
-  X, 
-  PlusCircle, 
-  MinusCircle, 
-  AlertTriangle, 
-  Layers, 
-  FileText 
+import {
+  X,
+  PlusCircle,
+  MinusCircle,
+  AlertTriangle,
+  Layers,
+  FileText,
 } from "lucide-react";
 
 export default function StockAdjustmentModal({
@@ -22,6 +22,7 @@ export default function StockAdjustmentModal({
   // Reiniciar el formulario cada vez que se abre para un item diferente
   useEffect(() => {
     if (isOpen) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setQuantity(1);
       setReason("");
     }
@@ -30,39 +31,48 @@ export default function StockAdjustmentModal({
   if (!isOpen || !inventoryItem) return null;
 
   // Configuration map según el tipo de ajuste
-  const config = {
-    ADD: {
-      title: "Agregar Stock",
-      description: "Incrementa las unidades físicas disponibles en el almacén.",
-      icon: PlusCircle,
-      colorClass: "text-emerald-600 bg-emerald-50 dark:bg-emerald-950/30 dark:text-emerald-400",
-      btnClass: "bg-green-600 hover:bg-green-700 focus:ring-green-500 text-white",
-      submitLabel: "Incrementar Stock",
-    },
-    REMOVE: {
-      title: "Remover Stock",
-      description: "Descuenta unidades del inventario por ajuste manual o merma.",
-      icon: MinusCircle,
-      colorClass: "text-orange-500 bg-orange-50 dark:bg-orange-950/30 dark:text-orange-400",
-      btnClass: "bg-orange-500 hover:bg-orange-600 focus:ring-orange-500 text-white",
-      submitLabel: "Descontar Stock",
-    },
-    DAMAGED: {
-      title: "Registrar Stock Dañado",
-      description: "Mueve unidades del stock disponible al registro de mermas/daños.",
-      icon: AlertTriangle,
-      colorClass: "text-red-600 bg-red-50 dark:bg-red-950/30 dark:text-red-400",
-      btnClass: "bg-red-600 hover:bg-red-700 focus:ring-red-500 text-white",
-      submitLabel: "Reportar Daño",
-    },
-  }[type] || {};
+  const config =
+    {
+      ADD: {
+        title: "Agregar Stock",
+        description:
+          "Incrementa las unidades físicas disponibles en el almacén.",
+        icon: PlusCircle,
+        colorClass:
+          "text-emerald-600 bg-emerald-50 dark:bg-emerald-950/30 dark:text-emerald-400",
+        btnClass:
+          "bg-green-600 hover:bg-green-700 focus:ring-green-500 text-white",
+        submitLabel: "Incrementar Stock",
+      },
+      REMOVE: {
+        title: "Remover Stock",
+        description:
+          "Descuenta unidades del inventario por ajuste manual o merma.",
+        icon: MinusCircle,
+        colorClass:
+          "text-orange-500 bg-orange-50 dark:bg-orange-950/30 dark:text-orange-400",
+        btnClass:
+          "bg-orange-500 hover:bg-orange-600 focus:ring-orange-500 text-white",
+        submitLabel: "Descontar Stock",
+      },
+      DAMAGED: {
+        title: "Registrar Stock Dañado",
+        description:
+          "Mueve unidades del stock disponible al registro de mermas/daños.",
+        icon: AlertTriangle,
+        colorClass:
+          "text-red-600 bg-red-50 dark:bg-red-950/30 dark:text-red-400",
+        btnClass: "bg-red-600 hover:bg-red-700 focus:ring-red-500 text-white",
+        submitLabel: "Reportar Daño",
+      },
+    }[type] || {};
 
   const IconComponent = config.icon;
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (quantity <= 0) return;
-    
+
     // Enviamos el ID del inventario y el body estructurado
     onSubmit(inventoryItem.id, {
       quantity: Number(quantity),
@@ -73,13 +83,13 @@ export default function StockAdjustmentModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* BACKDROP CON BLUR */}
-      <div 
-        className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity" 
+      <div
+        className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity"
         onClick={onClose}
       />
 
       {/* CONTENEDOR DEL MODAL */}
-      <div 
+      <div
         className="
           relative z-10 w-full max-w-md transform overflow-hidden 
           rounded-2xl bg-white dark:bg-slate-900 p-6 shadow-xl border
@@ -100,7 +110,9 @@ export default function StockAdjustmentModal({
 
         {/* ENCABEZADO DEL MODAL */}
         <div className="flex items-start gap-3.5 mb-6">
-          <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${config.colorClass}`}>
+          <div
+            className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${config.colorClass}`}
+          >
             <IconComponent size={22} />
           </div>
           <div>
@@ -117,21 +129,26 @@ export default function StockAdjustmentModal({
         <div className="mb-5 rounded-xl bg-slate-50 dark:bg-slate-800/50 p-3.5 text-xs space-y-1.5 border border-slate-100 dark:border-slate-800">
           <div className="flex justify-between">
             <span className="text-slate-500">Producto:</span>
-            <span className="font-semibold text-slate-800 dark:text-slate-200">{inventoryItem.product?.name}</span>
+            <span className="font-semibold text-slate-800 dark:text-slate-200">
+              {inventoryItem.product?.name}
+            </span>
           </div>
           <div className="flex justify-between">
             <span className="text-slate-500">Sucursal:</span>
-            <span className="font-medium text-slate-700 dark:text-slate-300">{inventoryItem.branch?.name}</span>
+            <span className="font-medium text-slate-700 dark:text-slate-300">
+              {inventoryItem.branch?.name}
+            </span>
           </div>
           <div className="flex justify-between border-t border-slate-200/50 dark:border-slate-700/50 pt-1.5 mt-1.5">
             <span className="text-slate-500">Stock Actual Físico:</span>
-            <span className="font-bold text-slate-900 dark:text-white">{inventoryItem.stock} u.</span>
+            <span className="font-bold text-slate-900 dark:text-white">
+              {inventoryItem.stock} u.
+            </span>
           </div>
         </div>
 
         {/* FORMULARIO */}
         <form onSubmit={handleSubmit} className="space-y-4">
-          
           {/* CAMPO: CANTIDAD */}
           <div>
             <label className="flex items-center gap-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
@@ -191,7 +208,7 @@ export default function StockAdjustmentModal({
             >
               Cancelar
             </button>
-            
+
             <button
               type="submit"
               disabled={actionLoading || quantity <= 0}
@@ -208,7 +225,6 @@ export default function StockAdjustmentModal({
               {config.submitLabel}
             </button>
           </div>
-
         </form>
       </div>
     </div>

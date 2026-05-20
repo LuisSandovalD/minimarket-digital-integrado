@@ -1,17 +1,11 @@
-import {
-  Input,
-} from "@/components/inputs";
+import { Input } from "@/components/inputs";
 
-import {
-  ModernButton,
-} from "@/components/buttons";
+import { ModernButton } from "@/components/buttons";
 
 export default function FooterNewsletter() {
   return (
     <div className="max-w-md">
-      <h3 className="text-lg font-bold">
-        Suscríbete
-      </h3>
+      <h3 className="text-lg font-bold">Suscríbete</h3>
 
       <p
         className="
@@ -24,9 +18,7 @@ export default function FooterNewsletter() {
       </p>
 
       <div className="mt-5 flex gap-3">
-        <Input
-          placeholder="correo@gmail.com"
-        />
+        <Input placeholder="correo@gmail.com" />
 
         <ModernButton text="Enviar" />
       </div>

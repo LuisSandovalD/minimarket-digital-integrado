@@ -1,47 +1,34 @@
 import { useEffect, useState } from "react";
 
 import {
+  Building2,
+  Check,
+  Layers3,
+  Lock,
   Mail,
   Phone,
   User,
-  X,
-  Lock,
-  Building2,
-  Layers3,
   UserCog,
-  Check,
+  X,
 } from "lucide-react";
 
-import {
-  Modal,
-  HeaderModal,
-  FooterModal,
-} from "@/components/modals";
+import { FooterModal, HeaderModal, Modal } from "@/components/modals";
 
-import { Input }
-  from "@/components/inputs";
+import { Input } from "@/components/inputs";
 
-import {
-  ModernButton,
-  SubmitButton,
-} from "@/components/buttons";
+import { ModernButton, SubmitButton } from "@/components/buttons";
 
-import ModernImageUpload
-  from "@/components/ui/ModernImageUpload";
+import ModernImageUpload from "@/components/ui/ModernImageUpload";
 
-import useUserForm
-  from "../hooks/useUsersForm";
+import useUserForm from "../hooks/useUsersForm";
 
-import {
-  getBranches,
-} from "../../../features/branches/services/branch.service";
+import { getBranches } from "../../../features/branches/services/branch.service";
 
 /* ========================================
  * ROLES
  * ====================================== */
 
 const ROLES = [
-
   {
     value: "MANAGER",
     label: "Gerente",
@@ -53,24 +40,14 @@ const ROLES = [
     label: "Supervisor",
     icon: Layers3,
   },
-
 ];
 
 /* ========================================
  * COMPONENT
  * ====================================== */
 
-export default function UserModal({
-
-  open,
-  onClose,
-  onSuccess,
-  user = null,
-
-}) {
-
+export default function UserModal({ open, onClose, onSuccess, user = null }) {
   const {
-
     loading,
 
     formData,
@@ -80,66 +57,41 @@ export default function UserModal({
     handleChange,
 
     handleSubmit,
-
   } = useUserForm({
-
     user,
     onClose,
     onSuccess,
-
   });
 
   /* ========================================
    * BRANCHES
    * ====================================== */
 
-  const [
-    branches,
-    setBranches,
-  ] = useState([]);
+  const [branches, setBranches] = useState([]);
 
   useEffect(() => {
-
+    // eslint-disable-next-line react-hooks/immutability
     loadBranches();
-
   }, []);
 
-  const loadBranches =
-    async () => {
+  const loadBranches = async () => {
+    try {
+      const data = await getBranches();
 
-      try {
-
-        const data =
-          await getBranches();
-
-        setBranches(data);
-
-      } catch (error) {
-
-        console.error(error);
-
-      }
-
-    };
+      setBranches(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
-
-    <Modal
-      open={open}
-      onClose={onClose}
-      size="full"
-    >
-
+    <Modal open={open} onClose={onClose} size="full">
       {/* ========================================
        * HEADER
        * ====================================== */}
 
       <HeaderModal
-        title={
-          isEdit
-            ? "Editar Usuario"
-            : "Nuevo Usuario"
-        }
+        title={isEdit ? "Editar Usuario" : "Nuevo Usuario"}
         subtitle={
           isEdit
             ? "Actualiza la información del usuario."
@@ -159,7 +111,6 @@ export default function UserModal({
           flex-col
         "
       >
-
         {/* BODY */}
 
         <div
@@ -170,7 +121,6 @@ export default function UserModal({
             py-5
           "
         >
-
           <div
             className="
               grid
@@ -179,15 +129,12 @@ export default function UserModal({
               xl:grid-cols-[340px_1fr]
             "
           >
-
             {/* ========================================
              * IMAGE SECTION
              * ====================================== */}
 
             <div className="space-y-4">
-
               <div>
-
                 <h3
                   className="
                     text-sm
@@ -209,7 +156,6 @@ export default function UserModal({
                 >
                   Imagen representativa del usuario.
                 </p>
-
               </div>
 
               <ModernImageUpload
@@ -224,7 +170,6 @@ export default function UserModal({
                 }
                 height="h-90"
               />
-
             </div>
 
             {/* ========================================
@@ -232,7 +177,6 @@ export default function UserModal({
              * ====================================== */}
 
             <div className="space-y-6">
-
               {/* ========================================
                * GENERAL INFO
                * ====================================== */}
@@ -250,9 +194,7 @@ export default function UserModal({
                   p-5
                 "
               >
-
                 <div className="mb-5">
-
                   <h3
                     className="
                       text-sm
@@ -274,7 +216,6 @@ export default function UserModal({
                   >
                     Datos principales del usuario.
                   </p>
-
                 </div>
 
                 <div
@@ -285,7 +226,6 @@ export default function UserModal({
                     md:grid-cols-2
                   "
                 >
-
                   <Input
                     label="Nombre"
                     name="name"
@@ -324,9 +264,7 @@ export default function UserModal({
                     placeholder="••••••••"
                     icon={Lock}
                   />
-
                 </div>
-
               </div>
 
               {/* ========================================
@@ -346,9 +284,7 @@ export default function UserModal({
                   p-5
                 "
               >
-
                 <div className="mb-5">
-
                   <h3
                     className="
                       text-sm
@@ -370,20 +306,15 @@ export default function UserModal({
                   >
                     Selecciona un rol para este usuario.
                   </p>
-
                 </div>
 
                 <div className="flex gap-3">
-
                   {ROLES.map((role) => {
-
                     const Icon = role.icon;
 
-                    const active =
-                      formData.role === role.value;
+                    const active = formData.role === role.value;
 
                     return (
-
                       <button
                         type="button"
                         key={role.value}
@@ -428,7 +359,6 @@ export default function UserModal({
                           }
                         `}
                       >
-
                         <div
                           className={`
                             flex
@@ -455,13 +385,10 @@ export default function UserModal({
                             }
                           `}
                         >
-
                           <Icon size={18} />
-
                         </div>
 
                         <div>
-
                           <h4
                             className="
                               text-sm
@@ -470,11 +397,9 @@ export default function UserModal({
                           >
                             {role.label}
                           </h4>
-
                         </div>
 
                         {active && (
-
                           <Check
                             size={16}
                             className="
@@ -482,21 +407,13 @@ export default function UserModal({
                               text-violet-600
                             "
                           />
-
                         )}
-
                       </button>
-
                     );
-
                   })}
-
                 </div>
-
               </div>
-
             </div>
-
           </div>
 
           {/* ========================================
@@ -504,9 +421,7 @@ export default function UserModal({
            * ====================================== */}
 
           <div className="mt-6">
-
             <div className="mb-5">
-
               <h3
                 className="
                   text-sm
@@ -528,7 +443,6 @@ export default function UserModal({
               >
                 Selecciona la sucursal asignada a este usuario.
               </p>
-
             </div>
 
             <div
@@ -541,14 +455,10 @@ export default function UserModal({
                 xl:grid-cols-4
               "
             >
-
               {branches.map((branch) => {
-
-                const active =
-                  formData.branchId === branch.id;
+                const active = formData.branchId === branch.id;
 
                 return (
-
                   <button
                     type="button"
                     key={branch.id}
@@ -596,7 +506,6 @@ export default function UserModal({
                       }
                     `}
                   >
-
                     <div
                       className={`
                         mb-4
@@ -625,9 +534,7 @@ export default function UserModal({
                         }
                       `}
                     >
-
                       <Building2 size={18} />
-
                     </div>
 
                     <div>
@@ -658,11 +565,9 @@ export default function UserModal({
                       >
                         {branch.city || "Sin ciudad"}
                       </p>
-
-                   </div>
+                    </div>
 
                     {active && (
-
                       <Check
                         size={16}
                         className="
@@ -673,19 +578,12 @@ export default function UserModal({
                           text-violet-600
                         "
                       />
-
                     )}
-
                   </button>
-
                 );
-
               })}
-
             </div>
-
           </div>
-
         </div>
 
         {/* ========================================
@@ -693,7 +591,6 @@ export default function UserModal({
          * ====================================== */}
 
         <FooterModal>
-
           <div
             className="
               flex
@@ -704,7 +601,6 @@ export default function UserModal({
               pb-5
             "
           >
-
             <div
               className="
                 hidden
@@ -714,8 +610,7 @@ export default function UserModal({
                 sm:block
               "
             >
-              La información será guardada
-              automáticamente en el usuario.
+              La información será guardada automáticamente en el usuario.
             </div>
 
             <div
@@ -726,7 +621,6 @@ export default function UserModal({
                 gap-3
               "
             >
-
               <ModernButton
                 type="button"
                 text="Cancelar"
@@ -736,24 +630,13 @@ export default function UserModal({
               />
 
               <SubmitButton
-                text={
-                  isEdit
-                    ? "Guardar Cambios"
-                    : "Crear Usuario"
-                }
+                text={isEdit ? "Guardar Cambios" : "Crear Usuario"}
                 loading={loading}
               />
-
             </div>
-
           </div>
-
         </FooterModal>
-
       </form>
-
     </Modal>
-
   );
-
 }

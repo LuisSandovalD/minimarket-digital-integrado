@@ -1,24 +1,14 @@
 import React from "react";
 
-import {
-  Menu,
-  Settings,
-} from "lucide-react";
+import { Menu, Settings } from "lucide-react";
 
-import ThemeToggle
-  from "../../../components/theme/ThemeToggle";
+import ThemeToggle from "../../../components/theme/ThemeToggle";
 
-import ModernButton
-  from "../../../components/buttons/ModernButton";
+import ModernButton from "../../../components/buttons/ModernButton";
 
-import SearchInput
-  from "../../../components/inputs/SearchInput";
+import SearchInput from "../../../components/inputs/SearchInput";
 
-
-
-export default function AppHeader({
-  onToggleAside,
-}) {
+export default function AppHeader({ onToggleAside }) {
   return (
     <header
       className="
@@ -56,7 +46,6 @@ export default function AppHeader({
           gap-3
         "
       >
-
         {/* ========================================
          * LEFT
          * ====================================== */}
@@ -67,7 +56,6 @@ export default function AppHeader({
             gap-3
           "
         >
-
           {/* MENU BUTTON */}
           <ModernButton
             icon={Menu}
@@ -108,7 +96,6 @@ export default function AppHeader({
               "
             />
           </div>
-
         </div>
 
         {/* ========================================
@@ -121,7 +108,6 @@ export default function AppHeader({
             gap-2
           "
         >
-
           {/* SETTINGS */}
           <ModernButton
             icon={Settings}
@@ -148,11 +134,8 @@ export default function AppHeader({
 
           {/* THEME */}
           <ThemeToggle />
-
         </div>
-
       </div>
-
     </header>
   );
 }

@@ -3,7 +3,6 @@
 // ========================================
 
 export const branchSchema = {
-
   name: {
     required: true,
   },
@@ -11,5 +10,4 @@ export const branchSchema = {
   address: {
     required: true,
   },
-
 };

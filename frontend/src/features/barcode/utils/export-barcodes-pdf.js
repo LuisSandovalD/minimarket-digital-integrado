@@ -2,36 +2,24 @@
 // features/barcodes/utils/export-barcodes-pdf.js
 // ========================================
 
-import JsBarcode
-  from "jsbarcode";
+import JsBarcode from "jsbarcode";
 
-import jsPDF
-  from "jspdf";
+import jsPDF from "jspdf";
 
-export async function exportBarcodesPDF(
-  selectedProducts
-) {
-
-  if (
-    selectedProducts.length === 0
-  ) {
-
-    alert(
-      "Selecciona productos"
-    );
+export async function exportBarcodesPDF(selectedProducts) {
+  if (selectedProducts.length === 0) {
+    alert("Selecciona productos");
 
     return;
   }
 
-  const pdf =
-    new jsPDF({
-      orientation:
-        "portrait",
+  const pdf = new jsPDF({
+    orientation: "portrait",
 
-      unit: "mm",
+    unit: "mm",
 
-      format: "a4",
-    });
+    format: "a4",
+  });
 
   const labelWidth = 60;
 
@@ -43,163 +31,88 @@ export async function exportBarcodesPDF(
 
   let y = 10;
 
-  for (
-    let i = 0;
-    i < selectedProducts.length;
-    i++
-  ) {
-
-    const product =
-      selectedProducts[i];
+  for (let i = 0; i < selectedProducts.length; i++) {
+    const product = selectedProducts[i];
 
     // ======================================
     // CREATE SVG
     // ======================================
 
-    const svg =
-      document.createElementNS(
-        "http://www.w3.org/2000/svg",
-        "svg"
-      );
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
 
-    JsBarcode(
-      svg,
-      product.barcode,
-      {
-        format: "CODE128",
+    JsBarcode(svg, product.barcode, {
+      format: "CODE128",
 
-        width: 1.5,
+      width: 1.5,
 
-        height: 35,
+      height: 35,
 
-        displayValue: true,
+      displayValue: true,
 
-        margin: 0,
+      margin: 0,
 
-        fontSize: 10,
-      }
-    );
+      fontSize: 10,
+    });
 
-    const svgData =
-      new XMLSerializer()
-        .serializeToString(
-          svg
-        );
+    const svgData = new XMLSerializer().serializeToString(svg);
 
-    const canvas =
-      document.createElement(
-        "canvas"
-      );
+    const canvas = document.createElement("canvas");
 
-    const ctx =
-      canvas.getContext("2d");
+    const ctx = canvas.getContext("2d");
 
-    const img =
-      new Image();
+    const img = new Image();
 
-    const svgBlob =
-      new Blob(
-        [svgData],
-        {
-          type:
-            "image/svg+xml;charset=utf-8",
-        }
-      );
+    const svgBlob = new Blob([svgData], {
+      type: "image/svg+xml;charset=utf-8",
+    });
 
-    const url =
-      URL.createObjectURL(
-        svgBlob
-      );
+    const url = URL.createObjectURL(svgBlob);
 
-    await new Promise(
-      resolve => {
+    await new Promise((resolve) => {
+      img.onload = () => {
+        canvas.width = img.width;
 
-        img.onload = () => {
+        canvas.height = img.height;
 
-          canvas.width =
-            img.width;
+        ctx.drawImage(img, 0, 0);
 
-          canvas.height =
-            img.height;
+        const imgData = canvas.toDataURL("image/png");
 
-          ctx.drawImage(
-            img,
-            0,
-            0
-          );
+        // ======================================
+        // LABEL
+        // ======================================
 
-          const imgData =
-            canvas.toDataURL(
-              "image/png"
-            );
+        pdf.setDrawColor(230);
 
-          // ======================================
-          // LABEL
-          // ======================================
+        pdf.roundedRect(x, y, labelWidth, labelHeight, 3, 3);
 
-          pdf.setDrawColor(
-            230
-          );
+        pdf.setFontSize(10);
 
-          pdf.roundedRect(
-            x,
-            y,
-            labelWidth,
-            labelHeight,
-            3,
-            3
-          );
+        pdf.text(product.name, x + 3, y + 6);
 
-          pdf.setFontSize(10);
+        pdf.setFontSize(9);
 
-          pdf.text(
-            product.name,
-            x + 3,
-            y + 6
-          );
+        pdf.text(`S/ ${product.salePrice}`, x + 3, y + 11);
 
-          pdf.setFontSize(9);
+        pdf.addImage(imgData, "PNG", x + 2, y + 13, 55, 15);
 
-          pdf.text(
-            `S/ ${product.salePrice}`,
-            x + 3,
-            y + 11
-          );
+        URL.revokeObjectURL(url);
 
-          pdf.addImage(
-            imgData,
-            "PNG",
-            x + 2,
-            y + 13,
-            55,
-            15
-          );
+        resolve();
+      };
 
-          URL.revokeObjectURL(
-            url
-          );
-
-          resolve();
-        };
-
-        img.src = url;
-      }
-    );
+      img.src = url;
+    });
 
     // ======================================
     // GRID
     // ======================================
 
-    if (
-      (i + 1) % columns === 0
-    ) {
-
+    if ((i + 1) % columns === 0) {
       x = 10;
 
       y += 40;
-
     } else {
-
       x += 65;
     }
 
@@ -208,7 +121,6 @@ export async function exportBarcodesPDF(
     // ======================================
 
     if (y > 250) {
-
       pdf.addPage();
 
       x = 10;
@@ -217,7 +129,5 @@ export async function exportBarcodesPDF(
     }
   }
 
-  pdf.save(
-    "barcodes.pdf"
-  );
+  pdf.save("barcodes.pdf");
 }

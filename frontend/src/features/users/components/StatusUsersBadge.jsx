@@ -2,12 +2,8 @@
 // components/BranchStatusBadge.jsx
 // ========================================
 
-export default function BranchStatusBadge({
-  active,
-}) {
-
+export default function BranchStatusBadge({ active }) {
   return (
-
     <span
       className={`
         px-3
@@ -29,15 +25,7 @@ export default function BranchStatusBadge({
         }
       `}
     >
-
-      {
-        active
-          ? "Activa"
-          : "Inactiva"
-      }
-
+      {active ? "Activa" : "Inactiva"}
     </span>
-
   );
-
 }

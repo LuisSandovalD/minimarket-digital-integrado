@@ -17,10 +17,7 @@ import {
   setAuthLoading,
 } from "./features/auth/store/authActions";
 
-import {
-  getUser,
-  getToken,
-} from "./features/auth/services/session.service";
+import { getUser, getToken } from "./features/auth/services/session.service";
 
 export default function App() {
   const dispatch = useDispatch();
@@ -59,9 +56,7 @@ export default function App() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <div className="animate-pulse text-gray-500">
-          Cargando sesión...
-        </div>
+        <div className="animate-pulse text-gray-500">Cargando sesión...</div>
       </div>
     );
   }

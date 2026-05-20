@@ -2,26 +2,16 @@
 // components/units/UnitHeader.jsx
 // ========================================
 
-import {
-  Plus,
-  Scale,
-  Activity,
-  Calculator,
-} from "lucide-react";
+import { Plus, Scale, Activity, Calculator } from "lucide-react";
 
-import PageHeader
-  from "@/components/ui/PageHeader";
+import PageHeader from "@/components/ui/PageHeader";
 
 export default function UnitHeader({
-
   units = [],
 
   onCreate,
-
 }) {
-
   const stats = [
-
     {
       icon: Scale,
       label: "TOTAL",
@@ -31,10 +21,7 @@ export default function UnitHeader({
     {
       icon: Activity,
       label: "ACTIVAS",
-      value:
-        units.filter(
-          (unit) => unit.isActive
-        ).length,
+      value: units.filter((unit) => unit.isActive).length,
     },
 
     {
@@ -42,11 +29,9 @@ export default function UnitHeader({
       label: "CONVERSIÓN",
       value: "Automática",
     },
-
   ];
 
   return (
-
     <PageHeader
       icon={Scale}
       badge="Inventario"
@@ -63,7 +48,5 @@ export default function UnitHeader({
         onClick: onCreate,
       }}
     />
-
   );
-
 }

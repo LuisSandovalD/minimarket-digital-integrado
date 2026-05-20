@@ -1,7 +1,4 @@
-export default function FooterModal({
-  children,
-  align = "right",
-}) {
+export default function FooterModal({ children, align = "right" }) {
   const aligns = {
     left: "justify-start",
     center: "justify-center",
@@ -31,9 +28,7 @@ export default function FooterModal({
       <div className="absolute left-0 top-0 h-full w-32 " />
 
       {/* CONTENT */}
-      <div className="relative z-10 flex w-full items-center">
-        {children}
-      </div>
+      <div className="relative z-10 flex w-full items-center">{children}</div>
     </div>
   );
 }

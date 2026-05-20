@@ -1,6 +1,4 @@
-export default function LoginOptions({
-  children,
-}) {
+export default function LoginOptions({ children }) {
   return (
     <div
       className="

@@ -1,16 +1,9 @@
-import {
-  User,
-} from "lucide-react";
+import { User } from "lucide-react";
 
 const socials = [
-  
-
- 
-
   {
     icon: User,
-  }
-  
+  },
 ];
 
 export default function FooterSocials() {

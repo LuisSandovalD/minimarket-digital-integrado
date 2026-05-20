@@ -6,12 +6,5 @@ export default function IconButton({
   size = "icon",
   ...props
 }) {
-  return (
-    <ModernButton
-      icon={icon}
-      variant={variant}
-      size={size}
-      {...props}
-    />
-  );
+  return <ModernButton icon={icon} variant={variant} size={size} {...props} />;
 }

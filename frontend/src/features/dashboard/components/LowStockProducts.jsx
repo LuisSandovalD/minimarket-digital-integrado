@@ -1,16 +1,7 @@
-const products = [
-
-  "Arroz",
-  "Azúcar",
-  "Leche",
-  "Aceite",
-
-];
+const products = ["Arroz", "Azúcar", "Leche", "Aceite"];
 
 export default function LowStockProducts() {
-
   return (
-
     <div
       className="
         rounded-3xl
@@ -28,7 +19,6 @@ export default function LowStockProducts() {
         backdrop-blur-xl
       "
     >
-
       <h2
         className="
           text-lg
@@ -42,9 +32,7 @@ export default function LowStockProducts() {
       </h2>
 
       <div className="mt-5 space-y-3">
-
         {products.map((product) => (
-
           <div
             key={product}
             className="
@@ -65,13 +53,8 @@ export default function LowStockProducts() {
           >
             {product}
           </div>
-
         ))}
-
       </div>
-
     </div>
-
   );
-
 }

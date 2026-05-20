@@ -9,12 +9,9 @@ import api from "@/api/axios";
 // ========================================
 
 export async function getPurchasesService() {
-
-  const response =
-    await api.get("/purchase");
+  const response = await api.get("/purchase");
 
   return response.data;
-
 }
 
 // ========================================
@@ -22,34 +19,19 @@ export async function getPurchasesService() {
 // ========================================
 
 export async function createPurchaseService(data) {
-
-  const response =
-    await api.post(
-      "/purchase",
-      data
-    );
+  const response = await api.post("/purchase", data);
 
   return response.data;
-
 }
 
 // ========================================
 // UPDATE PURCHASE
 // ========================================
 
-export async function updatePurchaseService(
-  id,
-  data
-) {
-
-  const response =
-    await api.put(
-      `/purchase/${id}`,
-      data
-    );
+export async function updatePurchaseService(id, data) {
+  const response = await api.put(`/purchase/${id}`, data);
 
   return response.data;
-
 }
 
 // ========================================
@@ -57,12 +39,7 @@ export async function updatePurchaseService(
 // ========================================
 
 export async function deletePurchaseService(id) {
-
-  const response =
-    await api.delete(
-      `/purchase/${id}`
-    );
+  const response = await api.delete(`/purchase/${id}`);
 
   return response.data;
-
 }

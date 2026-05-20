@@ -1,18 +1,11 @@
-import {
-  LogIn,
-  UserPlus,
-} from "lucide-react";
+import { LogIn, UserPlus } from "lucide-react";
 
-import {
-  ModernButton,
-} from "@/components/buttons";
+import { ModernButton } from "@/components/buttons";
 
 export default function MobileMenuFooter() {
   return (
     <div className="mt-auto border-t border-[#e7ecef] p-6 dark:border-[#365d86]/20">
-      
       <div className="space-y-3">
-        
         {/* LOGIN */}
         <ModernButton
           text="Iniciar Sesión"

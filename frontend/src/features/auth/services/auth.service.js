@@ -1,79 +1,47 @@
 import api from "@/api/axios";
 
-import {
-  clearSession,
-} from "./session.service";
+import { clearSession } from "./session.service";
 
 // ======================================
 // LOGIN
 // ======================================
 
-export const loginService =
-  async (payload) => {
+export const loginService = async (payload) => {
+  const response = await api.post("/auth/login", payload);
 
-    const response =
-      await api.post(
-        "/auth/login",
-        payload
-      );
-
-    return response.data;
-
-  };
+  return response.data;
+};
 
 // ======================================
 // REGISTER
 // ======================================
 
-export const registerService =
-  async (payload) => {
+export const registerService = async (payload) => {
+  const response = await api.post("/auth/register", payload);
 
-    const response =
-      await api.post(
-        "/auth/register",
-        payload
-      );
-
-    return response.data;
-
-  };
+  return response.data;
+};
 
 // ======================================
 // LOGOUT
 // ======================================
 
-export const logoutService =
-  async () => {
+export const logoutService = async () => {
+  try {
+    const response = await api.post("/auth/logout");
 
-    try {
-
-      const response =
-        await api.post(
-          "/auth/logout"
-        );
-
-      return response.data;
-
-    } finally {
-
-      clearSession();
-
-    }
-
-  };
+    return response.data;
+  } finally {
+    clearSession();
+  }
+};
 
 // ======================================
 // SESSION / ME
 // ======================================
 
-export const meService =
-  async () => {
+export const meService = async () => {
+  const response = await api.get("/auth/me");
 
-    const response =
-      await api.get(
-        "/auth/me"
-      );
-
-    return response.data;
-
-  };
+  return response.data;
+};

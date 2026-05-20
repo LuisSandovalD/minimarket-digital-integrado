@@ -22,9 +22,7 @@ export const SaleTable = ({
 
   return (
     <div>
-
       <table>
-
         <thead>
           <tr>
             <th>ID</th>
@@ -37,73 +35,39 @@ export const SaleTable = ({
         </thead>
 
         <tbody>
-
           {sales.map((sale) => (
             <tr key={sale.id}>
-
               {/* ID */}
               <td>#{sale.id}</td>
 
               {/* CLIENTE */}
-              <td>
-                {sale.customerName || "Sin cliente"}
-              </td>
+              <td>{sale.customerName || "Sin cliente"}</td>
 
               {/* TOTAL */}
-              <td>
-                {sale.total}
-              </td>
+              <td>{sale.total}</td>
 
               {/* STATUS */}
               <td>
-                <SaleStatusBadge
-                  status={sale.status}
-                />
+                <SaleStatusBadge status={sale.status} />
               </td>
 
               {/* DATE */}
-              <td>
-                {new Date(
-                  sale.createdAt
-                ).toLocaleDateString()}
-              </td>
+              <td>{new Date(sale.createdAt).toLocaleDateString()}</td>
 
               {/* ACTIONS */}
               <td>
+                <button onClick={() => onView(sale)}>Ver</button>
 
-                <button
-                  onClick={() => onView(sale)}
-                >
-                  Ver
-                </button>
+                <button onClick={() => onPay(sale)}>Pagar</button>
 
-                <button
-                  onClick={() => onPay(sale)}
-                >
-                  Pagar
-                </button>
+                <button onClick={() => onCancel(sale)}>Cancelar</button>
 
-                <button
-                  onClick={() => onCancel(sale)}
-                >
-                  Cancelar
-                </button>
-
-                <button
-                  onClick={() => onReturn(sale)}
-                >
-                  Devolución
-                </button>
-
+                <button onClick={() => onReturn(sale)}>Devolución</button>
               </td>
-
             </tr>
           ))}
-
         </tbody>
-
       </table>
-
     </div>
   );
 };

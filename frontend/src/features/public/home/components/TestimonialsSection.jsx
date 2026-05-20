@@ -1,6 +1,4 @@
-import {
-  motion,
-} from "framer-motion";
+import { motion } from "framer-motion";
 
 import {
   Quote,
@@ -11,13 +9,9 @@ import {
   ChevronRight,
 } from "lucide-react";
 
-import {
-  useRef,
-} from "react";
+import { useRef } from "react";
 
-import {
-  testimonials,
-} from "../constants/testimonials";
+import { testimonials } from "../constants/testimonials";
 
 import {
   fadeUp,
@@ -37,10 +31,7 @@ export default function TestimonialsSection() {
     if (!sliderRef.current) return;
 
     sliderRef.current.scrollBy({
-      left:
-        direction === "left"
-          ? -420
-          : 420,
+      left: direction === "left" ? -420 : 420,
 
       behavior: "smooth",
     });
@@ -49,7 +40,6 @@ export default function TestimonialsSection() {
   return (
     <section
       id="testimonials"
-
       className="
         relative
         overflow-hidden
@@ -77,13 +67,11 @@ export default function TestimonialsSection() {
             opacity: [0.2, 0.45, 0.2],
             scale: [1, 1.08, 1],
           }}
-
           transition={{
             duration: 8,
             repeat: Infinity,
             ease: "easeInOut",
           }}
-
           className="
             absolute
             right-0
@@ -102,14 +90,12 @@ export default function TestimonialsSection() {
       </div>
 
       <div className="mx-auto max-w-7xl">
-
         {/* HEADER */}
         <motion.div
           variants={staggerContainer}
           initial="hidden"
           whileInView="show"
           viewport={defaultViewport}
-
           className="
             flex
             flex-col
@@ -121,12 +107,10 @@ export default function TestimonialsSection() {
           "
         >
           <div className="max-w-3xl">
-
             {/* BADGE */}
             <motion.div
               variants={fadeScale}
               transition={springTransition}
-
               className="
                 inline-flex
                 items-center
@@ -158,7 +142,6 @@ export default function TestimonialsSection() {
               "
             >
               <BadgeCheck size={16} />
-
               Clientes satisfechos
             </motion.div>
 
@@ -166,7 +149,6 @@ export default function TestimonialsSection() {
             <motion.h2
               variants={fadeUp}
               transition={smoothTransition}
-
               className="
                 mt-7
                 text-4xl
@@ -182,7 +164,6 @@ export default function TestimonialsSection() {
               "
             >
               Empresas que ya
-
               <span
                 className="
                   block
@@ -204,7 +185,6 @@ export default function TestimonialsSection() {
             <motion.p
               variants={fadeUp}
               transition={smoothTransition}
-
               className="
                 mt-6
                 max-w-2xl
@@ -217,12 +197,9 @@ export default function TestimonialsSection() {
                 dark:text-[#cbd5e1]
               "
             >
-              Nuestro ERP POS multiempresa
-              ayuda a negocios modernos a
-              controlar inventario, ventas,
-              reportes, seguridad y múltiples
-              sucursales desde una sola
-              plataforma.
+              Nuestro ERP POS multiempresa ayuda a negocios modernos a controlar
+              inventario, ventas, reportes, seguridad y múltiples sucursales
+              desde una sola plataforma.
             </motion.p>
           </div>
 
@@ -230,7 +207,6 @@ export default function TestimonialsSection() {
           <motion.div
             variants={fadeScale}
             transition={springTransition}
-
             className="
               flex
               items-center
@@ -242,11 +218,7 @@ export default function TestimonialsSection() {
               whileTap={{
                 scale: 0.95,
               }}
-
-              onClick={() =>
-                scroll("left")
-              }
-
+              onClick={() => scroll("left")}
               className="
                 group
 
@@ -284,7 +256,6 @@ export default function TestimonialsSection() {
             >
               <ChevronLeft
                 size={22}
-
                 className="
                   transition-transform
                   duration-300
@@ -299,11 +270,7 @@ export default function TestimonialsSection() {
               whileTap={{
                 scale: 0.95,
               }}
-
-              onClick={() =>
-                scroll("right")
-              }
-
+              onClick={() => scroll("right")}
               className="
                 group
 
@@ -341,7 +308,6 @@ export default function TestimonialsSection() {
             >
               <ChevronRight
                 size={22}
-
                 className="
                   transition-transform
                   duration-300
@@ -359,9 +325,7 @@ export default function TestimonialsSection() {
           initial="hidden"
           whileInView="show"
           viewport={defaultViewport}
-
           ref={sliderRef}
-
           className="
             mt-16
 
@@ -379,20 +343,16 @@ export default function TestimonialsSection() {
             [&::-webkit-scrollbar]:hidden
           "
         >
-          {testimonials.map(
-            (item, index) => (
-              <motion.article
-                key={index}
-
-                variants={fadeUp}
-                transition={{
-                  ...smoothTransition,
-                  delay: index * 0.08,
-                }}
-
-                whileHover={hoverLift}
-
-                className="
+          {testimonials.map((item, index) => (
+            <motion.article
+              key={index}
+              variants={fadeUp}
+              transition={{
+                ...smoothTransition,
+                delay: index * 0.08,
+              }}
+              whileHover={hoverLift}
+              className="
                   group
                   relative
 
@@ -423,10 +383,10 @@ export default function TestimonialsSection() {
                   dark:bg-white/5
                   dark:shadow-black/30
                 "
-              >
-                {/* TOP GRADIENT */}
-                <div
-                  className="
+            >
+              {/* TOP GRADIENT */}
+              <div
+                className="
                     absolute
                     inset-x-0
                     top-0
@@ -438,17 +398,15 @@ export default function TestimonialsSection() {
                     via-[#6096ba]
                     to-[#a3cef1]
                   "
-                />
+              />
 
-                {/* ICON */}
-                <motion.div
-                  whileHover={hoverScale}
-
-                  transition={{
-                    duration: 0.3,
-                  }}
-
-                  className="
+              {/* ICON */}
+              <motion.div
+                whileHover={hoverScale}
+                transition={{
+                  duration: 0.3,
+                }}
+                className="
                     relative
 
                     flex
@@ -468,52 +426,46 @@ export default function TestimonialsSection() {
 
                     shadow-2xl
                   "
-                >
-                  <Quote size={28} />
-                </motion.div>
+              >
+                <Quote size={28} />
+              </motion.div>
 
-                {/* STARS */}
-                <div className="mt-7 flex gap-1">
-                  {Array.from({
-                    length: item.rating,
-                  }).map((_, i) => (
-                    <motion.div
-                      key={i}
-
-                      initial={{
-                        opacity: 0,
-                        scale: 0.5,
-                      }}
-
-                      whileInView={{
-                        opacity: 1,
-                        scale: 1,
-                      }}
-
-                      transition={{
-                        delay:
-                          i * 0.05,
-                      }}
-
-                      viewport={{
-                        once: true,
-                      }}
-                    >
-                      <Star
-                        size={18}
-
-                        className="
+              {/* STARS */}
+              <div className="mt-7 flex gap-1">
+                {Array.from({
+                  length: item.rating,
+                }).map((_, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{
+                      opacity: 0,
+                      scale: 0.5,
+                    }}
+                    whileInView={{
+                      opacity: 1,
+                      scale: 1,
+                    }}
+                    transition={{
+                      delay: i * 0.05,
+                    }}
+                    viewport={{
+                      once: true,
+                    }}
+                  >
+                    <Star
+                      size={18}
+                      className="
                           fill-yellow-400
                           text-yellow-400
                         "
-                      />
-                    </motion.div>
-                  ))}
-                </div>
+                    />
+                  </motion.div>
+                ))}
+              </div>
 
-                {/* MESSAGE */}
-                <p
-                  className="
+              {/* MESSAGE */}
+              <p
+                className="
                     mt-6
                     text-[15px]
                     leading-relaxed
@@ -522,33 +474,30 @@ export default function TestimonialsSection() {
 
                     dark:text-[#cbd5e1]
                   "
-                >
-                  “{item.message}”
-                </p>
+              >
+                “{item.message}”
+              </p>
 
-                {/* USER */}
-                <div
-                  className="
+              {/* USER */}
+              <div
+                className="
                     mt-8
                     flex
                     items-center
                     gap-4
                   "
-                >
-                  <div className="relative">
-                    <motion.img
-                      whileHover={{
-                        scale: 1.08,
-                      }}
-
-                      transition={{
-                        duration: 0.3,
-                      }}
-
-                      src={item.avatar}
-                      alt={item.name}
-
-                      className="
+              >
+                <div className="relative">
+                  <motion.img
+                    whileHover={{
+                      scale: 1.08,
+                    }}
+                    transition={{
+                      duration: 0.3,
+                    }}
+                    src={item.avatar}
+                    alt={item.name}
+                    className="
                         h-16
                         w-16
 
@@ -560,28 +509,24 @@ export default function TestimonialsSection() {
 
                         dark:ring-white/10
                       "
-                    />
+                  />
 
-                    {item.verified && (
-                      <motion.div
-                        initial={{
-                          scale: 0,
-                        }}
-
-                        whileInView={{
-                          scale: 1,
-                        }}
-
-                        transition={{
-                          type: "spring",
-                          stiffness: 180,
-                        }}
-
-                        viewport={{
-                          once: true,
-                        }}
-
-                        className="
+                  {item.verified && (
+                    <motion.div
+                      initial={{
+                        scale: 0,
+                      }}
+                      whileInView={{
+                        scale: 1,
+                      }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 180,
+                      }}
+                      viewport={{
+                        once: true,
+                      }}
+                      className="
                           absolute
                           -bottom-1
                           -right-1
@@ -597,28 +542,26 @@ export default function TestimonialsSection() {
                           bg-[#274c77]
                           text-white
                         "
-                      >
-                        <BadgeCheck
-                          size={14}
-                        />
-                      </motion.div>
-                    )}
-                  </div>
+                    >
+                      <BadgeCheck size={14} />
+                    </motion.div>
+                  )}
+                </div>
 
-                  <div className="flex-1">
-                    <h4
-                      className="
+                <div className="flex-1">
+                  <h4
+                    className="
                         font-bold
                         text-[#0f172a]
 
                         dark:text-white
                       "
-                    >
-                      {item.name}
-                    </h4>
+                  >
+                    {item.name}
+                  </h4>
 
-                    <p
-                      className="
+                  <p
+                    className="
                         mt-1
                         text-sm
                         font-medium
@@ -627,12 +570,12 @@ export default function TestimonialsSection() {
 
                         dark:text-[#a3cef1]
                       "
-                    >
-                      {item.role}
-                    </p>
+                  >
+                    {item.role}
+                  </p>
 
-                    <div
-                      className="
+                  <div
+                    className="
                         mt-1
 
                         flex
@@ -645,17 +588,17 @@ export default function TestimonialsSection() {
 
                         dark:text-[#94a3b8]
                       "
-                    >
-                      <MapPin size={13} />
+                  >
+                    <MapPin size={13} />
 
-                      {item.location}
-                    </div>
+                    {item.location}
                   </div>
                 </div>
+              </div>
 
-                {/* COMPANY */}
-                <div
-                  className="
+              {/* COMPANY */}
+              <div
+                className="
                     mt-7
 
                     rounded-3xl
@@ -675,17 +618,17 @@ export default function TestimonialsSection() {
                     dark:border-white/10
                     dark:bg-white/[0.03]
                   "
-                >
-                  <div
-                    className="
+              >
+                <div
+                  className="
                       flex
                       items-center
                       justify-between
                     "
-                  >
-                    <div>
-                      <p
-                        className="
+                >
+                  <div>
+                    <p
+                      className="
                           text-xs
                           uppercase
                           tracking-[0.2em]
@@ -694,12 +637,12 @@ export default function TestimonialsSection() {
 
                           dark:text-[#94a3b8]
                         "
-                      >
-                        Empresa
-                      </p>
+                    >
+                      Empresa
+                    </p>
 
-                      <h5
-                        className="
+                    <h5
+                      className="
                           mt-2
                           text-lg
                           font-bold
@@ -708,13 +651,13 @@ export default function TestimonialsSection() {
 
                           dark:text-white
                         "
-                      >
-                        {item.company}
-                      </h5>
-                    </div>
+                    >
+                      {item.company}
+                    </h5>
+                  </div>
 
-                    <span
-                      className="
+                  <span
+                    className="
                         rounded-full
 
                         bg-emerald-500/10
@@ -729,15 +672,15 @@ export default function TestimonialsSection() {
 
                         dark:text-emerald-400
                       "
-                    >
-                      Activo
-                    </span>
-                  </div>
+                  >
+                    Activo
+                  </span>
                 </div>
+              </div>
 
-                {/* GLOW */}
-                <div
-                  className="
+              {/* GLOW */}
+              <div
+                className="
                     pointer-events-none
 
                     absolute
@@ -760,10 +703,9 @@ export default function TestimonialsSection() {
 
                     group-hover:opacity-100
                   "
-                />
-              </motion.article>
-            )
-          )}
+              />
+            </motion.article>
+          ))}
         </motion.div>
       </div>
     </section>

@@ -2,12 +2,8 @@
 // features/product/components/ProductStatusBadge.jsx
 // ========================================
 
-export default function SupplierStatusBadge({
-  active = true,
-}) {
-
+export default function SupplierStatusBadge({ active = true }) {
   return (
-
     <span
       className={`
         inline-flex
@@ -31,13 +27,7 @@ export default function SupplierStatusBadge({
         }
       `}
     >
-      {
-        active
-          ? "Activo"
-          : "Inactivo"
-      }
+      {active ? "Activo" : "Inactivo"}
     </span>
-
   );
-
 }

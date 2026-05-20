@@ -1,0 +1,62 @@
+name: Docker Pipeline
+
+on:
+
+  workflow_call:
+
+jobs:
+
+  docker:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # ========================================
+      # CHECKOUT
+      # ========================================
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # ========================================
+      # BUILDX
+      # ========================================
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # ========================================
+      # BUILD
+      # ========================================
+
+      - name: Docker Compose Build
+        run: docker compose build
+
+      # ========================================
+      # START
+      # ========================================
+
+      - name: Docker Compose Up
+        run: docker compose up -d
+
+      # ========================================
+      # WAIT
+      # ========================================
+
+      - name: Wait Containers
+        run: sleep 15
+
+      # ========================================
+      # STATUS
+      # ========================================
+
+      - name: Docker Status
+        run: docker ps
+
+      # ========================================
+      # SUCCESS
+      # ========================================
+
+      - name: Docker Success
+        run: echo "Docker validated"

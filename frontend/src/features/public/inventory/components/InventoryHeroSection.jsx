@@ -1,11 +1,6 @@
 // inventory/components/InventoryHeroSection.jsx
 
-import {
-  Boxes,
-  PackageCheck,
-  Warehouse,
-  BarChart3,
-} from "lucide-react";
+import { Boxes, PackageCheck, Warehouse, BarChart3 } from "lucide-react";
 
 export default function InventoryHeroSection() {
   return (
@@ -33,7 +28,6 @@ export default function InventoryHeroSection() {
         <img
           src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=2070&auto=format&fit=crop"
           alt="Inventory"
-
           className="
             h-full
             w-full
@@ -98,7 +92,6 @@ export default function InventoryHeroSection() {
               "
             >
               <Boxes size={16} />
-
               Gestión Inteligente de Inventario
             </div>
 
@@ -149,11 +142,9 @@ export default function InventoryHeroSection() {
                 dark:text-[#cbd5e1]
               "
             >
-              Gestiona productos,
-              almacenes, movimientos,
-              alertas de stock y reportes
-              desde una plataforma moderna,
-              rápida y totalmente centralizada.
+              Gestiona productos, almacenes, movimientos, alertas de stock y
+              reportes desde una plataforma moderna, rápida y totalmente
+              centralizada.
             </p>
 
             <div
@@ -260,7 +251,6 @@ export default function InventoryHeroSection() {
               <img
                 src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=2070&auto=format&fit=crop"
                 alt="Inventory"
-
                 className="
                   h-[620px]
                   w-full

@@ -1,56 +1,33 @@
-import {
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
-  useQuery,
-  useMutation,
-  useQueryClient,
-
-} from "@tanstack/react-query";
-
-import productService
-  from "../services/product.service";
+import productService from "../services/product.service";
 
 // ========================================
 // HOOK
 // ========================================
 
 export default function useProducts() {
-
-  const queryClient =
-    useQueryClient();
+  const queryClient = useQueryClient();
 
   // ========================================
   // INVALIDATE CACHE
   // ========================================
 
-  const invalidateCache =
-    async () => {
+  const invalidateCache = async () => {
+    await queryClient.invalidateQueries({
+      queryKey: ["products"],
+    });
 
-      await queryClient
-        .invalidateQueries({
-
-          queryKey: [
-            "products",
-          ],
-
-        });
-
-      await queryClient
-        .invalidateQueries({
-
-          queryKey: [
-            "notifications",
-          ],
-
-        });
-
-    };
+    await queryClient.invalidateQueries({
+      queryKey: ["notifications"],
+    });
+  };
 
   // ========================================
   // GET PRODUCTS
   // ========================================
 
   const {
-
     data: products = [],
 
     isLoading: loading,
@@ -58,182 +35,96 @@ export default function useProducts() {
     error,
 
     refetch: fetchProducts,
-
   } = useQuery({
-
-    queryKey: [
-      "products",
-    ],
+    queryKey: ["products"],
 
     queryFn: async () => {
+      const response = await productService.getProducts();
 
-      const response =
-        await productService
-          .getProducts();
-
-      return Array.isArray(
-        response?.data
-      )
-        ? response.data
-        : [];
-
+      return Array.isArray(response?.data) ? response.data : [];
     },
 
-    refetchOnWindowFocus:
-      false,
-
+    refetchOnWindowFocus: false,
   });
 
   // ========================================
   // CREATE
   // ========================================
 
-  const createMutation =
-    useMutation({
+  const createMutation = useMutation({
+    mutationFn: async (data) => {
+      return await productService.createProduct(data);
+    },
 
-      mutationFn:
-        async (data) => {
+    onSuccess: async () => {
+      await invalidateCache();
+    },
 
-          return await productService
-            .createProduct(data);
-
-        },
-
-      onSuccess:
-        async () => {
-
-          await invalidateCache();
-
-        },
-
-      onError:
-        (error) => {
-
-          console.error(
-            "CREATE PRODUCT ERROR:",
-            error
-          );
-
-        },
-
-    });
+    onError: (error) => {
+      console.error("CREATE PRODUCT ERROR:", error);
+    },
+  });
 
   // ========================================
   // UPDATE
   // ========================================
 
-  const updateMutation =
-    useMutation({
+  const updateMutation = useMutation({
+    mutationFn: async ({ id, data }) => {
+      return await productService.updateProduct(id, data);
+    },
 
-      mutationFn:
-        async ({
-          id,
-          data,
-        }) => {
+    onSuccess: async () => {
+      await invalidateCache();
+    },
 
-          return await productService
-            .updateProduct(
-              id,
-              data
-            );
-
-        },
-
-      onSuccess:
-        async () => {
-
-          await invalidateCache();
-
-        },
-
-      onError:
-        (error) => {
-
-          console.error(
-            "UPDATE PRODUCT ERROR:",
-            error
-          );
-
-        },
-
-    });
+    onError: (error) => {
+      console.error("UPDATE PRODUCT ERROR:", error);
+    },
+  });
 
   // ========================================
   // DELETE
   // ========================================
 
-  const deleteMutation =
-    useMutation({
+  const deleteMutation = useMutation({
+    mutationFn: async (id) => {
+      return await productService.deleteProduct(id);
+    },
 
-      mutationFn:
-        async (id) => {
+    onSuccess: async () => {
+      await invalidateCache();
+    },
 
-          return await productService
-            .deleteProduct(id);
-
-        },
-
-      onSuccess:
-        async () => {
-
-          await invalidateCache();
-
-        },
-
-      onError:
-        (error) => {
-
-          console.error(
-            "DELETE PRODUCT ERROR:",
-            error
-          );
-
-        },
-
-    });
+    onError: (error) => {
+      console.error("DELETE PRODUCT ERROR:", error);
+    },
+  });
 
   // ========================================
   // METHODS
   // ========================================
 
-  const createProduct =
-    async (data) => {
+  const createProduct = async (data) => {
+    return await createMutation.mutateAsync(data);
+  };
 
-      return await createMutation
-        .mutateAsync(data);
-
-    };
-
-  const updateProduct =
-    async (
+  const updateProduct = async (id, data) => {
+    return await updateMutation.mutateAsync({
       id,
-      data
-    ) => {
+      data,
+    });
+  };
 
-      return await updateMutation
-        .mutateAsync({
-
-          id,
-          data,
-
-        });
-
-    };
-
-  const deleteProduct =
-    async (id) => {
-
-      return await deleteMutation
-        .mutateAsync(id);
-
-    };
+  const deleteProduct = async (id) => {
+    return await deleteMutation.mutateAsync(id);
+  };
 
   // ========================================
   // RETURN
   // ========================================
 
   return {
-
     // DATA
     products,
 
@@ -249,15 +140,10 @@ export default function useProducts() {
     deleteProduct,
 
     // STATES
-    creating:
-      createMutation.isPending,
+    creating: createMutation.isPending,
 
-    updating:
-      updateMutation.isPending,
+    updating: updateMutation.isPending,
 
-    deleting:
-      deleteMutation.isPending,
-
+    deleting: deleteMutation.isPending,
   };
-
 }

@@ -2,26 +2,18 @@
 // features/purchase/components/PurchaseActions.jsx
 // ========================================
 
-import {
-  Pencil,
-  Trash2,
-} from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
 
-import { ModernButton }
-  from "@/components/buttons/";
+import { ModernButton } from "@/components/buttons/";
 
 export default function PurchaseActions({
-
   purchase,
 
   onEdit,
 
   onDelete,
-
 }) {
-
   return (
-
     <div
       className="
         flex
@@ -30,15 +22,12 @@ export default function PurchaseActions({
         gap-2
       "
     >
-
       <ModernButton
         size="sm"
         variant="warning"
         icon={Pencil}
         text="Editar"
-        onClick={() =>
-          onEdit(purchase)
-        }
+        onClick={() => onEdit(purchase)}
       />
 
       <ModernButton
@@ -46,13 +35,8 @@ export default function PurchaseActions({
         variant="danger"
         icon={Trash2}
         text="Eliminar"
-        onClick={() =>
-          onDelete(purchase)
-        }
+        onClick={() => onDelete(purchase)}
       />
-
     </div>
-
   );
-
 }

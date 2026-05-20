@@ -2,73 +2,30 @@
 // features/product/hooks/useProductFilters.js
 // ========================================
 
-import {
-  useMemo,
-  useState,
-} from "react";
+import { useMemo, useState } from "react";
 
-export default function useProductFilters(
-  products = []
-) {
+export default function useProductFilters(products = []) {
+  const [search, setSearch] = useState("");
 
-  const [
-    search,
-    setSearch,
-  ] = useState("");
+  const [category, setCategory] = useState("");
 
-  const [
-    category,
-    setCategory,
-  ] = useState("");
+  const [featured, setFeatured] = useState(false);
 
-  const [
-    featured,
-    setFeatured,
-  ] = useState(false);
+  const filteredProducts = useMemo(() => {
+    return products.filter((product) => {
+      const matchesSearch = product.name
+        ?.toLowerCase()
+        .includes(search.toLowerCase());
 
-  const filteredProducts =
-    useMemo(() => {
+      const matchesCategory = !category || product.category?.name === category;
 
-      return products.filter(
-        (product) => {
+      const matchesFeatured = !featured || product.isFeatured;
 
-          const matchesSearch =
-            product.name
-              ?.toLowerCase()
-              .includes(
-                search.toLowerCase()
-              );
-
-          const matchesCategory =
-            !category ||
-            product.category
-              ?.name ===
-              category;
-
-          const matchesFeatured =
-            !featured ||
-            product.isFeatured;
-
-          return (
-            matchesSearch &&
-            matchesCategory &&
-            matchesFeatured
-          );
-
-        }
-      );
-
-    }, [
-
-      products,
-      search,
-      category,
-      featured,
-
-    ]);
+      return matchesSearch && matchesCategory && matchesFeatured;
+    });
+  }, [products, search, category, featured]);
 
   return {
-
     search,
     setSearch,
 
@@ -79,7 +36,5 @@ export default function useProductFilters(
     setFeatured,
 
     filteredProducts,
-
   };
-
 }

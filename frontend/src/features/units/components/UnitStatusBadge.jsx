@@ -1,11 +1,3 @@
-export default function UnitStatusBadge({
-  active
-}) {
-
-  return (
-    <span>
-      {active ? "Activo" : "Inactivo"}
-    </span>
-  );
-
+export default function UnitStatusBadge({ active }) {
+  return <span>{active ? "Activo" : "Inactivo"}</span>;
 }

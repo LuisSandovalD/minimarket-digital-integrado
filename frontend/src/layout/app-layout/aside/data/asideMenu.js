@@ -4,7 +4,6 @@
 // ========================================
 
 import {
-
   // GENERAL
   LayoutDashboard,
   BarChart3,
@@ -49,7 +48,6 @@ import {
   FileText,
   FileBarChart,
   User,
-
 } from "lucide-react";
 
 // ========================================
@@ -57,18 +55,15 @@ import {
 // ========================================
 
 export const menuByRole = {
-
   // =====================================================
   // ADMIN
   // =====================================================
 
   ADMIN: [
-
     {
       section: "GENERAL",
 
       items: [
-
         {
           id: "dashboard",
           label: "Dashboard",
@@ -96,7 +91,6 @@ export const menuByRole = {
           icon: Activity,
           href: "activity",
         },
-
       ],
     },
 
@@ -104,7 +98,6 @@ export const menuByRole = {
       section: "EMPRESAS",
 
       items: [
-
         {
           id: "companies",
           label: "Empresas",
@@ -118,7 +111,6 @@ export const menuByRole = {
           icon: Store,
           href: "branches",
         },
-
       ],
     },
 
@@ -126,7 +118,6 @@ export const menuByRole = {
       section: "USUARIOS",
 
       items: [
-
         {
           id: "users",
           label: "Usuarios",
@@ -161,7 +152,6 @@ export const menuByRole = {
           icon: History,
           href: "audit",
         },
-
       ],
     },
 
@@ -169,7 +159,6 @@ export const menuByRole = {
       section: "OPERACIONES",
 
       items: [
-
         {
           id: "sales",
           label: "Ventas",
@@ -204,7 +193,6 @@ export const menuByRole = {
           icon: CreditCard,
           href: "payments",
         },
-
       ],
     },
 
@@ -212,7 +200,6 @@ export const menuByRole = {
       section: "SISTEMA",
 
       items: [
-
         {
           id: "notifications",
           label: "Notificaciones",
@@ -254,10 +241,8 @@ export const menuByRole = {
           icon: Settings,
           href: "settings",
         },
-
       ],
     },
-
   ],
 
   // =====================================================
@@ -265,12 +250,10 @@ export const menuByRole = {
   // =====================================================
 
   MANAGER: [
-
     {
       section: "GENERAL",
 
       items: [
-
         {
           id: "dashboard",
           label: "Dashboard",
@@ -298,7 +281,6 @@ export const menuByRole = {
           icon: PieChart,
           href: "statistics",
         },
-
       ],
     },
 
@@ -306,7 +288,6 @@ export const menuByRole = {
       section: "VENTAS",
 
       items: [
-
         {
           id: "sales",
           label: "Ventas",
@@ -348,7 +329,6 @@ export const menuByRole = {
           icon: Receipt,
           href: "invoices",
         },
-
       ],
     },
 
@@ -356,7 +336,6 @@ export const menuByRole = {
       section: "INVENTARIO",
 
       items: [
-
         {
           id: "products",
           label: "Productos",
@@ -384,7 +363,6 @@ export const menuByRole = {
           icon: ScanLine,
           href: "barcode",
         },
-
       ],
     },
 
@@ -392,14 +370,12 @@ export const menuByRole = {
       section: "COMPRAS",
 
       items: [
-
         {
           id: "purchases",
           label: "Compras",
           icon: Truck,
           href: "purchases",
         },
-
       ],
     },
 
@@ -407,7 +383,6 @@ export const menuByRole = {
       section: "CATÁLOGOS",
 
       items: [
-
         {
           id: "categories",
           label: "Categorías",
@@ -421,7 +396,6 @@ export const menuByRole = {
           icon: PackageSearch,
           href: "units",
         },
-
       ],
     },
 
@@ -429,7 +403,6 @@ export const menuByRole = {
       section: "PERSONAL",
 
       items: [
-
         {
           id: "employees",
           label: "Empleados",
@@ -450,10 +423,8 @@ export const menuByRole = {
           icon: Bell,
           href: "notifications",
         },
-
       ],
     },
-
   ],
 
   // =====================================================
@@ -461,12 +432,10 @@ export const menuByRole = {
   // =====================================================
 
   SUPERVISOR: [
-
     {
       section: "OPERACIONES",
 
       items: [
-
         {
           id: "dashboard",
           label: "Dashboard",
@@ -515,10 +484,8 @@ export const menuByRole = {
           icon: FileBarChart,
           href: "reports",
         },
-
       ],
     },
-
   ],
 
   // =====================================================
@@ -526,12 +493,10 @@ export const menuByRole = {
   // =====================================================
 
   EMPLOYEE: [
-
     {
       section: "PUNTO DE VENTA",
 
       items: [
-
         {
           id: "dashboard",
           label: "Dashboard",
@@ -587,10 +552,8 @@ export const menuByRole = {
           icon: ScanLine,
           href: "barcode",
         },
-
       ],
     },
-
   ],
 
   // =====================================================
@@ -598,12 +561,10 @@ export const menuByRole = {
   // =====================================================
 
   VIEWER: [
-
     {
       section: "CONSULTAS",
 
       items: [
-
         {
           id: "dashboard",
           label: "Dashboard",
@@ -638,10 +599,7 @@ export const menuByRole = {
           icon: ShoppingCart,
           href: "sales",
         },
-
       ],
     },
-
   ],
-
 };

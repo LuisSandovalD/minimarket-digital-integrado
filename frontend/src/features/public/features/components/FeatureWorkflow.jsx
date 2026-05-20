@@ -5,7 +5,6 @@ import { workflow } from "../constants/workflow";
 export default function FeatureWorkflow() {
   return (
     <section className="relative overflow-hidden py-24 max-w-7xl mx-auto px-4">
-
       <div className="relative">
         {/* Header */}
         <div className="max-w-3xl">
@@ -74,10 +73,7 @@ export default function FeatureWorkflow() {
             const Icon = item.icon;
 
             return (
-              <div
-                key={item.step}
-                className="relative flex items-start"
-              >
+              <div key={item.step} className="relative flex items-start">
                 {/* Connector Line */}
                 {index !== workflow.length - 1 && (
                   <div

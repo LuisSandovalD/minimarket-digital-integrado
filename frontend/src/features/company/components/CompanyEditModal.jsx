@@ -10,25 +10,15 @@ import {
   ImagePlus,
 } from "lucide-react";
 
-import {
-  Modal,
-  HeaderModal,
-  FooterModal,
-} from "@/components/modals";
+import { Modal, HeaderModal, FooterModal } from "@/components/modals";
 
-import { Input }
-  from "@/components/inputs";
+import { Input } from "@/components/inputs";
 
-import {
-  ModernButton,
-  SubmitButton,
-} from "@/components/buttons";
+import { ModernButton, SubmitButton } from "@/components/buttons";
 
-import useCompanyEdit
-  from "../hooks/useCompanyEdit";
+import useCompanyEdit from "../hooks/useCompanyEdit";
 
-import ModernImageUpload
-  from "@/components/ui/ModernImageUpload";
+import ModernImageUpload from "@/components/ui/ModernImageUpload";
 
 export default function CompanyEditModal({
   open,
@@ -38,7 +28,6 @@ export default function CompanyEditModal({
 
   onSuccess,
 }) {
-
   const {
     loading,
     formData,
@@ -53,11 +42,7 @@ export default function CompanyEditModal({
   });
 
   return (
-    <Modal
-      open={open}
-      onClose={onClose}
-      size="2xl"
-    >
+    <Modal open={open} onClose={onClose} size="2xl">
       {/* ========================================
        * HEADER
        * ====================================== */}
@@ -105,7 +90,6 @@ export default function CompanyEditModal({
              * ====================================== */}
 
             <div className="space-y-4">
-
               <div>
                 <h3
                   className="
@@ -126,8 +110,7 @@ export default function CompanyEditModal({
                     dark:text-slate-400
                   "
                 >
-                  Sube un logo o imagen
-                  representativa.
+                  Sube un logo o imagen representativa.
                 </p>
               </div>
 
@@ -150,7 +133,6 @@ export default function CompanyEditModal({
              * ====================================== */}
 
             <div className="space-y-6">
-
               {/* BASIC INFO */}
 
               <div
@@ -165,7 +147,6 @@ export default function CompanyEditModal({
                 "
               >
                 <div className="mb-5">
-
                   <h3
                     className="
                       text-sm
@@ -185,8 +166,7 @@ export default function CompanyEditModal({
                       dark:text-slate-400
                     "
                   >
-                    Datos principales de
-                    identificación.
+                    Datos principales de identificación.
                   </p>
                 </div>
 
@@ -252,7 +232,6 @@ export default function CompanyEditModal({
                 "
               >
                 <div className="mb-5">
-
                   <h3
                     className="
                       text-sm
@@ -272,8 +251,7 @@ export default function CompanyEditModal({
                       dark:text-slate-400
                     "
                   >
-                    Información pública de
-                    contacto.
+                    Información pública de contacto.
                   </p>
                 </div>
 
@@ -315,9 +293,7 @@ export default function CompanyEditModal({
                   <Input
                     label="Representante Legal"
                     name="legalRepresentative"
-                    value={
-                      formData.legalRepresentative
-                    }
+                    value={formData.legalRepresentative}
                     onChange={handleChange}
                     placeholder="Juan Pérez"
                     icon={User2}
@@ -344,7 +320,6 @@ export default function CompanyEditModal({
          * ====================================== */}
 
         <FooterModal>
-
           <div
             className="
               flex
@@ -364,8 +339,7 @@ export default function CompanyEditModal({
                 sm:block
               "
             >
-              Los cambios se guardarán
-              automáticamente en la empresa.
+              Los cambios se guardarán automáticamente en la empresa.
             </div>
 
             <div
@@ -383,10 +357,7 @@ export default function CompanyEditModal({
                 onClick={onClose}
               />
 
-              <SubmitButton
-                text="Guardar Cambios"
-                loading={loading}
-              />
+              <SubmitButton text="Guardar Cambios" loading={loading} />
             </div>
           </div>
         </FooterModal>

@@ -1,18 +1,10 @@
 import { motion } from "framer-motion";
 
-import {
-  ArrowRight,
-  Play,
-  ShieldCheck,
-} from "lucide-react";
+import { ArrowRight, Play, ShieldCheck } from "lucide-react";
 
-import {
-  ModernButton,
-} from "@/components/buttons";
+import { ModernButton } from "@/components/buttons";
 
-import {
-  heroFeatures,
-} from "../constants/heroFeatures";
+import { heroFeatures } from "../constants/heroFeatures";
 
 import {
   fadeUp,
@@ -52,27 +44,22 @@ export default function HeroSection() {
     >
       {/* BACKGROUND */}
       <div className="absolute inset-0 -z-20">
-
         {/* IMAGE */}
         <motion.img
           initial={{
             scale: 1.1,
             opacity: 0,
           }}
-
           animate={{
             scale: 1,
             opacity: 1,
           }}
-
           transition={{
             duration: 1.4,
             ease: [0.16, 1, 0.3, 1],
           }}
-
           src="https://images.unsplash.com/photo-1556740749-887f6717d7e4?q=80&w=2070&auto=format&fit=crop"
           alt="ERP POS"
-
           className="
             h-full
             w-full
@@ -115,13 +102,11 @@ export default function HeroSection() {
           opacity: [0.4, 0.7, 0.4],
           scale: [1, 1.05, 1],
         }}
-
         transition={{
           duration: 6,
           repeat: Infinity,
           ease: "easeInOut",
         }}
-
         className="
           absolute
           left-0
@@ -144,13 +129,11 @@ export default function HeroSection() {
           opacity: [0.3, 0.6, 0.3],
           scale: [1, 1.08, 1],
         }}
-
         transition={{
           duration: 8,
           repeat: Infinity,
           ease: "easeInOut",
         }}
-
         className="
           absolute
           bottom-0
@@ -189,7 +172,6 @@ export default function HeroSection() {
             <motion.div
               variants={fadeUp}
               transition={smoothTransition}
-
               className="
                 inline-flex
                 items-center
@@ -222,7 +204,6 @@ export default function HeroSection() {
               "
             >
               <ShieldCheck size={16} />
-
               ERP • POS • Multiempresa
             </motion.div>
 
@@ -230,7 +211,6 @@ export default function HeroSection() {
             <motion.h2
               variants={fadeUp}
               transition={smoothTransition}
-
               className="
                 mt-8
 
@@ -248,7 +228,6 @@ export default function HeroSection() {
               "
             >
               Gestiona tu empresa
-
               <span
                 className="
                   mt-2
@@ -275,7 +254,6 @@ export default function HeroSection() {
             <motion.p
               variants={fadeUp}
               transition={smoothTransition}
-
               className="
                 mt-7
                 max-w-2xl
@@ -288,17 +266,14 @@ export default function HeroSection() {
                 dark:text-[#cbd5e1]
               "
             >
-              Administra ventas, inventario,
-              compras, reportes y múltiples
-              sucursales con una plataforma
-              moderna, rápida y diseñada para
+              Administra ventas, inventario, compras, reportes y múltiples
+              sucursales con una plataforma moderna, rápida y diseñada para
               empresas en crecimiento.
             </motion.p>
 
             {/* FEATURES */}
             <motion.div
               variants={staggerContainer}
-
               className="
                 mt-10
                 grid
@@ -313,12 +288,9 @@ export default function HeroSection() {
                 return (
                   <motion.div
                     key={item.title}
-
                     variants={fadeScale}
                     transition={springTransition}
-
                     whileHover={hoverLift}
-
                     className="
                       rounded-3xl
 
@@ -338,9 +310,7 @@ export default function HeroSection() {
                       dark:bg-white/5
                     "
                   >
-                    <motion.div
-                      whileHover={hoverScale}
-                    >
+                    <motion.div whileHover={hoverScale}>
                       <Icon
                         className="
                           text-[#274c77]
@@ -384,7 +354,6 @@ export default function HeroSection() {
             <motion.div
               variants={fadeUp}
               transition={smoothTransition}
-
               className="
                 mt-12
                 flex
@@ -394,18 +363,11 @@ export default function HeroSection() {
               "
             >
               <motion.div whileHover={hoverScale}>
-                <ModernButton
-                  text="Comenzar Ahora"
-                  icon={ArrowRight}
-                />
+                <ModernButton text="Comenzar Ahora" icon={ArrowRight} />
               </motion.div>
 
               <motion.div whileHover={hoverScale}>
-                <ModernButton
-                  text="Ver Demo"
-                  icon={Play}
-                  variant="secondary"
-                />
+                <ModernButton text="Ver Demo" icon={Play} variant="secondary" />
               </motion.div>
             </motion.div>
           </motion.div>
@@ -417,20 +379,16 @@ export default function HeroSection() {
               x: 80,
               scale: 0.95,
             }}
-
             whileInView={{
               opacity: 1,
               x: 0,
               scale: 1,
             }}
-
             viewport={defaultViewport}
-
             transition={{
               duration: 1,
               ease: [0.16, 1, 0.3, 1],
             }}
-
             className="relative"
           >
             {/* GLOW */}
@@ -452,14 +410,11 @@ export default function HeroSection() {
                 scale: 1.03,
                 rotate: 0.3,
               }}
-
               transition={{
                 duration: 0.4,
               }}
-
               src="https://images.unsplash.com/photo-1556740749-887f6717d7e4?q=80&w=2070&auto=format&fit=crop"
               alt="ERP POS"
-
               className="
                 relative
 

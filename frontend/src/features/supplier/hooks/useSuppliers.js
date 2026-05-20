@@ -1,25 +1,19 @@
-import useSupplierLoad
-  from "./useSupplierLoad";
+import useSupplierLoad from "./useSupplierLoad";
 
-import useSupplierForm
-  from "./useSupplierForm";
+import useSupplierForm from "./useSupplierForm";
 
-import useSupplierActions
-  from "./useSupplierActions";
+import useSupplierActions from "./useSupplierActions";
 
 export default function useSupplier() {
-
   // =========================
   // LOAD
   // =========================
 
   const {
-
     suppliers,
     loading,
 
     loadSuppliers,
-
   } = useSupplierLoad();
 
   // =========================
@@ -27,7 +21,6 @@ export default function useSupplier() {
   // =========================
 
   const {
-
     form,
     editingId,
 
@@ -35,7 +28,6 @@ export default function useSupplier() {
     handleEdit,
 
     resetForm,
-
   } = useSupplierForm();
 
   // =========================
@@ -43,20 +35,16 @@ export default function useSupplier() {
   // =========================
 
   const {
-
     saving,
 
     handleSubmit,
     handleDelete,
-
   } = useSupplierActions({
-
     form,
     editingId,
 
     resetForm,
     loadSuppliers,
-
   });
 
   // =========================
@@ -64,7 +52,6 @@ export default function useSupplier() {
   // =========================
 
   return {
-
     // DATA
     suppliers,
 
@@ -83,7 +70,5 @@ export default function useSupplier() {
     handleDelete,
 
     resetForm,
-
   };
-
 }

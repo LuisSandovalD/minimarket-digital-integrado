@@ -13,8 +13,7 @@ export const security = [
   {
     title: "Autenticación Segura",
 
-    description:
-      "Sistema de acceso protegido mediante JWT y sesiones seguras.",
+    description: "Sistema de acceso protegido mediante JWT y sesiones seguras.",
 
     icon: ShieldCheck,
 
@@ -25,8 +24,7 @@ export const security = [
   {
     title: "Control de Roles",
 
-    description:
-      "Gestiona permisos personalizados para cada usuario.",
+    description: "Gestiona permisos personalizados para cada usuario.",
 
     icon: Lock,
 
@@ -37,8 +35,7 @@ export const security = [
   {
     title: "2FA Empresarial",
 
-    description:
-      "Protección adicional mediante autenticación en dos pasos.",
+    description: "Protección adicional mediante autenticación en dos pasos.",
 
     icon: KeyRound,
 
@@ -61,8 +58,7 @@ export const security = [
   {
     title: "Auditoría Completa",
 
-    description:
-      "Registra todas las acciones y movimientos del sistema.",
+    description: "Registra todas las acciones y movimientos del sistema.",
 
     icon: Eye,
 
@@ -73,8 +69,7 @@ export const security = [
   {
     title: "Protección de Datos",
 
-    description:
-      "Bases de datos protegidas con cifrado y backups automáticos.",
+    description: "Bases de datos protegidas con cifrado y backups automáticos.",
 
     icon: Database,
 

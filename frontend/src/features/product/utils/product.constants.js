@@ -3,19 +3,13 @@
 // ========================================
 
 export const PRODUCT_STATUS = {
+  ACTIVE: "ACTIVE",
 
-  ACTIVE:
-    "ACTIVE",
+  INACTIVE: "INACTIVE",
 
-  INACTIVE:
-    "INACTIVE",
+  LOW_STOCK: "LOW_STOCK",
 
-  LOW_STOCK:
-    "LOW_STOCK",
-
-  OUT_OF_STOCK:
-    "OUT_OF_STOCK",
-
+  OUT_OF_STOCK: "OUT_OF_STOCK",
 };
 
 // ========================================
@@ -23,13 +17,11 @@ export const PRODUCT_STATUS = {
 // ========================================
 
 export const DEFAULT_PRODUCT_FILTERS = {
-
   search: "",
 
   category: "",
 
   featured: false,
-
 };
 
 // ========================================
@@ -37,7 +29,6 @@ export const DEFAULT_PRODUCT_FILTERS = {
 // ========================================
 
 export const PRODUCT_SORT_OPTIONS = [
-
   {
     label: "Más recientes",
     value: "newest",
@@ -67,7 +58,6 @@ export const PRODUCT_SORT_OPTIONS = [
     label: "Menor precio",
     value: "price_asc",
   },
-
 ];
 
 // ========================================
@@ -75,17 +65,11 @@ export const PRODUCT_SORT_OPTIONS = [
 // ========================================
 
 export const PRODUCT_STATUS_COLORS = {
+  ACTIVE: "bg-emerald-500/15 text-emerald-500 border-emerald-500/20",
 
-  ACTIVE:
-    "bg-emerald-500/15 text-emerald-500 border-emerald-500/20",
+  INACTIVE: "bg-slate-500/15 text-slate-400 border-slate-500/20",
 
-  INACTIVE:
-    "bg-slate-500/15 text-slate-400 border-slate-500/20",
+  LOW_STOCK: "bg-amber-500/15 text-amber-500 border-amber-500/20",
 
-  LOW_STOCK:
-    "bg-amber-500/15 text-amber-500 border-amber-500/20",
-
-  OUT_OF_STOCK:
-    "bg-red-500/15 text-red-500 border-red-500/20",
-
+  OUT_OF_STOCK: "bg-red-500/15 text-red-500 border-red-500/20",
 };

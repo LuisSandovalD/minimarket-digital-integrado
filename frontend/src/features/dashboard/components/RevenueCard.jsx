@@ -1,10 +1,5 @@
-export default function RevenueCard({
-  title,
-  value,
-}) {
-
+export default function RevenueCard({ title, value }) {
   return (
-
     <div
       className="
         rounded-3xl
@@ -22,7 +17,6 @@ export default function RevenueCard({
         backdrop-blur-xl
       "
     >
-
       <p
         className="
           text-sm
@@ -47,9 +41,6 @@ export default function RevenueCard({
       >
         {value}
       </h3>
-
     </div>
-
   );
-
 }

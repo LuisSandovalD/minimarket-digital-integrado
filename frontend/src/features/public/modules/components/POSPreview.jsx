@@ -1,11 +1,6 @@
 // models/components/POSPreview.jsx
 
-import {
-  ShoppingCart,
-  CreditCard,
-  QrCode,
-  Receipt,
-} from "lucide-react";
+import { ShoppingCart, CreditCard, QrCode, Receipt } from "lucide-react";
 
 export default function POSPreview() {
   return (
@@ -52,7 +47,6 @@ export default function POSPreview() {
             "
           >
             <ShoppingCart size={16} />
-
             Punto de Venta Inteligente
           </div>
 
@@ -108,11 +102,9 @@ export default function POSPreview() {
               md:text-lg
             "
           >
-            Procesa ventas en segundos
-            con soporte para tickets,
-            pagos digitales, códigos QR,
-            múltiples cajas y control
-            total de transacciones.
+            Procesa ventas en segundos con soporte para tickets, pagos
+            digitales, códigos QR, múltiples cajas y control total de
+            transacciones.
           </p>
 
           {/* FEATURES */}
@@ -262,7 +254,6 @@ export default function POSPreview() {
 
         {/* RIGHT */}
         <div className="relative">
-          
           {/* IMAGE */}
           <div
             className="
@@ -284,7 +275,6 @@ export default function POSPreview() {
             <img
               src="https://images.unsplash.com/photo-1556740749-887f6717d7e4?q=80&w=2070&auto=format&fit=crop"
               alt="POS"
-
               className="
                 h-[500px]
                 w-full

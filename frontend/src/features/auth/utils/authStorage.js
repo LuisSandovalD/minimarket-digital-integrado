@@ -2,92 +2,50 @@
 // SAVE SESSION
 // ======================================
 
-export const saveSession =
-  ({ token, user, company }) => {
+export const saveSession = ({ token, user, company }) => {
+  localStorage.setItem("token", token);
 
-    localStorage.setItem(
-      "token",
-      token
-    );
+  localStorage.setItem("user", JSON.stringify(user));
 
-    localStorage.setItem(
-      "user",
-      JSON.stringify(user)
-    );
-
-    localStorage.setItem(
-      "company",
-      JSON.stringify(company)
-    );
-
-  };
+  localStorage.setItem("company", JSON.stringify(company));
+};
 
 // ======================================
 // GET TOKEN
 // ======================================
 
-export const getToken =
-  () => {
-
-    return localStorage.getItem(
-      "token"
-    );
-
-  };
+export const getToken = () => {
+  return localStorage.getItem("token");
+};
 
 // ======================================
 // GET USER
 // ======================================
 
-export const getUser =
-  () => {
+export const getUser = () => {
+  const user = localStorage.getItem("user");
 
-    const user =
-      localStorage.getItem(
-        "user"
-      );
-
-    return user
-      ? JSON.parse(user)
-      : null;
-
-  };
+  return user ? JSON.parse(user) : null;
+};
 
 // ======================================
 // GET COMPANY
 // ======================================
 
-export const getCompany =
-  () => {
+export const getCompany = () => {
+  const company = localStorage.getItem("company");
 
-    const company =
-      localStorage.getItem(
-        "company"
-      );
-
-    return company
-      ? JSON.parse(company)
-      : null;
-
-  };
+  return company ? JSON.parse(company) : null;
+};
 
 // ======================================
 // CLEAR SESSION
 // ======================================
 
-export const clearSession =
-  () => {
+export const clearSession = () => {
+  localStorage.removeItem("token");
 
-    localStorage.removeItem(
-      "token"
-    );
+  localStorage.removeItem("user");
 
-    localStorage.removeItem(
-      "user"
-    );
-
-    localStorage.removeItem(
-      "company"
-    );
-
-  };
+  localStorage.removeItem("company");
+};

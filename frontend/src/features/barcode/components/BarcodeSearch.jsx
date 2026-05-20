@@ -1,16 +1,11 @@
-import SearchInput
-  from "@/components/inputs/SearchInput";
+import SearchInput from "@/components/inputs/SearchInput";
 
 export default function BarcodeSearch({
-
   value,
 
   onChange,
-
 }) {
-
   return (
-
     <div
       className="
         flex
@@ -20,24 +15,13 @@ export default function BarcodeSearch({
         lg:flex-row
       "
     >
-
       <SearchInput
-
         placeholder="
           Buscar producto...
         "
-
         value={value}
-
-        onChange={(e) =>
-          onChange(
-            e.target.value
-          )
-        }
+        onChange={(e) => onChange(e.target.value)}
       />
-
     </div>
-
   );
-
 }

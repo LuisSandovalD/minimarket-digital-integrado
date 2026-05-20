@@ -1,7 +1,5 @@
 export default function SalesChart() {
-
   return (
-
     <div
       className="
         rounded-3xl
@@ -19,7 +17,6 @@ export default function SalesChart() {
         backdrop-blur-xl
       "
     >
-
       <h2
         className="
           text-lg
@@ -49,7 +46,6 @@ export default function SalesChart() {
           dark:border-slate-700
         "
       >
-
         <span
           className="
             text-sm
@@ -59,11 +55,7 @@ export default function SalesChart() {
         >
           Aquí irá el gráfico
         </span>
-
       </div>
-
     </div>
-
   );
-
 }

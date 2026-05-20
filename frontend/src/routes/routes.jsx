@@ -1,72 +1,52 @@
-import { Navigate }
-from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 /* ================= PUBLIC LAYOUT ================= */
 
-import PublicLayout
-from "../layout/public/PublicLayout";
+import PublicLayout from "../layout/public/PublicLayout";
 
 /* ================= PUBLIC ================= */
 
-import Home
-from "../features/public/home/Home";
+import Home from "../features/public/home/Home";
 
-import Features
-from "../features/public/features/Features";
+import Features from "../features/public/features/Features";
 
-import Modules
-from "../features/public/modules/Modules";
+import Modules from "../features/public/modules/Modules";
 
-import Contact
-from "../features/public/contact/Contact";
+import Contact from "../features/public/contact/Contact";
 
-import Inventory
-from "../features/public/inventory/Inventory";
+import Inventory from "../features/public/inventory/Inventory";
 
 /* ================= APP ================= */
 
-import AppLayout
-from "../layout/app-layout/AppLayout";
+import AppLayout from "../layout/app-layout/AppLayout";
 
-import Dashboard
-from "../features/dashboard/pages/DashboardPage";
+import Dashboard from "../features/dashboard/pages/DashboardPage";
 
-import BranchesPage
-from "../features/branches/pages/BranchesPage";
+import BranchesPage from "../features/branches/pages/BranchesPage";
 
-import CompaniesPage
-from "../features/company/pages/CompaniesPage";
+import CompaniesPage from "../features/company/pages/CompaniesPage";
 
-import RequireAuth
-from "../features/auth/guards/RequireAuth";
+import RequireAuth from "../features/auth/guards/RequireAuth";
 
-import UsersPage
-from "../features/users/pages/UsersPage";
+import UsersPage from "../features/users/pages/UsersPage";
 
-import CategoriesPage
-from "../features/categories/pages/CategoriesPage";
+import CategoriesPage from "../features/categories/pages/CategoriesPage";
 
-import UnitPage
-from "../features/units";
+import UnitPage from "../features/units";
 
-
-import ProductsPage
-from "../features/product/pages/ProductsPage";
+import ProductsPage from "../features/product/pages/ProductsPage";
 
 import { SalesPage } from "../features/sales/pages/SalesPage";
 
-import SupplierPage from "../features/supplier/pages/SupplierPage";
-import PurchasePage from "../features/purchase/page/PurchasePage";
-import InventoryPage from "../features/inventory/pages/InventoryPage";
 import BarcodePages from "../features/barcode/pages/BarcodePages";
-import MovementsPage from "../features/movements/pages/MovementsPage";
-import EmployeesPage from "../features/employee/pages/EmployeesPage";
 import CustomerPage from "../features/customer/pages/CustomerPage";
-
-
+import EmployeesPage from "../features/employee/pages/EmployeesPage";
+import InventoryPage from "../features/inventory/pages/InventoryPage";
+import MovementsPage from "../features/movements/pages/MovementsPage";
+import PurchasePage from "../features/purchase/page/PurchasePage";
+import SupplierPage from "../features/supplier/pages/SupplierPage";
 
 export const routes = [
-
   /* ========================================
    * PUBLIC
    * ====================================== */
@@ -123,77 +103,72 @@ export const routes = [
 
           {
             path: "branches",
-            element: <BranchesPage />
+            element: <BranchesPage />,
           },
-
 
           {
             path: "inventory-history",
-            element: <MovementsPage/>
+            element: <MovementsPage />,
           },
 
-           {
+          {
             path: "employees",
-            element: <EmployeesPage/>
+            element: <EmployeesPage />,
           },
 
-            {
+          {
             path: "customers",
-            element: <CustomerPage/>
+            element: <CustomerPage />,
           },
-
-
-
 
           {
             path: "users",
-            element: <UsersPage />
+            element: <UsersPage />,
           },
 
           {
             path: "categories",
-            element: <CategoriesPage />
+            element: <CategoriesPage />,
           },
 
           {
             path: "companies",
-            element: <CompaniesPage />
+            element: <CompaniesPage />,
           },
 
           {
             path: "units",
-            element: <UnitPage />
+            element: <UnitPage />,
           },
 
           {
             path: "products",
-            element: <ProductsPage />
+            element: <ProductsPage />,
           },
 
           {
             path: "sales",
-            element : <SalesPage />
+            element: <SalesPage />,
           },
 
           {
             path: "purchases",
-            element : <          PurchasePage />
+            element: <PurchasePage />,
           },
           {
             path: "suppliers",
-            element : <SupplierPage />
+            element: <SupplierPage />,
           },
 
           {
-            path:"barcode",
-            element : <BarcodePages />
+            path: "barcode",
+            element: <BarcodePages />,
           },
 
-           {
+          {
             path: "inventory",
-            element : <InventoryPage />
-          }
-
+            element: <InventoryPage />,
+          },
         ],
       },
     ],
@@ -206,11 +181,6 @@ export const routes = [
   {
     path: "*",
 
-    element:
-      <Navigate
-        to="/"
-        replace
-      />,
+    element: <Navigate to="/" replace />,
   },
-
 ];

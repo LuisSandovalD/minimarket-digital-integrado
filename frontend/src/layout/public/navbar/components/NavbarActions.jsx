@@ -1,37 +1,22 @@
-import {
-  useState,
-} from "react";
+import { useState } from "react";
 
-import {
-  LogIn,
-  UserPlus,
-} from "lucide-react";
+import { LogIn, UserPlus } from "lucide-react";
 
-import {
-  ModernButton,
-} from "@/components/buttons";
+import { ModernButton } from "@/components/buttons";
 
-import ThemeToggle
-  from "@/components/theme/ThemeToggle";
+import ThemeToggle from "@/components/theme/ThemeToggle";
 
-import {LoginModal} from "@/features/auth/components/login/"
-import {RegisterModal} from "@/features/auth/components/register/"
+import { LoginModal } from "@/features/auth/components/login/";
+import { RegisterModal } from "@/features/auth/components/register/";
 export default function NavbarActions() {
-  const [
-    openLogin,
-    setOpenLogin,
-  ] = useState(false);
+  const [openLogin, setOpenLogin] = useState(false);
 
-  const [
-    openRegister,
-    setOpenRegister,
-  ] = useState(false);
+  const [openRegister, setOpenRegister] = useState(false);
 
   return (
     <>
       {/* ACTIONS */}
       <div className="hidden items-center gap-3 lg:flex">
-
         {/* LOGIN */}
         <ModernButton
           text="Iniciar Sesión"
@@ -59,19 +44,12 @@ export default function NavbarActions() {
       </div>
 
       {/* LOGIN MODAL */}
-      <LoginModal
-        open={openLogin}
-        onClose={() =>
-          setOpenLogin(false)
-        }
-      />
+      <LoginModal open={openLogin} onClose={() => setOpenLogin(false)} />
 
       {/* REGISTER MODAL */}
       <RegisterModal
         open={openRegister}
-        onClose={() =>
-          setOpenRegister(false)
-        }
+        onClose={() => setOpenRegister(false)}
       />
     </>
   );

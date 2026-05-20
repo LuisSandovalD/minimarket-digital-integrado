@@ -1,10 +1,6 @@
 // inventory/components/AlertsSection.jsx
 
-import {
-  BellRing,
-  AlertTriangle,
-  ShieldAlert,
-} from "lucide-react";
+import { BellRing, AlertTriangle, ShieldAlert } from "lucide-react";
 
 import { alerts } from "../constants/alerts";
 export default function AlertsSection() {
@@ -16,8 +12,6 @@ export default function AlertsSection() {
           overflow-hidden
         "
       >
-        
-
         <div
           className="
             relative
@@ -112,8 +106,8 @@ export default function AlertsSection() {
                 dark:text-[#cbd5e1]
               "
             >
-              Recibe alertas sobre stock, seguridad y movimientos
-              importantes dentro del inventario.
+              Recibe alertas sobre stock, seguridad y movimientos importantes
+              dentro del inventario.
             </p>
 
             {/* ALERTS */}

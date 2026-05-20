@@ -1,11 +1,6 @@
 // models/components/DashboardPreview.jsx
 
-import {
-  BarChart3,
-  Activity,
-  TrendingUp,
-  ShieldCheck,
-} from "lucide-react";
+import { BarChart3, Activity, TrendingUp, ShieldCheck } from "lucide-react";
 
 export default function DashboardPreview() {
   return (
@@ -50,7 +45,6 @@ export default function DashboardPreview() {
             "
           >
             <BarChart3 size={16} />
-
             Dashboard Inteligente
           </div>
 
@@ -106,11 +100,8 @@ export default function DashboardPreview() {
               md:text-lg
             "
           >
-            Monitorea ventas,
-            inventario, ingresos,
-            usuarios y estadísticas
-            en tiempo real desde
-            una interfaz moderna.
+            Monitorea ventas, inventario, ingresos, usuarios y estadísticas en
+            tiempo real desde una interfaz moderna.
           </p>
 
           {/* MINI CARDS */}
@@ -275,7 +266,6 @@ export default function DashboardPreview() {
             <img
               src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop"
               alt="ERP Dashboard"
-
               className="
                 h-[500px]
                 w-full

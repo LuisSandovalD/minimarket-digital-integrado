@@ -1,5 +1,4 @@
 const sales = [
-
   {
     id: 1,
     customer: "Juan Pérez",
@@ -11,13 +10,10 @@ const sales = [
     customer: "María López",
     total: "S/ 250",
   },
-
 ];
 
 export default function RecentSales() {
-
   return (
-
     <div
       className="
         rounded-3xl
@@ -35,7 +31,6 @@ export default function RecentSales() {
         backdrop-blur-xl
       "
     >
-
       <h2
         className="
           text-lg
@@ -49,9 +44,7 @@ export default function RecentSales() {
       </h2>
 
       <div className="mt-5 space-y-4">
-
         {sales.map((sale) => (
-
           <div
             key={sale.id}
             className="
@@ -68,7 +61,6 @@ export default function RecentSales() {
               py-3
             "
           >
-
             <span
               className="
                 text-sm
@@ -91,15 +83,9 @@ export default function RecentSales() {
             >
               {sale.total}
             </span>
-
           </div>
-
         ))}
-
       </div>
-
     </div>
-
   );
-
 }

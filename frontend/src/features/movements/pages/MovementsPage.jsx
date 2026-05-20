@@ -2,33 +2,26 @@
 // features/movements/pages/MovementsPage.jsx
 // ========================================
 
-import useMovements
-  from "../hooks/useMovements";
+import useMovements from "../hooks/useMovements";
 
-import MovementsHeader
-  from "../components/MovementsHeader";
+import MovementsHeader from "../components/MovementsHeader";
 
-import MovementSearch
-  from "../components/MovementSearch";
+import MovementSearch from "../components/MovementSearch";
 
-import MovementsTable
-  from "../components/MovementsTable";
+import MovementsTable from "../components/MovementsTable";
 
-import LoadingMovements
-  from "../components/LoadingMovements";
+import LoadingMovements from "../components/LoadingMovements";
 
 // ========================================
 // PAGE
 // ========================================
 
 export default function MovementsPage() {
-
   // ========================================
   // HOOK
   // ========================================
 
   const {
-
     movements,
 
     loading,
@@ -38,7 +31,6 @@ export default function MovementsPage() {
     setSearch,
 
     refetch,
-
   } = useMovements();
 
   // ========================================
@@ -46,11 +38,7 @@ export default function MovementsPage() {
   // ========================================
 
   if (loading) {
-
-    return (
-      <LoadingMovements />
-    );
-
+    return <LoadingMovements />;
   }
 
   // ========================================
@@ -58,52 +46,29 @@ export default function MovementsPage() {
   // ========================================
 
   return (
-    <div className="
+    <div
+      className="
       p-6
       space-y-6
-    ">
-
+    "
+    >
       {/* ======================================== */}
       {/* HEADER */}
       {/* ======================================== */}
 
-      <MovementsHeader
-
-        movements={movements}
-
-        onRefresh={
-          refetch
-        }
-
-      />
+      <MovementsHeader movements={movements} onRefresh={refetch} />
 
       {/* ======================================== */}
       {/* SEARCH */}
       {/* ======================================== */}
 
-      <MovementSearch
-
-        value={search}
-
-        onChange={
-          setSearch
-        }
-
-      />
+      <MovementSearch value={search} onChange={setSearch} />
 
       {/* ======================================== */}
       {/* TABLE */}
       {/* ======================================== */}
 
-      <MovementsTable
-
-        movements={movements}
-
-        loading={loading}
-
-      />
-
+      <MovementsTable movements={movements} loading={loading} />
     </div>
   );
-
 }

@@ -1,6 +1,6 @@
-import AsideItem from './AsideItem';
-import AsideSection from './AsideSection';
-import AsideGroupTitle from './AsideGroupTitle';
+import AsideItem from "./AsideItem";
+import AsideSection from "./AsideSection";
+import AsideGroupTitle from "./AsideGroupTitle";
 
 export default function AsideNavigation({
   menuItems = [],
@@ -24,10 +24,7 @@ export default function AsideNavigation({
     >
       <div className="space-y-6">
         {menuItems.map((section) => (
-          <AsideSection
-            key={section.section}
-            bordered={false}
-          >
+          <AsideSection key={section.section} bordered={false}>
             {/* ========================================
              * TÍTULO DE SECCIÓN
              * ====================================== */}
@@ -44,15 +41,9 @@ export default function AsideNavigation({
                 <AsideItem
                   key={item.id}
                   {...item}
-                  isActive={
-                    activeItem === item.id
-                  }
-                  isCollapsed={
-                    isCollapsed
-                  }
-                  onClick={() =>
-                    setActiveItem(item.id)
-                  }
+                  isActive={activeItem === item.id}
+                  isCollapsed={isCollapsed}
+                  onClick={() => setActiveItem(item.id)}
                 />
               ))}
             </div>

@@ -1,5 +1,3 @@
-// inventory/components/InventoryFeatures.jsx
-
 import { features } from "../constants/features";
 
 export default function InventoryFeatures() {
@@ -29,8 +27,7 @@ export default function InventoryFeatures() {
               dark:text-white
             "
           >
-            Todo lo que necesitas
-            para tu inventario
+            Todo lo que necesitas para tu inventario
           </h2>
         </div>
 
@@ -75,7 +72,6 @@ export default function InventoryFeatures() {
                 <img
                   src={item.image}
                   alt={item.title}
-
                   className="
                     h-56
                     w-full

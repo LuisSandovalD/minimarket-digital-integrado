@@ -1,28 +1,14 @@
 import api from "@/api/axios";
 
 class CompanyService {
-
   /* ========================================
    * MY COMPANY
    * ====================================== */
 
   async getMyCompany() {
+    const response = await api.get("/company/me");
 
-    try {
-
-      const response =
-        await api.get(
-          "/company/me"
-        );
-
-      return response.data;
-
-    } catch (error) {
-
-      throw error;
-
-    }
-
+    return response.data;
   }
 
   /* ========================================
@@ -30,22 +16,9 @@ class CompanyService {
    * ====================================== */
 
   async getCompanyBySlug(slug) {
+    const response = await api.get(`/company/slug/${slug}`);
 
-    try {
-
-      const response =
-        await api.get(
-          `/company/slug/${slug}`
-        );
-
-      return response.data;
-
-    } catch (error) {
-
-      throw error;
-
-    }
-
+    return response.data;
   }
 
   /* ========================================
@@ -53,22 +26,9 @@ class CompanyService {
    * ====================================== */
 
   async getCompanies() {
+    const response = await api.get("/company");
 
-    try {
-
-      const response =
-        await api.get(
-          "/company"
-        );
-
-      return response.data;
-
-    } catch (error) {
-
-      throw error;
-
-    }
-
+    return response.data;
   }
 
   /* ========================================
@@ -76,55 +36,24 @@ class CompanyService {
    * ====================================== */
 
   async getCompanyById(id) {
+    const response = await api.get(`/company/${id}`);
 
-    try {
-
-      const response =
-        await api.get(
-          `/company/${id}`
-        );
-
-      return response.data;
-
-    } catch (error) {
-
-      throw error;
-
-    }
-
+    return response.data;
   }
 
   /* ========================================
    * UPDATE
    * ====================================== */
 
-  async updateCompany(
-    id,
-    data
-  ) {
+  async updateCompany(id, data) {
+    const response = await api.put(
+      `/company/${id}`,
 
-    try {
+      data,
+    );
 
-      const response =
-        await api.put(
-
-          `/company/${id}`,
-
-          data
-
-        );
-
-      return response.data;
-
-    } catch (error) {
-
-      throw error;
-
-    }
-
+    return response.data;
   }
-
 }
 
-export const companyService =
-  new CompanyService();
+export const companyService = new CompanyService();

@@ -2,10 +2,7 @@
 
 import { useState } from "react";
 
-import {
-  ChevronDown,
-  HelpCircle,
-} from "lucide-react";
+import { ChevronDown, HelpCircle } from "lucide-react";
 
 import { faqs } from "../constants/faqs";
 
@@ -79,7 +76,6 @@ export default function ContactFAQ() {
             "
           >
             <HelpCircle size={15} />
-
             Preguntas frecuentes
           </div>
 
@@ -100,7 +96,6 @@ export default function ContactFAQ() {
             "
           >
             Resolvemos tus
-
             <span
               className="
                 mt-2
@@ -134,9 +129,8 @@ export default function ContactFAQ() {
               dark:text-[#cbd5e1]
             "
           >
-            Encuentra respuestas rápidas sobre implementación,
-            soporte técnico, funcionalidades ERP y acceso
-            a la plataforma.
+            Encuentra respuestas rápidas sobre implementación, soporte técnico,
+            funcionalidades ERP y acceso a la plataforma.
           </p>
         </div>
 
@@ -173,7 +167,6 @@ export default function ContactFAQ() {
                 {/* BUTTON */}
                 <button
                   onClick={() => toggleFAQ(index)}
-
                   className="
                     flex
                     w-full

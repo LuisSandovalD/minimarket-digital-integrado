@@ -21,7 +21,6 @@ export default function ReportsSection() {
       >
         {/* LEFT */}
         <div>
-          
           {/* BADGE */}
           <div
             className="
@@ -51,7 +50,6 @@ export default function ReportsSection() {
             "
           >
             <TrendingUp size={16} />
-
             Reportes Inteligentes
           </div>
 
@@ -72,9 +70,7 @@ export default function ReportsSection() {
               md:text-5xl
             "
           >
-            Toma decisiones
-            basadas en datos
-
+            Toma decisiones basadas en datos
             <span
               className="
                 mt-2
@@ -109,11 +105,8 @@ export default function ReportsSection() {
               md:text-lg
             "
           >
-            Genera reportes empresariales,
-            estadísticas avanzadas,
-            exportaciones PDF y Excel,
-            dashboards interactivos y
-            métricas en tiempo real.
+            Genera reportes empresariales, estadísticas avanzadas, exportaciones
+            PDF y Excel, dashboards interactivos y métricas en tiempo real.
           </p>
 
           {/* FEATURES */}
@@ -205,7 +198,6 @@ export default function ReportsSection() {
 
         {/* RIGHT */}
         <div className="relative">
-          
           {/* LIGHT */}
           <div
             className="
@@ -241,7 +233,6 @@ export default function ReportsSection() {
             <img
               src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop"
               alt="Reports"
-
               className="
                 h-[520px]
                 w-full
@@ -308,8 +299,7 @@ export default function ReportsSection() {
                   dark:text-[#cbd5e1]
                 "
               >
-                Métricas empresariales
-                actualizadas automáticamente.
+                Métricas empresariales actualizadas automáticamente.
               </p>
             </div>
           </div>

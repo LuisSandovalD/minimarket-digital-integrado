@@ -41,7 +41,6 @@ export default function InventoryAnalytics() {
         lg:px-14
       "
     >
-
       <div
         className="
           relative
@@ -108,7 +107,7 @@ export default function InventoryAnalytics() {
             <br />
             empresariales
             <span
-                className="
+              className="
                   block
 
                   bg-gradient-to-r
@@ -119,7 +118,7 @@ export default function InventoryAnalytics() {
                   bg-clip-text
                   text-transparent
                 "
-              >
+            >
               en tiempo real
             </span>
           </h2>
@@ -138,9 +137,9 @@ export default function InventoryAnalytics() {
               dark:text-slate-400
             "
           >
-            Visualiza productos más vendidos, niveles de stock,
-            rotación de inventario y rendimiento operativo desde
-            dashboards modernos y totalmente dinámicos.
+            Visualiza productos más vendidos, niveles de stock, rotación de
+            inventario y rendimiento operativo desde dashboards modernos y
+            totalmente dinámicos.
           </p>
 
           {/* STATS */}
@@ -250,8 +249,6 @@ export default function InventoryAnalytics() {
               );
             })}
           </div>
-
-         
         </div>
 
         {/* RIGHT IMAGE */}

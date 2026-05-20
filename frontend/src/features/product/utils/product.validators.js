@@ -2,10 +2,7 @@
 // VALIDATE PRODUCT
 // ========================================
 
-export const validateProduct = (
-  form
-) => {
-
+export const validateProduct = (form) => {
   const errors = {};
 
   // ========================================
@@ -13,38 +10,23 @@ export const validateProduct = (
   // ========================================
 
   if (!form.name?.trim()) {
-
-    errors.name =
-      "El nombre es requerido";
-
+    errors.name = "El nombre es requerido";
   }
 
   // ========================================
   // PURCHASE PRICE
   // ========================================
 
-  if (
-    !form.purchasePrice ||
-    Number(form.purchasePrice) <= 0
-  ) {
-
-    errors.purchasePrice =
-      "Precio de compra inválido";
-
+  if (!form.purchasePrice || Number(form.purchasePrice) <= 0) {
+    errors.purchasePrice = "Precio de compra inválido";
   }
 
   // ========================================
   // COST PRICE
   // ========================================
 
-  if (
-    !form.costPrice ||
-    Number(form.costPrice) <= 0
-  ) {
-
-    errors.costPrice =
-      "Costo inválido";
-
+  if (!form.costPrice || Number(form.costPrice) <= 0) {
+    errors.costPrice = "Costo inválido";
   }
 
   // ========================================
@@ -52,10 +34,7 @@ export const validateProduct = (
   // ========================================
 
   if (!form.categoryId) {
-
-    errors.categoryId =
-      "Seleccione categoría";
-
+    errors.categoryId = "Seleccione categoría";
   }
 
   // ========================================
@@ -63,12 +42,8 @@ export const validateProduct = (
   // ========================================
 
   if (!form.unitId) {
-
-    errors.unitId =
-      "Seleccione unidad";
-
+    errors.unitId = "Seleccione unidad";
   }
 
   return errors;
-
 };

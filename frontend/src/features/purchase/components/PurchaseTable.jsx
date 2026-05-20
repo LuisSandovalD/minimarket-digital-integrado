@@ -2,9 +2,7 @@
 // features/purchase/components/PurchaseTable.jsx
 // ========================================
 
-import React, {
-  useState,
-} from "react";
+import React, { useState } from "react";
 
 import {
   Receipt,
@@ -19,47 +17,28 @@ import {
   Eye,
 } from "lucide-react";
 
-import {
-  Table,
-  THead,
-} from "@/components/table";
+import { Table, THead } from "@/components/table";
 
-import {
-  ModernButton,
-} from "@/components/buttons";
+import { ModernButton } from "@/components/buttons";
 
-import PurchaseActions
-  from "./PurchaseActions";
+import PurchaseActions from "./PurchaseActions";
 
-import PurchaseProductsModal
-  from "./PurchaseProductsModal";
+import PurchaseProductsModal from "./PurchaseProductsModal";
 
-export default function PurchaseTable({
-  purchases = [],
-  onEdit,
-  onDelete,
-}) {
-
+export default function PurchaseTable({ purchases = [], onEdit, onDelete }) {
   // ========================================
   // MODAL
   // ========================================
 
-  const [
-    selectedPurchase,
-    setSelectedPurchase,
-  ] = useState(null);
+  const [selectedPurchase, setSelectedPurchase] = useState(null);
 
-  const [
-    openProducts,
-    setOpenProducts,
-  ] = useState(false);
+  const [openProducts, setOpenProducts] = useState(false);
 
   // ========================================
   // TABLE COLUMNS
   // ========================================
 
   const columns = [
-
     {
       key: "number",
 
@@ -158,37 +137,25 @@ export default function PurchaseTable({
         </div>
       ),
     },
-
   ];
 
   // ========================================
   // FORMAT PRICE
   // ========================================
 
-  const formatPrice = (
-    value
-  ) => {
-
-    return new Intl.NumberFormat(
-      "es-PE",
-      {
-        style: "currency",
-        currency: "PEN",
-      }
-    ).format(Number(value || 0));
-
+  const formatPrice = (value) => {
+    return new Intl.NumberFormat("es-PE", {
+      style: "currency",
+      currency: "PEN",
+    }).format(Number(value || 0));
   };
 
   // ========================================
   // STATUS STYLES
   // ========================================
 
-  const getStatusStyles = (
-    status
-  ) => {
-
+  const getStatusStyles = (status) => {
     switch (status) {
-
       case "COMPLETED":
         return `
           bg-green-100
@@ -221,42 +188,28 @@ export default function PurchaseTable({
           dark:text-slate-300
         `;
     }
-
   };
 
   // ========================================
   // OPEN PRODUCTS
   // ========================================
 
-  const handleOpenProducts =
-    (purchase) => {
+  const handleOpenProducts = (purchase) => {
+    setSelectedPurchase(purchase);
 
-      setSelectedPurchase(
-        purchase
-      );
-
-      setOpenProducts(true);
-
-    };
+    setOpenProducts(true);
+  };
 
   return (
-
     <>
-
       {/* ========================================
        * MODAL PRODUCTS
        * ====================================== */}
 
       <PurchaseProductsModal
-
         open={openProducts}
-
-        onClose={() =>
-          setOpenProducts(false)
-        }
-
+        onClose={() => setOpenProducts(false)}
         purchase={selectedPurchase}
-
       />
 
       {/* ========================================
@@ -264,9 +217,7 @@ export default function PurchaseTable({
        * ====================================== */}
 
       <div className="space-y-5">
-
         <div>
-
           <h2
             className="
               text-xl
@@ -286,22 +237,16 @@ export default function PurchaseTable({
               text-slate-500
             "
           >
-            Gestiona órdenes,
-            pagos y registros de compras.
+            Gestiona órdenes, pagos y registros de compras.
           </p>
-
         </div>
 
         <Table>
-
           <THead columns={columns} />
 
           <tbody>
-
             {purchases.length > 0 ? (
-
               purchases.map((purchase) => (
-
                 <tr
                   key={purchase.id}
                   className="
@@ -312,11 +257,9 @@ export default function PurchaseTable({
                     dark:hover:bg-slate-900/40
                   "
                 >
-
                   {/* NUMBER */}
 
                   <td className="px-6 py-5">
-
                     <div
                       className="
                         flex
@@ -324,7 +267,6 @@ export default function PurchaseTable({
                         gap-3
                       "
                     >
-
                       <div
                         className="
                           flex
@@ -337,16 +279,10 @@ export default function PurchaseTable({
                           dark:bg-slate-800
                         "
                       >
-
-                        <ClipboardList
-                          size={18}
-                          className="text-slate-500"
-                        />
-
+                        <ClipboardList size={18} className="text-slate-500" />
                       </div>
 
                       <div>
-
                         <h3
                           className="
                             text-sm
@@ -355,45 +291,33 @@ export default function PurchaseTable({
                             dark:text-white
                           "
                         >
-                          {
-                            purchase.purchaseNumber
-                          }
+                          {purchase.purchaseNumber}
                         </h3>
-
                       </div>
-
                     </div>
-
                   </td>
 
                   {/* SUBTOTAL */}
 
                   <td className="px-6 py-5 text-sm">
-                    {formatPrice(
-                      purchase.subtotal
-                    )}
+                    {formatPrice(purchase.subtotal)}
                   </td>
 
                   {/* TAX */}
 
                   <td className="px-6 py-5 text-sm">
-                    {formatPrice(
-                      purchase.tax
-                    )}
+                    {formatPrice(purchase.tax)}
                   </td>
 
                   {/* DISCOUNT */}
 
                   <td className="px-6 py-5 text-sm">
-                    {formatPrice(
-                      purchase.discount
-                    )}
+                    {formatPrice(purchase.discount)}
                   </td>
 
                   {/* TOTAL */}
 
                   <td className="px-6 py-5">
-
                     <p
                       className="
                         text-sm
@@ -402,41 +326,25 @@ export default function PurchaseTable({
                         dark:text-white
                       "
                     >
-                      {formatPrice(
-                        purchase.total
-                      )}
+                      {formatPrice(purchase.total)}
                     </p>
-
                   </td>
 
                   {/* PRODUCTS */}
 
                   <td className="px-6 py-5">
-
                     <ModernButton
-
                       type="button"
-
                       text={`${purchase.details?.length || 0} Productos`}
-
                       icon={Eye}
-
-                      onClick={() =>
-                        handleOpenProducts(
-                          purchase
-                        )
-                      }
-
+                      onClick={() => handleOpenProducts(purchase)}
                       variant="secondary"
-
                     />
-
                   </td>
 
                   {/* STATUS */}
 
                   <td className="px-6 py-5">
-
                     <span
                       className={`
                         inline-flex
@@ -446,16 +354,11 @@ export default function PurchaseTable({
                         py-1
                         text-xs
                         font-semibold
-                        ${getStatusStyles(
-                          purchase.status
-                        )}
+                        ${getStatusStyles(purchase.status)}
                       `}
                     >
-
                       {purchase.status}
-
                     </span>
-
                   </td>
 
                   {/* NOTES */}
@@ -469,38 +372,24 @@ export default function PurchaseTable({
                       max-w-[250px]
                     "
                   >
-
                     <p className="line-clamp-2">
-
-                      {
-                        purchase.notes ||
-                        "Sin notas"
-                      }
-
+                      {purchase.notes || "Sin notas"}
                     </p>
-
                   </td>
 
                   {/* ACTIONS */}
 
                   <td className="px-6 py-5">
-
                     <PurchaseActions
                       purchase={purchase}
                       onEdit={onEdit}
                       onDelete={onDelete}
                     />
-
                   </td>
-
                 </tr>
-
               ))
-
             ) : (
-
               <tr>
-
                 <td
                   colSpan={9}
                   className="
@@ -509,7 +398,6 @@ export default function PurchaseTable({
                     text-center
                   "
                 >
-
                   <div
                     className="
                       flex
@@ -518,7 +406,6 @@ export default function PurchaseTable({
                       justify-center
                     "
                   >
-
                     <div
                       className="
                         mb-4
@@ -532,7 +419,6 @@ export default function PurchaseTable({
                         dark:bg-slate-800
                       "
                     >
-
                       <Receipt
                         className="
                           h-8
@@ -540,7 +426,6 @@ export default function PurchaseTable({
                           text-slate-400
                         "
                       />
-
                     </div>
 
                     <h3
@@ -561,26 +446,15 @@ export default function PurchaseTable({
                         text-slate-500
                       "
                     >
-                      Empieza registrando
-                      tu primera compra.
+                      Empieza registrando tu primera compra.
                     </p>
-
                   </div>
-
                 </td>
-
               </tr>
-
             )}
-
           </tbody>
-
         </Table>
-
       </div>
-
     </>
-
   );
-
 }

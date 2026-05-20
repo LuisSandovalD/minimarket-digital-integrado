@@ -1,13 +1,6 @@
-import {
-  useState,
-  forwardRef,
-} from 'react';
+import { useState, forwardRef } from "react";
 
-import {
-  Eye,
-  EyeOff,
-  Lock,
-} from 'lucide-react';
+import { Eye, EyeOff, Lock } from "lucide-react";
 
 const PasswordInput = forwardRef(
   (
@@ -15,8 +8,8 @@ const PasswordInput = forwardRef(
       label,
       error,
 
-      className = '',
-      inputClassName = '',
+      className = "",
+      inputClassName = "",
 
       disabled = false,
       fullWidth = true,
@@ -25,10 +18,9 @@ const PasswordInput = forwardRef(
 
       ...props
     },
-    ref
+    ref,
   ) => {
-    const [show, setShow] =
-      useState(false);
+    const [show, setShow] = useState(false);
 
     return (
       <div
@@ -37,11 +29,7 @@ const PasswordInput = forwardRef(
           flex-col
           gap-1.5
 
-          ${
-            fullWidth
-              ? 'w-full'
-              : ''
-          }
+          ${fullWidth ? "w-full" : ""}
 
           ${className}
         `}
@@ -67,11 +55,7 @@ const PasswordInput = forwardRef(
           >
             {label}
 
-            {props.required && (
-              <span className="text-rose-500">
-                *
-              </span>
-            )}
+            {props.required && <span className="text-rose-500">*</span>}
           </label>
         )}
 
@@ -104,11 +88,7 @@ const PasswordInput = forwardRef(
           {/* INPUT */}
           <input
             ref={ref}
-            type={
-              show
-                ? 'text'
-                : 'password'
-            }
+            type={show ? "text" : "password"}
             disabled={disabled}
             className={`
               w-full
@@ -171,7 +151,7 @@ const PasswordInput = forwardRef(
                     cursor-not-allowed
                     opacity-60
                   `
-                  : ''
+                  : ""
               }
 
               ${inputClassName}
@@ -183,9 +163,7 @@ const PasswordInput = forwardRef(
           <button
             type="button"
             disabled={disabled}
-            onClick={() =>
-              setShow(!show)
-            }
+            onClick={() => setShow(!show)}
             className="
               absolute
               right-2
@@ -217,11 +195,7 @@ const PasswordInput = forwardRef(
               disabled:pointer-events-none
             "
           >
-            {show ? (
-              <EyeOff size={18} />
-            ) : (
-              <Eye size={18} />
-            )}
+            {show ? <EyeOff size={18} /> : <Eye size={18} />}
           </button>
         </div>
 
@@ -257,10 +231,9 @@ const PasswordInput = forwardRef(
         )}
       </div>
     );
-  }
+  },
 );
 
-PasswordInput.displayName =
-  'PasswordInput';
+PasswordInput.displayName = "PasswordInput";
 
 export default PasswordInput;

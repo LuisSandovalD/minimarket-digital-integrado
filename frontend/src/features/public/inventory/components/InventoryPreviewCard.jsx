@@ -33,7 +33,6 @@ export default function InventoryPreviewCard({
         <img
           src={image}
           alt={title}
-
           className="
             h-60
             w-full

@@ -100,8 +100,8 @@ export default function IntegrationsFeatures() {
             "
           >
             Integra pagos digitales, APIs empresariales, SUNAT, códigos QR,
-            impresoras y herramientas modernas para optimizar toda la
-            operación de tu negocio.
+            impresoras y herramientas modernas para optimizar toda la operación
+            de tu negocio.
           </p>
 
           {/* CTA */}

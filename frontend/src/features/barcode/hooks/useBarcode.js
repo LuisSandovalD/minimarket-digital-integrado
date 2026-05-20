@@ -2,112 +2,70 @@
 // features/barcodes/hooks/useBarcode.jsx
 // ========================================
 
-import {
-  useEffect,
-  useState,
-} from "react";
+import { useCallback, useEffect, useState } from "react";
 
-import productService
-  from "@/features/product/services/product.service";
+import productService from "@/features/product/services/product.service";
 
-import {
-  filterProducts,
-} from "../utils/filter-products";
+import { filterProducts } from "../utils/filter-products";
 
-import {
-  exportBarcodesPDF,
-} from "../utils/export-barcodes-pdf";
+import { exportBarcodesPDF } from "../utils/export-barcodes-pdf";
 
 export default function useBarcode() {
-
   // ========================================
   // STATES
   // ========================================
 
-  const [products, setProducts] =
-    useState([]);
+  const [products, setProducts] = useState([]);
 
-  const [loading, setLoading] =
-    useState(true);
+  const [loading, setLoading] = useState(true);
 
-  const [search, setSearch] =
-    useState("");
+  const [search, setSearch] = useState("");
 
-  const [selectedProducts, setSelectedProducts] =
-    useState([]);
+  const [selectedProducts, setSelectedProducts] = useState([]);
 
   // ========================================
   // LOAD PRODUCTS
   // ========================================
 
-  useEffect(() => {
+  const loadProducts = useCallback(async () => {
+    try {
+      const response = await productService.getProducts();
 
-    loadProducts();
-
+      setProducts(response.data || []);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  const loadProducts = async () => {
-
-    try {
-
-      const response =
-        await productService.getProducts();
-
-      setProducts(
-        response.data || []
-      );
-
-    } catch (error) {
-
-      console.error(error);
-
-    } finally {
-
-      setLoading(false);
-
-    }
-  };
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    loadProducts();
+  }, [loadProducts]);
 
   // ========================================
   // FILTERED PRODUCTS
   // ========================================
 
-  const filteredProducts =
-    filterProducts(
-      products,
-      search
-    );
+  const filteredProducts = filterProducts(products, search);
 
   // ========================================
   // TOGGLE PRODUCT
   // ========================================
 
-  const toggleProduct = (
-    product
-  ) => {
-
-    const exists =
-      selectedProducts.find(
-        item =>
-          item.id === product.id
-      );
+  const toggleProduct = (product) => {
+    const exists = selectedProducts.find((item) => item.id === product.id);
 
     if (exists) {
-
-      setSelectedProducts(prev =>
-        prev.filter(
-          item =>
-            item.id !== product.id
-        )
+      setSelectedProducts((prev) =>
+        prev.filter((item) => item.id !== product.id),
       );
 
       return;
     }
 
-    setSelectedProducts(prev => [
-      ...prev,
-      product,
-    ]);
+    setSelectedProducts((prev) => [...prev, product]);
   };
 
   // ========================================
@@ -115,65 +73,41 @@ export default function useBarcode() {
   // ========================================
 
   const handleSelectAll = () => {
-
-    const allSelected =
-      filteredProducts.every(
-        product =>
-          selectedProducts.some(
-            item =>
-              item.id === product.id
-          )
-      );
+    const allSelected = filteredProducts.every((product) =>
+      selectedProducts.some((item) => item.id === product.id),
+    );
 
     if (allSelected) {
-
-      setSelectedProducts(prev =>
+      setSelectedProducts((prev) =>
         prev.filter(
-          selected =>
-            !filteredProducts.some(
-              product =>
-                product.id ===
-                selected.id
-            )
-        )
+          (selected) =>
+            !filteredProducts.some((product) => product.id === selected.id),
+        ),
       );
 
       return;
     }
 
-    const newProducts =
-      filteredProducts.filter(
-        product =>
-          !selectedProducts.some(
-            item =>
-              item.id === product.id
-          )
-      );
+    const newProducts = filteredProducts.filter(
+      (product) => !selectedProducts.some((item) => item.id === product.id),
+    );
 
-    setSelectedProducts(prev => [
-      ...prev,
-      ...newProducts,
-    ]);
+    setSelectedProducts((prev) => [...prev, ...newProducts]);
   };
 
   // ========================================
   // EXPORT PDF
   // ========================================
 
-  const handleExportPDF =
-    async () => {
-
-      await exportBarcodesPDF(
-        selectedProducts
-      );
-    };
+  const handleExportPDF = async () => {
+    await exportBarcodesPDF(selectedProducts);
+  };
 
   // ========================================
   // PRINT
   // ========================================
 
   const handlePrint = () => {
-
     window.print();
   };
 
@@ -182,9 +116,7 @@ export default function useBarcode() {
   // ========================================
 
   return {
-
-    products:
-      filteredProducts,
+    products: filteredProducts,
 
     loading,
 

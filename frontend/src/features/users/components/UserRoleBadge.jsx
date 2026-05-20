@@ -2,22 +2,14 @@
 // components/users/UserRoleBadge.jsx
 // ========================================
 
-import {
-  ROLE_CONFIG,
-} from "./constants/roleConfig";
+import { ROLE_CONFIG } from "./constants/roleConfig";
 
-export default function UserRoleBadge({
-  role,
-}) {
+export default function UserRoleBadge({ role }) {
+  const config = ROLE_CONFIG[role];
 
-  const config =
-    ROLE_CONFIG[role];
-
-  const Icon =
-    config.icon;
+  const Icon = config.icon;
 
   return (
-
     <div
       className={`
         inline-flex
@@ -32,13 +24,9 @@ export default function UserRoleBadge({
         ${config.className}
       `}
     >
-
       <Icon size={14} />
 
       {role}
-
     </div>
-
   );
-
 }

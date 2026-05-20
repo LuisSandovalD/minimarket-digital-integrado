@@ -2,11 +2,7 @@ import { useEffect, useRef } from "react";
 import JsBarcode from "jsbarcode";
 import { Check, Tag, Package, DollarSign, Barcode } from "lucide-react";
 
-export default function BarcodeCard({
-  product,
-  selected,
-  onSelect,
-}) {
+export default function BarcodeCard({ product, selected, onSelect }) {
   const svgRef = useRef(null);
 
   useEffect(() => {
@@ -45,7 +41,6 @@ export default function BarcodeCard({
       </div>
 
       <div className="relative p-6 space-y-5">
-        
         {/* HEADER */}
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1 min-w-0">
@@ -76,15 +71,25 @@ export default function BarcodeCard({
               }
             `}
           >
-            {selected && <Check size={14} className="text-white" strokeWidth={3} />}
+            {selected && (
+              <Check size={14} className="text-white" strokeWidth={3} />
+            )}
           </button>
         </div>
 
         {/* INFO ITEMS GRID */}
         <div className="grid grid-cols-3 gap-3 pt-2">
           <InfoItem icon={Tag} label="SKU" value={product.sku} />
-          <InfoItem icon={Package} label="CATEGORÍA" value={product.category?.name || "—"} />
-          <InfoItem icon={Package} label="STOCK" value={`${product.availableStock}`} />
+          <InfoItem
+            icon={Package}
+            label="CATEGORÍA"
+            value={product.category?.name || "—"}
+          />
+          <InfoItem
+            icon={Package}
+            label="STOCK"
+            value={`${product.availableStock}`}
+          />
         </div>
 
         {/* DIVIDER */}
@@ -114,11 +119,11 @@ export default function BarcodeCard({
               Código de barras
             </span>
           </div>
-          
+
           <div className="flex justify-center py-4 px-3 bg-gray-900/80 rounded-lg border border-gray-700/50 backdrop-blur-sm">
             <svg ref={svgRef} className="scale-95" />
           </div>
-          
+
           <p className="text-xs text-center text-gray-500 font-mono tracking-widest">
             {product.barcode}
           </p>
@@ -143,9 +148,7 @@ function InfoItem({ icon: Icon, label, value }) {
           {label}
         </span>
       </div>
-      <p className="text-sm font-semibold text-gray-200 pl-5">
-        {value}
-      </p>
+      <p className="text-sm font-semibold text-gray-200 pl-5">{value}</p>
     </div>
   );
 }

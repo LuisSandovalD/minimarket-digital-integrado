@@ -93,9 +93,8 @@ export default function MultiWarehouseSection() {
               dark:text-[#cbd5e1]
             "
           >
-            Gestiona múltiples ubicaciones y controla
-            transferencias internas desde una plataforma
-            moderna y sincronizada.
+            Gestiona múltiples ubicaciones y controla transferencias internas
+            desde una plataforma moderna y sincronizada.
           </p>
         </div>
 
@@ -119,7 +118,6 @@ export default function MultiWarehouseSection() {
           <img
             src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop"
             alt="Multi Warehouse"
-
             className="
               relative
               z-10

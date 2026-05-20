@@ -1,59 +1,31 @@
-import {
-  useNavigate,
-} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-import {
-  useDispatch,
-} from "react-redux";
+import { useDispatch } from "react-redux";
 
-import {
-  Building2,
-  ShieldCheck,
-  Store,
-} from "lucide-react";
+import { Building2, ShieldCheck, Store } from "lucide-react";
 
-import {
-  Modal,
-  HeaderModal,
- FooterModal,
-} from "@/components/modals";
+import { Modal, HeaderModal, FooterModal } from "@/components/modals";
 
-import {
-  ModernButton,
-  SubmitButton,
-} from "@/components/buttons";
+import { ModernButton, SubmitButton } from "@/components/buttons";
 
-import RegisterForm
-from "./RegisterForm";
+import RegisterForm from "./RegisterForm";
 
-import useRegisterForm
-from "../../hooks/useRegisterForm";
+import useRegisterForm from "../../hooks/useRegisterForm";
 
-import {
-  registerService,
-} from "../../services/register.services";
+import { registerService } from "../../services/register.services";
 
-import {
-  loginSuccess,
-} from "../../store/authActions";
+import { loginSuccess } from "../../store/authActions";
 
-export default function RegisterModal({
-  open,
-  onClose,
-}) {
-
+export default function RegisterModal({ open, onClose }) {
   // ======================================
   // HOOKS
   // ======================================
 
-  const navigate =
-    useNavigate();
+  const navigate = useNavigate();
 
-  const dispatch =
-    useDispatch();
+  const dispatch = useDispatch();
 
   const {
-
     step,
 
     form,
@@ -73,7 +45,6 @@ export default function RegisterModal({
     prevStep,
 
     resetForm,
-
   } = useRegisterForm();
 
   // ======================================
@@ -81,7 +52,6 @@ export default function RegisterModal({
   // ======================================
 
   const steps = [
-
     {
       id: 1,
       title: "Usuario",
@@ -99,180 +69,116 @@ export default function RegisterModal({
       title: "Sucursal",
       icon: Store,
     },
-
   ];
 
   // ======================================
   // SUBMIT
   // ======================================
 
-  const handleSubmit =
-    async (event) => {
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
-      event.preventDefault();
+    setError(null);
 
-      setError(null);
+    setLoading(true);
 
-      setLoading(true);
+    try {
+      // ======================================
+      // PAYLOAD
+      // ======================================
 
-      try {
+      const payload = {
+        name: form.name,
 
-        // ======================================
-        // PAYLOAD
-        // ======================================
+        email: form.email,
 
-        const payload = {
+        password: form.password,
 
-          name:
-            form.name,
+        role: form.role,
 
-          email:
-            form.email,
+        phone: form.phone,
 
-          password:
-            form.password,
+        plan: form.plan,
 
-          role:
-            form.role,
+        company: {
+          name: form.companyName,
 
-          phone:
-            form.phone,
+          email: form.companyEmail || null,
 
-          plan:
-            form.plan,
+          phone: form.companyPhone || null,
 
-          company: {
+          address: form.companyAddress || null,
 
-            name:
-              form.companyName,
+          ruc: form.companyRuc || null,
+        },
+      };
 
-            email:
-              form.companyEmail ||
-              null,
+      // ======================================
+      // OPTIONAL BRANCH
+      // ======================================
 
-            phone:
-              form.companyPhone ||
-              null,
+      if (form.branchName.trim()) {
+        payload.branch = {
+          name: form.branchName,
 
-            address:
-              form.companyAddress ||
-              null,
+          code: form.branchCode,
 
-            ruc:
-              form.companyRuc ||
-              null,
+          address: form.branchAddress,
 
-          },
+          phone: form.branchPhone,
 
+          city: form.branchCity,
+
+          state: form.branchState,
+
+          country: form.branchCountry,
         };
-
-        // ======================================
-        // OPTIONAL BRANCH
-        // ======================================
-
-        if (
-          form.branchName.trim()
-        ) {
-
-          payload.branch = {
-
-            name:
-              form.branchName,
-
-            code:
-              form.branchCode,
-
-            address:
-              form.branchAddress,
-
-            phone:
-              form.branchPhone,
-
-            city:
-              form.branchCity,
-
-            state:
-              form.branchState,
-
-            country:
-              form.branchCountry,
-
-          };
-
-        }
-
-        // ======================================
-        // REGISTER
-        // ======================================
-
-        const response =
-          await registerService(
-            payload
-          );
-
-        // ======================================
-        // LOGIN REDUX
-        // ======================================
-
-        dispatch(
-          loginSuccess(
-            response.user
-          )
-        );
-
-        // ======================================
-        // RESET
-        // ======================================
-
-        resetForm();
-
-        // ======================================
-        // CLOSE MODAL
-        // ======================================
-
-        onClose?.();
-
-        // ======================================
-        // REDIRECT
-        // ======================================
-
-        navigate(
-          `/${response.company.slug}/dashboard`
-        );
-
-      } catch (err) {
-
-        setError(
-
-          err.response?.data
-            ?.message ||
-
-          err.message ||
-
-          "Error al registrarse"
-
-        );
-
-      } finally {
-
-        setLoading(false);
-
       }
 
-    };
+      // ======================================
+      // REGISTER
+      // ======================================
+
+      const response = await registerService(payload);
+
+      // ======================================
+      // LOGIN REDUX
+      // ======================================
+
+      dispatch(loginSuccess(response.user));
+
+      // ======================================
+      // RESET
+      // ======================================
+
+      resetForm();
+
+      // ======================================
+      // CLOSE MODAL
+      // ======================================
+
+      onClose?.();
+
+      // ======================================
+      // REDIRECT
+      // ======================================
+
+      navigate(`/${response.company.slug}/dashboard`);
+    } catch (err) {
+      setError(
+        err.response?.data?.message || err.message || "Error al registrarse",
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // ======================================
   // RENDER
   // ======================================
 
   return (
-
-    <Modal
-      open={open}
-      onClose={onClose}
-      size="lg"
-    >
-
+    <Modal open={open} onClose={onClose} size="lg">
       {/* ======================================
           HEADER
       ====================================== */}
@@ -289,33 +195,21 @@ export default function RegisterModal({
       ====================================== */}
 
       <div className="relative px-8 py-8">
-
         {/* ======================================
             STEPS
         ====================================== */}
 
         <div className="mb-10 flex w-full items-center justify-between">
+          {steps.map((item, index) => {
+            const Icon = item.icon;
 
-          {steps.map(
-            (item, index) => {
+            const active = step >= item.id;
 
-              const Icon =
-                item.icon;
-
-              const active =
-                step >= item.id;
-
-              return (
-
-                <div
-                  key={item.id}
-                  className="flex flex-1 items-center"
-                >
-
-                  <div className="flex flex-col items-center">
-
-                    <div
-                      className={`
+            return (
+              <div key={item.id} className="flex flex-1 items-center">
+                <div className="flex flex-col items-center">
+                  <div
+                    className={`
                         flex
                         h-14
                         w-14
@@ -343,54 +237,37 @@ export default function RegisterModal({
                             `
                         }
                       `}
-                    >
+                  >
+                    <Icon size={22} />
+                  </div>
 
-                      <Icon size={22} />
-
-                    </div>
-
-                    <p
-                      className="
+                  <p
+                    className="
                         mt-3
                         text-sm
                         font-semibold
                         text-[#274c77]
                       "
-                    >
+                  >
+                    {item.title}
+                  </p>
+                </div>
 
-                      {item.title}
-
-                    </p>
-
-                  </div>
-
-                  {index !==
-                    steps.length - 1 && (
-
-                    <div
-                      className={`
+                {index !== steps.length - 1 && (
+                  <div
+                    className={`
                         mx-4
                         h-1
                         flex-1
                         rounded-full
 
-                        ${
-                          step > item.id
-                            ? "bg-[#274c77]"
-                            : "bg-[#d7e0e7]"
-                        }
+                        ${step > item.id ? "bg-[#274c77]" : "bg-[#d7e0e7]"}
                       `}
-                    />
-
-                  )}
-
-                </div>
-
-              );
-
-            }
-          )}
-
+                  />
+                )}
+              </div>
+            );
+          })}
         </div>
 
         {/* ======================================
@@ -398,23 +275,12 @@ export default function RegisterModal({
         ====================================== */}
 
         <RegisterForm
-
           step={step}
-
           form={form}
-
           error={error}
-
-          handleChange={
-            handleChange
-          }
-
-          handleSubmit={
-            handleSubmit
-          }
-
+          handleChange={handleChange}
+          handleSubmit={handleSubmit}
         />
-
       </div>
 
       {/* ======================================
@@ -422,7 +288,6 @@ export default function RegisterModal({
       ====================================== */}
 
       <FooterModal>
-
         <div
           className="
             flex
@@ -431,7 +296,6 @@ export default function RegisterModal({
             justify-between
           "
         >
-
           <div
             className="
               text-sm
@@ -439,52 +303,31 @@ export default function RegisterModal({
               text-[#6096ba]
             "
           >
-
             Paso {step} de 3
-
           </div>
 
           <div className="flex items-center gap-3">
-
             {step > 1 && (
-
               <ModernButton
                 text="Volver"
                 variant="outline"
                 onClick={prevStep}
               />
-
             )}
 
             {step < 3 ? (
-
-              <ModernButton
-                text="Continuar"
-                onClick={nextStep}
-              />
-
+              <ModernButton text="Continuar" onClick={nextStep} />
             ) : (
-
-             <SubmitButton
-                text={
-                  loading
-                    ? "Creando cuenta..."
-                    : "Finalizar Registro"
-                }
+              <SubmitButton
+                text={loading ? "Creando cuenta..." : "Finalizar Registro"}
                 loading={loading}
                 disabled={loading}
                 onClick={handleSubmit}
               />
             )}
-
           </div>
-
         </div>
-
       </FooterModal>
-
     </Modal>
-
   );
-
 }

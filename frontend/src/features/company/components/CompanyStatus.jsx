@@ -1,9 +1,5 @@
-export default function CompanyStatus({
-  company,
-}) {
-
+export default function CompanyStatus({ company }) {
   return (
-
     <section
       className="
         mt-6
@@ -19,7 +15,6 @@ export default function CompanyStatus({
         dark:bg-slate-950
       "
     >
-
       <div
         className="
           flex
@@ -33,7 +28,6 @@ export default function CompanyStatus({
           sm:justify-between
         "
       >
-
         {/* STATUS */}
 
         <div
@@ -43,7 +37,6 @@ export default function CompanyStatus({
             gap-3
           "
         >
-
           <div
             className={`
               h-2.5
@@ -64,7 +57,6 @@ export default function CompanyStatus({
           />
 
           <div>
-
             <p
               className="
                 text-sm
@@ -74,9 +66,7 @@ export default function CompanyStatus({
                 dark:text-slate-100
               "
             >
-              {company.isActive
-                ? "Empresa activa"
-                : "Empresa inactiva"}
+              {company.isActive ? "Empresa activa" : "Empresa inactiva"}
             </p>
 
             <span
@@ -89,9 +79,7 @@ export default function CompanyStatus({
             >
               Estado operacional actual
             </span>
-
           </div>
-
         </div>
 
         {/* PLAN */}
@@ -103,7 +91,6 @@ export default function CompanyStatus({
             gap-3
           "
         >
-
           <span
             className="
               text-xs
@@ -139,16 +126,10 @@ export default function CompanyStatus({
               dark:text-slate-300
             "
           >
-            {company.subscriptionTier ||
-              "Free"}
+            {company.subscriptionTier || "Free"}
           </div>
-
         </div>
-
       </div>
-
     </section>
-
   );
-
 }

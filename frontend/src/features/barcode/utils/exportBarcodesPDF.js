@@ -2,22 +2,13 @@
 // utils/exportBarcodesPDF.js
 // ========================================
 
-import jsPDF
-  from "jspdf";
+import jsPDF from "jspdf";
 
-import generateBarcodeSVG
-  from "./generateBarcodeSVG";
+import generateBarcodeSVG from "./generateBarcodeSVG";
 
-export default async function
-exportBarcodesPDF(
-  products
-) {
-
+export default async function exportBarcodesPDF(products) {
   if (!products.length) {
-
-    alert(
-      "Selecciona productos"
-    );
+    alert("Selecciona productos");
 
     return;
   }
@@ -26,13 +17,11 @@ exportBarcodesPDF(
   // PDF
   // ========================================
 
-  const pdf =
-    new jsPDF({
-      orientation:
-        "portrait",
-      unit: "mm",
-      format: "a4",
-    });
+  const pdf = new jsPDF({
+    orientation: "portrait",
+    unit: "mm",
+    format: "a4",
+  });
 
   // ========================================
   // LABEL CONFIG
@@ -52,180 +41,106 @@ exportBarcodesPDF(
   // PRODUCTS
   // ========================================
 
-  for (
-    let i = 0;
-    i < products.length;
-    i++
-  ) {
-
-    const product =
-      products[i];
+  for (let i = 0; i < products.length; i++) {
+    const product = products[i];
 
     // ========================================
     // GENERATE SVG
     // ========================================
 
-    const svg =
-      generateBarcodeSVG(
-        product.barcode
-      );
+    const svg = generateBarcodeSVG(product.barcode);
 
     // ========================================
     // SVG TO STRING
     // ========================================
 
-    const svgData =
-      new XMLSerializer()
-        .serializeToString(
-          svg
-        );
+    const svgData = new XMLSerializer().serializeToString(svg);
 
     // ========================================
     // SVG TO IMAGE
     // ========================================
 
-    const canvas =
-      document.createElement(
-        "canvas"
-      );
+    const canvas = document.createElement("canvas");
 
-    const ctx =
-      canvas.getContext("2d");
+    const ctx = canvas.getContext("2d");
 
-    const img =
-      new Image();
+    const img = new Image();
 
-    const svgBlob =
-      new Blob(
-        [svgData],
-        {
-          type:
-            "image/svg+xml;charset=utf-8",
-        }
-      );
+    const svgBlob = new Blob([svgData], {
+      type: "image/svg+xml;charset=utf-8",
+    });
 
-    const url =
-      URL.createObjectURL(
-        svgBlob
-      );
+    const url = URL.createObjectURL(svgBlob);
 
     // ========================================
     // WAIT IMAGE
     // ========================================
 
-    await new Promise(
-      resolve => {
+    await new Promise((resolve) => {
+      img.onload = () => {
+        canvas.width = img.width;
 
-        img.onload = () => {
+        canvas.height = img.height;
 
-          canvas.width =
-            img.width;
+        ctx.drawImage(img, 0, 0);
 
-          canvas.height =
-            img.height;
+        const imgData = canvas.toDataURL("image/png");
 
-          ctx.drawImage(
-            img,
-            0,
-            0
-          );
+        // ========================================
+        // CARD
+        // ========================================
 
-          const imgData =
-            canvas.toDataURL(
-              "image/png"
-            );
+        pdf.setDrawColor(220);
 
-          // ========================================
-          // CARD
-          // ========================================
+        pdf.roundedRect(x, y, labelWidth, labelHeight, 2, 2);
 
-          pdf.setDrawColor(
-            220
-          );
+        // ========================================
+        // NAME
+        // ========================================
 
-          pdf.roundedRect(
-            x,
-            y,
-            labelWidth,
-            labelHeight,
-            2,
-            2
-          );
+        pdf.setFontSize(10);
 
-          // ========================================
-          // NAME
-          // ========================================
+        pdf.text(product.name, x + 3, y + 5);
 
-          pdf.setFontSize(10);
+        // ========================================
+        // PRICE
+        // ========================================
 
-          pdf.text(
-            product.name,
-            x + 3,
-            y + 5
-          );
+        pdf.setFontSize(9);
 
-          // ========================================
-          // PRICE
-          // ========================================
+        pdf.text(`S/ ${product.salePrice}`, x + 3, y + 10);
 
-          pdf.setFontSize(9);
+        // ========================================
+        // BARCODE
+        // ========================================
 
-          pdf.text(
-            `S/ ${product.salePrice}`,
-            x + 3,
-            y + 10
-          );
+        pdf.addImage(imgData, "PNG", x + 3, y + 12, 52, 15);
 
-          // ========================================
-          // BARCODE
-          // ========================================
+        // ========================================
+        // CODE
+        // ========================================
 
-          pdf.addImage(
-            imgData,
-            "PNG",
-            x + 3,
-            y + 12,
-            52,
-            15
-          );
+        pdf.setFontSize(7);
 
-          // ========================================
-          // CODE
-          // ========================================
+        pdf.text(product.barcode, x + 3, y + 31);
 
-          pdf.setFontSize(7);
+        URL.revokeObjectURL(url);
 
-          pdf.text(
-            product.barcode,
-            x + 3,
-            y + 31
-          );
+        resolve();
+      };
 
-          URL.revokeObjectURL(
-            url
-          );
-
-          resolve();
-        };
-
-        img.src = url;
-      }
-    );
+      img.src = url;
+    });
 
     // ========================================
     // GRID
     // ========================================
 
-    if (
-      (i + 1) % columns === 0
-    ) {
-
+    if ((i + 1) % columns === 0) {
       x = 10;
 
       y += 40;
-
     } else {
-
       x += 65;
     }
 
@@ -234,7 +149,6 @@ exportBarcodesPDF(
     // ========================================
 
     if (y > 250) {
-
       pdf.addPage();
 
       x = 10;
@@ -247,7 +161,5 @@ exportBarcodesPDF(
   // SAVE
   // ========================================
 
-  pdf.save(
-    "barcodes.pdf"
-  );
+  pdf.save("barcodes.pdf");
 }

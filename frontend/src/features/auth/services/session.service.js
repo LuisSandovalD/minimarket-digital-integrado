@@ -6,23 +6,13 @@
 // SAVE SESSION
 // ======================================
 
-export const saveSession = ({
-  token,
-  user,
-  company,
-}) => {
-
+export const saveSession = ({ token, user, company }) => {
   // ====================================
   // TOKEN
   // ====================================
 
   if (token) {
-
-    localStorage.setItem(
-      "token",
-      token
-    );
-
+    localStorage.setItem("token", token);
   }
 
   // ====================================
@@ -30,32 +20,19 @@ export const saveSession = ({
   // ====================================
 
   if (user) {
-
-    const currentUser =
-      getUser();
+    const currentUser = getUser();
 
     const updatedUser = {
-
       ...currentUser,
 
       ...user,
 
       // Mantener avatar anterior
       // si el nuevo viene null
-      avatar:
-        user.avatar ??
-        currentUser?.avatar ??
-        null,
-
+      avatar: user.avatar ?? currentUser?.avatar ?? null,
     };
 
-    localStorage.setItem(
-      "user",
-      JSON.stringify(
-        updatedUser
-      )
-    );
-
+    localStorage.setItem("user", JSON.stringify(updatedUser));
   }
 
   // ====================================
@@ -63,16 +40,8 @@ export const saveSession = ({
   // ====================================
 
   if (company) {
-
-    localStorage.setItem(
-      "company",
-      JSON.stringify(
-        company
-      )
-    );
-
+    localStorage.setItem("company", JSON.stringify(company));
   }
-
 };
 
 // ======================================
@@ -80,126 +49,74 @@ export const saveSession = ({
 // SOLO ACTUALIZA USER
 // ======================================
 
-export const updateSessionUser =
-  (userData) => {
+export const updateSessionUser = (userData) => {
+  const currentUser = getUser();
 
-    const currentUser =
-      getUser();
+  if (!currentUser) {
+    return;
+  }
 
-    if (!currentUser) {
-      return;
-    }
+  const updatedUser = {
+    ...currentUser,
 
-    const updatedUser = {
+    ...userData,
 
-      ...currentUser,
-
-      ...userData,
-
-      avatar:
-        userData.avatar ??
-        currentUser.avatar ??
-        null,
-
-    };
-
-    localStorage.setItem(
-      "user",
-      JSON.stringify(
-        updatedUser
-      )
-    );
-
+    avatar: userData.avatar ?? currentUser.avatar ?? null,
   };
+
+  localStorage.setItem("user", JSON.stringify(updatedUser));
+};
 
 // ======================================
 // GET TOKEN
 // ======================================
 
-export const getToken =
-  () => {
-
-    return localStorage.getItem(
-      "token"
-    );
-
-  };
+export const getToken = () => {
+  return localStorage.getItem("token");
+};
 
 // ======================================
 // GET USER
 // ======================================
 
-export const getUser =
-  () => {
+export const getUser = () => {
+  const user = localStorage.getItem("user");
 
-    const user =
-      localStorage.getItem(
-        "user"
-      );
-
-    return user
-      ? JSON.parse(user)
-      : null;
-
-  };
+  return user ? JSON.parse(user) : null;
+};
 
 // ======================================
 // GET COMPANY
 // ======================================
 
-export const getCompany =
-  () => {
+export const getCompany = () => {
+  const company = localStorage.getItem("company");
 
-    const company =
-      localStorage.getItem(
-        "company"
-      );
-
-    return company
-      ? JSON.parse(company)
-      : null;
-
-  };
+  return company ? JSON.parse(company) : null;
+};
 
 // ======================================
 // GET SESSION
 // ======================================
 
-export const getSession =
-  () => {
+export const getSession = () => {
+  return {
+    token: getToken(),
 
-    return {
+    user: getUser(),
 
-      token:
-        getToken(),
-
-      user:
-        getUser(),
-
-      company:
-        getCompany(),
-
-    };
-
+    company: getCompany(),
   };
+};
 
 // ======================================
 // CLEAR SESSION
 // ======================================
 
-export const clearSession =
-  () => {
+export const clearSession = () => {
+  localStorage.removeItem("token");
 
-    localStorage.removeItem(
-      "token"
-    );
+  localStorage.removeItem("user");
 
-    localStorage.removeItem(
-      "user"
-    );
-
-    localStorage.removeItem(
-      "company"
-    );
-
-  };
+  localStorage.removeItem("company");
+};

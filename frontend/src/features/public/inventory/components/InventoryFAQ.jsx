@@ -14,14 +14,12 @@ const faq = [
 
   {
     question: "¿El sistema permite códigos de barras?",
-    answer:
-      "Sí, es compatible con lectores y generación de códigos.",
+    answer: "Sí, es compatible con lectores y generación de códigos.",
   },
 
   {
     question: "¿Existen alertas automáticas?",
-    answer:
-      "Sí, recibirás alertas de bajo stock y productos críticos.",
+    answer: "Sí, recibirás alertas de bajo stock y productos críticos.",
   },
 ];
 
@@ -106,8 +104,8 @@ export default function InventoryFAQ() {
               dark:text-[#cbd5e1]
             "
           >
-            Todo lo que necesitas saber sobre la gestión
-            inteligente de inventario.
+            Todo lo que necesitas saber sobre la gestión inteligente de
+            inventario.
           </p>
         </div>
 
@@ -142,9 +140,7 @@ export default function InventoryFAQ() {
               >
                 {/* BUTTON */}
                 <button
-                  onClick={() =>
-                    setActive(isOpen ? null : index)
-                  }
+                  onClick={() => setActive(isOpen ? null : index)}
                   className="
                     flex
                     w-full
@@ -195,11 +191,7 @@ export default function InventoryFAQ() {
                       dark:bg-white/[0.03]
                       dark:text-[#a3cef1]
 
-                      ${
-                        isOpen
-                          ? "rotate-180"
-                          : ""
-                      }
+                      ${isOpen ? "rotate-180" : ""}
                     `}
                   >
                     <ChevronDown size={18} />

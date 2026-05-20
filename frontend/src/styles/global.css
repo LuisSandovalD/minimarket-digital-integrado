@@ -28,21 +28,17 @@
   --color-light-400: #e7ecef;
 
   /* SHADOWS */
-  --shadow-soft:
-    0 10px 40px rgba(39, 76, 119, 0.08);
+  --shadow-soft: 0 10px 40px rgba(39, 76, 119, 0.08);
 
-  --shadow-glow:
-    0 20px 80px rgba(96, 150, 186, 0.25);
+  --shadow-glow: 0 20px 80px rgba(96, 150, 186, 0.25);
 
-  --shadow-darkGlow:
-    0 20px 80px rgba(0, 0, 0, 0.45);
+  --shadow-darkGlow: 0 20px 80px rgba(0, 0, 0, 0.45);
 
   /* RADIUS */
   --radius-4xl: 2rem;
 
   /* EASING */
-  --ease-smooth:
-    cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* =========================================
@@ -50,7 +46,7 @@
 ========================================= */
 
 * {
-    font-family: 'Times New Roman', Times, serif;
+  font-family: "Times New Roman", Times, serif;
 }
 
 html {

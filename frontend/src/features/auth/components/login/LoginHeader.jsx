@@ -1,14 +1,8 @@
-import {
-  ShieldCheck,
-} from "lucide-react";
+import { ShieldCheck } from "lucide-react";
 
-import {
-  HeaderModal,
-} from "@/components/modals";
+import { HeaderModal } from "@/components/modals";
 
-export default function LoginHeader({
-  onClose,
-}) {
+export default function LoginHeader({ onClose }) {
   return (
     <HeaderModal
       title="Iniciar Sesión"

@@ -1,25 +1,12 @@
-import useCompany
-  from "../hooks/useCompany";
+import useCompany from "../hooks/useCompany";
 
-import CompanyCard
-  from "./CompanyCard";
+import CompanyCard from "./CompanyCard";
 
-export default function CompanyList({
-  onEdit,
-}) {
-
-  const {
-    company,
-    loading,
-    error,
-  } = useCompany();
+export default function CompanyList({ onEdit }) {
+  const { company, loading, error } = useCompany();
 
   if (loading) {
-    return (
-      <div className="py-12 text-center">
-        Cargando empresa...
-      </div>
-    );
+    return <div className="py-12 text-center">Cargando empresa...</div>;
   }
 
   if (error) {
@@ -27,18 +14,8 @@ export default function CompanyList({
   }
 
   if (!company) {
-    return (
-      <div>
-        No se encontró la empresa.
-      </div>
-    );
+    return <div>No se encontró la empresa.</div>;
   }
 
-  return (
-    <CompanyCard
-      company={company}
-      onEdit={onEdit}
-    />
-  );
-
+  return <CompanyCard company={company} onEdit={onEdit} />;
 }

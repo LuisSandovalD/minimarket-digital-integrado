@@ -1,8 +1,6 @@
 import { Link } from "react-router-dom";
 
-export default function MobileMenuLinks({
-  links,
-}) {
+export default function MobileMenuLinks({ links }) {
   return (
     <nav className="flex flex-1 flex-col overflow-y-auto p-4 space-y-1">
       {links.map((link, index) => (
@@ -63,9 +61,7 @@ export default function MobileMenuLinks({
           />
 
           {/* TEXT */}
-          <span className="relative z-10">
-            {link.label}
-          </span>
+          <span className="relative z-10">{link.label}</span>
         </Link>
       ))}
     </nav>

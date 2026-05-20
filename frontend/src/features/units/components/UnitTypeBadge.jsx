@@ -1,14 +1,5 @@
-import { getUnitLabel }
-from "../utils/unitHelpers";
+import { getUnitLabel } from "../utils/unitHelpers";
 
-export default function UnitTypeBadge({
-  type
-}) {
-
-  return (
-    <span>
-      {getUnitLabel(type)}
-    </span>
-  );
-
+export default function UnitTypeBadge({ type }) {
+  return <span>{getUnitLabel(type)}</span>;
 }

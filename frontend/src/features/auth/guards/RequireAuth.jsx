@@ -2,81 +2,50 @@
 // guards/RequireAuth.jsx
 // ========================================
 
-import {
-  Navigate,
-  Outlet,
-  useParams,
-} from "react-router-dom";
+import { Navigate, Outlet, useParams } from "react-router-dom";
 
-import useAuth
-  from "../hooks/useAuth";
+import useAuth from "../hooks/useAuth";
 
-import {
-  getToken,
-  getSession,
-  saveSession,
-} from "../services/session.service";
+import { getToken, getSession, saveSession } from "../services/session.service";
 
 export default function RequireAuth() {
+  const { isAuthenticated, loading, user } = useAuth();
 
-  const {
-    isAuthenticated,
-    loading,
-    user,
-  } = useAuth();
-
-  const {
-    companySlug,
-  } = useParams();
+  const { companySlug } = useParams();
 
   // ======================================
   // SESSION
   // ======================================
 
-  const token =
-    getToken();
+  const token = getToken();
 
-  const session =
-    getSession();
+  const session = getSession();
 
   // ======================================
   // SAFE COMPANY SLUG
   // ======================================
 
-  const sessionCompanySlug =
-    session?.company?.slug || "";
+  const sessionCompanySlug = session?.company?.slug || "";
 
   // ======================================
   // SYNC USER DATA
   // ======================================
 
-  if (
-    user &&
-    session?.user
-  ) {
-
+  if (user && session?.user) {
     const updatedSession = {
-
       ...session,
 
       user: {
-
         ...session.user,
 
         ...user,
 
-        avatar:
-          user.avatar ||
-          session.user?.avatar ||
-          null,
-
+        avatar: user.avatar || session.user?.avatar || null,
       },
-
     };
 
     // Guardar sesión actualizada
     saveSession(updatedSession);
-
   }
 
   // ======================================
@@ -84,53 +53,28 @@ export default function RequireAuth() {
   // ======================================
 
   if (loading) {
-
     // Permitir render mientras verifica
     if (token) {
-
       return <Outlet />;
-
     }
 
     return null;
-
   }
 
   // ======================================
   // NOT AUTHENTICATED
   // ======================================
 
-  if (
-    !isAuthenticated &&
-    !token
-  ) {
-
-    return (
-      <Navigate
-        to="/"
-        replace
-      />
-    );
-
+  if (!isAuthenticated && !token) {
+    return <Navigate to="/" replace />;
   }
 
   // ======================================
   // INVALID COMPANY
   // ======================================
 
-  if (
-    companySlug &&
-    sessionCompanySlug &&
-    sessionCompanySlug !== companySlug
-  ) {
-
-    return (
-      <Navigate
-        to={`/${sessionCompanySlug}/dashboard`}
-        replace
-      />
-    );
-
+  if (companySlug && sessionCompanySlug && sessionCompanySlug !== companySlug) {
+    return <Navigate to={`/${sessionCompanySlug}/dashboard`} replace />;
   }
 
   // ======================================
@@ -138,5 +82,4 @@ export default function RequireAuth() {
   // ======================================
 
   return <Outlet />;
-
 }

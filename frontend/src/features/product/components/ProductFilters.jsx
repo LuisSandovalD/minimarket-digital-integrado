@@ -2,18 +2,10 @@
 // features/product/components/ProductFilters.jsx
 // ========================================
 
-import SearchInput
-  from "@/components/inputs/SearchInput";
+import SearchInput from "@/components/inputs/SearchInput";
 
-export default function ProductFilters({
-
-  search,
-  setSearch,
-
-}) {
-
+export default function ProductFilters({ search, setSearch }) {
   return (
-
     <div
       className="
         flex
@@ -23,21 +15,13 @@ export default function ProductFilters({
         lg:flex-row
       "
     >
-
       <SearchInput
         placeholder="
           Buscar producto...
         "
         value={search}
-        onChange={(e) =>
-          setSearch(
-            e.target.value
-          )
-        }
+        onChange={(e) => setSearch(e.target.value)}
       />
-
     </div>
-
   );
-
 }

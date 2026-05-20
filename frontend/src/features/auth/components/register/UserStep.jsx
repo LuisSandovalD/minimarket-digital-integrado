@@ -1,31 +1,15 @@
-import {
-  Mail,
-  LockKeyhole,
-  User,
-  Phone,
-  AtSign,
-} from "lucide-react";
+import { Mail, LockKeyhole, User, Phone, AtSign } from "lucide-react";
 
-import {
-  Input,
-  PasswordInput,
-} from "@/components/inputs";
+import { Input, PasswordInput } from "@/components/inputs";
 
-export default function UserStep({
-  form,
-  handleChange,
-}) {
-
+export default function UserStep({ form, handleChange }) {
   return (
-
     <div className="space-y-5">
-
       {/* ======================================
           USER INFO
       ====================================== */}
 
       <div className="grid gap-5 md:grid-cols-2">
-
         <Input
           label="Nombre completo"
           name="name"
@@ -44,7 +28,6 @@ export default function UserStep({
           onChange={handleChange}
           icon={Phone}
         />
-
       </div>
 
       {/* ======================================
@@ -89,9 +72,6 @@ export default function UserStep({
         icon={LockKeyhole}
         required
       />
-
     </div>
-
   );
-
 }

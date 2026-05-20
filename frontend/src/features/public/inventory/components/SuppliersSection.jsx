@@ -4,13 +4,9 @@ import { suppliers } from "../constants/suppliers";
 export default function SuppliersSection() {
   return (
     <section className="relative py-8 lg:py-12">
-      
-
       <div className="relative grid gap-10 lg:gap-16 lg:grid-cols-12 items-start max-w-7xl mx-auto">
-
         {/* LEFT COLUMN - IMAGE */}
         <div className="lg:col-span-4 order-2 lg:order-1  h-full">
-
           <div
             className="
               relative
@@ -83,7 +79,6 @@ export default function SuppliersSection() {
         </div>
         {/* RIGHT COLUMN - CONTENT + SUPPLIERS LIST */}
         <div className="lg:col-span-8 space-y-6 order-1 lg:order-2">
-
           {/* HEADER */}
           <div className="space-y-4">
             {/* BADGE */}
@@ -368,8 +363,6 @@ export default function SuppliersSection() {
             </div>
           </div>
         </div>
-
-        
       </div>
     </section>
   );

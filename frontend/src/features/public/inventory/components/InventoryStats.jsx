@@ -13,8 +13,6 @@ const iconMap = {
 export default function InventoryStats() {
   return (
     <section className="relative py-24">
-
-      
       <div className="relative  max-w-7xl mx-auto">
         {/* HEADER */}
         <div className="mb-8 space-y-3">

@@ -15,28 +15,20 @@ import {
   XCircle,
 } from "lucide-react";
 
-import {Table, THead}
-  from "@/components/table/";
+import { Table, THead } from "@/components/table/";
 
+import { ModernButton } from "@/components/buttons/";
 
-import {ModernButton}
-  from "@/components/buttons/";
-
-import { UNIT_OPTIONS }
-  from "../utils/unitTypes";
+import { UNIT_OPTIONS } from "../utils/unitTypes";
 
 export default function UnitsTable({
-
   units = [],
 
   onEdit,
 
   onDelete,
-
 }) {
-
   const columns = [
-
     {
       key: "name",
       label: (
@@ -132,30 +124,17 @@ export default function UnitsTable({
         </div>
       ),
     },
-
   ];
 
-  const getTypeLabel = (
-    type
-  ) => {
-
-    return (
-      UNIT_OPTIONS.find(
-        (item) =>
-          item.value === type
-      )?.label || type
-    );
-
+  const getTypeLabel = (type) => {
+    return UNIT_OPTIONS.find((item) => item.value === type)?.label || type;
   };
 
   return (
-
     <div className="space-y-5">
-
       {/* HEADER */}
 
       <div>
-
         <h2
           className="
             text-xl
@@ -176,30 +155,22 @@ export default function UnitsTable({
             text-slate-500
           "
         >
-          Administra las unidades
-          de medida del sistema.
+          Administra las unidades de medida del sistema.
         </p>
-
       </div>
 
       {/* TABLE */}
 
       <Table>
-
         {/* HEAD */}
 
-        <THead
-          columns={columns}
-        />
+        <THead columns={columns} />
 
         {/* BODY */}
 
         <tbody>
-
           {units.length > 0 ? (
-
             units.map((unit) => (
-
               <tr
                 key={unit.id}
                 className="
@@ -212,11 +183,9 @@ export default function UnitsTable({
                   hover:bg-white/[0.03]
                 "
               >
-
                 {/* NAME */}
 
                 <td className="px-6 py-5">
-
                   <div
                     className="
                       flex
@@ -224,7 +193,6 @@ export default function UnitsTable({
                       gap-4
                     "
                   >
-
                     <div
                       className="
                         flex
@@ -240,7 +208,6 @@ export default function UnitsTable({
                         border-white/10
                       "
                     >
-
                       <Scale
                         className="
                           h-5
@@ -248,11 +215,9 @@ export default function UnitsTable({
                           text-white/70
                         "
                       />
-
                     </div>
 
                     <div>
-
                       <h3
                         className="
                           text-sm
@@ -273,17 +238,13 @@ export default function UnitsTable({
                       >
                         Unidad registrada
                       </p>
-
                     </div>
-
                   </div>
-
                 </td>
 
                 {/* ABBREVIATION */}
 
                 <td className="px-6 py-5">
-
                   <div
                     className="
                       inline-flex
@@ -306,13 +267,11 @@ export default function UnitsTable({
                   >
                     {unit.abbreviation}
                   </div>
-
                 </td>
 
                 {/* TYPE */}
 
                 <td className="px-6 py-5">
-
                   <span
                     className="
                       text-sm
@@ -321,19 +280,13 @@ export default function UnitsTable({
                       dark:text-slate-300
                     "
                   >
-                    {
-                      getTypeLabel(
-                        unit.type
-                      )
-                    }
+                    {getTypeLabel(unit.type)}
                   </span>
-
                 </td>
 
                 {/* CONVERSION */}
 
                 <td className="px-6 py-5">
-
                   <span
                     className="
                       text-sm
@@ -343,21 +296,14 @@ export default function UnitsTable({
                       dark:text-slate-300
                     "
                   >
-                    {
-                      Number(
-                        unit.conversionFactor
-                      ).toFixed(4)
-                    }
+                    {Number(unit.conversionFactor).toFixed(4)}
                   </span>
-
                 </td>
 
                 {/* STATUS */}
 
                 <td className="px-6 py-5">
-
                   {unit.isActive ? (
-
                     <div
                       className="
                         inline-flex
@@ -380,17 +326,10 @@ export default function UnitsTable({
                         text-emerald-400
                       "
                     >
-
-                      <CheckCircle2
-                        size={14}
-                      />
-
+                      <CheckCircle2 size={14} />
                       Activo
-
                     </div>
-
                   ) : (
-
                     <div
                       className="
                         inline-flex
@@ -413,23 +352,15 @@ export default function UnitsTable({
                         text-red-400
                       "
                     >
-
-                      <XCircle
-                        size={14}
-                      />
-
+                      <XCircle size={14} />
                       Inactivo
-
                     </div>
-
                   )}
-
                 </td>
 
                 {/* ACTIONS */}
 
                 <td className="px-6 py-5">
-
                   <div
                     className="
                       flex
@@ -438,15 +369,12 @@ export default function UnitsTable({
                       gap-2
                     "
                   >
-
                     <ModernButton
                       size="sm"
                       variant="ghost"
                       icon={Pencil}
                       text="Editar"
-                      onClick={() =>
-                        onEdit(unit)
-                      }
+                      onClick={() => onEdit(unit)}
                     />
 
                     <ModernButton
@@ -454,25 +382,14 @@ export default function UnitsTable({
                       variant="danger"
                       icon={Trash2}
                       text="Eliminar"
-                      onClick={() =>
-                        onDelete(
-                          unit.id
-                        )
-                      }
+                      onClick={() => onDelete(unit.id)}
                     />
-
                   </div>
-
                 </td>
-
               </tr>
-
             ))
-
           ) : (
-
             <tr>
-
               <td
                 colSpan={6}
                 className="
@@ -481,7 +398,6 @@ export default function UnitsTable({
                   text-center
                 "
               >
-
                 <div
                   className="
                     flex
@@ -490,7 +406,6 @@ export default function UnitsTable({
                     justify-center
                   "
                 >
-
                   <div
                     className="
                       mb-4
@@ -506,7 +421,6 @@ export default function UnitsTable({
                       dark:bg-slate-800
                     "
                   >
-
                     <Scale
                       className="
                         h-8
@@ -514,7 +428,6 @@ export default function UnitsTable({
                         text-slate-400
                       "
                     />
-
                   </div>
 
                   <h3
@@ -536,24 +449,14 @@ export default function UnitsTable({
                       text-slate-500
                     "
                   >
-                    Empieza creando tu primera
-                    unidad de medida.
+                    Empieza creando tu primera unidad de medida.
                   </p>
-
                 </div>
-
               </td>
-
             </tr>
-
           )}
-
         </tbody>
-
       </Table>
-
     </div>
-
   );
-
 }

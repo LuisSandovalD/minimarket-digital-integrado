@@ -2,27 +2,18 @@
 // features/supplier/components/SupplierActions.jsx
 // ========================================
 
-import {
-  Pencil,
-  Trash2,
-} from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
 
-import {
-  ModernButton
-} from "@/components/buttons";
+import { ModernButton } from "@/components/buttons";
 
 export default function SupplierActions({
-
   supplier,
 
   onEdit,
 
   onDelete,
-
 }) {
-
   return (
-
     <div
       className="
         flex
@@ -31,7 +22,6 @@ export default function SupplierActions({
         gap-2
       "
     >
-
       {/* EDIT */}
 
       <ModernButton
@@ -39,9 +29,7 @@ export default function SupplierActions({
         variant="warning"
         icon={Pencil}
         text="Editar"
-        onClick={() =>
-          onEdit(supplier)
-        }
+        onClick={() => onEdit(supplier)}
       />
 
       {/* DELETE */}
@@ -51,13 +39,8 @@ export default function SupplierActions({
         variant="danger"
         icon={Trash2}
         text="Eliminar"
-        onClick={() =>
-          onDelete(supplier.id)
-        }
+        onClick={() => onDelete(supplier.id)}
       />
-
     </div>
-
   );
-
 }

@@ -2,39 +2,24 @@
 // features/supplier/components/SupplierTable.jsx
 // ========================================
 
-import {
-  Building2,
-  Mail,
-  Phone,
-  User2,
-  Globe,
-  Settings2,
-} from "lucide-react";
+import { Building2, Mail, Phone, User2, Globe, Settings2 } from "lucide-react";
 
-import {
-  Table,
-  THead,
-} from "@/components/table";
+import { Table, THead } from "@/components/table";
 
-import SupplierActions
-  from "./SupplierActions";
+import SupplierActions from "./SupplierActions";
 
 export default function SupplierTable({
-
   suppliers = [],
   loading = false,
 
   handleEdit,
   handleDelete,
-
 }) {
-
   // ========================================
   // COLUMNS
   // ========================================
 
   const columns = [
-
     {
       key: "supplier",
 
@@ -100,7 +85,6 @@ export default function SupplierTable({
         </div>
       ),
     },
-
   ];
 
   // ========================================
@@ -108,15 +92,7 @@ export default function SupplierTable({
   // ========================================
 
   if (loading) {
-
-    return (
-
-      <div className="py-10 text-center">
-        Loading suppliers...
-      </div>
-
-    );
-
+    return <div className="py-10 text-center">Loading suppliers...</div>;
   }
 
   // ========================================
@@ -124,13 +100,10 @@ export default function SupplierTable({
   // ========================================
 
   return (
-
     <div className="space-y-5">
-
       {/* HEADER */}
 
       <div>
-
         <h2
           className="
             text-xl
@@ -152,21 +125,16 @@ export default function SupplierTable({
         >
           Gestiona proveedores del sistema.
         </p>
-
       </div>
 
       {/* TABLE */}
 
       <Table>
-
         <THead columns={columns} />
 
         <tbody>
-
           {suppliers.length > 0 ? (
-
             suppliers.map((supplier) => (
-
               <tr
                 key={supplier.id}
                 className="
@@ -177,13 +145,10 @@ export default function SupplierTable({
                   dark:hover:bg-slate-900/40
                 "
               >
-
                 {/* SUPPLIER */}
 
                 <td className="px-6 py-5">
-
                   <div>
-
                     <h3
                       className="
                         text-sm
@@ -203,9 +168,7 @@ export default function SupplierTable({
                     >
                       {supplier.ruc || "Sin RUC"}
                     </p>
-
                   </div>
-
                 </td>
 
                 {/* EMAIL */}
@@ -262,27 +225,16 @@ export default function SupplierTable({
                 {/* ACTIONS */}
 
                 <td className="px-6 py-5">
-
                   <SupplierActions
-
                     supplier={supplier}
-
                     onEdit={handleEdit}
-
                     onDelete={handleDelete}
-
                   />
-
                 </td>
-
               </tr>
-
             ))
-
           ) : (
-
             <tr>
-
               <td
                 colSpan={6}
                 className="
@@ -291,21 +243,12 @@ export default function SupplierTable({
                   text-center
                 "
               >
-
                 No suppliers found
-
               </td>
-
             </tr>
-
           )}
-
         </tbody>
-
       </Table>
-
     </div>
-
   );
-
 }

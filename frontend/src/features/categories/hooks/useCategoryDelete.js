@@ -1,45 +1,25 @@
-import {
-  useState,
-} from "react";
+import { useState } from "react";
 
-import {
-  deleteCategory,
-} from "../services/category.service";
+import { deleteCategory } from "../services/category.service";
 
-export default function useCategoryDelete(
-  onSuccess
-) {
+export default function useCategoryDelete(onSuccess) {
+  const [loading, setLoading] = useState(false);
 
-  const [
-    loading,
-    setLoading,
-  ] = useState(false);
+  const handleDelete = async (id) => {
+    try {
+      setLoading(true);
 
-  const handleDelete =
-    async (id) => {
+      await deleteCategory(id);
 
-      try {
-
-        setLoading(true);
-
-        await deleteCategory(id);
-
-        onSuccess?.();
-
-      } finally {
-
-        setLoading(false);
-
-      }
-
-    };
+      onSuccess?.();
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return {
-
     loading,
 
     handleDelete,
-
   };
-
 }

@@ -1,12 +1,3 @@
-export const findParentCategory =
-  (
-    categories,
-    parentId
-  ) => {
-
-    return categories.find(
-      (category) =>
-        category.id === parentId
-    );
-
-  };
+export const findParentCategory = (categories, parentId) => {
+  return categories.find((category) => category.id === parentId);
+};

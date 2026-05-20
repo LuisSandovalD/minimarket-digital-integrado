@@ -26,8 +26,7 @@ export default function CTAFeatures() {
             font-black
           "
         >
-          Lleva tu empresa
-          al siguiente nivel
+          Lleva tu empresa al siguiente nivel
         </h2>
 
         <p
@@ -40,8 +39,7 @@ export default function CTAFeatures() {
             dark:text-[#cbd5e1]
           "
         >
-          Gestiona todo desde
-          una plataforma moderna.
+          Gestiona todo desde una plataforma moderna.
         </p>
 
         <button

@@ -1,47 +1,31 @@
-import {
-  useState,
-} from "react";
+import { useState } from "react";
 
-import {
-  Outlet,
-} from "react-router-dom";
+import { Outlet } from "react-router-dom";
 
-import AppAside
-  from "./aside/AppAside";
+import AppAside from "./aside/AppAside";
 
-import AppHeader
-  from "./header/AppHeader";
+import AppHeader from "./header/AppHeader";
 
 export default function AppLayout() {
-
   // ========================================
   // SIDEBAR STATE
   // ========================================
 
-  const [
-    isSidebarOpen,
-    setIsSidebarOpen,
-  ] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   // ========================================
   // TOGGLE
   // ========================================
 
-  const toggleSidebar =
-    () => {
-
-      setIsSidebarOpen(
-        (prev) => !prev
-      );
-
-    };
+  const toggleSidebar = () => {
+    setIsSidebarOpen((prev) => !prev);
+  };
 
   // ========================================
   // RENDER
   // ========================================
 
   return (
-
     <div
       className="
         min-h-screen
@@ -50,14 +34,11 @@ export default function AppLayout() {
         dark:bg-slate-950
       "
     >
-
       {/* ====================================
        * SIDEBAR
        * ================================== */}
 
-      <AppAside
-        isOpen={isSidebarOpen}
-      />
+      <AppAside isOpen={isSidebarOpen} />
 
       {/* ====================================
        * MAIN
@@ -68,23 +49,14 @@ export default function AppLayout() {
           transition-all
           duration-300
 
-          ${
-            isSidebarOpen
-              ? "lg:ml-72"
-              : "lg:ml-20"
-          }
+          ${isSidebarOpen ? "lg:ml-72" : "lg:ml-20"}
         `}
       >
-
         {/* HEADER */}
 
         <AppHeader
-          isSidebarOpen={
-            isSidebarOpen
-          }
-          toggleSidebar={
-            toggleSidebar
-          }
+          isSidebarOpen={isSidebarOpen}
+          toggleSidebar={toggleSidebar}
         />
 
         {/* CONTENT */}
@@ -95,17 +67,9 @@ export default function AppLayout() {
             md:p-6
           "
         >
-
           <Outlet />
-
         </main>
-
-        
-
       </div>
-
     </div>
-
   );
-
 }

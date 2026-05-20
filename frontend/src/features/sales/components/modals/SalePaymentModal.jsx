@@ -4,12 +4,7 @@
 
 import React, { useState } from "react";
 
-export const SalePaymentModal = ({
-  open,
-  onClose,
-  sale,
-  onPay,
-}) => {
+export const SalePaymentModal = ({ open, onClose, sale, onPay }) => {
   const [amount, setAmount] = useState(0);
 
   if (!open || !sale) return null;
@@ -20,7 +15,6 @@ export const SalePaymentModal = ({
 
   return (
     <div>
-
       <h2>Pago de venta</h2>
 
       <p>Total: {sale.total}</p>
@@ -29,19 +23,12 @@ export const SalePaymentModal = ({
         type="number"
         placeholder="Monto"
         value={amount}
-        onChange={(e) =>
-          setAmount(Number(e.target.value))
-        }
+        onChange={(e) => setAmount(Number(e.target.value))}
       />
 
-      <button onClick={handlePay}>
-        Registrar pago
-      </button>
+      <button onClick={handlePay}>Registrar pago</button>
 
-      <button onClick={onClose}>
-        Cerrar
-      </button>
-
+      <button onClick={onClose}>Cerrar</button>
     </div>
   );
 };

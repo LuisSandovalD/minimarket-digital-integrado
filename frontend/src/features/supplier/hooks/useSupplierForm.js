@@ -1,75 +1,48 @@
-import { useState } from 'react'
+import { useState } from "react";
 
-import {
-  supplierInitialState
-} from '../utils/supplier.initialState'
+import { supplierInitialState } from "../utils/supplier.initialState";
 
 export default function useSupplierForm() {
+  const [form, setForm] = useState(supplierInitialState);
 
-  const [form, setForm] =
-    useState(
-      supplierInitialState
-    )
-
-  const [editingId, setEditingId] =
-    useState(null)
+  const [editingId, setEditingId] = useState(null);
 
   const handleChange = (e) => {
-
     setForm((prev) => ({
       ...prev,
-      [e.target.name]:
-        e.target.value
-    }))
-
-  }
+      [e.target.name]: e.target.value,
+    }));
+  };
 
   const resetForm = () => {
+    setEditingId(null);
 
-    setEditingId(null)
-
-    setForm(
-      supplierInitialState
-    )
-
-  }
+    setForm(supplierInitialState);
+  };
 
   const handleEdit = (supplier) => {
-
-    setEditingId(
-      supplier.id
-    )
+    setEditingId(supplier.id);
 
     setForm({
-      name:
-        supplier.name || '',
+      name: supplier.name || "",
 
-      ruc:
-        supplier.ruc || '',
+      ruc: supplier.ruc || "",
 
-      email:
-        supplier.email || '',
+      email: supplier.email || "",
 
-      phone:
-        supplier.phone || '',
+      phone: supplier.phone || "",
 
-      address:
-        supplier.address || '',
+      address: supplier.address || "",
 
-      contactPerson:
-        supplier.contactPerson || '',
+      contactPerson: supplier.contactPerson || "",
 
-      website:
-        supplier.website || '',
+      website: supplier.website || "",
 
-      notes:
-        supplier.notes || ''
-    })
-
-  }
+      notes: supplier.notes || "",
+    });
+  };
 
   return {
-
     form,
     editingId,
 
@@ -78,8 +51,6 @@ export default function useSupplierForm() {
 
     handleChange,
     handleEdit,
-    resetForm
-
-  }
-
+    resetForm,
+  };
 }

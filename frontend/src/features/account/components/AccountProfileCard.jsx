@@ -2,23 +2,11 @@
 // features/account/components/AccountProfileCard.jsx
 // ========================================
 
-import {
+import { User2 } from "lucide-react";
 
-  User2,
-
-} from "lucide-react";
-
-function InfoItem({
-
-  label,
-  value,
-
-}) {
-
+function InfoItem({ label, value }) {
   return (
-
     <div>
-
       <p
         className="
           text-xs
@@ -40,23 +28,12 @@ function InfoItem({
       >
         {value || "—"}
       </p>
-
     </div>
-
   );
-
 }
 
-export default function AccountProfileCard({
-
-  user,
-  company,
-  branch,
-
-}) {
-
+export default function AccountProfileCard({ user, company, branch }) {
   return (
-
     <div
       className="
         rounded-lg
@@ -71,7 +48,6 @@ export default function AccountProfileCard({
         p-5
       "
     >
-
       <div
         className="
           flex
@@ -79,7 +55,6 @@ export default function AccountProfileCard({
           gap-4
         "
       >
-
         <div
           className="
             flex
@@ -94,9 +69,7 @@ export default function AccountProfileCard({
             dark:bg-slate-800
           "
         >
-
           {user?.avatar ? (
-
             <img
               src={user.avatar}
               alt={user.name}
@@ -108,9 +81,7 @@ export default function AccountProfileCard({
                 object-cover
               "
             />
-
           ) : (
-
             <User2
               className="
                 h-7
@@ -119,13 +90,10 @@ export default function AccountProfileCard({
                 text-slate-500
               "
             />
-
           )}
-
         </div>
 
         <div className="flex-1">
-
           <h2
             className="
               text-lg
@@ -158,39 +126,19 @@ export default function AccountProfileCard({
               md:grid-cols-2
             "
           >
+            <InfoItem label="Rol" value={user?.role} />
 
-            <InfoItem
-              label="Rol"
-              value={user?.role}
-            />
+            <InfoItem label="Empresa" value={company?.name} />
 
-            <InfoItem
-              label="Empresa"
-              value={company?.name}
-            />
-
-            <InfoItem
-              label="Sucursal"
-              value={branch?.name}
-            />
+            <InfoItem label="Sucursal" value={branch?.name} />
 
             <InfoItem
               label="Estado"
-              value={
-                user?.isActive
-                  ? "Activo"
-                  : "Inactivo"
-              }
+              value={user?.isActive ? "Activo" : "Inactivo"}
             />
-
           </div>
-
         </div>
-
       </div>
-
     </div>
-
   );
-
 }

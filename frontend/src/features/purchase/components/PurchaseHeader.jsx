@@ -10,11 +10,9 @@ import {
   Activity,
 } from "lucide-react";
 
-import PageHeader
-  from "@/components/ui/PageHeader";
+import PageHeader from "@/components/ui/PageHeader";
 
 export default function PurchaseHeader({
-
   total = 0,
 
   pending = 0,
@@ -22,25 +20,18 @@ export default function PurchaseHeader({
   completed = 0,
 
   onCreate,
-
 }) {
-
   return (
-
     <PageHeader
       icon={Receipt}
-
       badge="Compras"
-
       title="Gestión de Compras"
-
       description="
         Administra órdenes,
         proveedores, pagos y
         registros de compras
         del sistema.
       "
-
       // ========================================
       // MAIN ACTION
       // ========================================
@@ -50,13 +41,11 @@ export default function PurchaseHeader({
         icon: Plus,
         onClick: onCreate,
       }}
-
       // ========================================
       // EXTRA ACTIONS
       // ========================================
 
       headerActions={
-
         <div
           className="
             flex
@@ -64,19 +53,14 @@ export default function PurchaseHeader({
             gap-3
           "
         >
-
           {/* EXTRA ACTIONS */}
-
         </div>
-
       }
-
       // ========================================
       // STATS
       // ========================================
 
       stats={[
-
         {
           icon: ClipboardList,
           label: "Compras",
@@ -94,10 +78,7 @@ export default function PurchaseHeader({
           label: "Completadas",
           value: completed,
         },
-
       ]}
     />
-
   );
-
 }

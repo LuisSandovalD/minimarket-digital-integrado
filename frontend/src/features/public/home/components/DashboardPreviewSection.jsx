@@ -26,7 +26,6 @@ export default function DashboardPreviewSection() {
       "
     >
       <div className="mx-auto max-w-7xl">
-
         <div
           className="
             grid
@@ -47,7 +46,6 @@ export default function DashboardPreviewSection() {
             <motion.span
               variants={fadeUp}
               transition={smoothTransition}
-
               className="
                 inline-flex
                 rounded-full
@@ -74,7 +72,6 @@ export default function DashboardPreviewSection() {
             <motion.h2
               variants={fadeUp}
               transition={smoothTransition}
-
               className="
                 mt-7
                 text-5xl
@@ -88,7 +85,6 @@ export default function DashboardPreviewSection() {
               "
             >
               Todo el control
-
               <span
                 className="
                   block
@@ -110,7 +106,6 @@ export default function DashboardPreviewSection() {
             <motion.p
               variants={fadeUp}
               transition={smoothTransition}
-
               className="
                 mt-6
                 max-w-2xl
@@ -122,18 +117,13 @@ export default function DashboardPreviewSection() {
                 dark:text-[#cbd5e1]
               "
             >
-              Visualiza ventas,
-              inventario, ingresos,
-              estadísticas, reportes
-              y rendimiento empresarial
-              desde una interfaz moderna
-              y optimizada.
+              Visualiza ventas, inventario, ingresos, estadísticas, reportes y
+              rendimiento empresarial desde una interfaz moderna y optimizada.
             </motion.p>
 
             {/* FEATURES */}
             <motion.div
               variants={staggerContainer}
-
               className="
                 mt-10
                 grid
@@ -150,12 +140,9 @@ export default function DashboardPreviewSection() {
               ].map((item) => (
                 <motion.div
                   key={item}
-
                   variants={fadeScale}
                   transition={springTransition}
-
                   whileHover={hoverLift}
-
                   className="
                     rounded-2xl
 
@@ -195,7 +182,6 @@ export default function DashboardPreviewSection() {
               duration: 1,
               ease: [0.16, 1, 0.3, 1],
             }}
-
             className="relative"
           >
             {/* GLOW */}
@@ -219,11 +205,9 @@ export default function DashboardPreviewSection() {
                 scale: 1.02,
                 y: -4,
               }}
-
               transition={{
                 duration: 0.4,
               }}
-
               className="
                 relative
 
@@ -244,14 +228,11 @@ export default function DashboardPreviewSection() {
                 whileHover={{
                   scale: 1.04,
                 }}
-
                 transition={{
                   duration: 0.6,
                 }}
-
                 src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop"
                 alt="Dashboard ERP"
-
                 className="
                   h-full
                   w-full

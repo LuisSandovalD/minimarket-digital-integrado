@@ -1,11 +1,6 @@
 // features/components/FeatureCard.jsx
 
-export default function FeatureCard({
-  title,
-  description,
-  icon: Icon,
-  image,
-}) {
+export default function FeatureCard({ title, description, icon: Icon, image }) {
   return (
     <article
       className="

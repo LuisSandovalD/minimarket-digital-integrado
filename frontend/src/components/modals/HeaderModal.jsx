@@ -55,10 +55,8 @@ export default function HeaderModal({
       />
 
       <div className="relative flex items-center justify-between">
-        
         {/* LEFT */}
         <div className="flex items-center gap-4">
-          
           {Icon && (
             <div
               className="
@@ -93,10 +91,7 @@ export default function HeaderModal({
                 "
               />
 
-              <Icon
-                size={24}
-                className="relative z-10"
-              />
+              <Icon size={24} className="relative z-10" />
             </div>
           )}
 

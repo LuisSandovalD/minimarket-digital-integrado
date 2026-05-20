@@ -3,76 +3,49 @@
 // ========================================
 
 export function mapAccount(user) {
-
   return {
+    id: user?.id || null,
 
-    id:
-      user?.id || null,
+    name: user?.name || "",
 
-    name:
-      user?.name || "",
+    email: user?.email || "",
 
-    email:
-      user?.email || "",
+    role: user?.role || "EMPLOYEE",
 
-    role:
-      user?.role || "EMPLOYEE",
+    avatar: user?.avatar || null,
 
-    avatar:
-      user?.avatar || null,
+    phone: user?.phone || "",
 
-    phone:
-      user?.phone || "",
+    isActive: user?.isActive || false,
 
-    isActive:
-      user?.isActive || false,
+    isDeleted: user?.isDeleted || false,
 
-    isDeleted:
-      user?.isDeleted || false,
+    isOnline: user?.isOnline || false,
 
-    isOnline:
-      user?.isOnline || false,
+    lastLogin: user?.lastLogin || null,
 
-    lastLogin:
-      user?.lastLogin || null,
+    lastLogout: user?.lastLogout || null,
 
-    lastLogout:
-      user?.lastLogout || null,
+    twoFactorEnabled: user?.twoFactorEnabled || false,
 
-    twoFactorEnabled:
-      user?.twoFactorEnabled || false,
+    createdAt: user?.createdAt || null,
 
-    createdAt:
-      user?.createdAt || null,
+    updatedAt: user?.updatedAt || null,
 
-    updatedAt:
-      user?.updatedAt || null,
+    manager: user?.manager || null,
 
-    manager:
-      user?.manager || null,
+    subordinates: user?.subordinates || [],
 
-    subordinates:
-      user?.subordinates || [],
+    company: user?.company || null,
 
-    company:
-      user?.company || null,
-
-    branch:
-      user?.branch || null,
+    branch: user?.branch || null,
 
     stats: {
+      sales: user?.stats?.sales || 0,
 
-      sales:
-        user?.stats?.sales || 0,
+      purchases: user?.stats?.purchases || 0,
 
-      purchases:
-        user?.stats?.purchases || 0,
-
-      supportTickets:
-        user?.stats?.supportTickets || 0,
-
+      supportTickets: user?.stats?.supportTickets || 0,
     },
-
   };
-
 }

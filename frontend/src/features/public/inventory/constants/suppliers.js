@@ -1,11 +1,4 @@
-import {
-  Star,
-  TrendingUp,
-  Clock,
-  Shield,
-  MapPin,
-  Phone,
-} from "lucide-react";
+import { Star, TrendingUp, Clock, Shield, MapPin, Phone } from "lucide-react";
 
 export const suppliers = [
   {

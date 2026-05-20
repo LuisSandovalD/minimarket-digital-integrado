@@ -1,24 +1,16 @@
 import React from "react";
 
-import {
-  useNavigate,
-} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-import AsideHeader
-  from "./components/AsideHeader";
+import AsideHeader from "./components/AsideHeader";
 
-import AsideNavigation
-  from "./components/AsideNavigation";
+import AsideNavigation from "./components/AsideNavigation";
 
-import AsideFooter
-  from "./components/AsideFooter";
+import AsideFooter from "./components/AsideFooter";
 
-import {
-  menuByRole,
-} from "./data/asideMenu";
+import { menuByRole } from "./data/asideMenu";
 
-import useAuth
-  from "@/features/auth/hooks/useAuth";
+import useAuth from "@/features/auth/hooks/useAuth";
 
 import {
   clearSession,
@@ -29,90 +21,69 @@ import {
 // COMPONENT
 // ========================================
 
-export default function AppAside({
-  isOpen,
-}) {
-
+export default function AppAside({ isOpen }) {
   // ========================================
   // NAVIGATION
   // ========================================
 
-  const navigate =
-    useNavigate();
+  const navigate = useNavigate();
 
   // ========================================
   // AUTH
   // ========================================
 
-  const {
-    user,
-    logout,
-  } = useAuth();
+  const { user, logout } = useAuth();
 
   // ========================================
   // COMPANY
   // ========================================
 
-  const company =
-    getCompany();
+  const company = getCompany();
 
   // ========================================
   // STATE
   // ========================================
 
-  const [
-    activeItem,
-    setActiveItem,
-  ] = React.useState(
-    "dashboard"
-  );
+  const [activeItem, setActiveItem] = React.useState("dashboard");
 
   // ========================================
   // ROLE
   // ========================================
 
-  const userRole =
-    user?.role ||
-    "EMPLOYEE";
+  const userRole = user?.role || "EMPLOYEE";
 
   // ========================================
   // MENU
   // ========================================
 
-  const menuItems =
-    menuByRole[userRole] || [];
+  const menuItems = menuByRole[userRole] || [];
 
   // ========================================
   // COLLAPSED
   // ========================================
 
-  const isCollapsed =
-    !isOpen;
+  const isCollapsed = !isOpen;
 
   // ========================================
   // LOGOUT
   // ========================================
 
-  const handleLogout =
-    () => {
+  const handleLogout = () => {
+    // Limpiar auth global
+    logout?.();
 
-      // Limpiar auth global
-      logout?.();
+    // Limpiar localStorage
+    clearSession();
 
-      // Limpiar localStorage
-      clearSession();
-
-      // Redireccionar
-      navigate("/");
-
-    };
+    // Redireccionar
+    navigate("/");
+  };
 
   // ========================================
   // RENDER
   // ========================================
 
   return (
-
     <aside
       className={`
         fixed
@@ -140,23 +111,14 @@ export default function AppAside({
         transition-all
         duration-300
 
-        ${
-          isCollapsed
-            ? "w-20"
-            : "w-72"
-        }
+        ${isCollapsed ? "w-20" : "w-72"}
       `}
     >
-
       {/* ====================================
        * HEADER
        * ================================== */}
 
-      <AsideHeader
-        isCollapsed={
-          isCollapsed
-        }
-      />
+      <AsideHeader isCollapsed={isCollapsed} />
 
       {/* ====================================
        * NAVIGATION
@@ -168,18 +130,12 @@ export default function AppAside({
           overflow-y-auto
         "
       >
-
         <AsideNavigation
           menuItems={menuItems}
           activeItem={activeItem}
-          setActiveItem={
-            setActiveItem
-          }
-          isCollapsed={
-            isCollapsed
-          }
+          setActiveItem={setActiveItem}
+          isCollapsed={isCollapsed}
         />
-
       </div>
 
       {/* ====================================
@@ -187,19 +143,12 @@ export default function AppAside({
        * ================================== */}
 
       <AsideFooter
-        isCollapsed={
-          isCollapsed
-        }
+        isCollapsed={isCollapsed}
         user={user}
         company={company}
         branch={user?.branch}
-        onLogout={
-          handleLogout
-        }
+        onLogout={handleLogout}
       />
-
     </aside>
-
   );
-
 }

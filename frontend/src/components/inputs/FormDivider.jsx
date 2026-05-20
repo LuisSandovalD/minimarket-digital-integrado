@@ -1,6 +1,4 @@
-export default function FormDivider({
-  text = "o continuar con",
-}) {
+export default function FormDivider({ text = "o continuar con" }) {
   return (
     <div className="relative py-2">
       <div className="absolute inset-0 flex items-center">

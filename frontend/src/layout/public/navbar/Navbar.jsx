@@ -9,11 +9,7 @@ import { navLinks } from "./constants/navLinks";
 import useNavbar from "./hooks/useNavbar";
 
 export default function Navbar() {
-  const {
-    open,
-    openMenu,
-    closeMenu,
-  } = useNavbar();
+  const { open, openMenu, closeMenu } = useNavbar();
 
   return (
     <>
@@ -89,19 +85,13 @@ export default function Navbar() {
           <div className="flex items-center gap-2">
             <NavbarActions />
 
-            <NavbarMobileButton
-              onClick={openMenu}
-            />
+            <NavbarMobileButton onClick={openMenu} />
           </div>
         </div>
       </header>
 
       {/* MOBILE MENU */}
-      <MobileMenu
-        open={open}
-        onClose={closeMenu}
-        links={navLinks}
-      />
+      <MobileMenu open={open} onClose={closeMenu} links={navLinks} />
     </>
   );
 }

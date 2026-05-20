@@ -24,19 +24,12 @@ import { SaleReturnModal } from "../components/modals/SaleReturnModal";
 // ========================================
 
 export const SalesPage = () => {
-
   // ======================================
   // DATA
   // ======================================
 
-  const {
-    sales,
-    loading,
-    addSale,
-    removeSale,
-    refundSale,
-    fetchSales,
-  } = useSales();
+  const { sales, loading, addSale, removeSale, refundSale, fetchSales } =
+    useSales();
 
   // ======================================
   // MODALS
@@ -70,127 +63,71 @@ export const SalesPage = () => {
   // CREATE SALE
   // ======================================
 
-  const handleCreate =
-    async (data) => {
+  const handleCreate = async (data) => {
+    await addSale(data);
 
-      await addSale(data);
-
-      setCreateOpen(false);
-
-    };
+    setCreateOpen(false);
+  };
 
   // ======================================
   // CANCEL SALE
   // ======================================
 
-  const handleCancel =
-    async (id) => {
+  const handleCancel = async (id) => {
+    await removeSale(id);
 
-      await removeSale(id);
-
-      setCancelOpen(false);
-
-    };
+    setCancelOpen(false);
+  };
 
   // ======================================
   // RETURN SALE
   // ======================================
 
-  const handleReturn =
-    async (
-      id,
-      items
-    ) => {
+  const handleReturn = async (id, items) => {
+    await refundSale(id, items);
 
-      await refundSale(
-        id,
-        items
-      );
-
-      setReturnOpen(false);
-
-    };
+    setReturnOpen(false);
+  };
 
   // ======================================
   // PAYMENT
   // ======================================
 
-  const handlePayment =
-    async (
-      id,
-      amount
-    ) => {
+  const handlePayment = async (id, amount) => {
+    console.log("Pago:", id, amount);
 
-      console.log(
-        "Pago:",
-        id,
-        amount
-      );
-
-      setPaymentOpen(false);
-
-    };
+    setPaymentOpen(false);
+  };
 
   // ======================================
   // STATS
   // ======================================
 
-  const totalRevenue =
-    sales.reduce(
-      (
-        acc,
-        sale
-      ) =>
-        acc +
-        Number(
-          sale.total || 0
-        ),
-      0
-    );
+  const totalRevenue = sales.reduce(
+    (acc, sale) => acc + Number(sale.total || 0),
+    0,
+  );
 
-  const totalOrders =
-    sales.length;
+  const totalOrders = sales.length;
 
-  const averageTicket =
-    totalOrders > 0
-      ? totalRevenue /
-        totalOrders
-      : 0;
+  const averageTicket = totalOrders > 0 ? totalRevenue / totalOrders : 0;
 
   // ======================================
   // RENDER
   // ======================================
 
   return (
-
     <div className="space-y-6">
-
       {/* ==================================
        * HEADER
        * ================================== */}
 
       <SaleHeader
-
-        totalSales={
-          totalOrders
-        }
-
-        totalRevenue={
-          totalRevenue
-        }
-
-        totalOrders={
-          totalOrders
-        }
-
-        averageTicket={
-          averageTicket
-        }
-
-        onCreate={() =>
-          setCreateOpen(true)
-        }
-
+        totalSales={totalOrders}
+        totalRevenue={totalRevenue}
+        totalOrders={totalOrders}
+        averageTicket={averageTicket}
+        onCreate={() => setCreateOpen(true)}
       />
 
       {/* ==================================
@@ -198,27 +135,12 @@ export const SalesPage = () => {
        * ================================== */}
 
       <SaleTable
-
         sales={sales}
-
         loading={loading}
-
-        onView={
-          openDetail
-        }
-
-        onPay={
-          openPayment
-        }
-
-        onCancel={
-          openCancel
-        }
-
-        onReturn={
-          openReturn
-        }
-
+        onView={openDetail}
+        onPay={openPayment}
+        onCancel={openCancel}
+        onReturn={openReturn}
       />
 
       {/* ==================================
@@ -226,19 +148,9 @@ export const SalesPage = () => {
        * ================================== */}
 
       <SaleCreateModal
-
-        open={
-          createOpen
-        }
-
-        onClose={() =>
-          setCreateOpen(false)
-        }
-
-        onSubmit={
-          handleCreate
-        }
-
+        open={createOpen}
+        onClose={() => setCreateOpen(false)}
+        onSubmit={handleCreate}
       />
 
       {/* ==================================
@@ -246,19 +158,9 @@ export const SalesPage = () => {
        * ================================== */}
 
       <SaleDetailModal
-
-        open={
-          detailOpen
-        }
-
-        sale={
-          selectedSale
-        }
-
-        onClose={() =>
-          setDetailOpen(false)
-        }
-
+        open={detailOpen}
+        sale={selectedSale}
+        onClose={() => setDetailOpen(false)}
       />
 
       {/* ==================================
@@ -266,23 +168,10 @@ export const SalesPage = () => {
        * ================================== */}
 
       <SalePaymentModal
-
-        open={
-          paymentOpen
-        }
-
-        sale={
-          selectedSale
-        }
-
-        onClose={() =>
-          setPaymentOpen(false)
-        }
-
-        onPay={
-          handlePayment
-        }
-
+        open={paymentOpen}
+        sale={selectedSale}
+        onClose={() => setPaymentOpen(false)}
+        onPay={handlePayment}
       />
 
       {/* ==================================
@@ -290,23 +179,10 @@ export const SalesPage = () => {
        * ================================== */}
 
       <SaleCancelModal
-
-        open={
-          cancelOpen
-        }
-
-        sale={
-          selectedSale
-        }
-
-        onClose={() =>
-          setCancelOpen(false)
-        }
-
-        onCancel={
-          handleCancel
-        }
-
+        open={cancelOpen}
+        sale={selectedSale}
+        onClose={() => setCancelOpen(false)}
+        onCancel={handleCancel}
       />
 
       {/* ==================================
@@ -314,27 +190,11 @@ export const SalesPage = () => {
        * ================================== */}
 
       <SaleReturnModal
-
-        open={
-          returnOpen
-        }
-
-        sale={
-          selectedSale
-        }
-
-        onClose={() =>
-          setReturnOpen(false)
-        }
-
-        onReturn={
-          handleReturn
-        }
-
+        open={returnOpen}
+        sale={selectedSale}
+        onClose={() => setReturnOpen(false)}
+        onReturn={handleReturn}
       />
-
     </div>
-
   );
-
 };

@@ -1,18 +1,11 @@
-import { useDispatch }
-from "react-redux";
+import { useDispatch } from "react-redux";
 
-import { logout }
-from "../store/authSlice";
+import { logout } from "../store/authSlice";
 
 export default function useLogout() {
-
-  const dispatch =
-    useDispatch();
+  const dispatch = useDispatch();
 
   return () => {
-
     dispatch(logout());
-
   };
-
 }

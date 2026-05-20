@@ -1,20 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 const Table = ({
   columns = [],
   data = [],
   loading = false,
-  emptyMessage = 'No hay datos disponibles',
-  sortable = true
+  emptyMessage = "No hay datos disponibles",
+  sortable = true,
 }) => {
-  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
 
   const handleSort = (key) => {
     if (!sortable) return;
 
-    let direction = 'asc';
-    if (sortConfig.key === key && sortConfig.direction === 'asc') {
-      direction = 'desc';
+    let direction = "asc";
+    if (sortConfig.key === key && sortConfig.direction === "asc") {
+      direction = "desc";
     }
 
     setSortConfig({ key, direction });
@@ -28,10 +28,10 @@ const Table = ({
       const bValue = b[sortConfig.key];
 
       if (aValue < bValue) {
-        return sortConfig.direction === 'asc' ? -1 : 1;
+        return sortConfig.direction === "asc" ? -1 : 1;
       }
       if (aValue > bValue) {
-        return sortConfig.direction === 'asc' ? 1 : -1;
+        return sortConfig.direction === "asc" ? 1 : -1;
       }
       return 0;
     });
@@ -47,11 +47,7 @@ const Table = ({
   }
 
   if (!data || data.length === 0) {
-    return (
-      <div className="text-center py-8 text-gray-500">
-        {emptyMessage}
-      </div>
-    );
+    return <div className="text-center py-8 text-gray-500">{emptyMessage}</div>;
   }
 
   return (
@@ -63,17 +59,23 @@ const Table = ({
               <th
                 key={column.key}
                 className={`px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider ${
-                  column.sortable !== false && sortable ? 'cursor-pointer hover:bg-gray-100' : ''
+                  column.sortable !== false && sortable
+                    ? "cursor-pointer hover:bg-gray-100"
+                    : ""
                 }`}
-                onClick={() => column.sortable !== false && handleSort(column.key)}
+                onClick={() =>
+                  column.sortable !== false && handleSort(column.key)
+                }
               >
                 <div className="flex items-center">
                   {column.title}
-                  {column.sortable !== false && sortable && sortConfig.key === column.key && (
-                    <span className="ml-1">
-                      {sortConfig.direction === 'asc' ? '↑' : '↓'}
-                    </span>
-                  )}
+                  {column.sortable !== false &&
+                    sortable &&
+                    sortConfig.key === column.key && (
+                      <span className="ml-1">
+                        {sortConfig.direction === "asc" ? "↑" : "↓"}
+                      </span>
+                    )}
                 </div>
               </th>
             ))}
@@ -83,8 +85,13 @@ const Table = ({
           {sortedData.map((row, index) => (
             <tr key={row.id || index} className="hover:bg-gray-50">
               {columns.map((column) => (
-                <td key={column.key} className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {column.render ? column.render(row[column.key], row) : row[column.key]}
+                <td
+                  key={column.key}
+                  className="px-6 py-4 whitespace-nowrap text-sm text-gray-900"
+                >
+                  {column.render
+                    ? column.render(row[column.key], row)
+                    : row[column.key]}
                 </td>
               ))}
             </tr>

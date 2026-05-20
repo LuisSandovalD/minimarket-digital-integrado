@@ -14,8 +14,6 @@ import { warehouses } from "../constants/warehouses";
 export default function WarehouseSection() {
   return (
     <section className="relative py-24">
-      
-
       <div className="relative max-w-7xl mx-auto">
         {/* TOP SECTION */}
         <div
@@ -108,12 +106,11 @@ export default function WarehouseSection() {
                 dark:text-[#cbd5e1]
               "
             >
-              Administra stock por sucursal, almacén o sede desde
-              una sola plataforma con sincronización instantánea,
-              métricas avanzadas y visibilidad total.
+              Administra stock por sucursal, almacén o sede desde una sola
+              plataforma con sincronización instantánea, métricas avanzadas y
+              visibilidad total.
             </p>
           </div>
-
         </div>
 
         {/* GRID */}
@@ -279,10 +276,7 @@ export default function WarehouseSection() {
                     <div>
                       <div className="mb-2 flex items-center justify-between">
                         <div className="flex items-center gap-2">
-                          <Package
-                            size={16}
-                            className="text-[#6096ba]"
-                          />
+                          <Package size={16} className="text-[#6096ba]" />
 
                           <span
                             className="
@@ -316,10 +310,7 @@ export default function WarehouseSection() {
                     <div>
                       <div className="mb-2 flex items-center justify-between">
                         <div className="flex items-center gap-2">
-                          <Zap
-                            size={16}
-                            className="text-[#6096ba]"
-                          />
+                          <Zap size={16} className="text-[#6096ba]" />
 
                           <span
                             className="
@@ -379,10 +370,7 @@ export default function WarehouseSection() {
                     {/* EMPLOYEES */}
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <Users
-                          size={16}
-                          className="text-[#6096ba]"
-                        />
+                        <Users size={16} className="text-[#6096ba]" />
 
                         <span
                           className="

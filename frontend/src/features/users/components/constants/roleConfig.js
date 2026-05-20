@@ -2,16 +2,9 @@
 // components/users/constants/roleConfig.js
 // ========================================
 
-import {
-  ShieldCheck,
-  UserCog,
-  Layers3,
-  User,
-  Eye,
-} from "lucide-react";
+import { ShieldCheck, UserCog, Layers3, User, Eye } from "lucide-react";
 
 export const ROLE_CONFIG = {
-
   ADMIN: {
     icon: ShieldCheck,
 
@@ -61,25 +54,20 @@ export const ROLE_CONFIG = {
       border-slate-500/20
     `,
   },
-
 };
 
 export const NEXT_ROLE = {
-
   ADMIN: "MANAGER",
 
   MANAGER: "SUPERVISOR",
 
   SUPERVISOR: "EMPLOYEE",
-
 };
 
 export const BUTTON_LABEL = {
-
   ADMIN: "Ver Gerentes",
 
   MANAGER: "Ver Supervisores",
 
   SUPERVISOR: "Ver Empleados",
-
 };

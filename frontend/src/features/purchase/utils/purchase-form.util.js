@@ -3,16 +3,12 @@
 // ========================================
 
 export const initialPurchaseForm = {
-
   supplierId: "",
-
 
   notes: "",
 
   details: [
-
     {
-
       productId: "",
 
       productName: "",
@@ -28,9 +24,6 @@ export const initialPurchaseForm = {
       costPrice: 0,
 
       subtotal: 0,
-
-    }
-
+    },
   ],
-
 };

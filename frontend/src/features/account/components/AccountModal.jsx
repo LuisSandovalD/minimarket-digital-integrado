@@ -1,89 +1,45 @@
-import {
-  X,
-  User2,
-  Shield,
-  BarChart3,
-  Pencil,
-} from "lucide-react";
+import { X, User2, Shield, BarChart3, Pencil } from "lucide-react";
 
 import { useState } from "react";
 
-import {
-  Modal,
-  HeaderModal,
-  FooterModal,
-} from "@/components/modals";
+import { Modal, HeaderModal, FooterModal } from "@/components/modals";
 
-import { ModernButton }
-  from "@/components/buttons";
+import { ModernButton } from "@/components/buttons";
 
-import useAccount
-  from "../hooks/useAccount";
+import useAccount from "../hooks/useAccount";
 
-import useDeleteAccount
-  from "../hooks/useDeleteAccount";
+import useDeleteAccount from "../hooks/useDeleteAccount";
 
-import useChangePassword
-  from "../hooks/useChangePassword";
+import useChangePassword from "../hooks/useChangePassword";
 
-import ChangePasswordModal
-  from "./ChangePasswordModal";
+import ChangePasswordModal from "./ChangePasswordModal";
 
-import EditProfileModal
-  from "./EditProfileModal";
+import EditProfileModal from "./EditProfileModal";
 
-import TwoFactorModal
-  from "./TwoFactorModal";
+import TwoFactorModal from "./TwoFactorModal";
 
-import SessionsModal
-  from "./SessionsModal";
+import SessionsModal from "./SessionsModal";
 
-import DeleteAccountModal
-  from "./DeleteAccountModal";
+import DeleteAccountModal from "./DeleteAccountModal";
 
-export default function AccountModal({
-  open,
-  onClose,
-  company,
-  branch,
-}) {
+export default function AccountModal({ open, onClose, company, branch }) {
+  const { user, updateProfile } = useAccount();
 
-  const { user, updateProfile }
-    = useAccount();
+  const { removeAccount } = useDeleteAccount();
 
-  const { removeAccount }
-    = useDeleteAccount();
+  const { updatePassword } = useChangePassword();
 
-  const { updatePassword }
-    = useChangePassword();
+  const [openPasswordModal, setOpenPasswordModal] = useState(false);
 
-  const [
-    openPasswordModal,
-    setOpenPasswordModal,
-  ] = useState(false);
+  const [openEditProfileModal, setOpenEditProfileModal] = useState(false);
 
-  const [
-    openEditProfileModal,
-    setOpenEditProfileModal,
-  ] = useState(false);
+  const [openTwoFactorModal, setOpenTwoFactorModal] = useState(false);
 
-  const [
-    openTwoFactorModal,
-    setOpenTwoFactorModal,
-  ] = useState(false);
+  const [openSessionsModal, setOpenSessionsModal] = useState(false);
 
-  const [
-    openSessionsModal,
-    setOpenSessionsModal,
-  ] = useState(false);
-
-  const [
-    openDeleteModal,
-    setOpenDeleteModal,
-  ] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
   async function handleUpdateProfile(form) {
-
     await updateProfile({
       name: form.name,
       email: form.email,
@@ -97,7 +53,6 @@ export default function AccountModal({
   }
 
   async function handleChangePassword(form) {
-
     await updatePassword({
       currentPassword: form.currentPassword,
       newPassword: form.newPassword,
@@ -109,12 +64,7 @@ export default function AccountModal({
 
   return (
     <>
-      <Modal
-        open={open}
-        onClose={onClose}
-        size="full"
-      >
-
+      <Modal open={open} onClose={onClose} size="full">
         {/* HEADER */}
 
         <HeaderModal
@@ -144,7 +94,6 @@ export default function AccountModal({
             dark:to-slate-900/30
           "
         >
-
           <div
             className="
               grid
@@ -153,7 +102,6 @@ export default function AccountModal({
               lg:grid-cols-[350px_1fr]
             "
           >
-
             {/* ========================================
              * LEFT SIDE
              * ====================================== */}
@@ -181,11 +129,9 @@ export default function AccountModal({
                 h-full
               "
             >
-
               {/* AVATAR */}
 
               <div className="flex justify-center mb-5">
-
                 <div
                   className="
                     flex
@@ -202,7 +148,6 @@ export default function AccountModal({
                     dark:bg-slate-800
                   "
                 >
-
                   {user?.avatar ? (
                     <img
                       src={user.avatar}
@@ -214,20 +159,14 @@ export default function AccountModal({
                       "
                     />
                   ) : (
-                    <User2
-                      size={40}
-                      className="text-slate-400"
-                    />
+                    <User2 size={40} className="text-slate-400" />
                   )}
-
                 </div>
-
               </div>
 
               {/* NAME */}
 
               <div className="text-center mb-8">
-
                 <h2
                   className="
                     text-lg
@@ -254,37 +193,21 @@ export default function AccountModal({
                 >
                   {user?.email || "-"}
                 </p>
-
               </div>
 
               {/* META */}
 
               <div className="space-y-4 mb-8">
+                <InfoItem label="Rol" value={user?.role} />
 
-                <InfoItem
-                  label="Rol"
-                  value={user?.role}
-                />
+                <InfoItem label="Empresa" value={company?.name} />
 
-                <InfoItem
-                  label="Empresa"
-                  value={company?.name}
-                />
-
-                <InfoItem
-                  label="Sucursal"
-                  value={branch?.name}
-                />
+                <InfoItem label="Sucursal" value={branch?.name} />
 
                 <InfoItem
                   label="Estado"
-                  value={
-                    user?.isActive
-                      ? "Activo"
-                      : "Inactivo"
-                  }
+                  value={user?.isActive ? "Activo" : "Inactivo"}
                 />
-
               </div>
 
               {/* BUTTON */}
@@ -293,12 +216,9 @@ export default function AccountModal({
                 text="Editar Perfil"
                 size="sm"
                 icon={Pencil}
-                onClick={() =>
-                  setOpenEditProfileModal(true)
-                }
+                onClick={() => setOpenEditProfileModal(true)}
                 className="w-full"
               />
-
             </div>
 
             {/* ========================================
@@ -306,7 +226,6 @@ export default function AccountModal({
              * ====================================== */}
 
             <div className="space-y-5">
-
               {/* ========================================
                * ACTIVITY
                * ====================================== */}
@@ -328,7 +247,6 @@ export default function AccountModal({
                   shadow-sm
                 "
               >
-
                 <div
                   className="
                     mb-5
@@ -337,7 +255,6 @@ export default function AccountModal({
                     gap-3
                   "
                 >
-
                   <div
                     className="
                       flex
@@ -352,7 +269,6 @@ export default function AccountModal({
                       dark:bg-slate-800
                     "
                   >
-
                     <BarChart3
                       size={18}
                       className="
@@ -360,11 +276,9 @@ export default function AccountModal({
                         dark:text-slate-300
                       "
                     />
-
                   </div>
 
                   <div>
-
                     <h3
                       className="
                         text-sm
@@ -386,9 +300,7 @@ export default function AccountModal({
                     >
                       Estadísticas recientes
                     </p>
-
                   </div>
-
                 </div>
 
                 <div
@@ -398,7 +310,6 @@ export default function AccountModal({
                     gap-4
                   "
                 >
-
                   <div
                     className="
                       rounded-2xl
@@ -416,7 +327,6 @@ export default function AccountModal({
                       shadow-sm
                     "
                   >
-
                     <p
                       className="
                         text-xs
@@ -439,7 +349,6 @@ export default function AccountModal({
                     >
                       {user?.loginAttempts || 0}
                     </p>
-
                   </div>
 
                   <div
@@ -459,7 +368,6 @@ export default function AccountModal({
                       shadow-sm
                     "
                   >
-
                     <p
                       className="
                         text-xs
@@ -481,16 +389,11 @@ export default function AccountModal({
                       "
                     >
                       {user?.lastLogin
-                        ? new Date(
-                            user.lastLogin
-                          ).toLocaleDateString("es-ES")
+                        ? new Date(user.lastLogin).toLocaleDateString("es-ES")
                         : "—"}
                     </p>
-
                   </div>
-
                 </div>
-
               </section>
 
               {/* ========================================
@@ -517,11 +420,9 @@ export default function AccountModal({
                   shadow-sm
                 "
               >
-
                 {/* SECURITY */}
 
                 <div className="flex-1">
-
                   <div
                     className="
                       mb-5
@@ -530,7 +431,6 @@ export default function AccountModal({
                       gap-3
                     "
                   >
-
                     <div
                       className="
                         flex
@@ -545,7 +445,6 @@ export default function AccountModal({
                         dark:bg-slate-800
                       "
                     >
-
                       <Shield
                         size={18}
                         className="
@@ -553,11 +452,9 @@ export default function AccountModal({
                           dark:text-slate-300
                         "
                       />
-
                     </div>
 
                     <div>
-
                       <h3
                         className="
                           text-sm
@@ -579,29 +476,20 @@ export default function AccountModal({
                       >
                         Configuración y protección
                       </p>
-
                     </div>
-
                   </div>
 
                   <div className="grid grid-cols-3 gap-3">
-
                     <ModernButton
-                      onClick={() =>
-                        setOpenPasswordModal(true)
-                      }
+                      onClick={() => setOpenPasswordModal(true)}
                       variant="secondary"
                       text="Cambiar contraseña"
                     />
-                      
 
                     <ModernButton
-                      onClick={() =>
-                        setOpenTwoFactorModal(true)
-                      }
+                      onClick={() => setOpenTwoFactorModal(true)}
                       variant="secondary"
                     >
-
                       <div
                         className="
                           flex
@@ -609,10 +497,7 @@ export default function AccountModal({
                           justify-between
                         "
                       >
-
-                        <span>
-                          Autenticación 2FA
-                        </span>
+                        <span>Autenticación 2FA</span>
 
                         <span
                           className={`
@@ -640,85 +525,63 @@ export default function AccountModal({
                             }
                           `}
                         >
-                          {user?.twoFactorEnabled
-                            ? "Activado"
-                            : "Desactivado"}
+                          {user?.twoFactorEnabled ? "Activado" : "Desactivado"}
                         </span>
-
                       </div>
-
                     </ModernButton>
 
                     <ModernButton
-                      onClick={() =>
-                        setOpenSessionsModal(true)
-                      }
+                      onClick={() => setOpenSessionsModal(true)}
                       variant="secondary"
                       text="Sesiones activas"
                     />
-
                   </div>
-
                 </div>
-
-              </section >
+              </section>
 
               <section className="grid grid-cols-1 gap-3">
-                
-                  {/* DANGER */}
-                  <h3
-                    className="
+                {/* DANGER */}
+                <h3
+                  className="
                       text-sm
                       font-semibold
                       text-red-600
                       dark:text-red-400
 
                     "
-                  >
-                    Zona de riesgo
-                  </h3>
+                >
+                  Zona de riesgo
+                </h3>
 
-                  <ModernButton
-                    onClick={() =>
-                      setOpenDeleteModal(true)
-                    }
-                    text="Eliminar cuenta"
-                    variant="danger"
-                    
-                  />
+                <ModernButton
+                  onClick={() => setOpenDeleteModal(true)}
+                  text="Eliminar cuenta"
+                  variant="danger"
+                />
               </section>
             </div>
-
           </div>
-
         </div>
 
         {/* FOOTER */}
 
         <FooterModal>
-
           <div className="w-full flex justify-end">
-
             <ModernButton
               text="Cerrar"
               variant="outline"
               icon={X}
               onClick={onClose}
             />
-
           </div>
-
         </FooterModal>
-
       </Modal>
 
       {/* PASSWORD */}
 
       <ChangePasswordModal
         open={openPasswordModal}
-        onClose={() =>
-          setOpenPasswordModal(false)
-        }
+        onClose={() => setOpenPasswordModal(false)}
         onSubmit={handleChangePassword}
       />
 
@@ -726,9 +589,7 @@ export default function AccountModal({
 
       <EditProfileModal
         open={openEditProfileModal}
-        onClose={() =>
-          setOpenEditProfileModal(false)
-        }
+        onClose={() => setOpenEditProfileModal(false)}
         user={user}
         company={company}
         branch={branch}
@@ -739,41 +600,28 @@ export default function AccountModal({
 
       <TwoFactorModal
         open={openTwoFactorModal}
-        onClose={() =>
-          setOpenTwoFactorModal(false)
-        }
-        isEnabled={
-          user?.twoFactorEnabled || false
-        }
+        onClose={() => setOpenTwoFactorModal(false)}
+        isEnabled={user?.twoFactorEnabled || false}
       />
 
       {/* SESSIONS */}
 
       <SessionsModal
         open={openSessionsModal}
-        onClose={() =>
-          setOpenSessionsModal(false)
-        }
+        onClose={() => setOpenSessionsModal(false)}
       />
 
       {/* DELETE */}
 
       <DeleteAccountModal
         open={openDeleteModal}
-        onClose={() =>
-          setOpenDeleteModal(false)
-        }
+        onClose={() => setOpenDeleteModal(false)}
       />
-
     </>
   );
 }
 
-function InfoItem({
-  label,
-  value,
-}) {
-
+function InfoItem({ label, value }) {
   return (
     <div
       className="
@@ -783,7 +631,6 @@ function InfoItem({
         gap-4
       "
     >
-
       <span
         className="
           text-sm
@@ -804,7 +651,6 @@ function InfoItem({
       >
         {value || "—"}
       </span>
-
     </div>
   );
 }

@@ -2,21 +2,16 @@
 // components/BarcodeGrid.jsx
 // ========================================
 
-import BarcodeCard
-  from "./BarcodeCard";
+import BarcodeCard from "./BarcodeCard";
 
 export default function BarcodeGrid({
-
   products,
 
   selectedProducts,
 
   onToggle,
-
 }) {
-
   return (
-
     <div
       className="
         grid
@@ -26,26 +21,14 @@ export default function BarcodeGrid({
         gap-4
       "
     >
-
-      {products.map(product => (
-
+      {products.map((product) => (
         <BarcodeCard
           key={product.id}
           product={product}
-          selected={
-            selectedProducts.some(
-              item =>
-                item.id ===
-                product.id
-            )
-          }
-          onSelect={() =>
-            onToggle(product)
-          }
+          selected={selectedProducts.some((item) => item.id === product.id)}
+          onSelect={() => onToggle(product)}
         />
-
       ))}
-
     </div>
   );
 }

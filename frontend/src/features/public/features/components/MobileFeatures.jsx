@@ -38,7 +38,6 @@ export default function MobileFeatures() {
       <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
         {/* TWO COLUMN LAYOUT */}
         <div className="grid gap-8 lg:gap-12 lg:grid-cols-12 items-center">
-          
           {/* LEFT COLUMN - CONTENT */}
           <div className="lg:col-span-5 space-y-6">
             {/* BADGE */}
@@ -145,12 +144,20 @@ export default function MobileFeatures() {
             {/* STATS */}
             <div className="flex gap-8 pt-4">
               <div>
-                <p className="text-3xl font-black text-[#274c77] dark:text-[#dbeafe]">4+</p>
-                <span className="text-xs text-[#475569] dark:text-[#cbd5e1]">Dispositivos</span>
+                <p className="text-3xl font-black text-[#274c77] dark:text-[#dbeafe]">
+                  4+
+                </p>
+                <span className="text-xs text-[#475569] dark:text-[#cbd5e1]">
+                  Dispositivos
+                </span>
               </div>
               <div>
-                <p className="text-3xl font-black text-[#274c77] dark:text-[#dbeafe]">100%</p>
-                <span className="text-xs text-[#475569] dark:text-[#cbd5e1]">Responsive</span>
+                <p className="text-3xl font-black text-[#274c77] dark:text-[#dbeafe]">
+                  100%
+                </p>
+                <span className="text-xs text-[#475569] dark:text-[#cbd5e1]">
+                  Responsive
+                </span>
               </div>
             </div>
           </div>

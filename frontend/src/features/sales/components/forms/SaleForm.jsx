@@ -3,11 +3,7 @@
 // CONNECTADO AL BACKEND
 // ========================================
 
-import React, {
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 import {
   Plus,
@@ -20,34 +16,26 @@ import {
 } from "lucide-react";
 
 // API
-import 
-  getProducts from "../../../product/services/product.service";
+import getProducts from "../../../product/services/product.service";
 
 // UI
-import {Input} from "@/components/inputs/";
-import {Select} from "@/components/selects/";
+import { Input } from "@/components/inputs/";
+import { Select } from "@/components/selects/";
 
-import {ModernButton}
-  from "@/components/buttons/";
+import { ModernButton } from "@/components/buttons/";
 
 // ========================================
 // FORM
 // ========================================
 
-export const SaleForm = ({
-  onSubmit,
-  loading = false,
-}) => {
-
+export const SaleForm = ({ onSubmit, loading = false }) => {
   // ======================================
   // STATES
   // ======================================
 
-  const [products, setProducts] =
-    useState([]);
+  const [products, setProducts] = useState([]);
 
-  const [fetchingProducts, setFetchingProducts] =
-    useState(false);
+  const [fetchingProducts, setFetchingProducts] = useState(false);
 
   const [form, setForm] = useState({
     customerName: "",
@@ -67,50 +55,35 @@ export const SaleForm = ({
   // ======================================
 
   useEffect(() => {
-
+    // eslint-disable-next-line react-hooks/immutability
     loadProducts();
-
   }, []);
 
-const loadProducts = async () => {
+  const loadProducts = async () => {
+    try {
+      setFetchingProducts(true);
 
-  try {
+      const response = await getProducts();
 
-    setFetchingProducts(true);
+      setProducts(response?.data || []);
+    } catch (error) {
+      console.error(error);
 
-    const response =
-      await getProducts();
-
-    setProducts(
-      response?.data || []
-    );
-
-  } catch (error) {
-
-    console.error(error);
-
-    setProducts([]);
-
-  } finally {
-
-    setFetchingProducts(false);
-
-  }
-
-};
+      setProducts([]);
+    } finally {
+      setFetchingProducts(false);
+    }
+  };
 
   // ======================================
   // INPUTS
   // ======================================
 
   const handleChange = (e) => {
-
     setForm((prev) => ({
       ...prev,
-      [e.target.name]:
-        e.target.value,
+      [e.target.name]: e.target.value,
     }));
-
   };
 
   // ======================================
@@ -118,7 +91,6 @@ const loadProducts = async () => {
   // ======================================
 
   const addItem = () => {
-
     setForm((prev) => ({
       ...prev,
 
@@ -132,7 +104,6 @@ const loadProducts = async () => {
         },
       ],
     }));
-
   };
 
   // ======================================
@@ -140,9 +111,7 @@ const loadProducts = async () => {
   // ======================================
 
   const removeItem = (index) => {
-
-    const items =
-      [...form.items];
+    const items = [...form.items];
 
     items.splice(index, 1);
 
@@ -150,50 +119,30 @@ const loadProducts = async () => {
       ...prev,
       items,
     }));
-
   };
 
   // ======================================
   // UPDATE ITEM
   // ======================================
 
-  const updateItem = (
-    index,
-    field,
-    value
-  ) => {
+  const updateItem = (index, field, value) => {
+    const items = [...form.items];
 
-    const items =
-      [...form.items];
-
-    items[index][field] =
-      value;
+    items[index][field] = value;
 
     // AUTO PRICE
     if (field === "productId") {
-
-      const product =
-        products.find(
-          (p) =>
-            p.id === Number(value)
-        );
+      const product = products.find((p) => p.id === Number(value));
 
       if (product) {
-
-        items[index].price =
-          Number(
-            product.salePrice
-          );
-
+        items[index].price = Number(product.salePrice);
       }
-
     }
 
     setForm((prev) => ({
       ...prev,
       items,
     }));
-
   };
 
   // ======================================
@@ -201,87 +150,52 @@ const loadProducts = async () => {
   // ======================================
 
   const total = useMemo(() => {
-
-    return form.items.reduce(
-      (acc, item) => {
-
-        return (
-          acc +
-          (
-            Number(item.quantity) *
-            Number(item.price)
-          )
-        );
-
-      },
-      0
-    );
-
+    return form.items.reduce((acc, item) => {
+      return acc + Number(item.quantity) * Number(item.price);
+    }, 0);
   }, [form.items]);
 
   // ======================================
   // PRODUCT OPTIONS
   // ======================================
 
-  const productOptions =
-    products.map((product) => ({
+  const productOptions = products.map((product) => ({
+    value: product.id,
 
-      value: product.id,
-
-      label:
-        `${product.name} - S/ ${product.salePrice}`,
-
-    }));
+    label: `${product.name} - S/ ${product.salePrice}`,
+  }));
 
   // ======================================
   // SUBMIT
   // ======================================
 
   const handleSubmit = async (e) => {
-
     e.preventDefault();
 
     const payload = {
+      customerName: form.customerName,
 
-      customerName:
-        form.customerName,
+      customerPhone: form.customerPhone,
 
-      customerPhone:
-        form.customerPhone,
+      items: form.items.map((item) => ({
+        productId: Number(item.productId),
 
-      items:
-        form.items.map(
-          (item) => ({
+        quantity: Number(item.quantity),
 
-            productId:
-              Number(item.productId),
-
-            quantity:
-              Number(item.quantity),
-
-            price:
-              Number(item.price),
-
-          })
-        ),
-
+        price: Number(item.price),
+      })),
     };
 
-    await onSubmit?.(
-      payload
-    );
-
+    await onSubmit?.(payload);
   };
 
   return (
-
     <form
       onSubmit={handleSubmit}
       className="
         space-y-6
       "
     >
-
       {/* ========================================
        * CUSTOMER
        * ====================================== */}
@@ -294,7 +208,6 @@ const loadProducts = async () => {
           md:grid-cols-2
         "
       >
-
         <Input
           label="Cliente"
           name="customerName"
@@ -312,7 +225,6 @@ const loadProducts = async () => {
           onChange={handleChange}
           icon={Phone}
         />
-
       </div>
 
       {/* ========================================
@@ -326,9 +238,7 @@ const loadProducts = async () => {
           justify-between
         "
       >
-
         <div>
-
           <h3
             className="
               text-lg
@@ -348,7 +258,6 @@ const loadProducts = async () => {
           >
             Agrega productos a la venta
           </p>
-
         </div>
 
         <ModernButton
@@ -357,7 +266,6 @@ const loadProducts = async () => {
           icon={Plus}
           onClick={addItem}
         />
-
       </div>
 
       {/* ========================================
@@ -369,13 +277,10 @@ const loadProducts = async () => {
           space-y-4
         "
       >
-
-        {form.items.map(
-          (item, index) => (
-
-            <div
-              key={index}
-              className="
+        {form.items.map((item, index) => (
+          <div
+            key={index}
+            className="
                 grid
                 gap-4
 
@@ -392,114 +297,74 @@ const loadProducts = async () => {
 
                 md:grid-cols-12
               "
-            >
+          >
+            {/* PRODUCT */}
 
-              {/* PRODUCT */}
-
-              <div
-                className="
+            <div
+              className="
                   md:col-span-5
                 "
-              >
+            >
+              <Select
+                label="Producto"
+                value={item.productId}
+                onChange={(e) => updateItem(index, "productId", e.target.value)}
+                options={productOptions}
+                placeholder={
+                  fetchingProducts ? "Cargando..." : "Seleccione producto"
+                }
+                icon={Package}
+              />
+            </div>
 
-                <Select
-                  label="Producto"
-                  value={
-                    item.productId
-                  }
-                  onChange={(e) =>
-                    updateItem(
-                      index,
-                      "productId",
-                      e.target.value
-                    )
-                  }
-                  options={
-                    productOptions
-                  }
-                  placeholder={
-                    fetchingProducts
-                      ? "Cargando..."
-                      : "Seleccione producto"
-                  }
-                  icon={Package}
-                />
+            {/* QUANTITY */}
 
-              </div>
-
-              {/* QUANTITY */}
-
-              <div
-                className="
+            <div
+              className="
                   md:col-span-2
                 "
-              >
+            >
+              <Input
+                label="Cantidad"
+                type="number"
+                min="1"
+                value={item.quantity}
+                onChange={(e) => updateItem(index, "quantity", e.target.value)}
+              />
+            </div>
 
-                <Input
-                  label="Cantidad"
-                  type="number"
-                  min="1"
-                  value={
-                    item.quantity
-                  }
-                  onChange={(e) =>
-                    updateItem(
-                      index,
-                      "quantity",
-                      e.target.value
-                    )
-                  }
-                />
+            {/* PRICE */}
 
-              </div>
-
-              {/* PRICE */}
-
-              <div
-                className="
+            <div
+              className="
                   md:col-span-3
                 "
-              >
+            >
+              <Input
+                label="Precio"
+                type="number"
+                step="0.01"
+                value={item.price}
+                onChange={(e) => updateItem(index, "price", e.target.value)}
+                icon={Calculator}
+              />
+            </div>
 
-                <Input
-                  label="Precio"
-                  type="number"
-                  step="0.01"
-                  value={
-                    item.price
-                  }
-                  onChange={(e) =>
-                    updateItem(
-                      index,
-                      "price",
-                      e.target.value
-                    )
-                  }
-                  icon={Calculator}
-                />
+            {/* DELETE */}
 
-              </div>
-
-              {/* DELETE */}
-
-              <div
-                className="
+            <div
+              className="
                   flex
                   items-end
 
                   md:col-span-2
                 "
-              >
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    removeItem(index)
-                  }
-                  disabled={
-                    form.items.length === 1
-                  }
-                  className="
+            >
+              <button
+                type="button"
+                onClick={() => removeItem(index)}
+                disabled={form.items.length === 1}
+                className="
                     flex
                     h-12
                     w-full
@@ -522,17 +387,12 @@ const loadProducts = async () => {
                     disabled:cursor-not-allowed
                     disabled:opacity-50
                   "
-                >
-                  <Trash2 size={18} />
-                </button>
-
-              </div>
-
+              >
+                <Trash2 size={18} />
+              </button>
             </div>
-
-          )
-        )}
-
+          </div>
+        ))}
       </div>
 
       {/* ========================================
@@ -558,7 +418,6 @@ const loadProducts = async () => {
           dark:bg-slate-900/40
         "
       >
-
         <div
           className="
             flex
@@ -566,7 +425,6 @@ const loadProducts = async () => {
             gap-3
           "
         >
-
           <div
             className="
               flex
@@ -586,7 +444,6 @@ const loadProducts = async () => {
           </div>
 
           <div>
-
             <p
               className="
                 text-sm
@@ -607,26 +464,16 @@ const loadProducts = async () => {
             >
               S/ {total.toFixed(2)}
             </h2>
-
           </div>
-
         </div>
 
         <ModernButton
           type="submit"
-          text={
-            loading
-              ? "Guardando..."
-              : "Guardar Venta"
-          }
+          text={loading ? "Guardando..." : "Guardar Venta"}
           icon={ShoppingCart}
           disabled={loading}
         />
-
       </div>
-
     </form>
-
   );
-
 };

@@ -2,16 +2,10 @@
 // components/users/UserAvatar.jsx
 // ========================================
 
-import {
-  User,
-} from "lucide-react";
+import { User } from "lucide-react";
 
-export default function UserAvatar({
-  user,
-}) {
-
+export default function UserAvatar({ user }) {
   return (
-
     <div
       className="
         flex
@@ -26,9 +20,7 @@ export default function UserAvatar({
         dark:bg-slate-900
       "
     >
-
       {user.avatar ? (
-
         <img
           src={user.avatar}
           alt={user.name}
@@ -38,15 +30,9 @@ export default function UserAvatar({
             object-cover
           "
         />
-
       ) : (
-
         <User size={20} />
-
       )}
-
     </div>
-
   );
-
 }

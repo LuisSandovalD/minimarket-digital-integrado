@@ -3,9 +3,7 @@
 // ========================================
 
 export default function BranchEmpty() {
-
   return (
-
     <div
       className="
         rounded-3xl
@@ -17,11 +15,7 @@ export default function BranchEmpty() {
         text-center
       "
     >
-
       No hay sucursales
-
     </div>
-
   );
-
 }

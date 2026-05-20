@@ -2,21 +2,12 @@
 // components/BarcodeHeader.jsx
 // ========================================
 
-import {
-  Barcode,
-  FileText,
-  Printer,
-  CheckSquare,
-  Plus,
-} from "lucide-react";
+import { Barcode, FileText, Printer, CheckSquare, Plus } from "lucide-react";
 
-import {
-  PageHeader,
-} from "@/components/ui";
+import { PageHeader } from "@/components/ui";
 import ModernButton from "../../../components/buttons/ModernButton";
 
 export default function BarcodeHeader({
-
   products,
 
   selectedProducts,
@@ -26,93 +17,64 @@ export default function BarcodeHeader({
   onExportPDF,
 
   onPrint,
-
 }) {
-
   return (
-
     <div className="space-y-5">
-
       {/* MAIN HEADER */}
 
       <PageHeader
-
         icon={Barcode}
-
         badge="Sistema de etiquetado"
-
         title="Gestión de códigos de barras"
-
         description="
           Genera, imprime y exporta
           etiquetas profesionales para
           tus productos y automatiza
           el escaneo en ventas.
         "
-
         action={{
-          label:
-            "Seleccionar todo",
+          label: "Seleccionar todo",
 
-          icon:
-            CheckSquare,
+          icon: CheckSquare,
 
-          onClick:
-            onSelectAll,
+          onClick: onSelectAll,
         }}
-
         headerActions={
-            <>
-                <ModernButton 
-                    onClick={onExportPDF}
-                    icon={FileText}
-                    text="Exportar PDF"
-                />
-                <ModernButton 
-                    onClick={onPrint}
-                    icon={Printer}
-                    text="Imprimir"
-                />
-            </>
-            
+          <>
+            <ModernButton
+              onClick={onExportPDF}
+              icon={FileText}
+              text="Exportar PDF"
+            />
+            <ModernButton onClick={onPrint} icon={Printer} text="Imprimir" />
+          </>
         }
         stats={[
-
           {
             icon: Barcode,
 
-            label:
-              "Productos",
+            label: "Productos",
 
-            value:
-              `${products.length} registrados`,
+            value: `${products.length} registrados`,
           },
 
           {
             icon: CheckSquare,
 
-            label:
-              "Seleccionados",
+            label: "Seleccionados",
 
-            value:
-              `${selectedProducts.length} activos`,
+            value: `${selectedProducts.length} activos`,
           },
-
-          
 
           {
             icon: FileText,
 
-            label:
-              "Exportación",
+            label: "Exportación",
 
-            value:
-              "PDF profesional",
+            value: "PDF profesional",
           },
-
         ]}
       />
-
     </div>
   );
 }

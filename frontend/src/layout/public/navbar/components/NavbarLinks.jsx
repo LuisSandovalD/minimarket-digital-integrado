@@ -1,15 +1,12 @@
 import { Link, useLocation } from "react-router-dom";
 
-export default function NavbarLinks({
-  links,
-}) {
+export default function NavbarLinks({ links }) {
   const location = useLocation();
 
   return (
     <nav className="hidden items-center gap-1 lg:flex">
       {links.map((link, index) => {
-        const isActive =
-          location.pathname === link.href;
+        const isActive = location.pathname === link.href;
 
         return (
           <Link
@@ -73,9 +70,7 @@ export default function NavbarLinks({
                 dark:via-[#6096ba]/10
 
                 ${
-                  isActive
-                    ? "opacity-100"
-                    : "opacity-0 group-hover:opacity-100"
+                  isActive ? "opacity-100" : "opacity-0 group-hover:opacity-100"
                 }
               `}
             />
@@ -100,11 +95,7 @@ export default function NavbarLinks({
                 transition-all
                 duration-300
 
-                ${
-                  isActive
-                    ? "w-10"
-                    : "w-0 group-hover:w-8"
-                }
+                ${isActive ? "w-10" : "w-0 group-hover:w-8"}
               `}
             />
 
@@ -132,9 +123,7 @@ export default function NavbarLinks({
             />
 
             {/* TEXT */}
-            <span className="relative z-10">
-              {link.label}
-            </span>
+            <span className="relative z-10">{link.label}</span>
           </Link>
         );
       })}

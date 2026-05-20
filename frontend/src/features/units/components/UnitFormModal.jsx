@@ -1,43 +1,18 @@
-import {
-  Scale,
-  Hash,
-  Package,
-  Calculator,
-  X,
-  Ruler,
-} from "lucide-react";
+import { Scale, Hash, Package, Calculator, X, Ruler } from "lucide-react";
 
-import {
-  Modal,
-  HeaderModal,
-  FooterModal,
-} from "@/components/modals";
+import { Modal, HeaderModal, FooterModal } from "@/components/modals";
 
-import { Input }
-  from "@/components/inputs";
+import { Input } from "@/components/inputs";
 
-import {
-  ModernButton,
-  SubmitButton,
-} from "@/components/buttons";
+import { ModernButton, SubmitButton } from "@/components/buttons";
 
-import {
-  Select,
-} from "@/components/selects";
+import { Select } from "@/components/selects";
 
-import {
-  UNIT_OPTIONS,
-} from "../utils/unitTypes";
+import { UNIT_OPTIONS } from "../utils/unitTypes";
 
-import {
-  createUnit,
-  updateUnit,
-} from "../services/unit.service";
+import { createUnit, updateUnit } from "../services/unit.service";
 
-import {
-  useEffect,
-  useState,
-} from "react";
+import { useEffect, useState } from "react";
 
 const initialState = {
   name: "",
@@ -46,112 +21,67 @@ const initialState = {
   conversionFactor: 1,
 };
 
-export default function UnitFormModal({
-  open,
-  onClose,
-  reload,
-  selectedUnit,
-}) {
+export default function UnitFormModal({ open, onClose, reload, selectedUnit }) {
+  const [loading, setLoading] = useState(false);
 
-  const [loading, setLoading] =
-    useState(false);
-
-  const [formData, setFormData] =
-    useState(initialState);
+  const [formData, setFormData] = useState(initialState);
 
   const isEdit = !!selectedUnit;
 
   useEffect(() => {
-
     if (selectedUnit) {
-
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setFormData({
-        name:
-          selectedUnit.name || "",
+        name: selectedUnit.name || "",
 
-        abbreviation:
-          selectedUnit.abbreviation || "",
+        abbreviation: selectedUnit.abbreviation || "",
 
-        type:
-          selectedUnit.type || "",
+        type: selectedUnit.type || "",
 
-        conversionFactor:
-          selectedUnit.conversionFactor || 1,
+        conversionFactor: selectedUnit.conversionFactor || 1,
       });
-
     } else {
-
       setFormData(initialState);
-
     }
-
   }, [selectedUnit]);
 
   const handleChange = (e) => {
-
     setFormData({
       ...formData,
-      [e.target.name]:
-        e.target.value,
+      [e.target.name]: e.target.value,
     });
-
   };
 
   const handleSubmit = async (e) => {
-
     e.preventDefault();
 
     try {
-
       setLoading(true);
 
       if (isEdit) {
-
-        await updateUnit(
-          selectedUnit.id,
-          formData
-        );
-
+        await updateUnit(selectedUnit.id, formData);
       } else {
-
         await createUnit(formData);
-
       }
 
       reload();
 
       onClose();
-
     } catch (error) {
-
       console.error(error);
-
     } finally {
-
       setLoading(false);
-
     }
-
   };
 
   return (
-
-    <Modal
-      open={open}
-      onClose={onClose}
-      size="xl"
-    >
-
+    <Modal open={open} onClose={onClose} size="xl">
       {/* ========================================
        * HEADER
        * ====================================== */}
 
       <HeaderModal
-        title={
-          isEdit
-            ? "Editar Unidad"
-            : "Nueva Unidad"
-        }
+        title={isEdit ? "Editar Unidad" : "Nueva Unidad"}
         subtitle={
           isEdit
             ? "Actualiza la información de la unidad."
@@ -171,7 +101,6 @@ export default function UnitFormModal({
           flex-col
         "
       >
-
         {/* BODY */}
 
         <div
@@ -182,9 +111,7 @@ export default function UnitFormModal({
             py-5
           "
         >
-
           <div className="space-y-6">
-
             {/* ========================================
              * GENERAL INFO
              * ====================================== */}
@@ -202,9 +129,7 @@ export default function UnitFormModal({
                 p-5
               "
             >
-
               <div className="mb-5">
-
                 <h3
                   className="
                     text-sm
@@ -224,10 +149,8 @@ export default function UnitFormModal({
                     dark:text-slate-400
                   "
                 >
-                  Configura la información
-                  principal de la unidad.
+                  Configura la información principal de la unidad.
                 </p>
-
               </div>
 
               <div
@@ -237,7 +160,6 @@ export default function UnitFormModal({
                   md:grid-cols-2
                 "
               >
-
                 <Input
                   label="Nombre"
                   name="name"
@@ -274,17 +196,13 @@ export default function UnitFormModal({
                   type="number"
                   step="0.0001"
                   name="conversionFactor"
-                  value={
-                    formData.conversionFactor
-                  }
+                  value={formData.conversionFactor}
                   onChange={handleChange}
                   placeholder="1.0000"
                   icon={Calculator}
                   required
                 />
-
               </div>
-
             </div>
 
             {/* ========================================
@@ -304,9 +222,7 @@ export default function UnitFormModal({
                 p-5
               "
             >
-
               <div className="mb-5">
-
                 <h3
                   className="
                     text-sm
@@ -326,11 +242,8 @@ export default function UnitFormModal({
                     dark:text-slate-400
                   "
                 >
-                  Define correctamente la
-                  estructura y conversión
-                  de la unidad.
+                  Define correctamente la estructura y conversión de la unidad.
                 </p>
-
               </div>
 
               <div
@@ -350,7 +263,6 @@ export default function UnitFormModal({
                   p-4
                 "
               >
-
                 <div
                   className="
                     flex
@@ -374,7 +286,6 @@ export default function UnitFormModal({
                 </div>
 
                 <div>
-
                   <h4
                     className="
                       text-sm
@@ -392,20 +303,13 @@ export default function UnitFormModal({
                       dark:text-slate-400
                     "
                   >
-                    El factor de conversión
-                    permite transformar
-                    cantidades entre
+                    El factor de conversión permite transformar cantidades entre
                     unidades relacionadas.
                   </p>
-
                 </div>
-
               </div>
-
             </div>
-
           </div>
-
         </div>
 
         {/* ========================================
@@ -413,7 +317,6 @@ export default function UnitFormModal({
          * ====================================== */}
 
         <FooterModal>
-
           <div
             className="
               flex
@@ -424,7 +327,6 @@ export default function UnitFormModal({
               pb-5
             "
           >
-
             <div
               className="
                 hidden
@@ -434,8 +336,7 @@ export default function UnitFormModal({
                 sm:block
               "
             >
-              Los cambios serán guardados
-              automáticamente en el sistema.
+              Los cambios serán guardados automáticamente en el sistema.
             </div>
 
             <div
@@ -446,7 +347,6 @@ export default function UnitFormModal({
                 gap-3
               "
             >
-
               <ModernButton
                 type="button"
                 text="Cancelar"
@@ -456,24 +356,13 @@ export default function UnitFormModal({
               />
 
               <SubmitButton
-                text={
-                  isEdit
-                    ? "Guardar Cambios"
-                    : "Crear Unidad"
-                }
+                text={isEdit ? "Guardar Cambios" : "Crear Unidad"}
                 loading={loading}
               />
-
             </div>
-
           </div>
-
         </FooterModal>
-
       </form>
-
     </Modal>
-
   );
-
 }

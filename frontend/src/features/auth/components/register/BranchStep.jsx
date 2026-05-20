@@ -1,28 +1,15 @@
-import {
-  Building,
-  MapPin,
-  Phone,
-} from "lucide-react";
+import { Building, MapPin, Phone } from "lucide-react";
 
-import {
-  Input,
-} from "@/components/inputs";
+import { Input } from "@/components/inputs";
 
-export default function BranchStep({
-  form,
-  handleChange,
-}) {
-
+export default function BranchStep({ form, handleChange }) {
   return (
-
     <div className="space-y-5">
-
       {/* ======================================
           BRANCH INFO
       ====================================== */}
 
       <div className="grid gap-5 md:grid-cols-2">
-
         <Input
           label="Sucursal"
           name="branchName"
@@ -39,7 +26,6 @@ export default function BranchStep({
           value={form.branchCode || ""}
           onChange={handleChange}
         />
-
       </div>
 
       {/* ======================================
@@ -73,7 +59,6 @@ export default function BranchStep({
       ====================================== */}
 
       <div className="grid gap-5 md:grid-cols-3">
-
         <Input
           label="Ciudad"
           name="branchCity"
@@ -97,11 +82,7 @@ export default function BranchStep({
           value={form.branchCountry || ""}
           onChange={handleChange}
         />
-
       </div>
-
     </div>
-
   );
-
 }

@@ -2,21 +2,11 @@
 // hooks/useCategoryForm.js
 // ========================================
 
-import {
-  useEffect,
-  useState,
-} from "react";
+import { useEffect, useState } from "react";
 
-import {
-  createCategory,
-  updateCategory,
-} from "../services/category.service";
+import { createCategory, updateCategory } from "../services/category.service";
 
-export default function useCategoryForm({
-  category,
-  onClose,
-  onSuccess,
-}) {
+export default function useCategoryForm({ category, onClose, onSuccess }) {
   // ========================================
   // STATE
   // ========================================
@@ -45,6 +35,7 @@ export default function useCategoryForm({
 
   useEffect(() => {
     if (category) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setFormData({
         name: category.name || "",
         slug: category.slug || "",
@@ -86,10 +77,7 @@ export default function useCategoryForm({
 
       const payload = {
         ...formData,
-        slug: formData.slug
-          ?.trim()
-          ?.toLowerCase()
-          ?.replaceAll(" ", "-"),
+        slug: formData.slug?.trim()?.toLowerCase()?.replaceAll(" ", "-"),
         parentId:
           formData.parentId && !formData.isParent
             ? Number(formData.parentId)
@@ -107,7 +95,6 @@ export default function useCategoryForm({
       // ========================================
       // CREATE
       // ========================================
-
       else {
         await createCategory(payload);
       }

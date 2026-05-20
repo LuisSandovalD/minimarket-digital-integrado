@@ -3,26 +3,18 @@
 // ========================================
 
 export const ROLE_LABELS = {
+  ADMIN: "Administrador",
 
-  ADMIN:
-    "Administrador",
+  MANAGER: "Gerente",
 
-  MANAGER:
-    "Gerente",
+  SUPERVISOR: "Supervisor",
 
-  SUPERVISOR:
-    "Supervisor",
+  EMPLOYEE: "Empleado",
 
-  EMPLOYEE:
-    "Empleado",
-
-  VIEWER:
-    "Visualizador",
-
+  VIEWER: "Visualizador",
 };
 
 export const ACCOUNT_TABS = [
-
   "profile",
 
   "security",
@@ -32,5 +24,4 @@ export const ACCOUNT_TABS = [
   "preferences",
 
   "danger",
-
 ];

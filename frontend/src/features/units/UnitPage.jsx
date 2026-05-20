@@ -1,60 +1,40 @@
-import { useState }
-from "react";
+import { useState } from "react";
 
-import { useUnits }
-from "./hooks/useUnits";
+import { useUnits } from "./hooks/useUnits";
 
-import UnitHeader
-from "./components/UnitHeader";
+import UnitHeader from "./components/UnitHeader";
 
-import UnitsTable
-from "./components/UnitsTable";
+import UnitsTable from "./components/UnitsTable";
 
-import UnitFormModal
-from "./components/UnitFormModal";
+import UnitFormModal from "./components/UnitFormModal";
 
-import UnitDeleteModal
-from "./components/UnitDeleteModal";
+import UnitDeleteModal from "./components/UnitDeleteModal";
 
 export default function UnitPage() {
+  const { units, loading, reload } = useUnits();
 
-  const {
-    units,
-    loading,
-    reload
-  } = useUnits();
+  const [openForm, setOpenForm] = useState(false);
 
-  const [openForm, setOpenForm] =
-    useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
 
-  const [openDelete, setOpenDelete] =
-    useState(false);
-
-  const [selectedUnit, setSelectedUnit] =
-    useState(null);
+  const [selectedUnit, setSelectedUnit] = useState(null);
 
   const handleCreate = () => {
-
     setSelectedUnit(null);
 
     setOpenForm(true);
-
   };
 
   const handleEdit = (unit) => {
-
     setSelectedUnit(unit);
 
     setOpenForm(true);
-
   };
 
   const handleDelete = (unit) => {
-
     setSelectedUnit(unit);
 
     setOpenDelete(true);
-
   };
 
   if (loading) {
@@ -63,16 +43,9 @@ export default function UnitPage() {
 
   return (
     <div className="space-y-4 p-4">
+      <UnitHeader onCreate={handleCreate} />
 
-      <UnitHeader
-        onCreate={handleCreate}
-      />
-
-      <UnitsTable
-        units={units}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-      />
+      <UnitsTable units={units} onEdit={handleEdit} onDelete={handleDelete} />
 
       <UnitFormModal
         open={openForm}
@@ -87,8 +60,6 @@ export default function UnitPage() {
         reload={reload}
         selectedUnit={selectedUnit}
       />
-
     </div>
   );
-
 }

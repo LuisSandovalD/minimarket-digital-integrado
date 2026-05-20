@@ -10,12 +10,10 @@ export const UNIT_LABELS = {
   PACK: "Paquete",
   DOZEN: "Docena",
   METER: "Metro",
-  SQUARE_METER: "Metro Cuadrado"
+  SQUARE_METER: "Metro Cuadrado",
 };
 
-export const UNIT_OPTIONS = Object.keys(
-  UNIT_LABELS
-).map((key) => ({
+export const UNIT_OPTIONS = Object.keys(UNIT_LABELS).map((key) => ({
   value: key,
-  label: UNIT_LABELS[key]
+  label: UNIT_LABELS[key],
 }));

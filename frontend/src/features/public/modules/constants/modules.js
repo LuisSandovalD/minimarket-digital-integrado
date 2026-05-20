@@ -61,8 +61,7 @@ export const modules = [
   {
     title: "Finanzas Empresariales",
 
-    description:
-      "Visualiza ingresos, egresos, balances y flujo financiero.",
+    description: "Visualiza ingresos, egresos, balances y flujo financiero.",
 
     icon: BadgeDollarSign,
 

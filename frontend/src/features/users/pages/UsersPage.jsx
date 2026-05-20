@@ -2,38 +2,28 @@
 // pages/UsersPage.jsx
 // ========================================
 
-import {
-  useMemo,
-  useState,
-} from "react";
+import { useMemo, useState } from "react";
 
-import UsersHeader
-  from "../components/UsersHeader";
+import UsersHeader from "../components/UsersHeader";
 
-import UsersTable
-  from "../components/UsersTable";
+import UsersTable from "../components/UsersTable";
 
-import UsersModal
-  from "../components/UsersModal";
+import UsersModal from "../components/UsersModal";
 
-import UsersTableEmpty
-  from "../components/UsersTableEmpty";
+import UsersTableEmpty from "../components/UsersTableEmpty";
 
-import useUsers
-  from "../hooks/useUsers";
+import useUsers from "../hooks/useUsers";
 
 // ========================================
 // COMPONENT
 // ========================================
 
 export default function UsersPage() {
-
   // ========================================
   // USERS
   // ========================================
 
   const {
-
     users,
 
     loading,
@@ -41,71 +31,49 @@ export default function UsersPage() {
     toggleUserStatus,
 
     fetchUsers,
-
   } = useUsers();
 
   // ========================================
   // MODAL
   // ========================================
 
-  const [
-    openModal,
-    setOpenModal,
-  ] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
 
-  const [
-    selectedUser,
-    setSelectedUser,
-  ] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null);
 
   // ========================================
   // SEARCH
   // ========================================
 
-  const [
-    search,
-    setSearch,
-  ] = useState("");
+  const [search, setSearch] = useState("");
 
   // ========================================
   // FILTERED USERS
   // ========================================
 
-  const filteredUsers =
-    useMemo(() => {
+  const filteredUsers = useMemo(() => {
+    if (!search) return users;
 
-      if (!search)
-        return users;
-
-      return users.filter((user) => {
-
-        const text =
-          `
+    return users.filter((user) => {
+      const text = `
             ${user.name}
             ${user.email}
             ${user.role}
             ${user.slug}
-          `
-            .toLowerCase();
+          `.toLowerCase();
 
-        return text.includes(
-          search.toLowerCase()
-        );
-
-      });
-
-    }, [users, search]);
+      return text.includes(search.toLowerCase());
+    });
+  }, [users, search]);
 
   // ========================================
   // CREATE
   // ========================================
 
   const handleCreate = () => {
-
     setSelectedUser(null);
 
     setOpenModal(true);
-
   };
 
   // ========================================
@@ -113,34 +81,27 @@ export default function UsersPage() {
   // ========================================
 
   const handleEdit = (user) => {
-
     setSelectedUser(user);
 
     setOpenModal(true);
-
   };
 
   // ========================================
   // SUCCESS
   // ========================================
 
-  const handleSuccess =
-    async () => {
+  const handleSuccess = async () => {
+    await fetchUsers();
 
-      await fetchUsers();
-
-      setOpenModal(false);
-
-    };
+    setOpenModal(false);
+  };
 
   // ========================================
   // LOADING
   // ========================================
 
   if (loading) {
-
     return (
-
       <div
         className="
           flex
@@ -149,7 +110,6 @@ export default function UsersPage() {
           justify-center
         "
       >
-
         <div
           className="
             h-10
@@ -164,11 +124,8 @@ export default function UsersPage() {
             dark:border-t-slate-100
           "
         />
-
       </div>
-
     );
-
   }
 
   // ========================================
@@ -176,16 +133,12 @@ export default function UsersPage() {
   // ========================================
 
   return (
-
     <div className="space-y-6">
-
       {/* ========================================
        * HEADER
        * ====================================== */}
 
-      <UsersHeader
-        onCreate={handleCreate}
-      />
+      <UsersHeader onCreate={handleCreate} />
 
       {/* ========================================
        * SEARCH
@@ -202,20 +155,14 @@ export default function UsersPage() {
           lg:justify-between
         "
       >
-
         <div className="max-w-md w-full">
-
           <input
             type="text"
             placeholder="
               Buscar usuarios...
             "
             value={search}
-            onChange={(e) =>
-              setSearch(
-                e.target.value
-              )
-            }
+            onChange={(e) => setSearch(e.target.value)}
             className="
               h-12
               w-full
@@ -239,41 +186,22 @@ export default function UsersPage() {
               dark:focus:ring-slate-800/50
             "
           />
-
         </div>
-
       </div>
 
       {/* ========================================
        * TABLE
        * ====================================== */}
 
-      {
-        filteredUsers.length > 0
-          ? (
-
-            <UsersTable
-              users={
-                filteredUsers
-              }
-              onEdit={
-                handleEdit
-              }
-              onToggleStatus={
-                toggleUserStatus
-              }
-            />
-
-          ) : (
-
-            <UsersTableEmpty
-              onCreate={
-                handleCreate
-              }
-            />
-
-          )
-      }
+      {filteredUsers.length > 0 ? (
+        <UsersTable
+          users={filteredUsers}
+          onEdit={handleEdit}
+          onToggleStatus={toggleUserStatus}
+        />
+      ) : (
+        <UsersTableEmpty onCreate={handleCreate} />
+      )}
 
       {/* ========================================
        * MODAL
@@ -281,15 +209,10 @@ export default function UsersPage() {
 
       <UsersModal
         open={openModal}
-        onClose={() =>
-          setOpenModal(false)
-        }
+        onClose={() => setOpenModal(false)}
         onSuccess={handleSuccess}
         user={selectedUser}
       />
-
     </div>
-
   );
-
 }

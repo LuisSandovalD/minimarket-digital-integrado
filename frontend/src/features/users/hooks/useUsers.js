@@ -2,21 +2,13 @@
 // hooks/useUsers.js
 // ========================================
 
-import {
-  useEffect,
-  useState,
-} from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import {
-
-  getUsers,
-
   getRootUsers,
-
+  getUsers,
   getUsersByManager,
-
   toggleUserStatus,
-
 } from "../services/users.service";
 
 // ========================================
@@ -24,420 +16,242 @@ import {
 // ========================================
 
 export default function useUsers() {
-
   // ========================================
   // STATE
   // ========================================
 
-  const [users, setUsers] =
-    useState([]);
+  const [users, setUsers] = useState([]);
 
-  const [loading, setLoading] =
-    useState(true);
+  const [loading, setLoading] = useState(true);
 
-  const [error, setError] =
-    useState("");
+  const [error, setError] = useState("");
 
-  const [expandedUsers,
-    setExpandedUsers] =
-    useState({});
+  const [expandedUsers, setExpandedUsers] = useState({});
 
   // ========================================
   // FETCH ALL USERS
   // ========================================
 
-  const fetchUsers =
-    async () => {
+  const fetchUsers = useCallback(async () => {
+    try {
+      setLoading(true);
 
-      try {
+      setError("");
 
-        setLoading(true);
+      const response = await getUsers();
 
-        setError("");
+      setUsers(response.data || []);
+    } catch (error) {
+      console.error(error);
 
-        const response =
-          await getUsers();
-
-        setUsers(
-          response.data || []
-        );
-
-      } catch (error) {
-
-        console.error(error);
-
-        setError(
-          error.message ||
-          "Error al obtener usuarios"
-        );
-
-      } finally {
-
-        setLoading(false);
-
-      }
-
-    };
+      setError(error.message || "Error al obtener usuarios");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   // ========================================
   // FETCH ROOT USERS
   // ========================================
 
-  const fetchRootUsers =
-    async () => {
+  const fetchRootUsers = useCallback(async () => {
+    try {
+      setLoading(true);
 
-      try {
+      setError("");
 
-        setLoading(true);
+      const response = await getRootUsers();
 
-        setError("");
+      setUsers(response.data || []);
+    } catch (error) {
+      console.error(error);
 
-        const response =
-          await getRootUsers();
-
-        setUsers(
-          response.data || []
-        );
-
-      } catch (error) {
-
-        console.error(error);
-
-        setError(
-          error.message ||
-          "Error al obtener jerarquía"
-        );
-
-      } finally {
-
-        setLoading(false);
-
-      }
-
-    };
+      setError(error.message || "Error al obtener jerarquía");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   // ========================================
   // LOAD SUBORDINATES
   // ========================================
 
-  const loadSubordinates =
-    async (managerId) => {
+  const loadSubordinates = async (managerId) => {
+    try {
+      const response = await getUsersByManager(managerId);
 
-      try {
+      const subordinates = response.data || [];
 
-        const response =
-          await getUsersByManager(
-            managerId
-          );
+      setUsers((prev) =>
+        prev.map((user) =>
+          user.id === managerId
+            ? {
+                ...user,
+                subordinates,
+              }
+            : user,
+        ),
+      );
 
-        const subordinates =
-          response.data || [];
-
-        setUsers((prev) =>
-
-          prev.map((user) =>
-
-            user.id === managerId
-
-              ? {
-                  ...user,
-                  subordinates,
-                }
-
-              : user
-
-          )
-
-        );
-
-        setExpandedUsers(
-          (prev) => ({
-
-            ...prev,
-
-            [managerId]:
-              true,
-
-          })
-        );
-
-      } catch (error) {
-
-        console.error(error);
-
-      }
-
-    };
+      setExpandedUsers((prev) => ({
+        ...prev,
+        [managerId]: true,
+      }));
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   // ========================================
   // TOGGLE EXPAND
   // ========================================
 
-  const toggleExpand =
-    async (user) => {
+  const toggleExpand = async (user) => {
+    const isExpanded = expandedUsers[user.id];
 
-      const isExpanded =
-        expandedUsers[user.id];
+    // ====================================
+    // COLLAPSE
+    // ====================================
 
-      // ====================================
-      // COLLAPSE
-      // ====================================
+    if (isExpanded) {
+      setExpandedUsers((prev) => ({
+        ...prev,
+        [user.id]: false,
+      }));
 
-      if (isExpanded) {
+      return;
+    }
 
-        setExpandedUsers(
-          (prev) => ({
+    // ====================================
+    // ALREADY LOADED
+    // ====================================
 
-            ...prev,
+    if (user.subordinates && user.subordinates.length > 0) {
+      setExpandedUsers((prev) => ({
+        ...prev,
+        [user.id]: true,
+      }));
 
-            [user.id]:
-              false,
+      return;
+    }
 
-          })
-        );
+    // ====================================
+    // FETCH FROM API
+    // ====================================
 
-        return;
-
-      }
-
-      // ====================================
-      // ALREADY LOADED
-      // ====================================
-
-      if (
-        user.subordinates &&
-        user.subordinates.length > 0
-      ) {
-
-        setExpandedUsers(
-          (prev) => ({
-
-            ...prev,
-
-            [user.id]:
-              true,
-
-          })
-        );
-
-        return;
-
-      }
-
-      // ====================================
-      // FETCH FROM API
-      // ====================================
-
-      await loadSubordinates(
-        user.id
-      );
-
-    };
+    await loadSubordinates(user.id);
+  };
 
   // ========================================
   // ADD USER
   // ========================================
 
-  const addUser = (
-    newUser
-  ) => {
-
+  const addUser = (newUser) => {
     // ====================================
     // USER WITH MANAGER
     // ====================================
 
     if (newUser.managerId) {
-
       setUsers((prev) =>
-
         prev.map((user) =>
-
-          user.id ===
-          newUser.managerId
-
+          user.id === newUser.managerId
             ? {
-
                 ...user,
 
-                subordinates: [
-
-                  ...(user.subordinates || []),
-
-                  newUser,
-
-                ],
-
+                subordinates: [...(user.subordinates || []), newUser],
               }
-
-            : user
-
-        )
-
+            : user,
+        ),
       );
 
       return;
-
     }
 
     // ====================================
     // ROOT USER
     // ====================================
 
-    setUsers((prev) => [
-
-      newUser,
-
-      ...prev,
-
-    ]);
-
+    setUsers((prev) => [newUser, ...prev]);
   };
 
   // ========================================
   // UPDATE USER
   // ========================================
 
-  const updateUserLocal =
-    (updatedUser) => {
+  const updateUserLocal = (updatedUser) => {
+    const updateRecursive = (items) => {
+      return items.map((user) => {
+        if (user.id === updatedUser.id) {
+          return {
+            ...user,
+            ...updatedUser,
+          };
+        }
 
-      const updateRecursive =
-        (items) => {
+        if (user.subordinates) {
+          return {
+            ...user,
 
-          return items.map(
-            (user) => {
+            subordinates: updateRecursive(user.subordinates),
+          };
+        }
 
-              if (
-                user.id ===
-                updatedUser.id
-              ) {
-
-                return {
-
-                  ...user,
-
-                  ...updatedUser,
-
-                };
-
-              }
-
-              if (
-                user.subordinates
-              ) {
-
-                return {
-
-                  ...user,
-
-                  subordinates:
-                    updateRecursive(
-                      user.subordinates
-                    ),
-
-                };
-
-              }
-
-              return user;
-
-            }
-          );
-
-        };
-
-      setUsers((prev) =>
-
-        updateRecursive(prev)
-
-      );
-
+        return user;
+      });
     };
+
+    setUsers((prev) => updateRecursive(prev));
+  };
 
   // ========================================
   // REMOVE USER
   // ========================================
 
-  const removeUserLocal =
-    (userId) => {
+  const removeUserLocal = (userId) => {
+    const removeRecursive = (items) => {
+      return items
+        .filter((user) => user.id !== userId)
 
-      const removeRecursive =
-        (items) => {
+        .map((user) => ({
+          ...user,
 
-          return items
-
-            .filter(
-              (user) =>
-                user.id !==
-                userId
-            )
-
-            .map((user) => ({
-
-              ...user,
-
-              subordinates:
-                user.subordinates
-
-                  ? removeRecursive(
-                      user.subordinates
-                    )
-
-                  : [],
-
-            }));
-
-        };
-
-      setUsers((prev) =>
-
-        removeRecursive(prev)
-
-      );
-
+          subordinates: user.subordinates
+            ? removeRecursive(user.subordinates)
+            : [],
+        }));
     };
+
+    setUsers((prev) => removeRecursive(prev));
+  };
 
   // ========================================
   // TOGGLE STATUS
   // ========================================
 
-  const handleToggleStatus =
-    async (userId) => {
+  const handleToggleStatus = async (userId) => {
+    try {
+      const response = await toggleUserStatus(userId);
 
-      try {
-
-        const response =
-          await toggleUserStatus(
-            userId
-          );
-
-        updateUserLocal(
-          response.data
-        );
-
-      } catch (error) {
-
-        console.error(error);
-
-      }
-
-    };
+      updateUserLocal(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   // ========================================
   // INITIAL LOAD
   // ========================================
 
   useEffect(() => {
-
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchRootUsers();
-
-  }, []);
+  }, [fetchRootUsers]);
 
   // ========================================
   // RETURN
   // ========================================
 
   return {
-
     users,
 
     loading,
@@ -460,9 +274,6 @@ export default function useUsers() {
 
     removeUserLocal,
 
-    toggleUserStatus:
-      handleToggleStatus,
-
+    toggleUserStatus: handleToggleStatus,
   };
-
 }

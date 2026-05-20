@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 const Select = ({
   label,
@@ -7,14 +7,17 @@ const Select = ({
   onChange,
   options = [],
   required = false,
-  placeholder = 'Seleccionar...',
-  className = '',
-  disabled = false
+  placeholder = "Seleccionar...",
+  className = "",
+  disabled = false,
 }) => {
   return (
     <div className={`mb-4 ${className}`}>
       {label && (
-        <label htmlFor={name} className="block text-sm font-medium text-gray-700 mb-1">
+        <label
+          htmlFor={name}
+          className="block text-sm font-medium text-gray-700 mb-1"
+        >
           {label} {required && <span className="text-red-500">*</span>}
         </label>
       )}

@@ -2,13 +2,8 @@
 // components/ui/table/Table.jsx
 // ============================================
 
-export default function Table({
-  children,
-  className = "",
-}) {
-
+export default function Table({ children, className = "" }) {
   return (
-
     <div
       className={`
         relative
@@ -22,7 +17,6 @@ export default function Table({
         ${className}
       `}
     >
-
       {/* Glass Glow */}
 
       <div
@@ -38,17 +32,8 @@ export default function Table({
       />
 
       <div className="overflow-x-auto">
-
-        <table className="w-full border-collapse">
-
-          {children}
-
-        </table>
-
+        <table className="w-full border-collapse">{children}</table>
       </div>
-
     </div>
-
   );
-
 }

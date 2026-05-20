@@ -6,30 +6,19 @@ export const getUnits = async () => {
 };
 
 export const createUnit = async (payload) => {
-  const { data } = await api.post(
-    "/unit",
-    payload
-  );
+  const { data } = await api.post("/unit", payload);
 
   return data;
 };
 
-export const updateUnit = async (
-  id,
-  payload
-) => {
-  const { data } = await api.put(
-    `/unit/${id}`,
-    payload
-  );
+export const updateUnit = async (id, payload) => {
+  const { data } = await api.put(`/unit/${id}`, payload);
 
   return data;
 };
 
 export const deleteUnit = async (id) => {
-  const { data } = await api.delete(
-    `/unit/${id}`
-  );
+  const { data } = await api.delete(`/unit/${id}`);
 
   return data;
 };

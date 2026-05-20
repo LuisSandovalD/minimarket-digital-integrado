@@ -4,25 +4,19 @@ import api from "@/api/axios";
 // REGISTER SERVICE
 // ======================================
 
-export const registerService =
-  async (payload) => {
+export const registerService = async (payload) => {
+  const response = await api.post(
+    "/auth/register",
 
-    const response =
-      await api.post(
+    payload,
 
-        "/auth/register",
+    {
+      withCredentials: true,
+    },
+  );
 
-        payload,
-
-        {
-          withCredentials: true,
-        }
-
-      );
-
-    return response.data;
-
-  };
+  return response.data;
+};
 
 export default {
   registerService,

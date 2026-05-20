@@ -1,12 +1,8 @@
 import { motion } from "framer-motion";
 
-import {
-  ArrowRight,
-} from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
-import {
-  ModernButton,
-} from "@/components/buttons";
+import { ModernButton } from "@/components/buttons";
 
 import {
   fadeUp,
@@ -49,13 +45,11 @@ export default function CTASection() {
             opacity: [0.3, 0.6, 0.3],
             scale: [1, 1.08, 1],
           }}
-
           transition={{
             duration: 8,
             repeat: Infinity,
             ease: "easeInOut",
           }}
-
           className="
             absolute
             left-1/2
@@ -81,7 +75,6 @@ export default function CTASection() {
         initial="hidden"
         whileInView="show"
         viewport={defaultViewport}
-
         className="
           mx-auto
           max-w-5xl
@@ -92,7 +85,6 @@ export default function CTASection() {
         <motion.div
           variants={fadeScale}
           transition={springTransition}
-
           className="
             inline-flex
             items-center
@@ -130,7 +122,6 @@ export default function CTASection() {
         <motion.h2
           variants={fadeUp}
           transition={smoothTransition}
-
           className="
             mt-8
 
@@ -147,7 +138,6 @@ export default function CTASection() {
           "
         >
           Empieza a gestionar
-
           <span
             className="
               block
@@ -169,7 +159,6 @@ export default function CTASection() {
         <motion.p
           variants={fadeUp}
           transition={smoothTransition}
-
           className="
             mx-auto
             mt-6
@@ -183,17 +172,14 @@ export default function CTASection() {
             dark:text-[#cbd5e1]
           "
         >
-          Centraliza ventas, inventario,
-          reportes y administración
-          multiempresa en una sola
-          plataforma moderna y segura.
+          Centraliza ventas, inventario, reportes y administración multiempresa
+          en una sola plataforma moderna y segura.
         </motion.p>
 
         {/* BUTTONS */}
         <motion.div
           variants={fadeUp}
           transition={smoothTransition}
-
           className="
             mt-10
 
@@ -206,10 +192,7 @@ export default function CTASection() {
             sm:flex-row
           "
         >
-          <motion.div
-            whileHover={hoverScale}
-            whileTap={{ scale: 0.97 }}
-          >
+          <motion.div whileHover={hoverScale} whileTap={{ scale: 0.97 }}>
             <ModernButton
               text="Crear Cuenta"
               variant="primary"
@@ -220,11 +203,9 @@ export default function CTASection() {
           <motion.button
             whileHover={hoverLift}
             whileTap={{ scale: 0.97 }}
-
             transition={{
               duration: 0.25,
             }}
-
             className="
               rounded-2xl
 

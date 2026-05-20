@@ -1,8 +1,6 @@
 import { motion } from "framer-motion";
 
-import {
-  workflow,
-} from "../constants/workflow";
+import { workflow } from "../constants/workflow";
 
 import {
   fadeUp,
@@ -45,13 +43,11 @@ export default function WorkflowSection() {
             opacity: [0.2, 0.5, 0.2],
             scale: [1, 1.08, 1],
           }}
-
           transition={{
             duration: 8,
             repeat: Infinity,
             ease: "easeInOut",
           }}
-
           className="
             absolute
             left-1/2
@@ -73,20 +69,17 @@ export default function WorkflowSection() {
       </div>
 
       <div className="mx-auto max-w-7xl">
-
         {/* HEADER */}
         <motion.div
           variants={staggerContainer}
           initial="hidden"
           whileInView="show"
           viewport={defaultViewport}
-
           className="text-center"
         >
           <motion.span
             variants={fadeScale}
             transition={springTransition}
-
             className="
               inline-flex
               rounded-full
@@ -120,7 +113,6 @@ export default function WorkflowSection() {
           <motion.h2
             variants={fadeUp}
             transition={smoothTransition}
-
             className="
               mt-7
               text-5xl
@@ -133,7 +125,6 @@ export default function WorkflowSection() {
             "
           >
             Gestiona tu negocio
-
             <span
               className="
                 block
@@ -158,7 +149,6 @@ export default function WorkflowSection() {
           initial="hidden"
           whileInView="show"
           viewport={defaultViewport}
-
           className="
             mt-20
             grid
@@ -171,12 +161,9 @@ export default function WorkflowSection() {
           {workflow.map((item) => (
             <motion.article
               key={item.step}
-
               variants={fadeUp}
               transition={smoothTransition}
-
               whileHover={hoverLift}
-
               className="
                 group
                 relative
@@ -223,11 +210,9 @@ export default function WorkflowSection() {
               {/* NUMBER */}
               <motion.div
                 whileHover={hoverScale}
-
                 transition={{
                   duration: 0.3,
                 }}
-
                 className="
                   relative
                   z-10

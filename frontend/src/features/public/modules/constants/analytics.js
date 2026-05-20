@@ -1,11 +1,6 @@
 // models/constants/analytics.js
 
-import {
-  BarChart3,
-  TrendingUp,
-  PieChart,
-  Activity,
-} from "lucide-react";
+import { BarChart3, TrendingUp, PieChart, Activity } from "lucide-react";
 
 export const analytics = [
   {
@@ -47,8 +42,7 @@ export const analytics = [
   {
     title: "KPIs Empresariales",
 
-    description:
-      "Controla objetivos, productividad y crecimiento empresarial.",
+    description: "Controla objetivos, productividad y crecimiento empresarial.",
 
     icon: PieChart,
 

@@ -1,12 +1,6 @@
-import {
-  ArrowRight,
-  Play,
-  ShieldCheck,
-} from "lucide-react";
+import { ArrowRight, Play, ShieldCheck } from "lucide-react";
 
-import {
-  ModernButton,
-} from "@/components/buttons";
+import { ModernButton } from "@/components/buttons";
 
 export default function FeaturesHeroSection() {
   return (
@@ -35,7 +29,6 @@ export default function FeaturesHeroSection() {
         <img
           src="https://images.unsplash.com/photo-1556740749-887f6717d7e4?q=80&w=2070&auto=format&fit=crop"
           alt="ERP POS"
-
           className="
             h-full
             w-full
@@ -149,7 +142,6 @@ export default function FeaturesHeroSection() {
             "
           >
             <ShieldCheck size={16} />
-
             Funciones Empresariales
           </div>
 
@@ -171,9 +163,7 @@ export default function FeaturesHeroSection() {
               dark:text-white
             "
           >
-            Funciones avanzadas
-            para empresas modernas
-
+            Funciones avanzadas para empresas modernas
             <span
               className="
                 mt-2
@@ -210,12 +200,9 @@ export default function FeaturesHeroSection() {
               dark:text-[#cbd5e1]
             "
           >
-            Descubre herramientas diseñadas
-            para optimizar ventas, inventario,
-            seguridad, analíticas, reportes
-            y automatización empresarial
-            desde una experiencia moderna
-            e intuitiva.
+            Descubre herramientas diseñadas para optimizar ventas, inventario,
+            seguridad, analíticas, reportes y automatización empresarial desde
+            una experiencia moderna e intuitiva.
           </p>
 
           {/* MESSAGE */}
@@ -247,15 +234,11 @@ export default function FeaturesHeroSection() {
                 dark:text-[#cbd5e1]
               "
             >
-              Cada funcionalidad del sistema
-              está enfocada en mejorar la
-              productividad, automatizar tareas,
-              centralizar operaciones y brindar
-              un mayor control empresarial
-              en tiempo real.
+              Cada funcionalidad del sistema está enfocada en mejorar la
+              productividad, automatizar tareas, centralizar operaciones y
+              brindar un mayor control empresarial en tiempo real.
             </p>
           </div>
-
         </div>
 
         {/* RIGHT */}
@@ -275,7 +258,6 @@ export default function FeaturesHeroSection() {
           <img
             src="https://images.unsplash.com/photo-1556740749-887f6717d7e4?q=80&w=2070&auto=format&fit=crop"
             alt="ERP POS"
-
             className="
               relative
 

@@ -1,13 +1,10 @@
 // contact/components/ContactSocials.jsx
 
-import {
-  ArrowUpRight,
-  Sparkles,
-} from "lucide-react";
+import { ArrowUpRight, Sparkles } from "lucide-react";
 
 import { socials } from "../constants/socials";
 
-import {ModernButton} from "@/components/buttons/";
+import { ModernButton } from "@/components/buttons/";
 
 export default function ContactSocials() {
   return (
@@ -80,7 +77,6 @@ export default function ContactSocials() {
             "
           >
             <Sparkles size={15} />
-
             Redes sociales
           </div>
 
@@ -102,7 +98,6 @@ export default function ContactSocials() {
             "
           >
             Mantente conectado
-
             <span
               className="
                 mt-2
@@ -162,7 +157,6 @@ export default function ContactSocials() {
                 href={social.url}
                 target="_blank"
                 rel="noopener noreferrer"
-
                 className="
                   group
                   relative
@@ -267,8 +261,8 @@ export default function ContactSocials() {
                       dark:text-[#cbd5e1]
                     "
                   >
-                    Conéctate con nosotros y descubre contenido,
-                    novedades y actualizaciones empresariales.
+                    Conéctate con nosotros y descubre contenido, novedades y
+                    actualizaciones empresariales.
                   </p>
                 </div>
               </a>

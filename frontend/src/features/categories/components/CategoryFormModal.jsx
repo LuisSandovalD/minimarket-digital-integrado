@@ -1,31 +1,14 @@
-import {
-  FileText,
-  Layers3,
-  Tag,
-  X,
-  FolderTree,
-} from "lucide-react";
+import { FileText, Layers3, Tag, X, FolderTree } from "lucide-react";
 
-import {
-  Modal,
-  HeaderModal,
-  FooterModal,
-} from "@/components/modals";
+import { Modal, HeaderModal, FooterModal } from "@/components/modals";
 
-import {
-  Input,
-  Checkbox,
-} from "@/components/inputs";
+import { Input, Checkbox } from "@/components/inputs";
 
-import {Select} from "@/components/selects/"
+import { Select } from "@/components/selects/";
 
-import {
-  ModernButton,
-  SubmitButton,
-} from "@/components/buttons";
+import { ModernButton, SubmitButton } from "@/components/buttons";
 
-import useCategoryForm
-  from "../hooks/useCategoryForm";
+import useCategoryForm from "../hooks/useCategoryForm";
 
 export default function CategoryFormModal({
   open,
@@ -34,17 +17,12 @@ export default function CategoryFormModal({
   category = null,
   categories = [],
 }) {
-  const {
-    loading,
-    formData,
-    isEdit,
-    handleChange,
-    handleSubmit,
-  } = useCategoryForm({
-    category,
-    onClose,
-    onSuccess,
-  });
+  const { loading, formData, isEdit, handleChange, handleSubmit } =
+    useCategoryForm({
+      category,
+      onClose,
+      onSuccess,
+    });
 
   const handleCheckboxChange = (e) => {
     const isParent = e.target.checked;
@@ -68,21 +46,13 @@ export default function CategoryFormModal({
 
   // Filtrar solo categorías padre (sin parentId)
   const parentCategories = categories.filter(
-    (item) => item.id !== category?.id && !item.parentId
+    (item) => item.id !== category?.id && !item.parentId,
   );
 
   return (
-    <Modal
-      open={open}
-      onClose={onClose}
-      size="lg"
-    >
+    <Modal open={open} onClose={onClose} size="lg">
       <HeaderModal
-        title={
-          isEdit
-            ? "Editar Categoría"
-            : "Nueva Categoría"
-        }
+        title={isEdit ? "Editar Categoría" : "Nueva Categoría"}
         subtitle={
           isEdit
             ? "Actualiza la información de la categoría."
@@ -91,10 +61,7 @@ export default function CategoryFormModal({
         onClose={onClose}
       />
 
-      <form
-        onSubmit={handleSubmit}
-        className="flex flex-col"
-      >
+      <form onSubmit={handleSubmit} className="flex flex-col">
         <div
           className="
             max-h-[72vh]
@@ -104,7 +71,6 @@ export default function CategoryFormModal({
           "
         >
           <div className="space-y-6">
-
             {/* ========================================
              * GENERAL
              * ====================================== */}
@@ -161,15 +127,14 @@ export default function CategoryFormModal({
                         dark:text-slate-400
                       "
                     >
-                      Los identificadores internos
-                      serán generados automáticamente.
+                      Los identificadores internos serán generados
+                      automáticamente.
                     </p>
                   </div>
                 </div>
               </div>
 
               <div className="space-y-5">
-
                 {/* ========================================
                  * NAME
                  * ====================================== */}
@@ -200,8 +165,8 @@ export default function CategoryFormModal({
                       dark:text-slate-400
                     "
                   >
-                    Las categorías padre pueden contener
-                    subcategorías dentro de ellas.
+                    Las categorías padre pueden contener subcategorías dentro de
+                    ellas.
                   </p>
                 </div>
 
@@ -210,19 +175,18 @@ export default function CategoryFormModal({
                  * ====================================== */}
                 {!formData.isParent && (
                   <div className="space-y-2 animate-in fade-in duration-200">
-                    
-                      <Select
-                        label="Categoría Padre"
-                        name="parentId"
-                        value={formData.parentId}
-                        onChange={handleChange}
-                        icon={Layers3}
-                        placeholder="Seleccionar categoría padre..."
-                        options={parentCategories.map((item) => ({
-                          value: item.id,
-                          label: item.name,
-                        }))}
-                      />
+                    <Select
+                      label="Categoría Padre"
+                      name="parentId"
+                      value={formData.parentId}
+                      onChange={handleChange}
+                      icon={Layers3}
+                      placeholder="Seleccionar categoría padre..."
+                      options={parentCategories.map((item) => ({
+                        value: item.id,
+                        label: item.name,
+                      }))}
+                    />
                     {parentCategories.length === 0 && (
                       <p
                         className="
@@ -236,7 +200,6 @@ export default function CategoryFormModal({
                     )}
                   </div>
                 )}
-
               </div>
             </div>
 
@@ -270,8 +233,7 @@ export default function CategoryFormModal({
                     dark:text-slate-400
                   "
                 >
-                  Información complementaria
-                  para identificar la categoría.
+                  Información complementaria para identificar la categoría.
                 </p>
               </div>
 
@@ -284,7 +246,6 @@ export default function CategoryFormModal({
                 icon={FileText}
               />
             </div>
-
           </div>
         </div>
 
@@ -305,8 +266,7 @@ export default function CategoryFormModal({
                 sm:block
               "
             >
-              Los cambios se aplicarán inmediatamente
-              dentro del catálogo.
+              Los cambios se aplicarán inmediatamente dentro del catálogo.
             </div>
 
             <div
@@ -324,11 +284,7 @@ export default function CategoryFormModal({
               />
 
               <SubmitButton
-                text={
-                  isEdit
-                    ? "Guardar Cambios"
-                    : "Crear Categoría"
-                }
+                text={isEdit ? "Guardar Cambios" : "Crear Categoría"}
                 loading={loading}
               />
             </div>

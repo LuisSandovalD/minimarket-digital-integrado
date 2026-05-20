@@ -3,7 +3,6 @@
 // ========================================
 
 export default function FormatDate({
-
   date,
 
   locale = "es-PE",
@@ -17,42 +16,20 @@ export default function FormatDate({
   emptyText = "-",
 
   className = "",
-
 }) {
-
   // ========================================
   // VALIDATE DATE
   // ========================================
 
   if (!date) {
-
-    return (
-
-      <span className={className}>
-        {emptyText}
-      </span>
-
-    );
-
+    return <span className={className}>{emptyText}</span>;
   }
 
   // ========================================
   // FORMAT DATE
   // ========================================
 
-  const formattedDate =
-    new Date(date)
-      .toLocaleDateString(
-        locale,
-        options
-      );
+  const formattedDate = new Date(date).toLocaleDateString(locale, options);
 
-  return (
-
-    <span className={className}>
-      {formattedDate}
-    </span>
-
-  );
-
+  return <span className={className}>{formattedDate}</span>;
 }

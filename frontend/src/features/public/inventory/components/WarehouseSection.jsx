@@ -19,9 +19,7 @@ export default function WarehouseSection() {
 
   return (
     <section className="relative py-8 lg:py-12">
-
       <div className="relative grid gap-10 lg:gap-16 lg:grid-cols-12 items-center max-w-7xl mx-auto">
-        
         {/* LEFT COLUMN - CONTENT + TABS */}
         <div className="lg:col-span-5 space-y-8 ">
           {/* HEADER */}
@@ -95,7 +93,6 @@ export default function WarehouseSection() {
             </p>
           </div>
 
-         
           {/* ACTIVE WAREHOUSE INFO */}
           <div
             className="

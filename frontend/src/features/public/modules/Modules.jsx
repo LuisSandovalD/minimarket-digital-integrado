@@ -39,30 +39,30 @@ export default function Models() {
     >
       <PageGlow />
 
-            <ModulesHeroSection />
-          {/* MÓDULOS */}
-          <ModulePreview />
+      <ModulesHeroSection />
+      {/* MÓDULOS */}
+      <ModulePreview />
 
-          {/* DASHBOARD */}
-          <DashboardPreview />
+      {/* DASHBOARD */}
+      <DashboardPreview />
 
-          {/* ANALÍTICAS */}
-          <AnalyticsPreview />
+      {/* ANALÍTICAS */}
+      <AnalyticsPreview />
 
-          {/* INVENTARIO */}
-          <InventoryPreview />
+      {/* INVENTARIO */}
+      <InventoryPreview />
 
-          {/* POS */}
-          <POSPreview />
+      {/* POS */}
+      <POSPreview />
 
-          {/* SEGURIDAD */}
-          <SecurityPreview />
+      {/* SEGURIDAD */}
+      <SecurityPreview />
 
-          {/* DISPOSITIVOS */}
-          <DevicePreview />
+      {/* DISPOSITIVOS */}
+      <DevicePreview />
 
-          {/* MULTIEMPRESA */}
-          <MultiCompanyPreview />
+      {/* MULTIEMPRESA */}
+      <MultiCompanyPreview />
     </main>
   );
 }

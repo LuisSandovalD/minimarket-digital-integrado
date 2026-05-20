@@ -1,9 +1,9 @@
-import { Loader2 } from 'lucide-react';
+import { Loader2 } from "lucide-react";
 
-import { useState } from 'react';
+import { useState } from "react";
 
 export default function ModernButton({
-  text = 'Botón',
+  text = "Botón",
   icon: Icon,
 
   onClick,
@@ -12,23 +12,22 @@ export default function ModernButton({
   loading = false,
   disabled = false,
 
-  type = 'button',
+  type = "button",
 
-  variant = 'primary',
-  size = 'md',
+  variant = "primary",
+  size = "md",
 
   fullWidth = false,
 
   once = false,
 
   confirm = false,
-  confirmText = '¿Estás seguro?',
+  confirmText = "¿Estás seguro?",
 
-  className = '',
+  className = "",
   children,
 }) {
-  const [clicked, setClicked] =
-    useState(false);
+  const [clicked, setClicked] = useState(false);
 
   /* ========================================
    * HANDLE CLICK
@@ -40,8 +39,7 @@ export default function ModernButton({
     if (once && clicked) return;
 
     if (confirm) {
-      const accepted =
-        window.confirm(confirmText);
+      const accepted = window.confirm(confirmText);
 
       if (!accepted) return;
     }
@@ -267,7 +265,7 @@ export default function ModernButton({
         ${variants[variant]}
         ${sizes[size]}
 
-        ${fullWidth ? 'w-full' : ''}
+        ${fullWidth ? "w-full" : ""}
 
         ${className}
       `}
@@ -285,22 +283,12 @@ export default function ModernButton({
         "
       >
         {loading ? (
-          <Loader2
-            size={18}
-            className="animate-spin"
-          />
+          <Loader2 size={18} className="animate-spin" />
         ) : (
-          Icon && (
-            <Icon
-              size={18}
-              className="flex-shrink-0"
-            />
-          )
+          Icon && <Icon size={18} className="flex-shrink-0" />
         )}
 
-        {(children || text) && (
-          <span>{children || text}</span>
-        )}
+        {(children || text) && <span>{children || text}</span>}
       </span>
     </button>
   );

@@ -1,13 +1,8 @@
 // contact/components/ContactMap.jsx
 
-import {
-  MapPin,
-  Navigation,
-  Clock3,
-  Building2,
-} from "lucide-react";
+import { MapPin, Navigation, Clock3, Building2 } from "lucide-react";
 
-import {ModernButton} from "@/components/buttons/";
+import { ModernButton } from "@/components/buttons/";
 
 export default function ContactMap() {
   return (
@@ -86,7 +81,6 @@ export default function ContactMap() {
             "
           >
             <MapPin size={15} />
-
             Ubicación
           </div>
 
@@ -108,7 +102,6 @@ export default function ContactMap() {
             "
           >
             Encuéntranos fácilmente
-
             <span
               className="
                 mt-2
@@ -141,9 +134,9 @@ export default function ContactMap() {
               dark:text-[#cbd5e1]
             "
           >
-            Estamos disponibles para ayudarte con asesorías,
-            implementaciones ERP, soporte empresarial y soluciones
-            tecnológicas modernas para tu negocio.
+            Estamos disponibles para ayudarte con asesorías, implementaciones
+            ERP, soporte empresarial y soluciones tecnológicas modernas para tu
+            negocio.
           </p>
 
           {/* INFO CARDS */}
@@ -254,10 +247,10 @@ export default function ContactMap() {
               variant="primary"
               onClick={() =>
                 window.open(
-                "https://maps.app.goo.gl/JgsPQVbkErPyUsYM8",
-                "_blank"
+                  "https://maps.app.goo.gl/JgsPQVbkErPyUsYM8",
+                  "_blank",
                 )
-            }
+              }
               size="lg"
             />
           </div>
@@ -287,16 +280,12 @@ export default function ContactMap() {
         >
           {/* MAP CONTAINER */}
           <div className="relative h-full w-full">
-           <iframe
-                src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d7773.899692173965!2d-76.3934391858281!3d-13.038864445374717!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1ses!2spe!4v1778348645539!5m2!1ses!2spe"
-
-                style={{ border: 0 }}
-
-                loading="lazy"
-
-                referrerPolicy="no-referrer-when-downgrade"
-
-                className="
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d7773.899692173965!2d-76.3934391858281!3d-13.038864445374717!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1ses!2spe!4v1778348645539!5m2!1ses!2spe"
+              style={{ border: 0 }}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="
                     rounded-[32px]
                     w-full
                     h-full

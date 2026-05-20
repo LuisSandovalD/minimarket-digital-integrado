@@ -10,24 +10,18 @@ export const testimonials = [
 
     location: "Lima, Perú",
 
-    image:
-      "https://randomuser.me/api/portraits/men/32.jpg",
+    image: "https://randomuser.me/api/portraits/men/32.jpg",
 
     rating: 5,
 
     message:
       "El sistema nos permitió controlar inventario, ventas y reportes desde múltiples sucursales. La plataforma es rápida, moderna y muy fácil de usar.",
 
-    businessType:
-      "Retail & Minimarket",
+    businessType: "Retail & Minimarket",
 
     employees: 18,
 
-    modules: [
-      "Ventas",
-      "Inventario",
-      "Reportes",
-    ],
+    modules: ["Ventas", "Inventario", "Reportes"],
   },
 
   {
@@ -41,24 +35,18 @@ export const testimonials = [
 
     location: "Arequipa, Perú",
 
-    image:
-      "https://randomuser.me/api/portraits/women/44.jpg",
+    image: "https://randomuser.me/api/portraits/women/44.jpg",
 
     rating: 5,
 
     message:
       "La gestión multiempresa y multi-sucursal nos ayudó muchísimo. Ahora tenemos control total del negocio desde un solo panel.",
 
-    businessType:
-      "Tecnología",
+    businessType: "Tecnología",
 
     employees: 32,
 
-    modules: [
-      "Compras",
-      "Usuarios",
-      "Dashboard",
-    ],
+    modules: ["Compras", "Usuarios", "Dashboard"],
   },
 
   {
@@ -72,24 +60,18 @@ export const testimonials = [
 
     location: "Cusco, Perú",
 
-    image:
-      "https://randomuser.me/api/portraits/men/51.jpg",
+    image: "https://randomuser.me/api/portraits/men/51.jpg",
 
     rating: 4.8,
 
     message:
       "Los reportes en tiempo real y el control de stock mejoraron nuestra productividad desde el primer mes.",
 
-    businessType:
-      "Distribución",
+    businessType: "Distribución",
 
     employees: 54,
 
-    modules: [
-      "Inventario",
-      "Reportes",
-      "Compras",
-    ],
+    modules: ["Inventario", "Reportes", "Compras"],
   },
 
   {
@@ -103,24 +85,18 @@ export const testimonials = [
 
     location: "Trujillo, Perú",
 
-    image:
-      "https://randomuser.me/api/portraits/women/68.jpg",
+    image: "https://randomuser.me/api/portraits/women/68.jpg",
 
     rating: 5,
 
     message:
       "La interfaz moderna y la seguridad avanzada hacen que el sistema se vea realmente profesional para empresas grandes.",
 
-    businessType:
-      "Supermercado",
+    businessType: "Supermercado",
 
     employees: 76,
 
-    modules: [
-      "Seguridad",
-      "Auditoría",
-      "Ventas",
-    ],
+    modules: ["Seguridad", "Auditoría", "Ventas"],
   },
 
   {
@@ -134,24 +110,18 @@ export const testimonials = [
 
     location: "Piura, Perú",
 
-    image:
-      "https://randomuser.me/api/portraits/men/75.jpg",
+    image: "https://randomuser.me/api/portraits/men/75.jpg",
 
     rating: 4.9,
 
     message:
       "La administración de usuarios, permisos y auditoría nos dio mucho más control y seguridad empresarial.",
 
-    businessType:
-      "Importadora",
+    businessType: "Importadora",
 
     employees: 25,
 
-    modules: [
-      "Usuarios",
-      "Auditoría",
-      "Configuración",
-    ],
+    modules: ["Usuarios", "Auditoría", "Configuración"],
   },
 
   {
@@ -165,23 +135,17 @@ export const testimonials = [
 
     location: "Chiclayo, Perú",
 
-    image:
-      "https://randomuser.me/api/portraits/women/24.jpg",
+    image: "https://randomuser.me/api/portraits/women/24.jpg",
 
     rating: 5,
 
     message:
       "El POS funciona excelente y el dashboard es muy intuitivo. Todo el equipo aprendió a usarlo rápidamente.",
 
-    businessType:
-      "Moda & Retail",
+    businessType: "Moda & Retail",
 
     employees: 14,
 
-    modules: [
-      "POS",
-      "Ventas",
-      "Clientes",
-    ],
+    modules: ["POS", "Ventas", "Clientes"],
   },
 ];

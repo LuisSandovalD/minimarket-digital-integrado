@@ -2,27 +2,17 @@
 // components/users/UserRow.jsx
 // ========================================
 
-import {
-  Building2,
-  Calendar,
-  Mail,
-  Phone,
-} from "lucide-react";
+import { Building2, Calendar, Mail, Phone } from "lucide-react";
 
-import UserAvatar
-  from "./UserAvatar";
+import UserAvatar from "./UserAvatar";
 
-import UserRoleBadge
-  from "./UserRoleBadge";
+import UserRoleBadge from "./UserRoleBadge";
 
-import UserStatusBadge
-  from "./UserStatusBadge";
+import UserStatusBadge from "./UserStatusBadge";
 
-import UserActions
-  from "./UserActions";
+import UserActions from "./UserActions";
 
 export default function UserRow({
-
   user,
 
   onEdit,
@@ -30,30 +20,18 @@ export default function UserRow({
   onToggleStatus,
 
   onViewChildren,
-
 }) {
+  const formatDate = (date) => {
+    if (!date) return "-";
 
-  const formatDate = (
-    date
-  ) => {
-
-    if (!date)
-      return "-";
-
-    return new Date(date)
-      .toLocaleDateString(
-        "es-PE",
-        {
-          year: "numeric",
-          month: "short",
-          day: "numeric",
-        }
-      );
-
+    return new Date(date).toLocaleDateString("es-PE", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
   };
 
   return (
-
     <tr
       className="
         border-b
@@ -66,11 +44,9 @@ export default function UserRow({
         dark:hover:bg-slate-900/30
       "
     >
-
       {/* USER */}
 
       <td className="px-6 py-5">
-
         <div
           className="
             flex
@@ -78,13 +54,9 @@ export default function UserRow({
             gap-4
           "
         >
-
-          <UserAvatar
-            user={user}
-          />
+          <UserAvatar user={user} />
 
           <div>
-
             <h3
               className="
                 text-sm
@@ -105,19 +77,14 @@ export default function UserRow({
             >
               @{user.slug}
             </p>
-
           </div>
-
         </div>
-
       </td>
 
       {/* CONTACT */}
 
       <td className="px-6 py-5">
-
         <div className="space-y-2">
-
           <div
             className="
               flex
@@ -129,17 +96,12 @@ export default function UserRow({
               dark:text-slate-300
             "
           >
-
             <Mail size={14} />
 
-            <span>
-              {user.email}
-            </span>
-
+            <span>{user.email}</span>
           </div>
 
           {user.phone && (
-
             <div
               className="
                 flex
@@ -149,35 +111,23 @@ export default function UserRow({
                 text-slate-500
               "
             >
-
               <Phone size={14} />
 
-              <span>
-                {user.phone}
-              </span>
-
+              <span>{user.phone}</span>
             </div>
-
           )}
-
         </div>
-
       </td>
 
       {/* ROLE */}
 
       <td className="px-6 py-5">
-
-        <UserRoleBadge
-          role={user.role}
-        />
-
+        <UserRoleBadge role={user.role} />
       </td>
 
       {/* BRANCH */}
 
       <td className="px-6 py-5">
-
         <div
           className="
             flex
@@ -189,53 +139,34 @@ export default function UserRow({
             dark:text-slate-300
           "
         >
-
           <Building2 size={15} />
 
-          <span>
-            {
-              user.branch?.name ||
-              "Sin sucursal"
-            }
-          </span>
-
+          <span>{user.branch?.name || "Sin sucursal"}</span>
         </div>
-
       </td>
 
       {/* STATUS */}
 
       <td className="px-6 py-5">
-
-        <UserStatusBadge
-          active={user.isActive}
-        />
-
+        <UserStatusBadge active={user.isActive} />
       </td>
 
       {/* LOGIN */}
 
       <td className="px-6 py-5">
-
         <span
           className="
             text-sm
             text-slate-500
           "
         >
-          {
-            formatDate(
-              user.lastLogin
-            )
-          }
+          {formatDate(user.lastLogin)}
         </span>
-
       </td>
 
       {/* CREATED */}
 
       <td className="px-6 py-5">
-
         <div
           className="
             flex
@@ -245,40 +176,22 @@ export default function UserRow({
             text-slate-500
           "
         >
-
           <Calendar size={14} />
 
-          <span>
-            {
-              formatDate(
-                user.createdAt
-              )
-            }
-          </span>
-
+          <span>{formatDate(user.createdAt)}</span>
         </div>
-
       </td>
 
       {/* ACTIONS */}
 
       <td className="px-6 py-5">
-
         <UserActions
           user={user}
           onEdit={onEdit}
-          onToggleStatus={
-            onToggleStatus
-          }
-          onViewChildren={
-            onViewChildren
-          }
+          onToggleStatus={onToggleStatus}
+          onViewChildren={onViewChildren}
         />
-
       </td>
-
     </tr>
-
   );
-
 }

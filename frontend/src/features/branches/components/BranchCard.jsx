@@ -61,27 +61,19 @@ const iconContainerStyles = `
 // COMPONENT
 // ========================================
 
-export default function BranchCard({
-  branch,
-  onEdit,
-  onToggleStatus,
-}) {
+export default function BranchCard({ branch, onEdit, onToggleStatus }) {
   const formatDate = (date) => {
-    return new Date(date).toLocaleDateString(
-      "es-PE",
-      {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-      }
-    );
+    return new Date(date).toLocaleDateString("es-PE", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
   };
 
   const location =
     branch.city && branch.state
       ? `${branch.city}, ${branch.state}`
-      : branch.address?.split(",")[0] ||
-        "Sin ubicación";
+      : branch.address?.split(",")[0] || "Sin ubicación";
 
   return (
     <article
@@ -153,10 +145,7 @@ export default function BranchCard({
                 dark:text-slate-200
               "
             >
-              <Store
-                size={22}
-                strokeWidth={1.7}
-              />
+              <Store size={22} strokeWidth={1.7} />
             </div>
 
             {/* TITLE */}
@@ -221,9 +210,7 @@ export default function BranchCard({
               icon={Power}
               variant="danger"
               size="sm"
-              onClick={() =>
-                onToggleStatus?.(branch.id)
-              }
+              onClick={() => onToggleStatus?.(branch.id)}
               className={`
                 ${actionButtonStyles}
 
@@ -257,9 +244,7 @@ export default function BranchCard({
               <MapPin size={16} />
             </div>
 
-            <span className="truncate">
-              {location}
-            </span>
+            <span className="truncate">{location}</span>
           </div>
 
           {/* CONTACT */}
@@ -267,17 +252,10 @@ export default function BranchCard({
           {(branch.phone || branch.email) && (
             <div className={infoRowStyles}>
               <div className={iconContainerStyles}>
-                {branch.phone ? (
-                  <Phone size={16} />
-                ) : (
-                  <Mail size={16} />
-                )}
+                {branch.phone ? <Phone size={16} /> : <Mail size={16} />}
               </div>
 
-              <span className="truncate">
-                {branch.phone ||
-                  branch.email}
-              </span>
+              <span className="truncate">{branch.phone || branch.email}</span>
             </div>
           )}
         </div>
@@ -308,14 +286,10 @@ export default function BranchCard({
           >
             <Calendar size={13} />
 
-            <span>
-              {formatDate(branch.createdAt)}
-            </span>
+            <span>{formatDate(branch.createdAt)}</span>
           </div>
 
-          <BranchStatusBadge
-            active={branch.isActive}
-          />
+          <BranchStatusBadge active={branch.isActive} />
         </div>
       </div>
     </article>

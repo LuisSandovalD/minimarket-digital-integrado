@@ -2,118 +2,79 @@
 // hooks/useCompany.js
 // ========================================
 
-import {
-  useCallback,
-  useEffect,
-  useState,
-} from "react";
+import { useCallback, useEffect, useState } from "react";
 
-import { companyService }
-  from "../services/company.service";
+import { companyService } from "../services/company.service";
 
 export default function useCompany() {
+  const [company, setCompany] = useState(null);
 
-  const [company, setCompany] =
-    useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const [loading, setLoading] =
-    useState(true);
-
-  const [error, setError] =
-    useState(null);
+  const [error, setError] = useState(null);
 
   /* ========================================
    * FETCH COMPANY
    * ====================================== */
 
-  const fetchCompany =
-    useCallback(async () => {
+  const fetchCompany = useCallback(async () => {
+    try {
+      setLoading(true);
 
-      try {
+      setError(null);
 
-        setLoading(true);
+      const response = await companyService.getMyCompany();
 
-        setError(null);
+      setCompany(response.data || response);
+    } catch (err) {
+      console.error(err);
 
-        const response =
-          await companyService.getMyCompany();
-
-        setCompany(
-          response.data || response
-        );
-
-      } catch (err) {
-
-        console.error(err);
-
-        setError(
-          "Error al obtener la empresa"
-        );
-
-      } finally {
-
-        setLoading(false);
-
-      }
-
-    }, []);
+      setError("Error al obtener la empresa");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   /* ========================================
    * UPDATE COMPANY
    * ====================================== */
 
-  const updateCompany =
-    async (companyId, data) => {
+  const updateCompany = async (companyId, data) => {
+    try {
+      setError(null);
 
-      try {
+      // UPDATE BACKEND
+      const response = await companyService.updateCompany(companyId, data);
 
-        setError(null);
+      // ACTUALIZAR INMEDIATAMENTE
+      const updatedCompany = response.data || response;
 
-        // UPDATE BACKEND
-        const response =
-          await companyService.updateCompany(
-            companyId,
-            data
-          );
+      setCompany(updatedCompany);
 
-        // ACTUALIZAR INMEDIATAMENTE
-        const updatedCompany =
-          response.data || response;
+      // OPCIONAL:
+      // volver a sincronizar desde backend
+      await fetchCompany();
 
-        setCompany(updatedCompany);
+      return updatedCompany;
+    } catch (err) {
+      console.error(err);
 
-        // OPCIONAL:
-        // volver a sincronizar desde backend
-        await fetchCompany();
+      setError("Error al actualizar empresa");
 
-        return updatedCompany;
-
-      } catch (err) {
-
-        console.error(err);
-
-        setError(
-          "Error al actualizar empresa"
-        );
-
-        throw err;
-
-      }
-
-    };
+      throw err;
+    }
+  };
 
   /* ========================================
    * INITIAL LOAD
    * ====================================== */
 
   useEffect(() => {
-
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchCompany();
-
   }, [fetchCompany]);
 
   return {
-
     company,
 
     loading,
@@ -125,7 +86,5 @@ export default function useCompany() {
     updateCompany,
 
     setCompany,
-
   };
-
 }

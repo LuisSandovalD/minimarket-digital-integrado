@@ -1,7 +1,4 @@
-export default function Checkbox({
-  label,
-  ...props
-}) {
+export default function Checkbox({ label, ...props }) {
   return (
     <label
       className="

@@ -2,10 +2,7 @@
 // components/ui/table/TFooter.jsx
 // ============================================
 
-import {
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function TFooter({
   page = 1,
@@ -13,13 +10,9 @@ export default function TFooter({
   onPrev = () => {},
   onNext = () => {},
 }) {
-
   return (
-
     <tfoot>
-
       <tr>
-
         <td
           colSpan="999"
           className="
@@ -28,7 +21,6 @@ export default function TFooter({
             bg-white/[0.02]
           "
         >
-
           <div
             className="
               flex
@@ -38,7 +30,6 @@ export default function TFooter({
               py-4
             "
           >
-
             <p
               className="
                 text-sm
@@ -49,7 +40,6 @@ export default function TFooter({
             </p>
 
             <div className="flex items-center gap-2">
-
               {/* PREV */}
 
               <button
@@ -79,9 +69,7 @@ export default function TFooter({
 
               <button
                 onClick={onNext}
-                disabled={
-                  page === totalPages
-                }
+                disabled={page === totalPages}
                 className="
                   flex
                   h-10
@@ -101,17 +89,10 @@ export default function TFooter({
               >
                 <ChevronRight size={18} />
               </button>
-
             </div>
-
           </div>
-
         </td>
-
       </tr>
-
     </tfoot>
-
   );
-
 }

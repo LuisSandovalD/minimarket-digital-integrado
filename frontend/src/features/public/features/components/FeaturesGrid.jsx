@@ -1,19 +1,14 @@
 // features/components/FeaturesGrid.jsx
 
-import {
-  Layers3,
-} from "lucide-react";
+import { Layers3 } from "lucide-react";
 
-import {
-  features,
-} from "../constants/features";
+import { features } from "../constants/features";
 
 import FeatureCard from "./FeatureCard";
 
 export default function FeaturesGrid() {
   return (
     <section className="relative py-20 max-w-7xl mx-auto px-6">
-      
       {/* HEADER */}
       <div
         className="
@@ -28,7 +23,6 @@ export default function FeaturesGrid() {
       >
         {/* LEFT */}
         <div className="max-w-3xl">
-          
           {/* BADGE */}
           <div
             className="
@@ -58,7 +52,6 @@ export default function FeaturesGrid() {
             "
           >
             <Layers3 size={16} />
-
             Características Inteligentes
           </div>
 
@@ -79,9 +72,7 @@ export default function FeaturesGrid() {
               md:text-5xl
             "
           >
-            Funciones diseñadas para
-            optimizar tu empresa
-
+            Funciones diseñadas para optimizar tu empresa
             <span
               className="
                 mt-2
@@ -116,10 +107,8 @@ export default function FeaturesGrid() {
               md:text-lg
             "
           >
-            Explora herramientas enfocadas
-            en productividad, automatización,
-            seguridad, reportes y gestión
-            empresarial desde una plataforma
+            Explora herramientas enfocadas en productividad, automatización,
+            seguridad, reportes y gestión empresarial desde una plataforma
             moderna y totalmente integrada.
           </p>
         </div>
@@ -153,9 +142,8 @@ export default function FeaturesGrid() {
             "
           >
             Más de <strong>20 funcionalidades</strong>
-            empresariales integradas para
-            mejorar la administración y
-            el crecimiento de tu negocio.
+            empresariales integradas para mejorar la administración y el
+            crecimiento de tu negocio.
           </p>
         </div>
       </div>
@@ -173,10 +161,7 @@ export default function FeaturesGrid() {
         "
       >
         {features.map((item, index) => (
-          <FeatureCard
-            key={index}
-            {...item}
-          />
+          <FeatureCard key={index} {...item} />
         ))}
       </div>
     </section>

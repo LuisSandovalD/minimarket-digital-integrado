@@ -2,45 +2,29 @@
 // features/product/pages/ProductsPage.jsx
 // ========================================
 
-import {
-  useState,
-  useEffect,
-} from "react";
+import { useState, useEffect } from "react";
 
-import ProductHeader
-  from "../components/ProductHeader";
+import ProductHeader from "../components/ProductHeader";
 
-import ProductsTable
-  from "../components/ProductsTable";
+import ProductsTable from "../components/ProductsTable";
 
-import ProductFormModal
-  from "../components/ProductFormModal";
+import ProductFormModal from "../components/ProductFormModal";
 
-import ProductFilters
-  from "../components/ProductFilters";
+import ProductFilters from "../components/ProductFilters";
 
-import useProducts
-  from "../hooks/useProducts";
+import useProducts from "../hooks/useProducts";
 
-import useProductForm
-  from "../hooks/useProductForm";
+import useProductForm from "../hooks/useProductForm";
 
-import useProductFilters
-  from "../hooks/useProductFilters";
+import useProductFilters from "../hooks/useProductFilters";
 
-import useProductStats
-  from "../hooks/useProductStats";
+import useProductStats from "../hooks/useProductStats";
 
-import {
-  getCategories,
-} from "@/features/categories/services/category.service";
+import { getCategories } from "@/features/categories/services/category.service";
 
-import {
-  getUnits,
-} from "@/features/units/services/unit.service";
+import { getUnits } from "@/features/units/services/unit.service";
 
 export default function ProductsPage() {
-
   const {
     products,
     createProduct,
@@ -49,55 +33,25 @@ export default function ProductsPage() {
     loading: productsLoading,
   } = useProducts();
 
-  const {
-    form,
-    handleChange,
-    setFormValues,
-    resetForm,
-  } = useProductForm();
+  const { form, handleChange, setFormValues, resetForm } = useProductForm();
 
-  const {
-    search,
-    setSearch,
-    filteredProducts,
-  } = useProductFilters(products);
+  const { search, setSearch, filteredProducts } = useProductFilters(products);
 
   const stats = useProductStats(products);
 
-  const [
-    openModal,
-    setOpenModal,
-  ] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
 
-  const [
-    openNotifications,
-    setOpenNotifications,
-  ] = useState(false);
+  const [openNotifications, setOpenNotifications] = useState(false);
 
-  const [
-    editing,
-    setEditing,
-  ] = useState(null);
+  const [editing, setEditing] = useState(null);
 
-  const [
-    categories,
-    setCategories,
-  ] = useState([]);
+  const [categories, setCategories] = useState([]);
 
-  const [
-    units,
-    setUnits,
-  ] = useState([]);
+  const [units, setUnits] = useState([]);
 
-  const [
-    loadingData,
-    setLoadingData,
-  ] = useState(false);
+  const [loadingData, setLoadingData] = useState(false);
 
-  const [
-    error,
-    setError,
-  ] = useState(null);
+  const [error, setError] = useState(null);
 
   // ========================================
   // LOAD CATEGORIES AND UNITS
@@ -109,10 +63,7 @@ export default function ProductsPage() {
         setLoadingData(true);
         setError(null);
 
-        const [
-          categoriesData,
-          unitsData,
-        ] = await Promise.all([
+        const [categoriesData, unitsData] = await Promise.all([
           getCategories(),
           getUnits(),
         ]);
@@ -120,24 +71,13 @@ export default function ProductsPage() {
         setCategories(
           Array.isArray(categoriesData)
             ? categoriesData
-            : categoriesData?.data || []
+            : categoriesData?.data || [],
         );
 
-        setUnits(
-          Array.isArray(unitsData)
-            ? unitsData
-            : unitsData?.data || []
-        );
-
+        setUnits(Array.isArray(unitsData) ? unitsData : unitsData?.data || []);
       } catch (err) {
-        console.error(
-          "Error loading data:",
-          err
-        );
-        setError(
-          err.message ||
-          "Error al cargar datos"
-        );
+        console.error("Error loading data:", err);
+        setError(err.message || "Error al cargar datos");
         setCategories([]);
         setUnits([]);
       } finally {
@@ -167,28 +107,21 @@ export default function ProductsPage() {
   const handleSubmit = async () => {
     try {
       if (editing) {
-        await updateProduct(
-          editing.id,
-          form
-        );
+        await updateProduct(editing.id, form);
       } else {
         await createProduct(form);
       }
 
       setOpenModal(false);
       resetForm();
-
     } catch (error) {
-      console.error(
-        "Error submitting form:",
-        error
-      );
+      console.error("Error submitting form:", error);
     }
   };
 
   const handleDelete = async (product) => {
     const confirmDelete = confirm(
-      `¿Eliminar "${product.name}"? Esta acción no se puede deshacer.`
+      `¿Eliminar "${product.name}"? Esta acción no se puede deshacer.`,
     );
 
     if (!confirmDelete) return;
@@ -196,10 +129,7 @@ export default function ProductsPage() {
     try {
       await deleteProduct(product.id);
     } catch (error) {
-      console.error(
-        "Error deleting product:",
-        error
-      );
+      console.error("Error deleting product:", error);
     }
   };
 
@@ -215,7 +145,6 @@ export default function ProductsPage() {
 
   return (
     <div className="space-y-6">
-
       {/* ========================================
        * HEADER
        * ====================================== */}
@@ -223,18 +152,13 @@ export default function ProductsPage() {
         total={stats.totalProducts}
         lowStock={stats.lowStockProducts}
         onCreate={handleCreate}
-        onNotifications={() =>
-          setOpenNotifications(true)
-        }
+        onNotifications={() => setOpenNotifications(true)}
       />
 
       {/* ========================================
        * FILTERS
        * ====================================== */}
-      <ProductFilters
-        search={search}
-        setSearch={setSearch}
-      />
+      <ProductFilters search={search} setSearch={setSearch} />
 
       {/* ========================================
        * TABLE
@@ -290,7 +214,6 @@ export default function ProductsPage() {
           {error}
         </div>
       )}
-
     </div>
   );
 }

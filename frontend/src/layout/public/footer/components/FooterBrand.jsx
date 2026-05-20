@@ -19,13 +19,9 @@ export default function FooterBrand() {
         </div>
 
         <div>
-          <h2 className="text-xl font-black">
-            ERP POS
-          </h2>
+          <h2 className="text-xl font-black">ERP POS</h2>
 
-          <p className="text-sm text-zinc-500">
-            Multiempresa
-          </p>
+          <p className="text-sm text-zinc-500">Multiempresa</p>
         </div>
       </div>
 
@@ -37,8 +33,7 @@ export default function FooterBrand() {
           text-zinc-500
         "
       >
-        Plataforma moderna para la gestión
-        empresarial, inventario, ventas y
+        Plataforma moderna para la gestión empresarial, inventario, ventas y
         operaciones avanzadas.
       </p>
     </div>

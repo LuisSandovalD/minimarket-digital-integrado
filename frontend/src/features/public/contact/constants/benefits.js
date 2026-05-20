@@ -10,24 +10,21 @@ import {
   Clock3,
 } from "lucide-react";
 export const benefits = [
-    {
-      icon: Clock3,
-      title: "Respuesta rápida",
-      description:
-        "Nuestro equipo responde en el menor tiempo posible.",
-    },
+  {
+    icon: Clock3,
+    title: "Respuesta rápida",
+    description: "Nuestro equipo responde en el menor tiempo posible.",
+  },
 
-    {
-      icon: ShieldCheck,
-      title: "Asesoría profesional",
-      description:
-        "Te ayudamos a encontrar la mejor solución ERP.",
-    },
+  {
+    icon: ShieldCheck,
+    title: "Asesoría profesional",
+    description: "Te ayudamos a encontrar la mejor solución ERP.",
+  },
 
-    {
-      icon: Sparkles,
-      title: "Implementación moderna",
-      description:
-        "Tecnología escalable para empresas actuales.",
-    },
-  ];
+  {
+    icon: Sparkles,
+    title: "Implementación moderna",
+    description: "Tecnología escalable para empresas actuales.",
+  },
+];

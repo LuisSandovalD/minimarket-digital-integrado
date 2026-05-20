@@ -17,7 +17,7 @@ export default function InventoryPage() {
   const [modal, setModal] = useState({
     isOpen: false,
     type: "ADD", // "ADD" | "REMOVE" | "DAMAGED"
-    item: null,  // El objeto del inventario de la fila clickeada
+    item: null, // El objeto del inventario de la fila clickeada
   });
 
   // 3. Funciones puentes que se activan al hacer click en los botones de la tabla
@@ -39,7 +39,7 @@ export default function InventoryPage() {
     // Aquí ejecutas la petición usando la lógica de tu hook
     // Ejemplo ficticio (puedes adaptarlo a cómo definiste tus funciones en el hook):
     const success = await executeStockAction(inventoryId, modal.type, body);
-    
+
     if (success) {
       handleCloseModal();
       loadInventories(); // Recargamos la tabla para ver los nuevos números reflejados

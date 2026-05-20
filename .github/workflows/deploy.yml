@@ -1,0 +1,16 @@
+name: Deploy Pipeline
+
+on:
+
+  workflow_dispatch:
+
+jobs:
+
+  deploy:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Deploy
+        run: echo "Future VPS Deploy"

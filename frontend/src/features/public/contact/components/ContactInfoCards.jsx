@@ -1,44 +1,34 @@
 // contact/components/ContactInfoCards.jsx
 
-import {
-  Phone,
-  Mail,
-  MapPin,
-  Clock3,
-  ArrowUpRight,
-} from "lucide-react";
+import { Phone, Mail, MapPin, Clock3, ArrowUpRight } from "lucide-react";
 
 export default function ContactInfoCards() {
   const cards = [
     {
       title: "Teléfono",
       value: "+51 999 999 999",
-      description:
-        "Atención comercial y soporte empresarial.",
+      description: "Atención comercial y soporte empresarial.",
       icon: Phone,
     },
 
     {
       title: "Correo electrónico",
       value: "contacto@empresa.com",
-      description:
-        "Escríbenos para consultas o asesoría.",
+      description: "Escríbenos para consultas o asesoría.",
       icon: Mail,
     },
 
     {
       title: "Ubicación",
       value: "Lima, Perú",
-      description:
-        "Atendemos proyectos en todo el país.",
+      description: "Atendemos proyectos en todo el país.",
       icon: MapPin,
     },
 
     {
       title: "Horario",
       value: "Lun - Vie / 8:00 AM",
-      description:
-        "Disponible para reuniones y soporte.",
+      description: "Disponible para reuniones y soporte.",
       icon: Clock3,
     },
   ];
@@ -113,7 +103,6 @@ export default function ContactInfoCards() {
             "
           >
             <Phone size={15} />
-
             Información de contacto
           </div>
 
@@ -133,7 +122,6 @@ export default function ContactInfoCards() {
             "
           >
             Estamos listos para
-
             <span
               className="
                 mt-2
@@ -166,10 +154,8 @@ export default function ContactInfoCards() {
               dark:text-[#cbd5e1]
             "
           >
-            Ponte en contacto con nuestro equipo
-            para resolver dudas, solicitar una
-            demostración o recibir asesoría sobre
-            nuestras soluciones ERP.
+            Ponte en contacto con nuestro equipo para resolver dudas, solicitar
+            una demostración o recibir asesoría sobre nuestras soluciones ERP.
           </p>
         </div>
 

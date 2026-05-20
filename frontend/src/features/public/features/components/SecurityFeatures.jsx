@@ -1,20 +1,14 @@
 // features/components/SecurityFeatures.jsx
 
-import {
-  ShieldCheck,
-  LockKeyhole,
-} from "lucide-react";
+import { ShieldCheck, LockKeyhole } from "lucide-react";
 
-import {
-  security,
-} from "../constants/security";
+import { security } from "../constants/security";
 
 import FeatureCard from "./FeatureCard";
 
 export default function SecurityFeatures() {
   return (
     <section className="relative py-20 max-w-7xl mx-auto px-6">
-      
       {/* HEADER */}
       <div
         className="
@@ -29,7 +23,6 @@ export default function SecurityFeatures() {
       >
         {/* LEFT */}
         <div className="max-w-3xl">
-          
           {/* BADGE */}
           <div
             className="
@@ -59,7 +52,6 @@ export default function SecurityFeatures() {
             "
           >
             <ShieldCheck size={16} />
-
             Seguridad Empresarial
           </div>
 
@@ -80,9 +72,7 @@ export default function SecurityFeatures() {
               md:text-5xl
             "
           >
-            Protección avanzada
-            para tu empresa
-
+            Protección avanzada para tu empresa
             <span
               className="
                 mt-2
@@ -117,11 +107,8 @@ export default function SecurityFeatures() {
               md:text-lg
             "
           >
-            Protege usuarios, accesos,
-            operaciones y datos empresariales
-            con autenticación segura,
-            permisos avanzados y monitoreo
-            inteligente.
+            Protege usuarios, accesos, operaciones y datos empresariales con
+            autenticación segura, permisos avanzados y monitoreo inteligente.
           </p>
         </div>
 
@@ -190,8 +177,7 @@ export default function SecurityFeatures() {
                 dark:text-[#cbd5e1]
               "
             >
-              Seguridad integrada en
-              todo el sistema ERP.
+              Seguridad integrada en todo el sistema ERP.
             </p>
           </div>
         </div>
@@ -210,10 +196,7 @@ export default function SecurityFeatures() {
         "
       >
         {security.map((item, index) => (
-          <FeatureCard
-            key={index}
-            {...item}
-          />
+          <FeatureCard key={index} {...item} />
         ))}
       </div>
     </section>

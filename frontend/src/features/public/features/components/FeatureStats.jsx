@@ -1,28 +1,16 @@
 // features/components/FeatureStats.jsx
 
-import {
-  Activity,
-  BarChart3,
-  ShieldCheck,
-  Zap,
-} from "lucide-react";
+import { Activity, BarChart3, ShieldCheck, Zap } from "lucide-react";
 
 import { stats } from "../constants/stats";
 
-const icons = [
-  Activity,
-  BarChart3,
-  ShieldCheck,
-  Zap,
-];
+const icons = [Activity, BarChart3, ShieldCheck, Zap];
 
 export default function FeatureStats() {
   return (
     <section className="relative py-20 max-w-7xl mx-auto px-6">
-      
       {/* HEADER */}
       <div>
-        
         {/* BADGE */}
         <div
           className="
@@ -52,7 +40,6 @@ export default function FeatureStats() {
           "
         >
           <BarChart3 size={16} />
-
           Métricas del Sistema
         </div>
 
@@ -108,11 +95,9 @@ export default function FeatureStats() {
             md:text-lg
           "
         >
-          Descubre cómo las funciones
-          inteligentes del ERP optimizan
-          procesos empresariales, mejoran
-          la productividad y ofrecen una
-          experiencia moderna y eficiente.
+          Descubre cómo las funciones inteligentes del ERP optimizan procesos
+          empresariales, mejoran la productividad y ofrecen una experiencia
+          moderna y eficiente.
         </p>
       </div>
 

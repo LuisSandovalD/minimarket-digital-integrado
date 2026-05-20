@@ -1,51 +1,25 @@
-import {
-  useState,
-} from "react";
+import { useState } from "react";
 
-import {
-  updateCategory,
-} from "../services/category.service";
+import { updateCategory } from "../services/category.service";
 
-export default function useCategoryUpdate(
-  onSuccess
-) {
+export default function useCategoryUpdate(onSuccess) {
+  const [loading, setLoading] = useState(false);
 
-  const [
-    loading,
-    setLoading,
-  ] = useState(false);
+  const handleUpdate = async (id, data) => {
+    try {
+      setLoading(true);
 
-  const handleUpdate =
-    async (
-      id,
-      data
-    ) => {
+      await updateCategory(id, data);
 
-      try {
-
-        setLoading(true);
-
-        await updateCategory(
-          id,
-          data
-        );
-
-        onSuccess?.();
-
-      } finally {
-
-        setLoading(false);
-
-      }
-
-    };
+      onSuccess?.();
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return {
-
     loading,
 
     handleUpdate,
-
   };
-
 }

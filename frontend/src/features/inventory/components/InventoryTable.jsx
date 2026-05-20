@@ -12,10 +12,7 @@ import {
   ShieldAlert,
 } from "lucide-react";
 
-import {
-  Table,
-  THead,
-} from "@/components/table";
+import { Table, THead } from "@/components/table";
 
 import { getStockStatus } from "../utils/stockStatus";
 
@@ -27,7 +24,6 @@ export default function InventoriesTable({
   handleRemoveStock,
   handleDamagedStock,
 }) {
-
   // ========================================
   // TABLE COLUMNS
   // ========================================
@@ -108,7 +104,6 @@ export default function InventoriesTable({
 
   return (
     <div className="space-y-5">
-      
       {/* ========================================
        * TABLE CONTAINER
        * ====================================== */}
@@ -127,8 +122,12 @@ export default function InventoriesTable({
             </tr>
           ) : inventories.length > 0 ? (
             inventories.map((inventory) => {
-              const status = getStockStatus(inventory.stock, inventory.product?.minStock);
-              const availableStock = (inventory.stock || 0) - (inventory.reservedStock || 0);
+              const status = getStockStatus(
+                inventory.stock,
+                inventory.product?.minStock,
+              );
+              const availableStock =
+                (inventory.stock || 0) - (inventory.reservedStock || 0);
 
               return (
                 <tr
@@ -212,7 +211,7 @@ export default function InventoriesTable({
                       >
                         <Plus size={13} /> Agregar
                       </button>
-                      
+
                       <button
                         disabled={actionLoading}
                         onClick={() => handleRemoveStock(inventory.id)}

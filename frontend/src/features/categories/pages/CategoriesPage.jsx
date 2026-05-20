@@ -1,86 +1,58 @@
-import {
-  useState,
-} from "react";
+import { useState } from "react";
 
-import useCategories
-from "../../categories/hooks/useCategories";
+import useCategories from "../../categories/hooks/useCategories";
 
-import CategoriesTable
-from "../../categories/components/CategoriesTable";
+import CategoriesTable from "../../categories/components/CategoriesTable";
 
-import CategoryEmpty
-from "../../categories/components/CategoryEmpty";
+import CategoryEmpty from "../../categories/components/CategoryEmpty";
 
-import CategoryHeader
-from "../../categories/components/CategoryHeader";
+import CategoryHeader from "../../categories/components/CategoryHeader";
 
-import CategoryFormModal
-from "../../categories/components/CategoryFormModal";
+import CategoryFormModal from "../../categories/components/CategoryFormModal";
 
 export default function CategoriesPage() {
-
   // ========================================
   // STATES
   // ========================================
 
-  const [
-    openModal,
-    setOpenModal,
-  ] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
 
-  const [
-    selectedCategory,
-    setSelectedCategory,
-  ] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
   // ========================================
   // DATA
   // ========================================
 
   const {
-
     categories,
 
     loading,
 
     refetch,
-
   } = useCategories();
 
   // ========================================
   // HANDLERS
   // ========================================
 
-  const handleCloseModal =
-    () => {
+  const handleCloseModal = () => {
+    setOpenModal(false);
 
-      setOpenModal(false);
+    setSelectedCategory(null);
+  };
 
-      setSelectedCategory(
-        null
-      );
+  const handleCreate = () => {
+    setSelectedCategory(null);
 
-    };
-
-  const handleCreate =
-    () => {
-
-      setSelectedCategory(
-        null
-      );
-
-      setOpenModal(true);
-
-    };
+    setOpenModal(true);
+  };
 
   // ========================================
   // LOADING
   // ========================================
 
   if (loading) {
-
     return (
-
       <div
         className="
           flex
@@ -91,9 +63,7 @@ export default function CategoriesPage() {
       >
         Cargando...
       </div>
-
     );
-
   }
 
   // ========================================
@@ -101,39 +71,21 @@ export default function CategoriesPage() {
   // ========================================
 
   return (
-
     <div className="space-y-6">
-
       {/* ========================================
        * HEADER
        * ====================================== */}
 
-      <CategoryHeader
-
-        categories={categories}
-
-        onCreate={
-          handleCreate
-        }
-
-      />
+      <CategoryHeader categories={categories} onCreate={handleCreate} />
 
       {/* ========================================
        * TABLE / EMPTY
        * ====================================== */}
 
       {categories.length === 0 ? (
-
         <CategoryEmpty />
-
       ) : (
-
-        <CategoriesTable
-          categories={
-            categories
-          }
-        />
-
+        <CategoriesTable categories={categories} />
       )}
 
       {/* ========================================
@@ -141,33 +93,16 @@ export default function CategoriesPage() {
        * ====================================== */}
 
       <CategoryFormModal
-
         open={openModal}
-
-        onClose={
-          handleCloseModal
-        }
-
+        onClose={handleCloseModal}
         onSuccess={() => {
-
           handleCloseModal();
 
           refetch();
-
         }}
-
-        category={
-          selectedCategory
-        }
-
-        categories={
-          categories
-        }
-
+        category={selectedCategory}
+        categories={categories}
       />
-
     </div>
-
   );
-
 }

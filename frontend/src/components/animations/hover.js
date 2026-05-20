@@ -13,6 +13,5 @@ export const hoverRotate = {
 };
 
 export const hoverGlow = {
-  boxShadow:
-    "0px 10px 40px rgba(96,150,186,0.25)",
+  boxShadow: "0px 10px 40px rgba(96,150,186,0.25)",
 };

@@ -1,13 +1,8 @@
-import {
-  Boxes,
-  ShieldCheck,
-  BarChart3,
-  Building2,
-} from "lucide-react";
+import { Boxes, ShieldCheck, BarChart3, Building2 } from "lucide-react";
 
 export default function ModulesHeroSection() {
   return (
-   <section
+    <section
       className="
         relative
         isolate
@@ -61,8 +56,6 @@ export default function ModulesHeroSection() {
             dark:bg-black/30
           "
         />
-
-        
       </div>
 
       {/* CONTENT */}
@@ -115,7 +108,6 @@ export default function ModulesHeroSection() {
             "
           >
             <Boxes size={16} />
-
             Módulos ERP Inteligentes
           </div>
 
@@ -172,12 +164,8 @@ export default function ModulesHeroSection() {
               md:text-lg
             "
           >
-            Gestiona inventario,
-            ventas, clientes,
-            reportes, seguridad,
-            sucursales y analíticas
-            en tiempo real con una
-            experiencia moderna,
+            Gestiona inventario, ventas, clientes, reportes, seguridad,
+            sucursales y analíticas en tiempo real con una experiencia moderna,
             rápida y escalable.
           </p>
 

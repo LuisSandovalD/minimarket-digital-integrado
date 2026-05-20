@@ -1,10 +1,6 @@
-import {
-  Link,
-  useParams,
-} from 'react-router-dom';
+import { Link, useParams } from "react-router-dom";
 
-import AsideBadge
-from './AsideBadge';
+import AsideBadge from "./AsideBadge";
 
 export default function AsideItem({
   label,
@@ -15,16 +11,12 @@ export default function AsideItem({
   isCollapsed,
   onClick,
 }) {
-
-  const { companySlug } =
-    useParams();
+  const { companySlug } = useParams();
 
   return (
     <Link
       to={`/${companySlug}/${href}`}
-
       onClick={onClick}
-
       className={`
         group
 
@@ -56,14 +48,9 @@ export default function AsideItem({
             `
         }
 
-        ${
-          isCollapsed
-            ? 'md:justify-center'
-            : ''
-        }
+        ${isCollapsed ? "md:justify-center" : ""}
       `}
     >
-
       {/* ICON */}
       <Icon
         className="
@@ -90,7 +77,6 @@ export default function AsideItem({
           <AsideBadge value={badge} />
         </>
       )}
-
     </Link>
   );
 }

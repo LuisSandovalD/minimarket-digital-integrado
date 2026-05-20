@@ -1,81 +1,60 @@
 import { useState } from "react";
 
-import {
-  validateRegisterStep,
-} from "../validations/register.schema";
+import { validateRegisterStep } from "../validations/register.schema";
 
 export default function useRegisterForm() {
-
   // ======================================
   // STATES
   // ======================================
 
-  const [step, setStep] =
-    useState(1);
+  const [step, setStep] = useState(1);
 
-  const [loading, setLoading] =
-    useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const [error, setError] =
-    useState(null);
+  const [error, setError] = useState(null);
 
   // ======================================
   // FORM
   // ======================================
 
-  const [form, setForm] =
-    useState({
+  const [form, setForm] = useState({
+    // USER
+    name: "",
+    email: "",
+    password: "",
+    role: "ADMIN",
+    phone: "",
 
-      // USER
-      name: "",
-      email: "",
-      password: "",
-      role: "ADMIN",
-      phone: "",
+    // COMPANY
+    companyName: "",
+    companyEmail: "",
+    companyPhone: "",
+    companyAddress: "",
+    companyRuc: "",
+    plan: "FREE",
 
-      // COMPANY
-      companyName: "",
-      companyEmail: "",
-      companyPhone: "",
-      companyAddress: "",
-      companyRuc: "",
-      plan: "FREE",
-
-      // BRANCH
-      branchName: "",
-      branchCode: "",
-      branchAddress: "",
-      branchPhone: "",
-      branchCity: "",
-      branchState: "",
-      branchCountry: "",
-
-    });
+    // BRANCH
+    branchName: "",
+    branchCode: "",
+    branchAddress: "",
+    branchPhone: "",
+    branchCity: "",
+    branchState: "",
+    branchCountry: "",
+  });
 
   // ======================================
   // HANDLE CHANGE
   // ======================================
 
   const handleChange = (e) => {
-
-    const {
-      name,
-      value,
-      type,
-      checked,
-    } = e.target;
+    const { name, value, type, checked } = e.target;
 
     setForm((prev) => ({
-
       ...prev,
 
-      [name]:
-        type === "checkbox"
-          ? checked
-          : value,
-
+      [name]: type === "checkbox" ? checked : value,
     }));
-
   };
 
   // ======================================
@@ -83,27 +62,17 @@ export default function useRegisterForm() {
   // ======================================
 
   const nextStep = () => {
-
     setError(null);
 
-    const validationError =
-      validateRegisterStep(
-        step,
-        form
-      );
+    const validationError = validateRegisterStep(step, form);
 
     if (validationError) {
-
       setError(validationError);
 
       return;
-
     }
 
-    setStep((prev) =>
-      Math.min(prev + 1, 3)
-    );
-
+    setStep((prev) => Math.min(prev + 1, 3));
   };
 
   // ======================================
@@ -111,13 +80,9 @@ export default function useRegisterForm() {
   // ======================================
 
   const prevStep = () => {
-
     setError(null);
 
-    setStep((prev) =>
-      Math.max(prev - 1, 1)
-    );
-
+    setStep((prev) => Math.max(prev - 1, 1));
   };
 
   // ======================================
@@ -125,13 +90,11 @@ export default function useRegisterForm() {
   // ======================================
 
   const resetForm = () => {
-
     setStep(1);
 
     setError(null);
 
     setForm({
-
       name: "",
       email: "",
       password: "",
@@ -152,9 +115,7 @@ export default function useRegisterForm() {
       branchCity: "",
       branchState: "",
       branchCountry: "",
-
     });
-
   };
 
   // ======================================
@@ -162,7 +123,6 @@ export default function useRegisterForm() {
   // ======================================
 
   return {
-
     step,
     setStep,
 
@@ -181,7 +141,5 @@ export default function useRegisterForm() {
     prevStep,
 
     resetForm,
-
   };
-
 }

@@ -10,10 +10,7 @@ import {
   User2,
 } from "lucide-react";
 
-export default function CompanyInfoGrid({
-  company,
-}) {
-
+export default function CompanyInfoGrid({ company }) {
   const items = [
     {
       label: "Nombre Empresarial",
@@ -58,11 +55,9 @@ export default function CompanyInfoGrid({
     },
 
     {
-      label:
-        "Representante Legal",
+      label: "Representante Legal",
 
-      value:
-        company.legalRepresentative,
+      value: company.legalRepresentative,
 
       icon: User2,
     },
@@ -75,7 +70,6 @@ export default function CompanyInfoGrid({
   ];
 
   return (
-
     <section
       className="
         mt-6
@@ -93,7 +87,6 @@ export default function CompanyInfoGrid({
         dark:bg-slate-950
       "
     >
-
       {/* HEADER */}
 
       <div
@@ -111,9 +104,7 @@ export default function CompanyInfoGrid({
           dark:border-slate-800
         "
       >
-
         <div>
-
           <h3
             className="
               text-sm
@@ -136,12 +127,9 @@ export default function CompanyInfoGrid({
               dark:text-slate-400
             "
           >
-            Datos corporativos y
-            administrativos de la empresa
+            Datos corporativos y administrativos de la empresa
           </p>
-
         </div>
-
       </div>
 
       {/* GRID */}
@@ -154,14 +142,10 @@ export default function CompanyInfoGrid({
           xl:grid-cols-3
         "
       >
-
         {items.map((item) => {
-
-          const Icon =
-            item.icon;
+          const Icon = item.icon;
 
           return (
-
             <div
               key={item.label}
               className="
@@ -183,7 +167,6 @@ export default function CompanyInfoGrid({
                 dark:hover:bg-slate-900/40
               "
             >
-
               {/* ICON */}
 
               <div
@@ -204,7 +187,6 @@ export default function CompanyInfoGrid({
                   dark:bg-slate-900
                 "
               >
-
                 <Icon
                   className="
                     h-4
@@ -214,7 +196,6 @@ export default function CompanyInfoGrid({
                     dark:text-slate-400
                   "
                 />
-
               </div>
 
               {/* CONTENT */}
@@ -225,7 +206,6 @@ export default function CompanyInfoGrid({
                   flex-1
                 "
               >
-
                 <p
                   className="
                     mb-1
@@ -253,9 +233,7 @@ export default function CompanyInfoGrid({
                     dark:text-slate-100
                   "
                 >
-
                   {item.value || (
-
                     <span
                       className="
                         text-slate-400
@@ -264,23 +242,13 @@ export default function CompanyInfoGrid({
                     >
                       No registrado
                     </span>
-
                   )}
-
                 </div>
-
               </div>
-
             </div>
-
           );
-
         })}
-
       </div>
-
     </section>
-
   );
-
 }

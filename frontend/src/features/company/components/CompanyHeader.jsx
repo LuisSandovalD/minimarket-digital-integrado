@@ -2,18 +2,11 @@
 // components/CompanyHeader.jsx
 // ========================================
 
-import {
-  Building2,
-  ShieldCheck,
-  Sparkles,
-  Plus,
-} from "lucide-react";
+import { Building2, ShieldCheck, Sparkles, Plus } from "lucide-react";
 
 import PageHeader from "@/components/ui/PageHeader";
 
-export default function CompanyHeader({
-  onCreate,
-}) {
+export default function CompanyHeader({ onCreate }) {
   return (
     <PageHeader
       icon={Building2}
@@ -29,8 +22,7 @@ export default function CompanyHeader({
         {
           icon: Building2,
           label: "Gestión",
-          value:
-            "Información centralizada",
+          value: "Información centralizada",
         },
 
         {

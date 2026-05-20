@@ -2,12 +2,9 @@
 // components/layout/PageHeader.jsx
 // ========================================
 
-import {
-  ArrowUpRight,
-} from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 
-import ModernButton
-  from "../buttons/ModernButton";
+import ModernButton from "../buttons/ModernButton";
 
 export default function PageHeader({
   icon: Icon,
@@ -25,9 +22,7 @@ export default function PageHeader({
 
   headerActions,
 }) {
-
   return (
-
     <section
       className={`
         relative
@@ -47,7 +42,6 @@ export default function PageHeader({
         ${className}
       `}
     >
-
       {/* ========================================
        * GLASS GLOW
        * ====================================== */}
@@ -66,7 +60,6 @@ export default function PageHeader({
       />
 
       <div className="relative z-10">
-
         {/* ========================================
          * TOP
          * ====================================== */}
@@ -87,17 +80,14 @@ export default function PageHeader({
             lg:justify-between
           "
         >
-
           {/* ========================================
            * LEFT
            * ====================================== */}
 
           <div className="flex items-start gap-5">
-
             {/* ICON */}
 
             {Icon && (
-
               <div
                 className="
                   flex
@@ -117,7 +107,6 @@ export default function PageHeader({
                   backdrop-blur-xl
                 "
               >
-
                 <Icon
                   size={26}
                   strokeWidth={1.7}
@@ -126,19 +115,15 @@ export default function PageHeader({
                     dark:text-slate-200
                   "
                 />
-
               </div>
-
             )}
 
             {/* CONTENT */}
 
             <div className="space-y-4">
-
               {/* BADGE */}
 
               {badge && (
-
                 <div
                   className="
                     inline-flex
@@ -168,13 +153,11 @@ export default function PageHeader({
                 >
                   {badge}
                 </div>
-
               )}
 
               {/* TITLE */}
 
               <div>
-
                 <h1
                   className="
                     text-3xl
@@ -189,7 +172,6 @@ export default function PageHeader({
                 </h1>
 
                 {description && (
-
                   <p
                     className="
                       mt-3
@@ -204,17 +186,13 @@ export default function PageHeader({
                   >
                     {description}
                   </p>
-
                 )}
-
               </div>
 
               {/* EXTRA */}
 
               {children}
-
             </div>
-
           </div>
 
           {/* ========================================
@@ -222,7 +200,6 @@ export default function PageHeader({
            * ====================================== */}
 
           {(action || headerActions) && (
-
             <div
               className="
                 flex
@@ -232,35 +209,26 @@ export default function PageHeader({
                 shrink-0
               "
             >
-
               {/* PRIMARY ACTION */}
 
               {action && (
-
                 <ModernButton
                   icon={action.icon}
                   text={action.label}
                   onClick={action.onClick}
-                  variant={
-                    action.variant ||
-                    "primary"
-                  }
+                  variant={action.variant || "primary"}
                   className="
                     rounded-xl
                     px-5
                   "
                 />
-
               )}
 
               {/* CUSTOM ACTIONS */}
 
               {headerActions}
-
             </div>
-
           )}
-
         </div>
 
         {/* ========================================
@@ -268,7 +236,6 @@ export default function PageHeader({
          * ====================================== */}
 
         {stats.length > 0 && (
-
           <div
             className="
               grid
@@ -280,21 +247,10 @@ export default function PageHeader({
               xl:grid-cols-3
             "
           >
-
-            {stats.map(
-
-              (
-                {
-                  icon: StatIcon,
-                  label,
-                  value,
-                },
-                index
-              ) => (
-
-                <div
-                  key={index}
-                  className="
+            {stats.map(({ icon: StatIcon, label, value }, index) => (
+              <div
+                key={index}
+                className="
                     flex
                     items-center
                     justify-between
@@ -311,18 +267,15 @@ export default function PageHeader({
 
                     last:border-r-0
                   "
-                >
+              >
+                {/* LEFT */}
 
-                  {/* LEFT */}
+                <div className="flex items-center gap-3">
+                  {/* ICON */}
 
-                  <div className="flex items-center gap-3">
-
-                    {/* ICON */}
-
-                    {StatIcon && (
-
-                      <div
-                        className="
+                  {StatIcon && (
+                    <div
+                      className="
                           flex
                           h-10
                           w-10
@@ -339,38 +292,34 @@ export default function PageHeader({
 
                           backdrop-blur-xl
                         "
-                      >
-
-                        <StatIcon
-                          size={18}
-                          className="
+                    >
+                      <StatIcon
+                        size={18}
+                        className="
                             text-slate-600
                             dark:text-slate-300
                           "
-                        />
+                      />
+                    </div>
+                  )}
 
-                      </div>
+                  {/* TEXT */}
 
-                    )}
-
-                    {/* TEXT */}
-
-                    <div>
-
-                      <p
-                        className="
+                  <div>
+                    <p
+                      className="
                           text-xs
                           uppercase
                           tracking-wider
 
                           text-slate-400
                         "
-                      >
-                        {label}
-                      </p>
+                    >
+                      {label}
+                    </p>
 
-                      <h3
-                        className="
+                    <h3
+                      className="
                           mt-1
                           text-sm
                           font-medium
@@ -378,37 +327,25 @@ export default function PageHeader({
                           text-slate-900
                           dark:text-slate-100
                         "
-                      >
-                        {value}
-                      </h3>
-
-                    </div>
-
+                    >
+                      {value}
+                    </h3>
                   </div>
-
-                  {/* ARROW */}
-
-                  <ArrowUpRight
-                    size={16}
-                    className="
-                      text-slate-400
-                    "
-                  />
-
                 </div>
 
-              )
+                {/* ARROW */}
 
-            )}
-
+                <ArrowUpRight
+                  size={16}
+                  className="
+                      text-slate-400
+                    "
+                />
+              </div>
+            ))}
           </div>
-
         )}
-
       </div>
-
     </section>
-
   );
-
 }

@@ -1,19 +1,10 @@
 import { motion, AnimatePresence } from "framer-motion";
 
-import {
-  Sparkles,
-  ArrowUpRight,
-  ChevronDown,
-  ChevronUp,
-} from "lucide-react";
+import { Sparkles, ArrowUpRight, ChevronDown, ChevronUp } from "lucide-react";
 
-import {
-  useState,
-} from "react";
+import { useState } from "react";
 
-import {
-  features,
-} from "../constants/feactures";
+import { features } from "../constants/feactures";
 
 import {
   fadeUp,
@@ -27,18 +18,13 @@ import {
 } from "@/components/animations/";
 
 export default function FeaturesSection() {
-  const [showAll, setShowAll] =
-    useState(false);
+  const [showAll, setShowAll] = useState(false);
 
-  const visibleFeatures =
-    showAll
-      ? features
-      : features.slice(0, 6);
+  const visibleFeatures = showAll ? features : features.slice(0, 6);
 
   return (
     <section
       id="features"
-
       className="
         relative
         overflow-hidden
@@ -66,13 +52,11 @@ export default function FeaturesSection() {
             opacity: [0.2, 0.5, 0.2],
             scale: [1, 1.08, 1],
           }}
-
           transition={{
             duration: 8,
             repeat: Infinity,
             ease: "easeInOut",
           }}
-
           className="
             absolute
             left-1/2
@@ -94,20 +78,17 @@ export default function FeaturesSection() {
       </div>
 
       <div className="mx-auto max-w-7xl">
-
         {/* HEADER */}
         <motion.div
           variants={staggerContainer}
           initial="hidden"
           whileInView="show"
           viewport={defaultViewport}
-
           className="max-w-3xl"
         >
           <motion.div
             variants={fadeScale}
             transition={springTransition}
-
             className="
               inline-flex
               items-center
@@ -139,14 +120,12 @@ export default function FeaturesSection() {
             "
           >
             <Sparkles size={16} />
-
             Funciones inteligentes
           </motion.div>
 
           <motion.h2
             variants={fadeUp}
             transition={smoothTransition}
-
             className="
               mt-7
               text-4xl
@@ -162,7 +141,6 @@ export default function FeaturesSection() {
             "
           >
             Todo lo que necesitas
-
             <span
               className="
                 block
@@ -183,7 +161,6 @@ export default function FeaturesSection() {
           <motion.p
             variants={fadeUp}
             transition={smoothTransition}
-
             className="
               mt-6
               max-w-2xl
@@ -196,11 +173,8 @@ export default function FeaturesSection() {
               dark:text-[#cbd5e1]
             "
           >
-            Un sistema ERP POS moderno,
-            rápido y escalable diseñado
-            para ventas, inventario,
-            reportes, seguridad y gestión
-            multiempresa.
+            Un sistema ERP POS moderno, rápido y escalable diseñado para ventas,
+            inventario, reportes, seguridad y gestión multiempresa.
           </motion.p>
         </motion.div>
 
@@ -210,7 +184,6 @@ export default function FeaturesSection() {
           initial="hidden"
           whileInView="show"
           viewport={defaultViewport}
-
           className="
             mt-20
 
@@ -222,30 +195,23 @@ export default function FeaturesSection() {
           "
         >
           <AnimatePresence>
-            {visibleFeatures.map(
-              (feature, index) => {
-                const Icon =
-                  feature.icon;
+            {visibleFeatures.map((feature, index) => {
+              const Icon = feature.icon;
 
-                return (
-                  <motion.article
-                    key={feature.title}
-
-                    layout
-
-                    variants={fadeUp}
-                    initial="hidden"
-                    animate="show"
-                    exit={{
-                      opacity: 0,
-                      y: 20,
-                    }}
-
-                    transition={smoothTransition}
-
-                    whileHover={hoverLift}
-
-                    className="
+              return (
+                <motion.article
+                  key={feature.title}
+                  layout
+                  variants={fadeUp}
+                  initial="hidden"
+                  animate="show"
+                  exit={{
+                    opacity: 0,
+                    y: 20,
+                  }}
+                  transition={smoothTransition}
+                  whileHover={hoverLift}
+                  className="
                       group
                       relative
                       overflow-hidden
@@ -265,37 +231,34 @@ export default function FeaturesSection() {
                       dark:border-white/10
                       dark:bg-white/[0.03]
                     "
-                  >
-                    {/* IMAGE */}
-                    <div
-                      className="
+                >
+                  {/* IMAGE */}
+                  <div
+                    className="
                         relative
                         h-56
                         overflow-hidden
                       "
-                    >
-                      <motion.img
-                        whileHover={{
-                          scale: 1.1,
-                        }}
-
-                        transition={{
-                          duration: 0.7,
-                        }}
-
-                        src={feature.image}
-                        alt={feature.title}
-
-                        className="
+                  >
+                    <motion.img
+                      whileHover={{
+                        scale: 1.1,
+                      }}
+                      transition={{
+                        duration: 0.7,
+                      }}
+                      src={feature.image}
+                      alt={feature.title}
+                      className="
                           h-full
                           w-full
                           object-cover
                         "
-                      />
+                    />
 
-                      {/* OVERLAY */}
-                      <div
-                        className="
+                    {/* OVERLAY */}
+                    <div
+                      className="
                           absolute
                           inset-0
 
@@ -304,17 +267,15 @@ export default function FeaturesSection() {
                           via-[#020617]/20
                           to-transparent
                         "
-                      />
+                    />
 
-                      {/* ICON */}
-                      <motion.div
-                        whileHover={hoverScale}
-
-                        transition={{
-                          duration: 0.3,
-                        }}
-
-                        className={`
+                    {/* ICON */}
+                    <motion.div
+                      whileHover={hoverScale}
+                      transition={{
+                        duration: 0.3,
+                      }}
+                      className={`
                           absolute
                           left-6
                           top-6
@@ -334,24 +295,23 @@ export default function FeaturesSection() {
 
                           shadow-2xl
                         `}
-                      >
-                        <Icon size={28} />
-                      </motion.div>
-                    </div>
+                    >
+                      <Icon size={28} />
+                    </motion.div>
+                  </div>
 
-                    {/* CONTENT */}
-                    <div className="p-8">
-
-                      <div
-                        className="
+                  {/* CONTENT */}
+                  <div className="p-8">
+                    <div
+                      className="
                           flex
                           items-start
                           justify-between
                           gap-4
                         "
-                      >
-                        <h3
-                          className="
+                    >
+                      <h3
+                        className="
                             text-2xl
                             font-black
                             leading-tight
@@ -365,21 +325,19 @@ export default function FeaturesSection() {
 
                             dark:text-white
                           "
-                        >
-                          {feature.title}
-                        </h3>
+                      >
+                        {feature.title}
+                      </h3>
 
-                        <motion.div
-                          whileHover={{
-                            rotate: 45,
-                            scale: 1.08,
-                          }}
-
-                          transition={{
-                            duration: 0.3,
-                          }}
-
-                          className="
+                      <motion.div
+                        whileHover={{
+                          rotate: 45,
+                          scale: 1.08,
+                        }}
+                        transition={{
+                          duration: 0.3,
+                        }}
+                        className="
                             flex
                             h-11
                             w-11
@@ -407,15 +365,13 @@ export default function FeaturesSection() {
                             dark:bg-white/5
                             dark:text-[#a3cef1]
                           "
-                        >
-                          <ArrowUpRight
-                            size={18}
-                          />
-                        </motion.div>
-                      </div>
+                      >
+                        <ArrowUpRight size={18} />
+                      </motion.div>
+                    </div>
 
-                      <p
-                        className="
+                    <p
+                      className="
                           mt-5
                           text-[15px]
                           leading-relaxed
@@ -424,13 +380,13 @@ export default function FeaturesSection() {
 
                           dark:text-[#cbd5e1]
                         "
-                      >
-                        {feature.description}
-                      </p>
+                    >
+                      {feature.description}
+                    </p>
 
-                      {/* FOOTER */}
-                      <div
-                        className="
+                    {/* FOOTER */}
+                    <div
+                      className="
                           mt-8
                           flex
                           items-center
@@ -443,23 +399,22 @@ export default function FeaturesSection() {
 
                           dark:text-[#a3cef1]
                         "
-                      >
-                        <div
-                          className="
+                    >
+                      <div
+                        className="
                             h-2
                             w-2
                             rounded-full
                             bg-[#6096ba]
                           "
-                        />
-
-                        Sistema optimizado
-                      </div>
+                      />
+                      Sistema optimizado
                     </div>
+                  </div>
 
-                    {/* GLOW */}
-                    <div
-                      className="
+                  {/* GLOW */}
+                  <div
+                    className="
                         pointer-events-none
                         absolute
                         right-[-60px]
@@ -481,11 +436,10 @@ export default function FeaturesSection() {
 
                         group-hover:opacity-100
                       "
-                    />
-                  </motion.article>
-                );
-              }
-            )}
+                  />
+                </motion.article>
+              );
+            })}
           </AnimatePresence>
         </motion.div>
 
@@ -497,7 +451,6 @@ export default function FeaturesSection() {
             whileInView="show"
             viewport={defaultViewport}
             transition={smoothTransition}
-
             className="
               mt-16
               flex
@@ -509,11 +462,7 @@ export default function FeaturesSection() {
               whileTap={{
                 scale: 0.96,
               }}
-
-              onClick={() =>
-                setShowAll(!showAll)
-              }
-
+              onClick={() => setShowAll(!showAll)}
               className="
                 group
 
@@ -557,7 +506,6 @@ export default function FeaturesSection() {
               {showAll ? (
                 <>
                   Ver menos
-
                   <ChevronUp
                     size={18}
                     className="
@@ -569,7 +517,6 @@ export default function FeaturesSection() {
               ) : (
                 <>
                   Ver más características
-
                   <ChevronDown
                     size={18}
                     className="

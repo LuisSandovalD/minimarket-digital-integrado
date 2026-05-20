@@ -4,27 +4,15 @@
 
 import { useState } from "react";
 
-import {
-  Trash2,
-} from "lucide-react";
+import { Trash2 } from "lucide-react";
 
-import DeleteAccountModal
-  from "./DeleteAccountModal";
+import DeleteAccountModal from "./DeleteAccountModal";
 
 export default function AccountDangerZone() {
-
-  const [
-
-    openDeleteModal,
-
-    setOpenDeleteModal,
-
-  ] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
   return (
-
     <>
-
       <section
         className="
           pt-6
@@ -34,7 +22,6 @@ export default function AccountDangerZone() {
           dark:border-slate-800
         "
       >
-
         <div
           className="
             mb-4
@@ -43,7 +30,6 @@ export default function AccountDangerZone() {
             gap-3
           "
         >
-
           <div
             className="
               flex
@@ -58,7 +44,6 @@ export default function AccountDangerZone() {
               dark:bg-red-900/20
             "
           >
-
             <Trash2
               size={18}
               className="
@@ -66,11 +51,9 @@ export default function AccountDangerZone() {
                 dark:text-red-400
               "
             />
-
           </div>
 
           <div>
-
             <h3
               className="
                 text-sm
@@ -91,15 +74,11 @@ export default function AccountDangerZone() {
             >
               Acciones irreversibles
             </p>
-
           </div>
-
         </div>
 
         <button
-          onClick={() =>
-            setOpenDeleteModal(true)
-          }
+          onClick={() => setOpenDeleteModal(true)}
           className="
             w-full
 
@@ -129,18 +108,12 @@ export default function AccountDangerZone() {
         >
           Eliminar cuenta
         </button>
-
       </section>
 
       <DeleteAccountModal
         open={openDeleteModal}
-        onClose={() =>
-          setOpenDeleteModal(false)
-        }
+        onClose={() => setOpenDeleteModal(false)}
       />
-
     </>
-
   );
-
 }

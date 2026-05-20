@@ -2,72 +2,37 @@
 // features/product/hooks/useProductStats.js
 // ========================================
 
-import {
-  useMemo,
-} from "react";
+import { useMemo } from "react";
 
-export default function useProductStats(
-  products = []
-) {
+export default function useProductStats(products = []) {
+  const stats = useMemo(() => {
+    const totalProducts = products.length;
 
-  const stats =
-    useMemo(() => {
+    const activeProducts = products.filter((p) => p.isActive).length;
 
-      const totalProducts =
-        products.length;
+    const lowStockProducts = products.filter(
+      (p) => p.stock <= p.minStock,
+    ).length;
 
-      const activeProducts =
-        products.filter(
-          (p) => p.isActive
-        ).length;
+    const featuredProducts = products.filter((p) => p.isFeatured).length;
 
-      const lowStockProducts =
-        products.filter(
-          (p) =>
-            p.stock <=
-            p.minStock
-        ).length;
+    const inventoryValue = products.reduce(
+      (acc, product) => acc + Number(product.costPrice) * Number(product.stock),
+      0,
+    );
 
-      const featuredProducts =
-        products.filter(
-          (p) =>
-            p.isFeatured
-        ).length;
+    return {
+      totalProducts,
 
-      const inventoryValue =
-        products.reduce(
-          (
-            acc,
-            product
-          ) =>
-            acc +
-            (
-              Number(
-                product.costPrice
-              ) *
-              Number(
-                product.stock
-              )
-            ),
-          0
-        );
+      activeProducts,
 
-      return {
+      lowStockProducts,
 
-        totalProducts,
+      featuredProducts,
 
-        activeProducts,
-
-        lowStockProducts,
-
-        featuredProducts,
-
-        inventoryValue,
-
-      };
-
-    }, [products]);
+      inventoryValue,
+    };
+  }, [products]);
 
   return stats;
-
 }

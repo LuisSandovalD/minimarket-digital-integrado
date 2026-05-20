@@ -1,11 +1,6 @@
 // models/components/MultiCompanyPreview.jsx
 
-import {
-  Building2,
-  Network,
-  Warehouse,
-  Users,
-} from "lucide-react";
+import { Building2, Network, Warehouse, Users } from "lucide-react";
 
 export default function MultiCompanyPreview() {
   return (
@@ -23,7 +18,6 @@ export default function MultiCompanyPreview() {
       >
         {/* IMAGE */}
         <div className="relative">
-          
           {/* IMAGE CONTAINER */}
           <div
             className="
@@ -45,7 +39,6 @@ export default function MultiCompanyPreview() {
             <img
               src="https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?q=80&w=2070&auto=format&fit=crop"
               alt="Multiempresa"
-
               className="
                 h-[520px]
                 w-full
@@ -131,7 +124,6 @@ export default function MultiCompanyPreview() {
 
         {/* CONTENT */}
         <div>
-          
           {/* BADGE */}
           <div
             className="
@@ -161,7 +153,6 @@ export default function MultiCompanyPreview() {
             "
           >
             <Network size={16} />
-
             Gestión Multiempresa
           </div>
 
@@ -217,11 +208,8 @@ export default function MultiCompanyPreview() {
               md:text-lg
             "
           >
-            Controla empresas,
-            almacenes, usuarios,
-            sucursales y operaciones
-            desde una sola plataforma
-            moderna, segura y escalable.
+            Controla empresas, almacenes, usuarios, sucursales y operaciones
+            desde una sola plataforma moderna, segura y escalable.
           </p>
 
           {/* FEATURES */}

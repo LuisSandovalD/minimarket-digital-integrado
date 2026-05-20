@@ -11,8 +11,6 @@ export default function FAQFeatures() {
 
   return (
     <section className="relative overflow-hidden py-24">
-      
-
       <div className="relative mx-auto max-w-4xl">
         {/* Header */}
         <div className="text-center">

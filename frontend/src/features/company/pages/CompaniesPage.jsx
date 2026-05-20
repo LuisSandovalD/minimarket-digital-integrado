@@ -2,26 +2,18 @@
 // pages/CompaniesPage.jsx
 // ========================================
 
-import {
-  useState,
-} from "react";
+import { useState } from "react";
 
-import useCompany
-  from "../../company/hooks/useCompany";
+import useCompany from "../../company/hooks/useCompany";
 
-import CompanyList
-  from "../../company/components/CompanyList";
+import CompanyList from "../../company/components/CompanyList";
 
-import CompanyHeader
-  from "../../company/components/CompanyHeader";
+import CompanyHeader from "../../company/components/CompanyHeader";
 
-import CompanyEditModal
-  from "../../company/components/CompanyEditModal";
+import CompanyEditModal from "../../company/components/CompanyEditModal";
 
 export default function CompaniesPage() {
-
   const {
-
     company,
 
     loading,
@@ -29,76 +21,50 @@ export default function CompaniesPage() {
     error,
 
     fetchCompany,
-
   } = useCompany();
 
-  const [
+  const [openEditModal, setOpenEditModal] = useState(false);
 
-    openEditModal,
-
-    setOpenEditModal,
-
-  ] = useState(false);
-
-  const [
-
-    selectedCompanyId,
-
-    setSelectedCompanyId,
-
-  ] = useState(null);
+  const [selectedCompanyId, setSelectedCompanyId] = useState(null);
 
   /* ========================================
    * OPEN CREATE MODAL
    * ====================================== */
 
-  const handleOpenCreate =
-    () => {
+  const handleOpenCreate = () => {
+    setSelectedCompanyId(null);
 
-      setSelectedCompanyId(null);
-
-      setOpenEditModal(true);
-
-    };
+    setOpenEditModal(true);
+  };
 
   /* ========================================
    * OPEN EDIT MODAL
    * ====================================== */
 
-  const handleOpenEdit =
-    (id) => {
+  const handleOpenEdit = (id) => {
+    setSelectedCompanyId(id);
 
-      setSelectedCompanyId(id);
-
-      setOpenEditModal(true);
-
-    };
+    setOpenEditModal(true);
+  };
 
   /* ========================================
    * CLOSE MODAL
    * ====================================== */
 
-  const handleCloseModal =
-    () => {
+  const handleCloseModal = () => {
+    setOpenEditModal(false);
 
-      setOpenEditModal(false);
-
-      setTimeout(() => {
-
-        setSelectedCompanyId(null);
-
-      }, 200);
-
-    };
+    setTimeout(() => {
+      setSelectedCompanyId(null);
+    }, 200);
+  };
 
   /* ========================================
    * LOADING
    * ====================================== */
 
   if (loading) {
-
     return (
-
       <div
         className="
           flex
@@ -117,9 +83,7 @@ export default function CompaniesPage() {
           Cargando empresa...
         </p>
       </div>
-
     );
-
   }
 
   /* ========================================
@@ -127,9 +91,7 @@ export default function CompaniesPage() {
    * ====================================== */
 
   if (error) {
-
     return (
-
       <div
         className="
           flex
@@ -160,40 +122,28 @@ export default function CompaniesPage() {
           {error}
         </div>
       </div>
-
     );
-
   }
 
   return (
     <div className="space-y-6">
-
       {/* HEADER */}
 
-      <CompanyHeader
-        onCreate={handleOpenCreate}
-      />
+      <CompanyHeader onCreate={handleOpenCreate} />
 
       {/* COMPANY */}
 
-      <CompanyList
-        company={company}
-        onEdit={handleOpenEdit}
-      />
+      <CompanyList company={company} onEdit={handleOpenEdit} />
 
       {/* MODAL */}
 
       <CompanyEditModal
-        key={
-          selectedCompanyId || "create"
-        }
+        key={selectedCompanyId || "create"}
         open={openEditModal}
         onClose={handleCloseModal}
         onSuccess={fetchCompany}
         companyId={selectedCompanyId}
       />
-
     </div>
   );
-
 }

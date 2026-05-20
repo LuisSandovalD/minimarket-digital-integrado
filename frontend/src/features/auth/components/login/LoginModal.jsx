@@ -1,32 +1,22 @@
-import {
-  Modal,
-} from "@/components/modals";
+import { Modal } from "@/components/modals";
 
-import LoginHeader
-  from "./LoginHeader";
+import LoginHeader from "./LoginHeader";
 
-import LoginBadge
-  from "./LoginBadge";
+import LoginBadge from "./LoginBadge";
 
-import LoginForm
-  from "./LoginForm";
+import LoginForm from "./LoginForm";
 
 export default function LoginModal({
-
   open,
 
   onClose,
-
 }) {
-
   // ======================================
   // HIDE MODAL
   // ======================================
 
   if (!open) {
-
     return null;
-
   }
 
   // ======================================
@@ -34,13 +24,7 @@ export default function LoginModal({
   // ======================================
 
   return (
-
-    <Modal
-      open={open}
-      onClose={onClose}
-      size="md"
-    >
-
+    <Modal open={open} onClose={onClose} size="md">
       {/* ======================================
           BACKGROUND EFFECTS
       ====================================== */}
@@ -87,9 +71,7 @@ export default function LoginModal({
           HEADER
       ====================================== */}
 
-      <LoginHeader
-        onClose={onClose}
-      />
+      <LoginHeader onClose={onClose} />
 
       {/* ======================================
           CONTENT
@@ -103,21 +85,14 @@ export default function LoginModal({
           py-7
         "
       >
-
         {/* BADGE */}
 
         <LoginBadge />
 
         {/* FORM */}
 
-        <LoginForm
-          onClose={onClose}
-        />
-
+        <LoginForm onClose={onClose} />
       </div>
-
     </Modal>
-
   );
-
 }

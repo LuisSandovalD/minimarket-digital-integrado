@@ -1,2 +1,1 @@
-export const DASHBOARD_TITLE =
-  "Dashboard ERP";
+export const DASHBOARD_TITLE = "Dashboard ERP";

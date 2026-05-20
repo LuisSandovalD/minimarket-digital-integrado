@@ -28,9 +28,7 @@ const benefits = [
 export default function BarcodeSection() {
   return (
     <section className="relative py-8 lg:py-12">
-
       <div className="relative grid gap-10 lg:gap-16 lg:grid-cols-12 items-center max-w-7xl mx-auto">
-
         {/* RIGHT COLUMN - IMAGE + STATS */}
         <div className="lg:col-span-7 space-y-5">
           {/* IMAGE */}

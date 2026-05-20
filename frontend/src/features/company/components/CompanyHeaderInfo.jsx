@@ -1,31 +1,15 @@
-import {
-  Building2,
-  Pencil,
-} from "lucide-react";
+import { Building2, Pencil } from "lucide-react";
 
-import {
-  useState,
-} from "react";
+import { useState } from "react";
 
-import ModernButton
-  from "@/components/buttons/ModernButton";
+import ModernButton from "@/components/buttons/ModernButton";
 
-export default function CompanyHeaderInfo({
-  company,
-  onEdit,
-}) {
+export default function CompanyHeaderInfo({ company, onEdit }) {
+  const [imageError, setImageError] = useState(false);
 
-  const [
-    imageError,
-    setImageError,
-  ] = useState(false);
-
-  const showLogo =
-    company?.logo &&
-    !imageError;
+  const showLogo = company?.logo && !imageError;
 
   return (
-
     <section
       className="
         flex
@@ -51,7 +35,6 @@ export default function CompanyHeaderInfo({
         md:p-6
       "
     >
-
       {/* LEFT */}
 
       <div
@@ -62,7 +45,6 @@ export default function CompanyHeaderInfo({
           gap-4
         "
       >
-
         {/* LOGO */}
 
         <div
@@ -83,24 +65,18 @@ export default function CompanyHeaderInfo({
             dark:bg-slate-900
           "
         >
-
           {showLogo ? (
-
             <img
               src={company.logo}
               alt={company.name}
-              onError={() =>
-                setImageError(true)
-              }
+              onError={() => setImageError(true)}
               className="
                 h-full
                 w-full
                 object-cover
               "
             />
-
           ) : (
-
             <Building2
               size={26}
               strokeWidth={1.8}
@@ -109,15 +85,12 @@ export default function CompanyHeaderInfo({
                 dark:text-slate-400
               "
             />
-
           )}
-
         </div>
 
         {/* INFO */}
 
         <div className="min-w-0">
-
           <div
             className="
               flex
@@ -125,7 +98,6 @@ export default function CompanyHeaderInfo({
               gap-2
             "
           >
-
             <h2
               className="
                 truncate
@@ -153,7 +125,6 @@ export default function CompanyHeaderInfo({
                 "
               />
             )}
-
           </div>
 
           <p
@@ -166,8 +137,7 @@ export default function CompanyHeaderInfo({
               dark:text-slate-400
             "
           >
-            Panel corporativo y gestión
-            empresarial
+            Panel corporativo y gestión empresarial
           </p>
 
           {/* META */}
@@ -182,7 +152,6 @@ export default function CompanyHeaderInfo({
               gap-3
             "
           >
-
             {company?.email && (
               <span
                 className="
@@ -218,11 +187,8 @@ export default function CompanyHeaderInfo({
                 RUC {company.ruc}
               </span>
             )}
-
           </div>
-
         </div>
-
       </div>
 
       {/* ACTION */}
@@ -234,24 +200,17 @@ export default function CompanyHeaderInfo({
           items-center
         "
       >
-
         <ModernButton
           text="Editar"
           icon={Pencil}
           variant="secondary"
-          onClick={() =>
-            onEdit?.(company?.id)
-          }
+          onClick={() => onEdit?.(company?.id)}
           className="
             rounded-xl
             px-4
           "
         />
-
       </div>
-
     </section>
-
   );
-
 }

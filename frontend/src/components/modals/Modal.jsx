@@ -1,11 +1,6 @@
-import {
-  AnimatePresence,
-  motion,
-} from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
-import {
-  createPortal,
-} from "react-dom";
+import { createPortal } from "react-dom";
 
 export default function Modal({
   open,
@@ -25,10 +20,7 @@ export default function Modal({
   };
 
   const handleOutside = (e) => {
-    if (
-      e.target === e.currentTarget &&
-      closeOnOutside
-    ) {
+    if (e.target === e.currentTarget && closeOnOutside) {
       onClose?.();
     }
   };
@@ -62,16 +54,11 @@ export default function Modal({
             p-4
             md:p-6
 
-            ${
-              blur
-                ? "backdrop-blur-md"
-                : ""
-            }
+            ${blur ? "backdrop-blur-md" : ""}
           `}
         >
           {/* BACKDROP EFFECT */}
           <div className="absolute inset-0 overflow-hidden">
-            
             <div
               className="
                 absolute
@@ -183,6 +170,6 @@ export default function Modal({
       )}
     </AnimatePresence>,
 
-    document.body
+    document.body,
   );
 }

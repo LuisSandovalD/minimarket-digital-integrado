@@ -11,8 +11,7 @@ import {
   Plus,
 } from "lucide-react";
 
-import PageHeader
-  from "@/components/ui/PageHeader";
+import PageHeader from "@/components/ui/PageHeader";
 
 // ========================================
 // COMPONENT
@@ -25,28 +24,21 @@ export default function SaleHeader({
   averageTicket = 0,
   onCreate,
 }) {
-
   return (
-
     <PageHeader
-
       // ====================================
       // MAIN
       // ====================================
 
       icon={ShoppingCart}
-
       badge="Gestión Comercial"
-
       title="Ventas"
-
       description="
         Administra las ventas,
         pagos, devoluciones
         y movimientos comerciales
         de la empresa.
       "
-
       // ====================================
       // ACTION
       // ====================================
@@ -56,19 +48,15 @@ export default function SaleHeader({
         icon: Plus,
         onClick: onCreate,
       }}
-
       // ====================================
       // STATS
       // ====================================
 
       stats={[
-
         {
           icon: DollarSign,
           label: "Ingresos",
-          value: `S/ ${Number(
-            totalRevenue
-          ).toFixed(2)}`,
+          value: `S/ ${Number(totalRevenue).toFixed(2)}`,
         },
 
         {
@@ -80,15 +68,9 @@ export default function SaleHeader({
         {
           icon: TrendingUp,
           label: "Ticket Promedio",
-          value: `S/ ${Number(
-            averageTicket
-          ).toFixed(2)}`,
+          value: `S/ ${Number(averageTicket).toFixed(2)}`,
         },
-
       ]}
-
     />
-
   );
-
 }

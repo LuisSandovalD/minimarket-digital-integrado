@@ -1,158 +1,93 @@
-import {
-  useState,
-} from "react";
+import { useState } from "react";
 
-import {
-  useDispatch,
-} from "react-redux";
+import { useDispatch } from "react-redux";
 
-import {
-  useNavigate,
-} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-import {
-  loginService,
-} from "../services/auth.service";
+import { loginService } from "../services/auth.service";
 
-import {
-  loginSuccess,
-} from "../store/authActions";
+import { loginSuccess } from "../store/authActions";
 
-import {
-  saveSession,
-} from "../services/session.service";
+import { saveSession } from "../services/session.service";
 
-export default function useLoginForm(
-  onClose
-) {
+export default function useLoginForm(onClose) {
+  const dispatch = useDispatch();
 
-  const dispatch =
-    useDispatch();
+  const navigate = useNavigate();
 
-  const navigate =
-    useNavigate();
+  const [loading, setLoading] = useState(false);
 
-  const [loading, setLoading] =
-    useState(false);
+  const [error, setError] = useState("");
 
-  const [error, setError] =
-    useState("");
+  const [form, setForm] = useState({
+    email: "",
 
-  const [form, setForm] =
-    useState({
+    password: "",
 
-      email: "",
-
-      password: "",
-
-      remember: false,
-
-    });
+    remember: false,
+  });
 
   // ======================================
   // CHANGE
   // ======================================
 
-  const handleChange =
-    (e) => {
+  const handleChange = (e) => {
+    const {
+      name,
 
-      const {
+      value,
 
-        name,
+      type,
 
-        value,
+      checked,
+    } = e.target;
 
-        type,
+    setForm((prev) => ({
+      ...prev,
 
-        checked,
-
-      } = e.target;
-
-      setForm((prev) => ({
-
-        ...prev,
-
-        [name]:
-          type === "checkbox"
-            ? checked
-            : value,
-
-      }));
-
-    };
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
 
   // ======================================
   // SUBMIT
   // ======================================
 
-  const handleSubmit =
-    async (e) => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-      e.preventDefault();
+    try {
+      setLoading(true);
 
-      try {
+      setError("");
 
-        setLoading(true);
+      const response = await loginService({
+        email: form.email,
 
-        setError("");
+        password: form.password,
+      });
 
-        const response =
-          await loginService({
+      saveSession({
+        token: response.token,
 
-            email:
-              form.email,
+        user: response.user,
 
-            password:
-              form.password,
+        company: response.company,
+      });
 
-          });
+      dispatch(loginSuccess(response.user));
 
-        saveSession({
+      onClose?.();
 
-          token:
-            response.token,
-
-          user:
-            response.user,
-
-          company:
-            response.company,
-
-        });
-
-        dispatch(
-          loginSuccess(
-            response.user
-          )
-        );
-
-        onClose?.();
-
-        navigate(
-          `/${response.company.slug}/dashboard`
-        );
-
-      } catch (error) {
-
-        setError(
-
-          error.response?.data
-            ?.message ||
-
-          "Error al iniciar sesión"
-
-        );
-
-      } finally {
-
-        setLoading(false);
-
-      }
-
-    };
+      navigate(`/${response.company.slug}/dashboard`);
+    } catch (error) {
+      setError(error.response?.data?.message || "Error al iniciar sesión");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return {
-
     form,
 
     loading,
@@ -162,7 +97,5 @@ export default function useLoginForm(
     handleChange,
 
     handleSubmit,
-
   };
-
 }

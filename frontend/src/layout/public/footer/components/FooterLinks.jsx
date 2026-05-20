@@ -1,12 +1,7 @@
-export default function FooterLinks({
-  title,
-  links,
-}) {
+export default function FooterLinks({ title, links }) {
   return (
     <div>
-      <h3 className="font-bold">
-        {title}
-      </h3>
+      <h3 className="font-bold">{title}</h3>
 
       <ul
         className="

@@ -11,14 +11,8 @@ import {
   Calendar,
   Lock,
 } from "lucide-react";
-import {
-  Modal,
-  HeaderModal,
-  FooterModal,
-} from "@/components/modals";
-import {
-  ModernButton,
-} from "@/components/buttons";
+import { Modal, HeaderModal, FooterModal } from "@/components/modals";
+import { ModernButton } from "@/components/buttons";
 import Input from "@/components/inputs/Input";
 import ModernImageUpload from "@/components/ui/ModernImageUpload";
 
@@ -42,6 +36,7 @@ export default function EditProfileModal({
 
   useEffect(() => {
     if (!user) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setForm({
       name: user?.name || "",
       email: user?.email || "",
@@ -85,7 +80,10 @@ export default function EditProfileModal({
           {/* LEFT: Avatar */}
           <div>
             <div className="flex items-center gap-2 mb-3">
-              <Camera size={16} className="text-slate-500 dark:text-slate-400" />
+              <Camera
+                size={16}
+                className="text-slate-500 dark:text-slate-400"
+              />
               <h3 className="text-sm font-semibold text-slate-900 dark:text-white">
                 Foto
               </h3>
@@ -172,18 +170,13 @@ export default function EditProfileModal({
                 />
               </div>
             </div>
-
           </div>
         </div>
       </div>
 
       <FooterModal>
         <div className="flex gap-3 justify-end w-full">
-          <ModernButton
-            text="Cancelar"
-            variant="outline"
-            onClick={onClose}
-          />
+          <ModernButton text="Cancelar" variant="outline" onClick={onClose} />
 
           <ModernButton
             text={loading ? "Guardando..." : "Guardar"}

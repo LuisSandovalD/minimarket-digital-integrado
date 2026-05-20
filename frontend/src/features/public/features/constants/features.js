@@ -12,8 +12,7 @@ import {
 export const features = [
   {
     title: "Inventario Inteligente",
-    description:
-      "Controla stock, productos y movimientos en tiempo real.",
+    description: "Controla stock, productos y movimientos en tiempo real.",
     icon: Boxes,
     image:
       "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=2070&auto=format&fit=crop",
@@ -21,8 +20,7 @@ export const features = [
 
   {
     title: "Ventas Modernas",
-    description:
-      "Procesa ventas rápidas y optimizadas.",
+    description: "Procesa ventas rápidas y optimizadas.",
     icon: ShoppingCart,
     image:
       "https://images.unsplash.com/photo-1556740749-887f6717d7e4?q=80&w=2070&auto=format&fit=crop",
@@ -30,8 +28,7 @@ export const features = [
 
   {
     title: "Seguridad Avanzada",
-    description:
-      "Protección empresarial y control de accesos.",
+    description: "Protección empresarial y control de accesos.",
     icon: ShieldCheck,
     image:
       "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=2070&auto=format&fit=crop",
@@ -39,8 +36,7 @@ export const features = [
 
   {
     title: "Analíticas",
-    description:
-      "Reportes y métricas empresariales.",
+    description: "Reportes y métricas empresariales.",
     icon: BarChart3,
     image:
       "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop",
@@ -48,8 +44,7 @@ export const features = [
 
   {
     title: "Clientes",
-    description:
-      "Gestiona clientes y fidelización.",
+    description: "Gestiona clientes y fidelización.",
     icon: Users,
     image:
       "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=2070&auto=format&fit=crop",
@@ -57,8 +52,7 @@ export const features = [
 
   {
     title: "Multiempresa",
-    description:
-      "Administra múltiples negocios.",
+    description: "Administra múltiples negocios.",
     icon: Building2,
     image:
       "https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?q=80&w=2070&auto=format&fit=crop",

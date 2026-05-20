@@ -38,9 +38,7 @@ const useAccountStore = create((set, get) => ({
     } catch (error) {
       set({
         loading: false,
-        error:
-          error?.response?.data?.message ||
-          "Error obteniendo cuenta",
+        error: error?.response?.data?.message || "Error obteniendo cuenta",
       });
     }
   },
@@ -60,9 +58,7 @@ const useAccountStore = create((set, get) => ({
     } catch (error) {
       set({
         saving: false,
-        error:
-          error?.response?.data?.message ||
-          "Error actualizando perfil",
+        error: error?.response?.data?.message || "Error actualizando perfil",
       });
 
       throw error;
@@ -82,8 +78,7 @@ const useAccountStore = create((set, get) => ({
       set({
         passwordLoading: false,
         error:
-          error?.response?.data?.message ||
-          "Error actualizando contraseña",
+          error?.response?.data?.message || "Error actualizando contraseña",
       });
 
       throw error;
@@ -107,9 +102,7 @@ const useAccountStore = create((set, get) => ({
     } catch (error) {
       set({
         sessionsLoading: false,
-        error:
-          error?.response?.data?.message ||
-          "Error obteniendo sesiones",
+        error: error?.response?.data?.message || "Error obteniendo sesiones",
       });
     }
   },
@@ -119,15 +112,11 @@ const useAccountStore = create((set, get) => ({
       await closeSessionService(sessionId);
 
       set({
-        sessions: get().sessions.filter(
-          (s) => s.id !== sessionId
-        ),
+        sessions: get().sessions.filter((s) => s.id !== sessionId),
       });
     } catch (error) {
       set({
-        error:
-          error?.response?.data?.message ||
-          "Error cerrando sesión",
+        error: error?.response?.data?.message || "Error cerrando sesión",
       });
     }
   },
@@ -149,8 +138,7 @@ const useAccountStore = create((set, get) => ({
         user: state.user
           ? {
               ...state.user,
-              twoFactorEnabled:
-                response.twoFactorEnabled ?? enable,
+              twoFactorEnabled: response.twoFactorEnabled ?? enable,
             }
           : state.user,
 
@@ -161,9 +149,7 @@ const useAccountStore = create((set, get) => ({
     } catch (error) {
       set({
         twoFactorLoading: false,
-        error:
-          error?.response?.data?.message ||
-          "Error actualizando 2FA",
+        error: error?.response?.data?.message || "Error actualizando 2FA",
       });
 
       throw error;
@@ -189,9 +175,7 @@ const useAccountStore = create((set, get) => ({
     } catch (error) {
       set({
         deleteLoading: false,
-        error:
-          error?.response?.data?.message ||
-          "Error eliminando cuenta",
+        error: error?.response?.data?.message || "Error eliminando cuenta",
       });
 
       throw error;

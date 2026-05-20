@@ -61,10 +61,8 @@ export const useSales = () => {
 
     setSales((prev) =>
       prev.map((sale) =>
-        sale.id === id
-          ? { ...sale, status: "CANCELLED" }
-          : sale
-      )
+        sale.id === id ? { ...sale, status: "CANCELLED" } : sale,
+      ),
     );
   };
 
@@ -86,6 +84,7 @@ export const useSales = () => {
   // ======================================
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchSales();
   }, []);
 

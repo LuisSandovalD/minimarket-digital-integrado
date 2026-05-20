@@ -1,28 +1,17 @@
 // models/components/ModulePreview.jsx
 
-import {
-  Layers3,
-  ArrowRight,
-} from "lucide-react";
+import { Layers3, ArrowRight } from "lucide-react";
 
-import {
-  useState,
-} from "react";
+import { useState } from "react";
 
-import {
-  modules,
-} from "../constants/modules";
+import { modules } from "../constants/modules";
 
 import ERPPreviewCard from "./ERPPreviewCard";
 
 export default function ModulePreview() {
-  const [showAll, setShowAll] =
-    useState(false);
+  const [showAll, setShowAll] = useState(false);
 
-  const visibleModules =
-    showAll
-      ? modules
-      : modules.slice(0, 6);
+  const visibleModules = showAll ? modules : modules.slice(0, 6);
 
   return (
     <section
@@ -32,7 +21,6 @@ export default function ModulePreview() {
       "
     >
       <div className="max-w-7xl mx-auto">
-        
         {/* HEADER */}
         <div
           className="
@@ -46,7 +34,6 @@ export default function ModulePreview() {
           "
         >
           <div className="max-w-3xl">
-            
             {/* BADGE */}
             <div
               className="
@@ -76,7 +63,6 @@ export default function ModulePreview() {
               "
             >
               <Layers3 size={16} />
-
               Módulos Empresariales
             </div>
 
@@ -129,12 +115,8 @@ export default function ModulePreview() {
                 dark:text-[#cbd5e1]
               "
             >
-              Centraliza inventario,
-              ventas, seguridad,
-              analíticas, reportes,
-              clientes y operaciones
-              empresariales en un
-              ecosistema moderno,
+              Centraliza inventario, ventas, seguridad, analíticas, reportes,
+              clientes y operaciones empresariales en un ecosistema moderno,
               rápido y escalable.
             </p>
           </div>
@@ -205,8 +187,7 @@ export default function ModulePreview() {
                   dark:text-[#cbd5e1]
                 "
               >
-                Diseñados para empresas
-                modernas y escalables.
+                Diseñados para empresas modernas y escalables.
               </p>
             </div>
           </div>
@@ -224,23 +205,16 @@ export default function ModulePreview() {
             xl:grid-cols-3
           "
         >
-          {visibleModules.map(
-            (item, index) => (
-              <ERPPreviewCard
-                key={index}
-                {...item}
-              />
-            )
-          )}
+          {visibleModules.map((item, index) => (
+            <ERPPreviewCard key={index} {...item} />
+          ))}
         </div>
 
         {/* BUTTON */}
         {modules.length > 6 && (
           <div className="mt-16 flex justify-center">
             <button
-              onClick={() =>
-                setShowAll(!showAll)
-              }
+              onClick={() => setShowAll(!showAll)}
               className="
                 group
 
@@ -277,9 +251,7 @@ export default function ModulePreview() {
                 dark:hover:bg-white/[0.05]
               "
             >
-              {showAll
-                ? "Mostrar menos"
-                : "Mostrar todos los módulos"}
+              {showAll ? "Mostrar menos" : "Mostrar todos los módulos"}
 
               <ArrowRight
                 size={18}

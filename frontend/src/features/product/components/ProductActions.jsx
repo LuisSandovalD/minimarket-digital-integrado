@@ -2,26 +2,18 @@
 // features/product/components/ProductActions.jsx
 // ========================================
 
-import {
-  Pencil,
-  Trash2,
-} from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
 
-import {ModernButton}
-  from "@/components/buttons/";
+import { ModernButton } from "@/components/buttons/";
 
 export default function ProductActions({
-
   product,
 
   onEdit,
 
   onDelete,
-
 }) {
-
   return (
-
     <div
       className="
         flex
@@ -30,15 +22,12 @@ export default function ProductActions({
         gap-2
       "
     >
-
       <ModernButton
         size="sm"
         variant="warning"
         icon={Pencil}
         text="Editar"
-        onClick={() =>
-          onEdit(product)
-        }
+        onClick={() => onEdit(product)}
       />
 
       <ModernButton
@@ -46,13 +35,8 @@ export default function ProductActions({
         variant="danger"
         icon={Trash2}
         text="Eliminar"
-        onClick={() =>
-          onDelete(product)
-        }
+        onClick={() => onDelete(product)}
       />
-
     </div>
-
   );
-
 }

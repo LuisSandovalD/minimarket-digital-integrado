@@ -1,14 +1,8 @@
 // models/components/SecurityPreview.jsx
 
-import {
-  ShieldCheck,
-  Lock,
-  Fingerprint,
-} from "lucide-react";
+import { ShieldCheck, Lock, Fingerprint } from "lucide-react";
 
-import {
-  security,
-} from "../constants/security";
+import { security } from "../constants/security";
 
 import ERPPreviewCard from "./ERPPreviewCard";
 
@@ -16,7 +10,6 @@ export default function SecurityPreview() {
   return (
     <section className="relative py-20">
       <div className="mx-auto max-w-7xl">
-        
         {/* HEADER */}
         <div
           className="
@@ -31,7 +24,6 @@ export default function SecurityPreview() {
         >
           {/* LEFT */}
           <div className="max-w-3xl">
-            
             {/* BADGE */}
             <div
               className="
@@ -61,7 +53,6 @@ export default function SecurityPreview() {
               "
             >
               <ShieldCheck size={16} />
-
               Seguridad Empresarial
             </div>
 
@@ -117,11 +108,8 @@ export default function SecurityPreview() {
                 md:text-lg
               "
             >
-              Protege información,
-              usuarios, accesos y
-              operaciones con sistemas
-              modernos de autenticación,
-              permisos y monitoreo.
+              Protege información, usuarios, accesos y operaciones con sistemas
+              modernos de autenticación, permisos y monitoreo.
             </p>
           </div>
 
@@ -187,8 +175,7 @@ export default function SecurityPreview() {
                   dark:text-[#cbd5e1]
                 "
               >
-                Protección de usuarios
-                y datos empresariales.
+                Protección de usuarios y datos empresariales.
               </p>
             </div>
           </div>
@@ -207,10 +194,7 @@ export default function SecurityPreview() {
           "
         >
           {security.map((item, index) => (
-            <ERPPreviewCard
-              key={index}
-              {...item}
-            />
+            <ERPPreviewCard key={index} {...item} />
           ))}
         </div>
       </div>

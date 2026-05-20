@@ -2,18 +2,10 @@
 // features/supplier/components/SupplierFilters.jsx
 // ========================================
 
-import SearchInput
-  from "@/components/inputs/SearchInput";
+import SearchInput from "@/components/inputs/SearchInput";
 
-export default function SupplierFilters({
-
-  search,
-  setSearch,
-
-}) {
-
+export default function SupplierFilters({ search, setSearch }) {
   return (
-
     <div
       className="
         flex
@@ -23,21 +15,13 @@ export default function SupplierFilters({
         lg:flex-row
       "
     >
-
       <SearchInput
         placeholder="
           Buscar proveedor...
         "
         value={search}
-        onChange={(e) =>
-          setSearch(
-            e.target.value
-          )
-        }
+        onChange={(e) => setSearch(e.target.value)}
       />
-
     </div>
-
   );
-
 }

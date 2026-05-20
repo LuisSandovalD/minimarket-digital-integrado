@@ -2,16 +2,11 @@
 // hooks/useCompanyEdit.js
 // ========================================
 
-import {
-  useEffect,
-  useState,
-} from "react";
+import { useEffect, useState } from "react";
 
-import { companyService }
-  from "../services/company.service";
+import { companyService } from "../services/company.service";
 
 const INITIAL_STATE = {
-
   name: "",
   slug: "",
   ruc: "",
@@ -22,7 +17,6 @@ const INITIAL_STATE = {
   taxId: "",
   legalRepresentative: "",
   logo: null,
-
 };
 
 export default function useCompanyEdit({
@@ -31,94 +25,59 @@ export default function useCompanyEdit({
   onClose,
   onSuccess,
 }) {
+  const [loading, setLoading] = useState(false);
 
-  const [loading, setLoading] =
-    useState(false);
-
-  const [formData, setFormData] =
-    useState(INITIAL_STATE);
+  const [formData, setFormData] = useState(INITIAL_STATE);
 
   /* ========================================
    * FETCH COMPANY
    * ====================================== */
 
   useEffect(() => {
-
-    if (
-      !open ||
-      !companyId
-    ) {
-
+    if (!open || !companyId) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setFormData(INITIAL_STATE);
 
       return;
-
     }
 
-    const fetchCompany =
-      async () => {
+    const fetchCompany = async () => {
+      try {
+        setLoading(true);
 
-        try {
+        const response = await companyService.getCompanyById(companyId);
 
-          setLoading(true);
+        const company = response.data || response;
 
-          const response =
-            await companyService
-              .getCompanyById(
-                companyId
-              );
+        setFormData({
+          name: company.name || "",
 
-          const company =
-            response.data || response;
+          slug: company.slug || "",
 
-          setFormData({
+          ruc: company.ruc || "",
 
-            name:
-              company.name || "",
+          email: company.email || "",
 
-            slug:
-              company.slug || "",
+          phone: company.phone || "",
 
-            ruc:
-              company.ruc || "",
+          address: company.address || "",
 
-            email:
-              company.email || "",
+          website: company.website || "",
 
-            phone:
-              company.phone || "",
+          taxId: company.taxId || "",
 
-            address:
-              company.address || "",
+          legalRepresentative: company.legalRepresentative || "",
 
-            website:
-              company.website || "",
-
-            taxId:
-              company.taxId || "",
-
-            legalRepresentative:
-              company.legalRepresentative || "",
-
-            logo:
-              company.logo || null,
-
-          });
-
-        } catch (error) {
-
-          console.error(error);
-
-        } finally {
-
-          setLoading(false);
-
-        }
-
-      };
+          logo: company.logo || null,
+        });
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
     fetchCompany();
-
   }, [open, companyId]);
 
   /* ========================================
@@ -126,68 +85,48 @@ export default function useCompanyEdit({
    * ====================================== */
 
   const handleChange = (e) => {
-
-    const {
-      name,
-      value,
-    } = e.target;
+    const { name, value } = e.target;
 
     setFormData((prev) => ({
-
       ...prev,
 
       [name]: value,
-
     }));
-
   };
 
   /* ========================================
    * SUBMIT
    * ====================================== */
 
-  const handleSubmit =
-    async (e) => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-      e.preventDefault();
+    try {
+      setLoading(true);
 
-      try {
+      // UPDATE
 
-        setLoading(true);
+      const response = await companyService.updateCompany(
+        companyId,
 
-        // UPDATE
+        formData,
+      );
 
-        const response =
-          await companyService.updateCompany(
+      // ESPERA REFRESH
 
-            companyId,
+      await onSuccess?.(response);
 
-            formData
+      // CIERRA DESPUÉS
 
-          );
-
-        // ESPERA REFRESH
-
-        await onSuccess?.(response);
-
-        // CIERRA DESPUÉS
-
-        onClose?.();
-
-      } catch (error) {
-
-        console.error(error);
-
-      } finally {
-
-        setLoading(false);
-
-      }
-
-    };
+      onClose?.();
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return {
-
     loading,
 
     formData,
@@ -195,7 +134,5 @@ export default function useCompanyEdit({
     handleChange,
 
     handleSubmit,
-
   };
-
 }

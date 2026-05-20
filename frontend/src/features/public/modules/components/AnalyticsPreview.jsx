@@ -1,14 +1,8 @@
 // models/components/AnalyticsPreview.jsx
 
-import {
-  BarChart3,
-  TrendingUp,
-  PieChart,
-} from "lucide-react";
+import { BarChart3, TrendingUp, PieChart } from "lucide-react";
 
-import {
-  analytics,
-} from "../constants/analytics";
+import { analytics } from "../constants/analytics";
 
 import ERPPreviewCard from "./ERPPreviewCard";
 
@@ -16,7 +10,6 @@ export default function AnalyticsPreview() {
   return (
     <section className="relative py-20">
       <div className="mx-auto max-w-7xl">
-        
         {/* HEADER */}
         <div
           className="
@@ -31,7 +24,6 @@ export default function AnalyticsPreview() {
         >
           {/* LEFT */}
           <div className="max-w-3xl">
-            
             {/* BADGE */}
             <div
               className="
@@ -61,7 +53,6 @@ export default function AnalyticsPreview() {
               "
             >
               <BarChart3 size={16} />
-
               Analíticas Inteligentes
             </div>
 
@@ -117,11 +108,8 @@ export default function AnalyticsPreview() {
                 md:text-lg
               "
             >
-              Analiza ventas,
-              ingresos, rendimiento,
-              productos y tendencias
-              desde dashboards modernos
-              y reportes inteligentes.
+              Analiza ventas, ingresos, rendimiento, productos y tendencias
+              desde dashboards modernos y reportes inteligentes.
             </p>
           </div>
 
@@ -187,8 +175,7 @@ export default function AnalyticsPreview() {
                   dark:text-[#cbd5e1]
                 "
               >
-                Métricas y estadísticas
-                en tiempo real.
+                Métricas y estadísticas en tiempo real.
               </p>
             </div>
           </div>
@@ -206,13 +193,9 @@ export default function AnalyticsPreview() {
           "
         >
           {analytics.map((item, index) => (
-            <ERPPreviewCard
-              key={index}
-              {...item}
-            />
+            <ERPPreviewCard key={index} {...item} />
           ))}
         </div>
-
       </div>
     </section>
   );

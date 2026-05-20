@@ -1,11 +1,6 @@
-import {
-  UserStep,
-  CompanyStep,
-  BranchStep,
-} from "../../components/register/";
+import { UserStep, CompanyStep, BranchStep } from "../../components/register/";
 
 export default function RegisterForm({
-
   step,
 
   form,
@@ -15,66 +10,36 @@ export default function RegisterForm({
   handleChange,
 
   handleSubmit,
-
 }) {
-
   // ======================================
   // RENDER
   // ======================================
 
   return (
-
-    <form
-      id="register-form"
-      onSubmit={handleSubmit}
-      className="space-y-6"
-    >
-
+    <form id="register-form" onSubmit={handleSubmit} className="space-y-6">
       {/* ======================================
           STEP 1 — USER
       ====================================== */}
 
-      {step === 1 && (
-
-        <UserStep
-          form={form}
-          handleChange={handleChange}
-        />
-
-      )}
+      {step === 1 && <UserStep form={form} handleChange={handleChange} />}
 
       {/* ======================================
           STEP 2 — COMPANY
       ====================================== */}
 
-      {step === 2 && (
-
-        <CompanyStep
-          form={form}
-          handleChange={handleChange}
-        />
-
-      )}
+      {step === 2 && <CompanyStep form={form} handleChange={handleChange} />}
 
       {/* ======================================
           STEP 3 — BRANCH
       ====================================== */}
 
-      {step === 3 && (
-
-        <BranchStep
-          form={form}
-          handleChange={handleChange}
-        />
-
-      )}
+      {step === 3 && <BranchStep form={form} handleChange={handleChange} />}
 
       {/* ======================================
           ERROR
       ====================================== */}
 
       {error && (
-
         <div
           className="
             rounded-2xl
@@ -88,15 +53,9 @@ export default function RegisterForm({
             text-red-500
           "
         >
-
           {error}
-
         </div>
-
       )}
-
     </form>
-
   );
-
 }

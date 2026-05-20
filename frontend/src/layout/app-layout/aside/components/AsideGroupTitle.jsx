@@ -1,7 +1,4 @@
-export default function AsideGroupTitle({
-  title,
-  isCollapsed,
-}) {
+export default function AsideGroupTitle({ title, isCollapsed }) {
   return (
     <p
       className={`
@@ -14,7 +11,7 @@ export default function AsideGroupTitle({
         mb-3
         transition-all
 
-        ${isCollapsed ? 'md:hidden' : ''}
+        ${isCollapsed ? "md:hidden" : ""}
       `}
     >
       {title}

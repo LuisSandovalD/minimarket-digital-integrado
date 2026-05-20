@@ -2,7 +2,6 @@
 // components/categories/CategoriesTable.jsx
 // ========================================
 
-
 import {
   FolderTree,
   CalendarDays,
@@ -12,16 +11,11 @@ import {
   CornerDownRight,
 } from "lucide-react";
 
+import { Table, THead, TFooter } from "@/components/table/";
 
-import {Table, THead, TFooter}
-  from "@/components/table/";
-
-
-import ModernButton
-  from "@/components/buttons/ModernButton";
+import ModernButton from "@/components/buttons/ModernButton";
 
 export default function CategoriesTable({
-
   categories = [],
 
   page = 1,
@@ -35,29 +29,20 @@ export default function CategoriesTable({
   onEdit,
 
   onDelete,
-
 }) {
-
   // ========================================
   // PARENT CATEGORIES
   // ========================================
 
-  const parentCategories =
-    categories.filter(
-      (category) => !category.parentId
-    );
+  const parentCategories = categories.filter((category) => !category.parentId);
 
   // ========================================
   // CHILD CATEGORIES
   // ========================================
 
-  const childCategories =
-    categories.filter(
-      (category) => category.parentId
-    );
+  const childCategories = categories.filter((category) => category.parentId);
 
   const columns = [
-
     {
       key: "name",
       label: "Categoría",
@@ -82,17 +67,11 @@ export default function CategoriesTable({
       key: "actions",
       label: "Acciones",
     },
-
   ];
 
-  const renderRows = (
-    data = [],
-    isChild = false
-  ) => (
-
+  const renderRows = (data = [], isChild = false) => (
     <>
       {data.map((category) => (
-
         <tr
           key={category.id}
           className="
@@ -108,15 +87,12 @@ export default function CategoriesTable({
             dark:hover:bg-slate-900/40
           "
         >
-
           {/* ========================================
            * CATEGORY
            * ====================================== */}
 
           <td className="px-6 py-5">
-
             <div className="flex items-center gap-4">
-
               <div
                 className="
                   flex
@@ -136,18 +112,14 @@ export default function CategoriesTable({
                   dark:bg-slate-900
                 "
               >
-
                 {isChild ? (
-
                   <CornerDownRight
                     size={20}
                     className="
                       text-slate-500
                     "
                   />
-
                 ) : (
-
                   <FolderTree
                     size={20}
                     className="
@@ -155,13 +127,10 @@ export default function CategoriesTable({
                       dark:text-slate-300
                     "
                   />
-
                 )}
-
               </div>
 
               <div>
-
                 <h3
                   className="
                     text-sm
@@ -185,11 +154,8 @@ export default function CategoriesTable({
                 >
                   ID #{category.id}
                 </p>
-
               </div>
-
             </div>
-
           </td>
 
           {/* ========================================
@@ -197,7 +163,6 @@ export default function CategoriesTable({
            * ====================================== */}
 
           <td className="px-6 py-5">
-
             <p
               className="
                 max-w-[280px]
@@ -209,10 +174,8 @@ export default function CategoriesTable({
                 dark:text-slate-300
               "
             >
-              {category.description ||
-                "Sin descripción"}
+              {category.description || "Sin descripción"}
             </p>
-
           </td>
 
           {/* ========================================
@@ -220,9 +183,7 @@ export default function CategoriesTable({
            * ====================================== */}
 
           <td className="px-6 py-5">
-
             {category.parent ? (
-
               <div
                 className="
                   inline-flex
@@ -243,7 +204,6 @@ export default function CategoriesTable({
                   dark:bg-slate-900
                 "
               >
-
                 <Layers3
                   size={16}
                   className="
@@ -262,11 +222,8 @@ export default function CategoriesTable({
                 >
                   {category.parent.name}
                 </span>
-
               </div>
-
             ) : (
-
               <span
                 className="
                   inline-flex
@@ -294,9 +251,7 @@ export default function CategoriesTable({
               >
                 Categoría Principal
               </span>
-
             )}
-
           </td>
 
           {/* ========================================
@@ -304,9 +259,7 @@ export default function CategoriesTable({
            * ====================================== */}
 
           <td className="px-6 py-5">
-
             <div className="flex items-center gap-2">
-
               <CalendarDays
                 size={16}
                 className="
@@ -322,13 +275,9 @@ export default function CategoriesTable({
                   dark:text-slate-300
                 "
               >
-                {new Date(
-                  category.createdAt
-                ).toLocaleDateString()}
+                {new Date(category.createdAt).toLocaleDateString()}
               </span>
-
             </div>
-
           </td>
 
           {/* ========================================
@@ -336,17 +285,13 @@ export default function CategoriesTable({
            * ====================================== */}
 
           <td className="px-6 py-5">
-
             <div className="flex items-center gap-3">
-
               <ModernButton
                 text="Editar"
                 size="sm"
                 variant="secondary"
                 icon={Pencil}
-                onClick={() =>
-                  onEdit?.(category)
-                }
+                onClick={() => onEdit?.(category)}
               />
 
               <ModernButton
@@ -354,34 +299,23 @@ export default function CategoriesTable({
                 size="sm"
                 variant="danger"
                 icon={Trash2}
-                onClick={() =>
-                  onDelete?.(category)
-                }
+                onClick={() => onDelete?.(category)}
               />
-
             </div>
-
           </td>
-
         </tr>
-
       ))}
     </>
-
   );
 
   return (
-
     <div className="space-y-8">
-
       {/* ========================================
        * PARENT CATEGORIES
        * ====================================== */}
 
       <div>
-
         <div className="mb-4">
-
           <h2
             className="
               text-lg
@@ -403,26 +337,18 @@ export default function CategoriesTable({
               dark:text-slate-400
             "
           >
-            Categorías raíz utilizadas
-            para organizar el catálogo.
+            Categorías raíz utilizadas para organizar el catálogo.
           </p>
-
         </div>
 
         <Table>
-
           <THead columns={columns} />
 
           <tbody>
-
             {parentCategories.length > 0 ? (
-
               renderRows(parentCategories)
-
             ) : (
-
               <tr>
-
                 <td
                   colSpan={columns.length}
                   className="
@@ -435,15 +361,10 @@ export default function CategoriesTable({
                 >
                   No existen categorías principales.
                 </td>
-
               </tr>
-
             )}
-
           </tbody>
-
         </Table>
-
       </div>
 
       {/* ========================================
@@ -451,9 +372,7 @@ export default function CategoriesTable({
        * ====================================== */}
 
       <div>
-
         <div className="mb-4">
-
           <h2
             className="
               text-lg
@@ -475,29 +394,18 @@ export default function CategoriesTable({
               dark:text-slate-400
             "
           >
-            Categorías dependientes
-            de una categoría principal.
+            Categorías dependientes de una categoría principal.
           </p>
-
         </div>
 
         <Table>
-
           <THead columns={columns} />
 
           <tbody>
-
             {childCategories.length > 0 ? (
-
-              renderRows(
-                childCategories,
-                true
-              )
-
+              renderRows(childCategories, true)
             ) : (
-
               <tr>
-
                 <td
                   colSpan={columns.length}
                   className="
@@ -510,11 +418,8 @@ export default function CategoriesTable({
                 >
                   No existen subcategorías.
                 </td>
-
               </tr>
-
             )}
-
           </tbody>
 
           <TFooter
@@ -523,13 +428,8 @@ export default function CategoriesTable({
             onPrev={onPrev}
             onNext={onNext}
           />
-
         </Table>
-
       </div>
-
     </div>
-
   );
-
 }

@@ -1,15 +1,6 @@
-import {
-  ImagePlus,
-  Upload,
-  X,
-  ImageIcon,
-} from "lucide-react";
+import { ImageIcon, ImagePlus, Upload, X } from "lucide-react";
 
-import {
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function ModernImageUpload({
   value,
@@ -20,38 +11,28 @@ export default function ModernImageUpload({
 
   height = "h-96",
 }) {
-
   const inputRef = useRef(null);
 
-  const [preview, setPreview] =
-    useState(null);
+  const [preview, setPreview] = useState(null);
 
-  const [dragging, setDragging] =
-    useState(false);
+  const [dragging, setDragging] = useState(false);
 
   // =========================================
   // SYNC VALUE
   // =========================================
 
   useEffect(() => {
-
     if (!value) {
-
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setPreview(null);
 
       return;
-
     }
 
     // BASE64 / URL
-    if (
-      typeof value === "string"
-    ) {
-
+    if (typeof value === "string") {
       setPreview(value);
-
     }
-
   }, [value]);
 
   // =========================================
@@ -59,154 +40,102 @@ export default function ModernImageUpload({
   // =========================================
 
   const handleOpen = () => {
-
     inputRef.current?.click();
-
   };
 
   // =========================================
   // FILE TO BASE64
   // =========================================
 
-  const fileToBase64 =
-    (file) => {
+  const fileToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
 
-      return new Promise(
+      reader.readAsDataURL(file);
 
-        (resolve, reject) => {
+      reader.onload = () => {
+        resolve(reader.result);
+      };
 
-          const reader =
-            new FileReader();
-
-          reader.readAsDataURL(file);
-
-          reader.onload =
-            () => {
-
-              resolve(
-                reader.result
-              );
-
-            };
-
-          reader.onerror =
-            (error) => {
-
-              reject(error);
-
-            };
-
-        }
-
-      );
-
-    };
+      reader.onerror = (error) => {
+        reject(error);
+      };
+    });
+  };
 
   // =========================================
   // PROCESS FILE
   // =========================================
 
-  const processFile =
-    async (file) => {
+  const processFile = async (file) => {
+    if (!file) return;
 
-      if (!file) return;
+    try {
+      const base64 = await fileToBase64(file);
 
-      try {
+      setPreview(base64);
 
-        const base64 =
-          await fileToBase64(
-            file
-          );
-
-        setPreview(base64);
-
-        onChange?.(base64);
-
-      } catch (error) {
-
-        console.error(error);
-
-      }
-
-    };
+      onChange?.(base64);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   // =========================================
   // INPUT CHANGE
   // =========================================
 
-  const handleImageChange =
-    async (e) => {
+  const handleImageChange = async (e) => {
+    const file = e.target.files?.[0];
 
-      const file =
-        e.target.files?.[0];
-
-      processFile(file);
-
-    };
+    processFile(file);
+  };
 
   // =========================================
   // REMOVE IMAGE
   // =========================================
 
   const handleRemove = () => {
-
     setPreview(null);
 
     onChange?.(null);
 
     if (inputRef.current) {
-
-      inputRef.current.value =
-        "";
-
+      inputRef.current.value = "";
     }
-
   };
 
   // =========================================
   // DRAG EVENTS
   // =========================================
 
-  const handleDragOver =
-    (e) => {
+  const handleDragOver = (e) => {
+    e.preventDefault();
 
-      e.preventDefault();
+    setDragging(true);
+  };
 
-      setDragging(true);
+  const handleDragLeave = (e) => {
+    e.preventDefault();
 
-    };
+    setDragging(false);
+  };
 
-  const handleDragLeave =
-    (e) => {
+  const handleDrop = async (e) => {
+    e.preventDefault();
 
-      e.preventDefault();
+    setDragging(false);
 
-      setDragging(false);
+    const file = e.dataTransfer.files?.[0];
 
-    };
-
-  const handleDrop =
-    async (e) => {
-
-      e.preventDefault();
-
-      setDragging(false);
-
-      const file =
-        e.dataTransfer.files?.[0];
-
-      processFile(file);
-
-    };
+    processFile(file);
+  };
 
   return (
     <div className="w-full space-y-3">
-
       {/* HEADER */}
       <div className="flex items-start justify-between gap-4">
-
         <div>
-
           <label
             className="
               text-sm
@@ -301,7 +230,6 @@ export default function ModernImageUpload({
           }
         `}
       >
-
         {/* =====================================
          * IMAGE PREVIEW
          * =================================== */}
@@ -355,10 +283,7 @@ export default function ModernImageUpload({
                   backdrop-blur-sm
                 "
               >
-                <Upload
-                  size={42}
-                  className="text-white"
-                />
+                <Upload size={42} className="text-white" />
 
                 <p
                   className="
@@ -386,10 +311,8 @@ export default function ModernImageUpload({
                 p-6
               "
             >
-
               {/* INFO */}
               <div>
-
                 <div
                   className="
                     inline-flex
@@ -405,10 +328,7 @@ export default function ModernImageUpload({
                     backdrop-blur-md
                   "
                 >
-                  <ImageIcon
-                    size={16}
-                    className="text-white/80"
-                  />
+                  <ImageIcon size={16} className="text-white/80" />
 
                   <span
                     className="
@@ -428,8 +348,7 @@ export default function ModernImageUpload({
                     text-white/70
                   "
                 >
-                  Haz clic o arrastra una nueva
-                  imagen para reemplazarla.
+                  Haz clic o arrastra una nueva imagen para reemplazarla.
                 </p>
               </div>
 
@@ -460,7 +379,6 @@ export default function ModernImageUpload({
                 "
               >
                 <Upload size={16} />
-
                 Cambiar
               </button>
             </div>
@@ -487,7 +405,6 @@ export default function ModernImageUpload({
               dark:to-slate-900
             "
           >
-
             {/* BG EFFECT */}
             <div
               className="
@@ -528,7 +445,6 @@ export default function ModernImageUpload({
                 text-center
               "
             >
-
               {/* ICON */}
               <div
                 className={`
@@ -579,7 +495,6 @@ export default function ModernImageUpload({
 
               {/* TEXT */}
               <div className="mt-7 space-y-2">
-
                 <h3
                   className="
                     text-2xl
@@ -589,9 +504,7 @@ export default function ModernImageUpload({
                     dark:text-slate-100
                   "
                 >
-                  {dragging
-                    ? "Suelta tu imagen"
-                    : "Sube una imagen"}
+                  {dragging ? "Suelta tu imagen" : "Sube una imagen"}
                 </h3>
 
                 <p
@@ -604,9 +517,8 @@ export default function ModernImageUpload({
                     dark:text-slate-400
                   "
                 >
-                  Arrastra una imagen aquí
-                  o haz clic para seleccionarla
-                  desde tu dispositivo.
+                  Arrastra una imagen aquí o haz clic para seleccionarla desde
+                  tu dispositivo.
                 </p>
               </div>
 
@@ -641,7 +553,6 @@ export default function ModernImageUpload({
                 "
               >
                 <Upload size={17} />
-
                 Seleccionar imagen
               </button>
             </div>
@@ -659,5 +570,4 @@ export default function ModernImageUpload({
       </div>
     </div>
   );
-
 }

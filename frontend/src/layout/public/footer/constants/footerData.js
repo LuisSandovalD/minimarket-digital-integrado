@@ -1,40 +1,21 @@
 export const footerLinks = [
   {
     title: "Producto",
-    links: [
-      "Características",
-      "Planes",
-      "Integraciones",
-      "API",
-    ],
+    links: ["Características", "Planes", "Integraciones", "API"],
   },
 
   {
     title: "Empresa",
-    links: [
-      "Nosotros",
-      "Blog",
-      "Carreras",
-      "Contacto",
-    ],
+    links: ["Nosotros", "Blog", "Carreras", "Contacto"],
   },
 
   {
     title: "Recursos",
-    links: [
-      "Documentación",
-      "FAQ",
-      "Soporte",
-      "Guías",
-    ],
+    links: ["Documentación", "FAQ", "Soporte", "Guías"],
   },
 
   {
     title: "Legal",
-    links: [
-      "Privacidad",
-      "Términos",
-      "Cookies",
-    ],
+    links: ["Privacidad", "Términos", "Cookies"],
   },
 ];

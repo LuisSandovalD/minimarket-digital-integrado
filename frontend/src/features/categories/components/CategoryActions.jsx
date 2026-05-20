@@ -1,20 +1,12 @@
-import {
-  Edit2,
-  Trash2,
-} from "lucide-react";
+import { Edit2, Trash2 } from "lucide-react";
 
 export default function CategoryActions({
-
   onEdit,
 
   onDelete,
-
 }) {
-
   return (
-
     <div className="flex gap-2">
-
       <button
         onClick={onEdit}
         className="
@@ -29,9 +21,7 @@ export default function CategoryActions({
           bg-amber-500/[0.06]
         "
       >
-
         <Edit2 size={16} />
-
       </button>
 
       <button
@@ -48,13 +38,8 @@ export default function CategoryActions({
           bg-red-500/[0.06]
         "
       >
-
         <Trash2 size={16} />
-
       </button>
-
     </div>
-
   );
-
 }

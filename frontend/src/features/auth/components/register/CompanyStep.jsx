@@ -1,33 +1,17 @@
-import {
-  Building2,
-  Globe,
-  MapPin,
-  ReceiptText,
-} from "lucide-react";
+import { Building2, Globe, MapPin, ReceiptText } from "lucide-react";
 
-import {
-  Input,
-} from "@/components/inputs";
+import { Input } from "@/components/inputs";
 
-import {
-  plans,
-} from "../../constants/plans";
+import { plans } from "../../constants/plans";
 
-export default function CompanyStep({
-  form,
-  handleChange,
-}) {
-
+export default function CompanyStep({ form, handleChange }) {
   return (
-
     <div className="space-y-5">
-
       {/* ======================================
           COMPANY
       ====================================== */}
 
       <div className="grid gap-5 md:grid-cols-2">
-
         <Input
           label="Empresa"
           name="companyName"
@@ -46,7 +30,6 @@ export default function CompanyStep({
           onChange={handleChange}
           icon={ReceiptText}
         />
-
       </div>
 
       {/* ======================================
@@ -80,7 +63,6 @@ export default function CompanyStep({
       ====================================== */}
 
       <div className="space-y-3">
-
         <label
           className="
             text-sm
@@ -93,9 +75,7 @@ export default function CompanyStep({
         </label>
 
         <div className="grid gap-4 md:grid-cols-3">
-
           {plans.map((plan) => (
-
             <button
               key={plan.value}
               type="button"
@@ -117,14 +97,12 @@ export default function CompanyStep({
 
                 ${
                   form.plan === plan.value
-
                     ? `
                       border-[#274c77]
                       bg-[#274c77]
                       text-white
                       shadow-xl
                     `
-
                     : `
                       border-[#d7e0e7]
                       bg-white/70
@@ -133,25 +111,13 @@ export default function CompanyStep({
                 }
               `}
             >
+              <h3 className="font-bold">{plan.label}</h3>
 
-              <h3 className="font-bold">
-                {plan.label}
-              </h3>
-
-              <p className="mt-1 text-sm opacity-80">
-                {plan.description}
-              </p>
-
+              <p className="mt-1 text-sm opacity-80">{plan.description}</p>
             </button>
-
           ))}
-
         </div>
-
       </div>
-
     </div>
-
   );
-
 }

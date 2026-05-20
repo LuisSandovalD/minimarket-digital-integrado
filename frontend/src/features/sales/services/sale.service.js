@@ -41,9 +41,7 @@ export const createSale = async (data) => {
 // ========================================
 
 export const cancelSale = async (id) => {
-  const res = await axios.put(
-    `/sales/${id}/cancel`
-  );
+  const res = await axios.put(`/sales/${id}/cancel`);
 
   return res.data;
 };
@@ -53,10 +51,7 @@ export const cancelSale = async (id) => {
 // ========================================
 
 export const returnSale = async (id, items) => {
-  const res = await axios.post(
-    `/sale/${id}/return`,
-    { items }
-  );
+  const res = await axios.post(`/sale/${id}/return`, { items });
 
   return res.data;
 };
@@ -66,9 +61,7 @@ export const returnSale = async (id, items) => {
 // ========================================
 
 export const getSalePayments = async (id) => {
-  const res = await axios.get(
-    `/sale/${id}/payments`
-  );
+  const res = await axios.get(`/sale/${id}/payments`);
 
   return res.data.data;
 };
@@ -77,19 +70,13 @@ export const getSalePayments = async (id) => {
 // GET DAILY REPORT
 // ========================================
 
-export const getDailySalesReport = async (
-  startDate,
-  endDate
-) => {
-  const res = await axios.get(
-    "/sale/reports/daily",
-    {
-      params: {
-        startDate,
-        endDate,
-      },
-    }
-  );
+export const getDailySalesReport = async (startDate, endDate) => {
+  const res = await axios.get("/sale/reports/daily", {
+    params: {
+      startDate,
+      endDate,
+    },
+  });
 
   return res.data.data;
 };
@@ -99,9 +86,7 @@ export const getDailySalesReport = async (
 // ========================================
 
 export const getTopProducts = async () => {
-  const res = await axios.get(
-    "/sale/reports/top-products"
-  );
+  const res = await axios.get("/sale/reports/top-products");
 
   return res.data.data;
 };

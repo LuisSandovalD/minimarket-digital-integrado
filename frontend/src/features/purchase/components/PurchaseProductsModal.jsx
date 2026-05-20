@@ -2,68 +2,34 @@
 // features/purchase/components/PurchaseProductsModal.jsx
 // ========================================
 
-import {
-  Package,
-  Barcode,
-  Boxes,
-  DollarSign,
-  X,
-} from "lucide-react";
+import { Package, Barcode, Boxes, DollarSign, X } from "lucide-react";
 
 import Modal from "@/components/modals/Modal";
 import HeaderModal from "@/components/modals/HeaderModal";
 import FooterModal from "@/components/modals/FooterModal";
 
-import {
-  ModernButton,
-} from "@/components/buttons";
+import { ModernButton } from "@/components/buttons";
 
-export default function PurchaseProductsModal({
-  open,
-  onClose,
-  purchase,
-}) {
-
-  const details =
-    Array.isArray(purchase?.details)
-      ? purchase.details
-      : [];
+export default function PurchaseProductsModal({ open, onClose, purchase }) {
+  const details = Array.isArray(purchase?.details) ? purchase.details : [];
 
   const formatPrice = (value) => {
-
-    return new Intl.NumberFormat(
-      "es-PE",
-      {
-        style: "currency",
-        currency: "PEN",
-      }
-    ).format(Number(value || 0));
-
+    return new Intl.NumberFormat("es-PE", {
+      style: "currency",
+      currency: "PEN",
+    }).format(Number(value || 0));
   };
 
   return (
-
-    <Modal
-      open={open}
-      onClose={onClose}
-      size="lg"
-    >
-
+    <Modal open={open} onClose={onClose} size="lg">
       {/* ========================================
        * HEADER
        * ====================================== */}
 
       <HeaderModal
-
         title="Productos de la Compra"
-
-        subtitle={
-          purchase?.purchaseNumber ||
-          "Detalle completo"
-        }
-
+        subtitle={purchase?.purchaseNumber || "Detalle completo"}
         onClose={onClose}
-
       />
 
       {/* ========================================
@@ -79,15 +45,10 @@ export default function PurchaseProductsModal({
           space-y-4
         "
       >
-
         {details.length > 0 ? (
-
           details.map((detail) => (
-
             <div
-
               key={detail.id}
-
               className="
                 rounded-2xl
                 border
@@ -98,9 +59,7 @@ export default function PurchaseProductsModal({
                 p-5
                 shadow-sm
               "
-
             >
-
               {/* PRODUCT */}
 
               <div
@@ -111,9 +70,7 @@ export default function PurchaseProductsModal({
                   gap-4
                 "
               >
-
                 <div className="flex gap-3">
-
                   <div
                     className="
                       h-12
@@ -126,16 +83,10 @@ export default function PurchaseProductsModal({
                       justify-center
                     "
                   >
-
-                    <Package
-                      size={20}
-                      className="text-slate-500"
-                    />
-
+                    <Package size={20} className="text-slate-500" />
                   </div>
 
                   <div>
-
                     <h3
                       className="
                         text-sm
@@ -144,10 +95,7 @@ export default function PurchaseProductsModal({
                         dark:text-white
                       "
                     >
-                      {
-                        detail.product?.name ||
-                        "Producto"
-                      }
+                      {detail.product?.name || "Producto"}
                     </h3>
 
                     <div
@@ -160,20 +108,10 @@ export default function PurchaseProductsModal({
                         text-slate-500
                       "
                     >
-
                       <Barcode size={13} />
-
-                      SKU:
-                      {" "}
-                      {
-                        detail.product?.sku ||
-                        "-"
-                      }
-
+                      SKU: {detail.product?.sku || "-"}
                     </div>
-
                   </div>
-
                 </div>
 
                 <div
@@ -181,7 +119,6 @@ export default function PurchaseProductsModal({
                     text-right
                   "
                 >
-
                   <p
                     className="
                       text-xs
@@ -199,13 +136,10 @@ export default function PurchaseProductsModal({
                     "
                   >
                     {formatPrice(
-                      Number(detail.quantity || 0) *
-                      Number(detail.price || 0)
+                      Number(detail.quantity || 0) * Number(detail.price || 0),
                     )}
                   </p>
-
                 </div>
-
               </div>
 
               {/* INFO */}
@@ -219,7 +153,6 @@ export default function PurchaseProductsModal({
                   gap-4
                 "
               >
-
                 {/* QUANTITY */}
 
                 <div
@@ -231,7 +164,6 @@ export default function PurchaseProductsModal({
                     p-4
                   "
                 >
-
                   <div
                     className="
                       flex
@@ -241,13 +173,9 @@ export default function PurchaseProductsModal({
                       mb-2
                     "
                   >
-
                     <Boxes size={14} />
 
-                    <span className="text-xs">
-                      Cantidad
-                    </span>
-
+                    <span className="text-xs">Cantidad</span>
                   </div>
 
                   <p
@@ -258,7 +186,6 @@ export default function PurchaseProductsModal({
                   >
                     {detail.quantity}
                   </p>
-
                 </div>
 
                 {/* PRICE */}
@@ -272,7 +199,6 @@ export default function PurchaseProductsModal({
                     p-4
                   "
                 >
-
                   <div
                     className="
                       flex
@@ -282,13 +208,9 @@ export default function PurchaseProductsModal({
                       mb-2
                     "
                   >
-
                     <DollarSign size={14} />
 
-                    <span className="text-xs">
-                      Precio Compra
-                    </span>
-
+                    <span className="text-xs">Precio Compra</span>
                   </div>
 
                   <p
@@ -299,7 +221,6 @@ export default function PurchaseProductsModal({
                   >
                     {formatPrice(detail.price)}
                   </p>
-
                 </div>
 
                 {/* STOCK */}
@@ -313,7 +234,6 @@ export default function PurchaseProductsModal({
                     p-4
                   "
                 >
-
                   <div
                     className="
                       flex
@@ -323,13 +243,9 @@ export default function PurchaseProductsModal({
                       mb-2
                     "
                   >
-
                     <Package size={14} />
 
-                    <span className="text-xs">
-                      Stock Actual
-                    </span>
-
+                    <span className="text-xs">Stock Actual</span>
                   </div>
 
                   <p
@@ -338,21 +254,13 @@ export default function PurchaseProductsModal({
                       font-semibold
                     "
                   >
-                    {
-                      detail.quantity|| 0
-                    }
+                    {detail.quantity || 0}
                   </p>
-
                 </div>
-
               </div>
-
             </div>
-
           ))
-
         ) : (
-
           <div
             className="
               py-16
@@ -360,13 +268,9 @@ export default function PurchaseProductsModal({
               text-slate-400
             "
           >
-
             No hay productos registrados
-
           </div>
-
         )}
-
       </div>
 
       {/* ========================================
@@ -374,27 +278,15 @@ export default function PurchaseProductsModal({
        * ====================================== */}
 
       <FooterModal>
-
         <div className="flex justify-end w-full">
-
           <ModernButton
-
             type="button"
-
             text="Cerrar"
-
             icon={X}
-
             onClick={onClose}
-
           />
-
         </div>
-
       </FooterModal>
-
     </Modal>
-
   );
-
 }

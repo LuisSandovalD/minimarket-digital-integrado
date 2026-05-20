@@ -1,16 +1,12 @@
 import { useEffect, useState } from "react";
 
 export default function useTheme() {
-  const [theme, setTheme] = useState(
-    localStorage.getItem("theme") || "system"
-  );
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "system");
 
   useEffect(() => {
     const root = window.document.documentElement;
 
-    const media = window.matchMedia(
-      "(prefers-color-scheme: dark)"
-    );
+    const media = window.matchMedia("(prefers-color-scheme: dark)");
 
     const applyTheme = (value) => {
       if (value === "dark") {
@@ -39,10 +35,7 @@ export default function useTheme() {
     media.addEventListener("change", handleChange);
 
     return () => {
-      media.removeEventListener(
-        "change",
-        handleChange
-      );
+      media.removeEventListener("change", handleChange);
     };
   }, [theme]);
 

@@ -3,50 +3,34 @@
 // ========================================
 
 export const ROLE_HIERARCHY = {
-
   ADMIN: {
     level: 5,
 
-    canView: [
-      "MANAGER",
-      "SUPERVISOR",
-      "EMPLOYEE",
-      "VIEWER",
-    ],
+    canView: ["MANAGER", "SUPERVISOR", "EMPLOYEE", "VIEWER"],
 
     nextRole: "MANAGER",
 
-    nextLabel:
-      "Ver Gerentes",
+    nextLabel: "Ver Gerentes",
   },
 
   MANAGER: {
     level: 4,
 
-    canView: [
-      "SUPERVISOR",
-      "EMPLOYEE",
-      "VIEWER",
-    ],
+    canView: ["SUPERVISOR", "EMPLOYEE", "VIEWER"],
 
     nextRole: "SUPERVISOR",
 
-    nextLabel:
-      "Ver Supervisores",
+    nextLabel: "Ver Supervisores",
   },
 
   SUPERVISOR: {
     level: 3,
 
-    canView: [
-      "EMPLOYEE",
-      "VIEWER",
-    ],
+    canView: ["EMPLOYEE", "VIEWER"],
 
     nextRole: "EMPLOYEE",
 
-    nextLabel:
-      "Ver Empleados",
+    nextLabel: "Ver Empleados",
   },
 
   EMPLOYEE: {
@@ -68,5 +52,4 @@ export const ROLE_HIERARCHY = {
 
     nextLabel: null,
   },
-
 };

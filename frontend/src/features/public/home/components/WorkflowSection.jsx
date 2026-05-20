@@ -1,8 +1,6 @@
 import { motion } from "framer-motion";
 
-import {
-  workflow,
-} from "../constants/workflow";
+import { workflow } from "../constants/workflow";
 
 import {
   fadeUp,
@@ -25,7 +23,6 @@ export default function WorkflowSection() {
       "
     >
       <div className="mx-auto max-w-7xl">
-
         {/* HEADER */}
         <motion.div
           variants={fadeUp}
@@ -76,7 +73,6 @@ export default function WorkflowSection() {
             "
           >
             Automatiza tu negocio
-
             <span
               className="
                 block
@@ -106,10 +102,8 @@ export default function WorkflowSection() {
               dark:text-[#cbd5e1]
             "
           >
-            Gestiona ventas, productos,
-            inventario, clientes y reportes
-            desde una plataforma moderna,
-            rápida y preparada para múltiples
+            Gestiona ventas, productos, inventario, clientes y reportes desde
+            una plataforma moderna, rápida y preparada para múltiples
             sucursales.
           </p>
         </motion.div>
@@ -139,12 +133,10 @@ export default function WorkflowSection() {
                 key={item.step}
                 variants={fadeUp}
                 transition={smoothTransition}
-
                 whileHover={{
                   y: -8,
                   scale: 1.02,
                 }}
-
                 className="
                   group
                   relative
@@ -176,7 +168,6 @@ export default function WorkflowSection() {
                       rotate: 6,
                       scale: 1.08,
                     }}
-
                     className="
                       flex
                       h-16
@@ -204,7 +195,6 @@ export default function WorkflowSection() {
                     whileHover={{
                       scale: 1.08,
                     }}
-
                     className="
                       text-5xl
                       font-black
@@ -310,7 +300,6 @@ export default function WorkflowSection() {
             );
           })}
         </motion.div>
-
       </div>
     </section>
   );

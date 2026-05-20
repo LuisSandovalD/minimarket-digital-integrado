@@ -1,11 +1,6 @@
-import {
-  ShieldCheck,
-  Sparkles,
-} from 'lucide-react';
+import { ShieldCheck, Sparkles } from "lucide-react";
 
-export default function AsideHeader({
-  isCollapsed,
-}) {
+export default function AsideHeader({ isCollapsed }) {
   return (
     <div
       className="
@@ -47,7 +42,7 @@ export default function AsideHeader({
           transition-all
           duration-300
 
-          ${isCollapsed ? 'justify-center px-2 py-5' : 'px-5 py-6'}
+          ${isCollapsed ? "justify-center px-2 py-5" : "px-5 py-6"}
         `}
       >
         {/* Logo */}

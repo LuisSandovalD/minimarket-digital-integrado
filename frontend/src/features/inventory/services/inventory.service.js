@@ -2,242 +2,137 @@
 // features/inventory/services/inventory.service.js
 // ========================================
 
-import api
-  from "../../../api/axios";
+import api from "../../../api/axios";
 
 // ========================================
 // GET INVENTORIES
 // ========================================
 
-export const getInventoriesService =
-  async () => {
+export const getInventoriesService = async () => {
+  const response = await api.get("/inventory");
 
-    const response =
-      await api.get(
-        "/inventory"
-      );
-
-    return response.data;
-
-  };
+  return response.data;
+};
 
 // ========================================
 // GET INVENTORY BY ID
 // ========================================
 
-export const getInventoryByIdService =
-  async (
-    id
-  ) => {
+export const getInventoryByIdService = async (id) => {
+  const response = await api.get(`/inventory/${id}`);
 
-    const response =
-      await api.get(
-        `/inventory/${id}`
-      );
-
-    return response.data;
-
-  };
+  return response.data;
+};
 
 // ========================================
 // GET LOW STOCK
 // ========================================
 
-export const getLowStockService =
-  async () => {
+export const getLowStockService = async () => {
+  const response = await api.get("/inventory/low-stock");
 
-    const response =
-      await api.get(
-        "/inventory/low-stock"
-      );
-
-    return response.data;
-
-  };
+  return response.data;
+};
 
 // ========================================
 // GET DAMAGED STOCK
 // ========================================
 
-export const getDamagedStockService =
-  async () => {
+export const getDamagedStockService = async () => {
+  const response = await api.get("/inventory/damaged");
 
-    const response =
-      await api.get(
-        "/inventory/damaged"
-      );
-
-    return response.data;
-
-  };
+  return response.data;
+};
 
 // ========================================
 // GET MOVEMENTS
 // ========================================
 
-export const getMovementsService =
-  async () => {
+export const getMovementsService = async () => {
+  const response = await api.get("/inventory/movements/all");
 
-    const response =
-      await api.get(
-        "/inventory/movements/all"
-      );
-
-    return response.data;
-
-  };
+  return response.data;
+};
 
 // ========================================
 // GET PRODUCT MOVEMENTS
 // ========================================
 
-export const getProductMovementsService =
-  async (
-    productId
-  ) => {
+export const getProductMovementsService = async (productId) => {
+  const response = await api.get(`/inventory/movements/product/${productId}`);
 
-    const response =
-      await api.get(
-        `/inventory/movements/product/${productId}`
-      );
-
-    return response.data;
-
-  };
+  return response.data;
+};
 
 // ========================================
 // GET BRANCH MOVEMENTS
 // ========================================
 
-export const getBranchMovementsService =
-  async (
-    branchId
-  ) => {
+export const getBranchMovementsService = async (branchId) => {
+  const response = await api.get(`/inventory/movements/branch/${branchId}`);
 
-    const response =
-      await api.get(
-        `/inventory/movements/branch/${branchId}`
-      );
-
-    return response.data;
-
-  };
+  return response.data;
+};
 
 // ========================================
 // ADD STOCK
 // ========================================
 
-export const addStockService =
-  async (
-    inventoryId,
-    body
-  ) => {
+export const addStockService = async (inventoryId, body) => {
+  const response = await api.patch(`/inventory/${inventoryId}/add-stock`, body);
 
-    const response =
-      await api.patch(
-        `/inventory/${inventoryId}/add-stock`,
-        body
-      );
-
-    return response.data;
-
-  };
+  return response.data;
+};
 
 // ========================================
 // REMOVE STOCK
 // ========================================
 
-export const removeStockService =
-  async (
-    inventoryId,
-    body
-  ) => {
+export const removeStockService = async (inventoryId, body) => {
+  const response = await api.patch(
+    `/inventory/${inventoryId}/remove-stock`,
+    body,
+  );
 
-    const response =
-      await api.patch(
-        `/inventory/${inventoryId}/remove-stock`,
-        body
-      );
-
-    return response.data;
-
-  };
+  return response.data;
+};
 
 // ========================================
 // RESERVE STOCK
 // ========================================
 
-export const reserveStockService =
-  async (
-    inventoryId,
-    body
-  ) => {
+export const reserveStockService = async (inventoryId, body) => {
+  const response = await api.patch(`/inventory/${inventoryId}/reserve`, body);
 
-    const response =
-      await api.patch(
-        `/inventory/${inventoryId}/reserve`,
-        body
-      );
-
-    return response.data;
-
-  };
+  return response.data;
+};
 
 // ========================================
 // RELEASE RESERVED STOCK
 // ========================================
 
-export const releaseReservedStockService =
-  async (
-    inventoryId,
-    body
-  ) => {
+export const releaseReservedStockService = async (inventoryId, body) => {
+  const response = await api.patch(`/inventory/${inventoryId}/release`, body);
 
-    const response =
-      await api.patch(
-        `/inventory/${inventoryId}/release`,
-        body
-      );
-
-    return response.data;
-
-  };
+  return response.data;
+};
 
 // ========================================
 // ADD DAMAGED STOCK
 // ========================================
 
-export const damagedStockService =
-  async (
-    inventoryId,
-    body
-  ) => {
+export const damagedStockService = async (inventoryId, body) => {
+  const response = await api.patch(`/inventory/${inventoryId}/damaged`, body);
 
-    const response =
-      await api.patch(
-        `/inventory/${inventoryId}/damaged`,
-        body
-      );
-
-    return response.data;
-
-  };
+  return response.data;
+};
 
 // ========================================
 // TRANSFER STOCK
 // ========================================
 
-export const transferStockService =
-  async (
-    body
-  ) => {
+export const transferStockService = async (body) => {
+  const response = await api.post("/inventory/transfer", body);
 
-    const response =
-      await api.post(
-        "/inventory/transfer",
-        body
-      );
-
-    return response.data;
-
-  };
+  return response.data;
+};

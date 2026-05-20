@@ -2,176 +2,91 @@
 // components/users/UsersTable.jsx
 // ========================================
 
-import {
-  Building2,
-  Calendar,
-  Mail,
-  Phone,
-  ChevronRight,
-} from "lucide-react";
+import { Building2, Calendar, Mail, Phone, ChevronRight } from "lucide-react";
 
-import {
-  useMemo,
-  useState,
-} from "react";
+import { useMemo, useState } from "react";
 
-import UserAvatar
-  from "./UserAvatar";
+import UserAvatar from "./UserAvatar";
 
-import UserRoleBadge
-  from "./UserRoleBadge";
+import UserRoleBadge from "./UserRoleBadge";
 
-import UserStatusBadge
-  from "./UserStatusBadge";
+import UserStatusBadge from "./UserStatusBadge";
 
-import UserActions
-  from "./UserActions";
+import UserActions from "./UserActions";
 
-import ModernButton
-  from "@/components/buttons/ModernButton";
+import ModernButton from "@/components/buttons/ModernButton";
 
-import {
-  getSession,
-} from "../../auth/services/session.service";
+import { getSession } from "../../auth/services/session.service";
 
-import {FormatDate}
-from "@/components/ui";
+import { FormatDate } from "@/components/ui";
 
 export default function UsersTable({
-
   users = [],
 
   onEdit,
 
   onToggleStatus,
-
 }) {
+  const session = getSession();
 
-  const session =
-    getSession();
+  const currentUser = session?.user;
 
-  const currentUser =
-    session?.user;
+  const currentRole = currentUser?.role;
 
-  const currentRole =
-    currentUser?.role;
-
-  const [
-
-    selectedManagerId,
-
-    setSelectedManagerId,
-
-  ] = useState(null);
+  const [selectedManagerId, setSelectedManagerId] = useState(null);
 
   // ========================================
   // FILTER USERS
   // ========================================
 
-  const filteredUsers =
-    useMemo(() => {
-
-      if (
-        currentRole === "ADMIN"
-      ) {
-
-        if (!selectedManagerId) {
-
-          return users.filter(
-            (user) =>
-              user.role ===
-              "MANAGER"
-          );
-
-        }
-
-        return users.filter(
-          (user) =>
-            user.managerId ===
-            selectedManagerId
-        );
-
+  const filteredUsers = useMemo(() => {
+    if (currentRole === "ADMIN") {
+      if (!selectedManagerId) {
+        return users.filter((user) => user.role === "MANAGER");
       }
 
-      if (
-        currentRole === "MANAGER"
-      ) {
+      return users.filter((user) => user.managerId === selectedManagerId);
+    }
 
-        if (!selectedManagerId) {
-
-          return users.filter(
-            (user) =>
-              user.role ===
-                "SUPERVISOR" &&
-              user.managerId ===
-                currentUser.id
-          );
-
-        }
-
+    if (currentRole === "MANAGER") {
+      if (!selectedManagerId) {
         return users.filter(
           (user) =>
-            user.role ===
-              "EMPLOYEE" &&
-            user.managerId ===
-              selectedManagerId
+            user.role === "SUPERVISOR" && user.managerId === currentUser.id,
         );
-
       }
 
-      if (
-        currentRole ===
-        "SUPERVISOR"
-      ) {
+      return users.filter(
+        (user) =>
+          user.role === "EMPLOYEE" && user.managerId === selectedManagerId,
+      );
+    }
 
-        return users.filter(
-          (user) =>
-            user.role ===
-              "EMPLOYEE" &&
-            user.managerId ===
-              currentUser.id
-        );
+    if (currentRole === "SUPERVISOR") {
+      return users.filter(
+        (user) => user.role === "EMPLOYEE" && user.managerId === currentUser.id,
+      );
+    }
 
-      }
-
-      return [];
-
-    }, [
-
-      users,
-      currentRole,
-      currentUser,
-      selectedManagerId,
-
-    ]);
+    return [];
+  }, [users, currentRole, currentUser, selectedManagerId]);
 
   // ========================================
   // FORMAT DATE
   // ========================================
 
-  const formatDate = (
-    date
-  ) => {
+  const formatDate = (date) => {
+    if (!date) return "-";
 
-    if (!date)
-      return "-";
-
-    return new Date(date)
-      .toLocaleDateString(
-        "es-PE",
-        {
-          year: "numeric",
-          month: "short",
-          day: "numeric",
-        }
-      );
-
+    return new Date(date).toLocaleDateString("es-PE", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
   };
 
   return (
-
     <div className="space-y-5">
-
       {/* HEADER */}
 
       <div
@@ -181,9 +96,7 @@ export default function UsersTable({
           justify-between
         "
       >
-
         <div>
-
           <h2
             className="
               text-xl
@@ -204,26 +117,17 @@ export default function UsersTable({
               text-slate-500
             "
           >
-            Gestión jerárquica
-            de usuarios
+            Gestión jerárquica de usuarios
           </p>
-
         </div>
 
         {selectedManagerId && (
-
           <ModernButton
             text="Volver"
             variant="outline"
-            onClick={() =>
-              setSelectedManagerId(
-                null
-              )
-            }
+            onClick={() => setSelectedManagerId(null)}
           />
-
         )}
-
       </div>
 
       {/* TABLE */}
@@ -242,7 +146,6 @@ export default function UsersTable({
           dark:bg-white/[0.03]
         "
       >
-
         {/* GLASS EFFECT */}
 
         <div
@@ -258,13 +161,10 @@ export default function UsersTable({
         />
 
         <div className="overflow-x-auto">
-
           <table className="w-full">
-
             {/* HEADER */}
 
             <thead>
-
               <tr
                 className="
                   border-b
@@ -272,7 +172,6 @@ export default function UsersTable({
                   bg-white/[0.03]
                 "
               >
-
                 {[
                   "Usuario",
                   "Contacto",
@@ -283,7 +182,6 @@ export default function UsersTable({
                   "Creado",
                   "",
                 ].map((item) => (
-
                   <th
                     key={item}
                     className="
@@ -301,84 +199,67 @@ export default function UsersTable({
                   >
                     {item}
                   </th>
-
                 ))}
-
               </tr>
-
             </thead>
 
             {/* BODY */}
 
             <tbody>
-
-              {filteredUsers.map(
-                (user) => (
-
-                  <tr
-                    key={user.id}
-                    className="
+              {filteredUsers.map((user) => (
+                <tr
+                  key={user.id}
+                  className="
                       border-b
                       border-white/[0.05]
                       transition-all
                       duration-300
                       hover:bg-white/[0.03]
                     "
-                  >
+                >
+                  {/* USER */}
 
-                    {/* USER */}
-
-                    <td className="px-6 py-5">
-
-                      <div
-                        className="
+                  <td className="px-6 py-5">
+                    <div
+                      className="
                           flex
                           items-center
                           gap-4
                         "
-                      >
+                    >
+                      <UserAvatar user={user} />
 
-                        <UserAvatar
-                          user={user}
-                        />
-
-                        <div>
-
-                          <h3
-                            className="
+                      <div>
+                        <h3
+                          className="
                               text-sm
                               font-semibold
                               text-slate-800
 
                               dark:text-white
                             "
-                          >
-                            {user.name}
-                          </h3>
+                        >
+                          {user.name}
+                        </h3>
 
-                          <p
-                            className="
+                        <p
+                          className="
                               text-xs
                               text-slate-500
                             "
-                          >
-                            @{user.slug}
-                          </p>
-
-                        </div>
-
+                        >
+                          @{user.slug}
+                        </p>
                       </div>
+                    </div>
+                  </td>
 
-                    </td>
+                  {/* CONTACT */}
 
-                    {/* CONTACT */}
-
-                    <td className="px-6 py-5">
-
-                      <div className="space-y-2">
-
-                        <div
-                          className="
+                  <td className="px-6 py-5">
+                    <div className="space-y-2">
+                      <div
+                        className="
                             flex
                             items-center
                             gap-2
@@ -387,58 +268,41 @@ export default function UsersTable({
 
                             dark:text-slate-300
                           "
-                        >
+                      >
+                        <Mail size={14} />
 
-                          <Mail size={14} />
+                        <span>{user.email}</span>
+                      </div>
 
-                          <span>
-                            {user.email}
-                          </span>
-
-                        </div>
-
-                        {user.phone && (
-
-                          <div
-                            className="
+                      {user.phone && (
+                        <div
+                          className="
                               flex
                               items-center
                               gap-2
                               text-sm
                               text-slate-500
                             "
-                          >
+                        >
+                          <Phone size={14} />
 
-                            <Phone size={14} />
+                          <span>{user.phone}</span>
+                        </div>
+                      )}
+                    </div>
+                  </td>
 
-                            <span>
-                              {user.phone}
-                            </span>
+                  {/* ROLE */}
 
-                          </div>
+                  <td className="px-6 py-5">
+                    <UserRoleBadge role={user.role} />
+                  </td>
 
-                        )}
+                  {/* BRANCH */}
 
-                      </div>
-
-                    </td>
-
-                    {/* ROLE */}
-
-                    <td className="px-6 py-5">
-
-                      <UserRoleBadge
-                        role={user.role}
-                      />
-
-                    </td>
-
-                    {/* BRANCH */}
-
-                    <td className="px-6 py-5">
-
-                      <div
-                        className="
+                  <td className="px-6 py-5">
+                    <div
+                      className="
                           flex
                           items-center
                           gap-2
@@ -447,145 +311,85 @@ export default function UsersTable({
 
                           dark:text-slate-300
                         "
-                      >
+                    >
+                      <Building2 size={15} />
 
-                        <Building2
-                          size={15}
-                        />
+                      <span>{user.branch?.name || "Sin sucursal"}</span>
+                    </div>
+                  </td>
 
-                        <span>
-                          {
-                            user.branch
-                              ?.name ||
-                            "Sin sucursal"
-                          }
-                        </span>
+                  {/* STATUS */}
 
-                      </div>
+                  <td className="px-6 py-5">
+                    <UserStatusBadge active={user.isActive} />
+                  </td>
 
-                    </td>
+                  {/* LAST LOGIN */}
 
-                    {/* STATUS */}
-
-                    <td className="px-6 py-5">
-
-                      <UserStatusBadge
-                        active={
-                          user.isActive
-                        }
-                      />
-
-                    </td>
-
-                    {/* LAST LOGIN */}
-
-                    <td className="px-6 py-5">
-
-                      <span
-                        className="
+                  <td className="px-6 py-5">
+                    <span
+                      className="
                           text-sm
                           text-slate-500
                         "
-                      >
-                        {
-                          formatDate(
-                            user.lastLogin
-                          )
-                        }
-                      </span>
+                    >
+                      {formatDate(user.lastLogin)}
+                    </span>
+                  </td>
 
-                    </td>
+                  {/* CREATED */}
 
-                    {/* CREATED */}
-
-                    <td className="px-6 py-5">
-
-                      <div
-                        className="
+                  <td className="px-6 py-5">
+                    <div
+                      className="
                           flex
                           items-center
                           gap-2
                           text-sm
                           text-slate-500
                         "
-                      >
+                    >
+                      <Calendar size={14} />
 
-                        <Calendar
-                          size={14}
-                        />
+                      <span>{formatDate(user.createdAt)}</span>
+                    </div>
+                  </td>
 
-                        <span>
-                          {
-                            formatDate(
-                              user.createdAt
-                            )
-                          }
-                        </span>
+                  {/* ACTIONS */}
 
-                      </div>
-
-                    </td>
-
-                    {/* ACTIONS */}
-
-                    <td className="px-6 py-5">
-
-                      <div
-                        className="
+                  <td className="px-6 py-5">
+                    <div
+                      className="
                           flex
                           items-center
                           justify-end
                           gap-2
                         "
-                      >
-                        {(
-                          user.role === "MANAGER" ||
-                          user.role === "SUPERVISOR"
-                        ) && (
-
-                          <ModernButton
-                            icon={ChevronRight}
-                            variant="ghost"
-                            text="Ver Supervisores"
-                            size="sm"
-                            onClick={() =>
-                              setSelectedManagerId(
-                                user.id
-                              )
-                            }
-                          />
-
-                        )}
-
-                        <UserActions
-                          user={user}
-                          onEdit={
-                            onEdit
-                          }
-                          onToggleStatus={
-                            onToggleStatus
-                          }
+                    >
+                      {(user.role === "MANAGER" ||
+                        user.role === "SUPERVISOR") && (
+                        <ModernButton
+                          icon={ChevronRight}
+                          variant="ghost"
+                          text="Ver Supervisores"
+                          size="sm"
+                          onClick={() => setSelectedManagerId(user.id)}
                         />
+                      )}
 
-                      </div>
-
-                    </td>
-
-                  </tr>
-
-                )
-              )}
-
+                      <UserActions
+                        user={user}
+                        onEdit={onEdit}
+                        onToggleStatus={onToggleStatus}
+                      />
+                    </div>
+                  </td>
+                </tr>
+              ))}
             </tbody>
-
           </table>
-
         </div>
-
       </div>
-
     </div>
-
   );
-
 }

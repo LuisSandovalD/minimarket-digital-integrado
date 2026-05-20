@@ -1,8 +1,4 @@
-import {
-  BarChart3,
-  Boxes,
-  ShieldCheck,
-} from "lucide-react";
+import { BarChart3, Boxes, ShieldCheck } from "lucide-react";
 
 export const heroFeatures = [
   {

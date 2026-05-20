@@ -12,8 +12,6 @@ import {
 import { features } from "../constants/performance";
 
 export default function PerformanceSection() {
- 
-
   return (
     <section
       className="
@@ -41,10 +39,8 @@ export default function PerformanceSection() {
       />
 
       <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
-        
         {/* TOP SECTION - CONTENT + METRIC */}
         <div className="grid gap-8 lg:gap-12 lg:grid-cols-12 items-start mb-12">
-          
           {/* LEFT - CONTENT */}
           <div className="lg:col-span-6 space-y-6">
             {/* BADGE */}
@@ -117,9 +113,9 @@ export default function PerformanceSection() {
                 max-w-lg
               "
             >
-              Optimizado para empresas modernas, operaciones en tiempo real
-              y grandes volúmenes de información sin perder velocidad,
-              estabilidad ni seguridad.
+              Optimizado para empresas modernas, operaciones en tiempo real y
+              grandes volúmenes de información sin perder velocidad, estabilidad
+              ni seguridad.
             </p>
 
             {/* CTA */}

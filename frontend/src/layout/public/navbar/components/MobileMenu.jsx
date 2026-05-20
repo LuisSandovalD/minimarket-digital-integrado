@@ -4,11 +4,7 @@ import MobileMenuLinks from "./MobileMenuLinks";
 
 import MobileMenuFooter from "./MobileMenuFooter";
 
-export default function MobileMenu({
-  open,
-  onClose,
-  links,
-}) {
+export default function MobileMenu({ open, onClose, links }) {
   return (
     <>
       {/* BACKDROP */}
@@ -25,11 +21,7 @@ export default function MobileMenu({
           
           dark:bg-black/50
           
-          ${
-            open
-              ? "visible opacity-100"
-              : "invisible opacity-0"
-          }
+          ${open ? "visible opacity-100" : "invisible opacity-0"}
         `}
       />
 
@@ -55,11 +47,7 @@ export default function MobileMenu({
           dark:border-[#365d86]/30
           dark:bg-[#0f172a]/95
 
-          ${
-            open
-              ? "translate-x-0"
-              : "translate-x-full"
-          }
+          ${open ? "translate-x-0" : "translate-x-full"}
         `}
       >
         {/* HEADER */}

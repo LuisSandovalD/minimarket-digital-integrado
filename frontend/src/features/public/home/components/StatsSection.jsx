@@ -1,15 +1,8 @@
 import { motion } from "framer-motion";
 
-import {
-  Building2,
-  ShoppingCart,
-  ShieldCheck,
-  TrendingUp,
-} from "lucide-react";
+import { Building2, ShoppingCart, ShieldCheck, TrendingUp } from "lucide-react";
 
-import {
-  stats,
-} from "../constants/stats";
+import { stats } from "../constants/stats";
 
 import {
   fadeUp,
@@ -20,12 +13,7 @@ import {
   hoverRotate,
 } from "@/components/animations/";
 
-const icons = [
-  Building2,
-  ShoppingCart,
-  ShieldCheck,
-  TrendingUp,
-];
+const icons = [Building2, ShoppingCart, ShieldCheck, TrendingUp];
 
 export default function StatsSection() {
   return (
@@ -41,7 +29,6 @@ export default function StatsSection() {
       "
     >
       <div className="mx-auto max-w-7xl">
-
         {/* HEADER */}
         <motion.div
           variants={fadeUp}
@@ -91,7 +78,6 @@ export default function StatsSection() {
             "
           >
             Empresas que ya
-
             <span
               className="
                 block
@@ -121,10 +107,8 @@ export default function StatsSection() {
               dark:text-[#cbd5e1]
             "
           >
-            Un ERP POS moderno para
-            gestionar ventas, inventario,
-            reportes y múltiples sucursales
-            desde un solo sistema.
+            Un ERP POS moderno para gestionar ventas, inventario, reportes y
+            múltiples sucursales desde un solo sistema.
           </p>
         </motion.div>
 
@@ -151,9 +135,7 @@ export default function StatsSection() {
                 key={index}
                 variants={fadeUp}
                 transition={smoothTransition}
-
                 whileHover={hoverLift}
-
                 className="
                   group
                   relative
@@ -198,7 +180,6 @@ export default function StatsSection() {
                 {/* ICON */}
                 <motion.div
                   whileHover={hoverRotate}
-
                   className="
                     relative
                     z-10
@@ -230,21 +211,17 @@ export default function StatsSection() {
                     opacity: 0,
                     y: 20,
                   }}
-
                   whileInView={{
                     opacity: 1,
                     y: 0,
                   }}
-
                   transition={{
                     duration: 0.6,
                     delay: 0.2,
                   }}
-
                   viewport={{
                     once: true,
                   }}
-
                   className="
                     relative
                     z-10

@@ -1,16 +1,9 @@
-import {
-  Moon,
-  Sun,
-  Monitor,
-} from "lucide-react";
+import { Moon, Sun, Monitor } from "lucide-react";
 
 import useTheme from "./useTheme";
 
 export default function ThemeToggle() {
-  const {
-    theme,
-    setTheme,
-  } = useTheme();
+  const { theme, setTheme } = useTheme();
 
   const themes = [
     {
@@ -29,24 +22,16 @@ export default function ThemeToggle() {
     },
   ];
 
-  const currentIndex = themes.findIndex(
-    (item) => item.value === theme
-  );
+  const currentIndex = themes.findIndex((item) => item.value === theme);
 
-  const currentTheme =
-    themes[currentIndex];
+  const currentTheme = themes[currentIndex];
 
-  const CurrentIcon =
-    currentTheme.icon;
+  const CurrentIcon = currentTheme.icon;
 
   const handleToggle = () => {
-    const nextIndex =
-      (currentIndex + 1) %
-      themes.length;
+    const nextIndex = (currentIndex + 1) % themes.length;
 
-    setTheme(
-      themes[nextIndex].value
-    );
+    setTheme(themes[nextIndex].value);
   };
 
   return (

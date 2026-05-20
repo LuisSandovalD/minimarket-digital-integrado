@@ -11,8 +11,7 @@ export default function FooterBottom() {
         text-zinc-500
       "
     >
-      © 2026 ERP POS Multiempresa.
-      Todos los derechos reservados.
+      © 2026 ERP POS Multiempresa. Todos los derechos reservados.
     </div>
   );
 }

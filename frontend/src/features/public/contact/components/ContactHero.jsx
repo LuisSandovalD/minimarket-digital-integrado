@@ -1,9 +1,4 @@
-import {
-  Mail,
-  Phone,
-  MapPin,
-  ArrowUpRight,
-} from "lucide-react";
+import { Mail, Phone, MapPin, ArrowUpRight } from "lucide-react";
 
 export default function ContactHero() {
   return (
@@ -26,9 +21,8 @@ export default function ContactHero() {
 
       "
     >
-     {/* BACKGROUND */}
+      {/* BACKGROUND */}
       <div className="absolute inset-0 -z-20">
-        
         {/* IMAGE */}
         <img
           src="https://images.unsplash.com/photo-1556740749-887f6717d7e4?q=80&w=2070&auto=format&fit=crop"
@@ -109,7 +103,6 @@ export default function ContactHero() {
             "
           >
             <Mail size={15} />
-
             Contacto Empresarial
           </div>
 
@@ -131,7 +124,6 @@ export default function ContactHero() {
             "
           >
             Hablemos sobre
-
             <span
               className="
                 mt-3
@@ -164,9 +156,9 @@ export default function ContactHero() {
               dark:text-[#cbd5e1]
             "
           >
-            Nuestro equipo está listo para ayudarte a implementar
-            soluciones empresariales modernas, optimizar procesos y
-            llevar la gestión de tu negocio al siguiente nivel.
+            Nuestro equipo está listo para ayudarte a implementar soluciones
+            empresariales modernas, optimizar procesos y llevar la gestión de tu
+            negocio al siguiente nivel.
           </p>
 
           {/* BUTTONS */}
@@ -210,7 +202,6 @@ export default function ContactHero() {
               "
             >
               Contactar ahora
-
               <ArrowUpRight size={18} />
             </button>
 
@@ -405,7 +396,6 @@ export default function ContactHero() {
             <img
               src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=2070&auto=format&fit=crop"
               alt="Contacto empresarial"
-
               className="
                 h-[780px]
                 w-full
@@ -473,8 +463,8 @@ export default function ContactHero() {
                   text-[#dbe4ee]
                 "
               >
-                Nuestro equipo responde rápidamente para ayudarte
-                con implementación, soporte y soluciones empresariales.
+                Nuestro equipo responde rápidamente para ayudarte con
+                implementación, soporte y soluciones empresariales.
               </p>
 
               <div

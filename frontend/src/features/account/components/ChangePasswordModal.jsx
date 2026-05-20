@@ -1,10 +1,6 @@
 import { useMemo, useState } from "react";
 import { ShieldCheck, Check, X } from "lucide-react";
-import {
-  Modal,
-  HeaderModal,
-  FooterModal,
-} from "@/components/modals";
+import { Modal, HeaderModal, FooterModal } from "@/components/modals";
 import { ModernButton } from "@/components/buttons";
 import PasswordInput from "@/components/inputs/PasswordInput";
 
@@ -22,16 +18,19 @@ export default function ChangePasswordModal({
 
   const [errors, setErrors] = useState({});
 
-  const validations = useMemo(() => ({
-    length: form.newPassword.length >= 8,
-    uppercase: /[A-Z]/.test(form.newPassword),
-    number: /[0-9]/.test(form.newPassword),
-    special: /[^A-Za-z0-9]/.test(form.newPassword),
-    match:
-      form.newPassword &&
-      form.confirmPassword &&
-      form.newPassword === form.confirmPassword,
-  }), [form]);
+  const validations = useMemo(
+    () => ({
+      length: form.newPassword.length >= 8,
+      uppercase: /[A-Z]/.test(form.newPassword),
+      number: /[0-9]/.test(form.newPassword),
+      special: /[^A-Za-z0-9]/.test(form.newPassword),
+      match:
+        form.newPassword &&
+        form.confirmPassword &&
+        form.newPassword === form.confirmPassword,
+    }),
+    [form],
+  );
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -115,10 +114,16 @@ export default function ChangePasswordModal({
               Requisitos
             </p>
             <div className="space-y-2">
-              <ValidationCheck valid={validations.length} text="8+ caracteres" />
+              <ValidationCheck
+                valid={validations.length}
+                text="8+ caracteres"
+              />
               <ValidationCheck valid={validations.uppercase} text="Mayúscula" />
               <ValidationCheck valid={validations.number} text="Número" />
-              <ValidationCheck valid={validations.special} text="Carácter especial" />
+              <ValidationCheck
+                valid={validations.special}
+                text="Carácter especial"
+              />
             </div>
           </div>
         )}
@@ -126,11 +131,7 @@ export default function ChangePasswordModal({
 
       <FooterModal>
         <div className="flex gap-3 sm:justify-end w-full">
-          <ModernButton
-            text="Cancelar"
-            variant="outline"
-            onClick={onClose}
-          />
+          <ModernButton text="Cancelar" variant="outline" onClick={onClose} />
           <ModernButton
             text={loading ? "Guardando..." : "Actualizar"}
             icon={ShieldCheck}

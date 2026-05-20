@@ -2,146 +2,89 @@
 // features/movements/hooks/useMovements.js
 // ========================================
 
-import {
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { useEffect, useMemo, useState } from "react";
 
-import {
-  getMovementsService,
-} from "../../inventory/services/inventory.service";
+import { getMovementsService } from "../../inventory/services/inventory.service";
 
 export default function useMovements() {
-
   // ========================================
   // STATES
   // ========================================
 
-  const [
-    movements,
-    setMovements,
-  ] = useState([]);
+  const [movements, setMovements] = useState([]);
 
-  const [
-    loading,
-    setLoading,
-  ] = useState(true);
+  const [loading, setLoading] = useState(true);
 
-  const [
-    search,
-    setSearch,
-  ] = useState("");
+  const [search, setSearch] = useState("");
 
   // ========================================
   // FETCH
   // ========================================
 
   useEffect(() => {
-
+    // eslint-disable-next-line react-hooks/immutability
     fetchMovements();
-
   }, []);
 
   // ========================================
   // FETCH MOVEMENTS
   // ========================================
 
-  const fetchMovements =
-    async () => {
+  const fetchMovements = async () => {
+    try {
+      setLoading(true);
 
-      try {
+      const response = await getMovementsService();
 
-        setLoading(true);
+      const movementsData = Array.isArray(response)
+        ? response
+        : Array.isArray(response?.data)
+          ? response.data
+          : Array.isArray(response?.data?.data)
+            ? response.data.data
+            : [];
 
-        const response =
-          await getMovementsService();
+      setMovements(movementsData);
+    } catch (error) {
+      console.error(error);
 
-        const movementsData =
-          Array.isArray(response)
-            ? response
-            : Array.isArray(response?.data)
-              ? response.data
-              : Array.isArray(response?.data?.data)
-                ? response.data.data
-                : [];
-
-        setMovements(
-          movementsData
-        );
-
-      } catch (error) {
-
-        console.error(error);
-
-        setMovements([]);
-
-      } finally {
-
-        setLoading(false);
-
-      }
-
-    };
+      setMovements([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // ========================================
   // FILTERED
   // ========================================
 
-  const filteredMovements =
-    useMemo(() => {
+  const filteredMovements = useMemo(() => {
+    if (!Array.isArray(movements)) {
+      return [];
+    }
 
-      if (
-        !Array.isArray(movements)
-      ) {
-        return [];
-      }
+    return movements.filter((movement) => {
+      const product = movement?.product?.name?.toLowerCase() || "";
 
-      return movements.filter(
-        movement => {
+      const sku = movement?.product?.sku?.toLowerCase() || "";
 
-          const product =
-            movement?.product?.name
-              ?.toLowerCase()
-              || "";
+      const type = movement?.type?.toLowerCase() || "";
 
-          const sku =
-            movement?.product?.sku
-              ?.toLowerCase()
-              || "";
+      const branch = movement?.branch?.name?.toLowerCase() || "";
 
-          const type =
-            movement?.type
-              ?.toLowerCase()
-              || "";
+      const searchValue = search.toLowerCase();
 
-          const branch =
-            movement?.branch?.name
-              ?.toLowerCase()
-              || "";
-
-          const searchValue =
-            search.toLowerCase();
-
-          return (
-            product.includes(searchValue) ||
-            sku.includes(searchValue) ||
-            type.includes(searchValue) ||
-            branch.includes(searchValue)
-          );
-
-        }
+      return (
+        product.includes(searchValue) ||
+        sku.includes(searchValue) ||
+        type.includes(searchValue) ||
+        branch.includes(searchValue)
       );
-
-    }, [
-      movements,
-      search,
-    ]);
+    });
+  }, [movements, search]);
 
   return {
-
-    movements:
-      filteredMovements,
+    movements: filteredMovements,
 
     loading,
 
@@ -149,9 +92,6 @@ export default function useMovements() {
 
     setSearch,
 
-    refetch:
-      fetchMovements,
-
+    refetch: fetchMovements,
   };
-
 }

@@ -3,11 +3,7 @@
 // ========================================
 
 export const BRANCH_STATUS = {
+  ACTIVE: "Activa",
 
-  ACTIVE:
-    "Activa",
-
-  INACTIVE:
-    "Inactiva",
-
+  INACTIVE: "Inactiva",
 };

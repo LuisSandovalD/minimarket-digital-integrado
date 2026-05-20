@@ -14,25 +14,15 @@ import {
   Globe,
 } from "lucide-react";
 
-import {
-  Modal,
-  HeaderModal,
-  FooterModal,
-} from "@/components/modals";
+import { Modal, HeaderModal, FooterModal } from "@/components/modals";
 
-import { Input }
-  from "@/components/inputs";
+import { Input } from "@/components/inputs";
 
-import {
-  ModernButton,
-  SubmitButton,
-} from "@/components/buttons";
+import { ModernButton, SubmitButton } from "@/components/buttons";
 
-import ModernImageUpload
-  from "@/components/ui/ModernImageUpload";
+import ModernImageUpload from "@/components/ui/ModernImageUpload";
 
-import useBranchForm
-  from "../hooks/useBranchForm";
+import useBranchForm from "../hooks/useBranchForm";
 
 export default function BranchModal({
   open,
@@ -40,9 +30,7 @@ export default function BranchModal({
   onSuccess,
   branch = null,
 }) {
-
   const {
-
     loading,
 
     formData,
@@ -52,7 +40,6 @@ export default function BranchModal({
     handleChange,
 
     handleSubmit,
-
   } = useBranchForm({
     branch,
     onClose,
@@ -60,23 +47,13 @@ export default function BranchModal({
   });
 
   return (
-
-    <Modal
-      open={open}
-      onClose={onClose}
-      size="full"
-    >
-
+    <Modal open={open} onClose={onClose} size="full">
       {/* ========================================
        * HEADER
        * ====================================== */}
 
       <HeaderModal
-        title={
-          isEdit
-            ? "Editar Sucursal"
-            : "Nueva Sucursal"
-        }
+        title={isEdit ? "Editar Sucursal" : "Nueva Sucursal"}
         subtitle={
           isEdit
             ? "Actualiza la información de la sucursal."
@@ -96,7 +73,6 @@ export default function BranchModal({
           flex-col
         "
       >
-
         {/* BODY */}
 
         <div
@@ -107,7 +83,6 @@ export default function BranchModal({
             py-5
           "
         >
-
           <div
             className="
               grid
@@ -116,15 +91,12 @@ export default function BranchModal({
               xl:grid-cols-[340px_1fr]
             "
           >
-
             {/* ========================================
              * IMAGE SECTION
              * ====================================== */}
 
             <div className="space-y-4">
-
               <div>
-
                 <h3
                   className="
                     text-sm
@@ -144,10 +116,8 @@ export default function BranchModal({
                     dark:text-slate-400
                   "
                 >
-                  Sube una imagen representativa
-                  de la sucursal.
+                  Sube una imagen representativa de la sucursal.
                 </p>
-
               </div>
 
               <ModernImageUpload
@@ -162,7 +132,6 @@ export default function BranchModal({
                 }
                 height="h-90"
               />
-
             </div>
 
             {/* ========================================
@@ -170,7 +139,6 @@ export default function BranchModal({
              * ====================================== */}
 
             <div className="space-y-6">
-
               {/* ========================================
                * GENERAL INFO
                * ====================================== */}
@@ -188,9 +156,7 @@ export default function BranchModal({
                   p-5
                 "
               >
-
                 <div className="mb-5">
-
                   <h3
                     className="
                       text-sm
@@ -210,10 +176,8 @@ export default function BranchModal({
                       dark:text-slate-400
                     "
                   >
-                    Datos principales de
-                    identificación.
+                    Datos principales de identificación.
                   </p>
-
                 </div>
 
                 <div
@@ -224,7 +188,6 @@ export default function BranchModal({
                     md:grid-cols-2
                   "
                 >
-
                   <Input
                     label="Nombre"
                     name="name"
@@ -280,14 +243,12 @@ export default function BranchModal({
                     icon={Globe}
                   />
                 </div>
-
               </div>
 
-             
-               <div className="grid lg:grid-cols-2 md:grid-cols-1 gap-2">
-                   {/* ========================================
-                * DESCRIPTION
-                * ====================================== */}
+              <div className="grid lg:grid-cols-2 md:grid-cols-1 gap-2">
+                {/* ========================================
+                 * DESCRIPTION
+                 * ====================================== */}
                 <div
                   className="
                     rounded-3xl
@@ -301,9 +262,7 @@ export default function BranchModal({
                     p-5
                   "
                 >
-
                   <div className="mb-5">
-
                     <h3
                       className="
                         text-sm
@@ -323,10 +282,8 @@ export default function BranchModal({
                         dark:text-slate-400
                       "
                     >
-                      Información adicional
-                      sobre la sucursal.
+                      Información adicional sobre la sucursal.
                     </p>
-
                   </div>
 
                   <Input
@@ -337,12 +294,11 @@ export default function BranchModal({
                     placeholder="Descripción breve"
                     icon={FileText}
                   />
-
                 </div>
 
                 {/* ========================================
-                * ADDRESS
-                * ====================================== */}
+                 * ADDRESS
+                 * ====================================== */}
 
                 <div
                   className="
@@ -357,9 +313,7 @@ export default function BranchModal({
                     p-5
                   "
                 >
-
                   <div className="mb-5">
-
                     <h3
                       className="
                         text-sm
@@ -379,10 +333,8 @@ export default function BranchModal({
                         dark:text-slate-400
                       "
                     >
-                      Dirección principal de la
-                      sucursal.
+                      Dirección principal de la sucursal.
                     </p>
-
                   </div>
 
                   <Input
@@ -393,15 +345,10 @@ export default function BranchModal({
                     placeholder="Av. Principal 123"
                     icon={MapPin}
                   />
-
                 </div>
-
-               </div>
-
+              </div>
             </div>
-
           </div>
-
         </div>
 
         {/* ========================================
@@ -409,7 +356,6 @@ export default function BranchModal({
          * ====================================== */}
 
         <FooterModal>
-
           <div
             className="
               flex
@@ -420,7 +366,6 @@ export default function BranchModal({
               pb-5
             "
           >
-
             <div
               className="
                 hidden
@@ -430,8 +375,7 @@ export default function BranchModal({
                 sm:block
               "
             >
-              La información será guardada
-              automáticamente en la sucursal.
+              La información será guardada automáticamente en la sucursal.
             </div>
 
             <div
@@ -442,7 +386,6 @@ export default function BranchModal({
                 gap-3
               "
             >
-
               <ModernButton
                 type="button"
                 text="Cancelar"
@@ -452,24 +395,13 @@ export default function BranchModal({
               />
 
               <SubmitButton
-                text={
-                  isEdit
-                    ? "Guardar Cambios"
-                    : "Crear Sucursal"
-                }
+                text={isEdit ? "Guardar Cambios" : "Crear Sucursal"}
                 loading={loading}
               />
-
             </div>
-
           </div>
-
         </FooterModal>
-
       </form>
-
     </Modal>
-
   );
-
 }

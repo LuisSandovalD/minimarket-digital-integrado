@@ -15,17 +15,11 @@ export const getNotifications = async () => {
     const response = await api.get(BASE_URL);
 
     // Maneja tanto response.data.data como response.data
-    const data =
-      response.data?.data ||
-      response.data ||
-      [];
+    const data = response.data?.data || response.data || [];
 
     return Array.isArray(data) ? data : [];
   } catch (error) {
-    console.error(
-      "Error fetching notifications:",
-      error
-    );
+    console.error("Error fetching notifications:", error);
     throw error;
   }
 };
@@ -34,20 +28,12 @@ export const getNotifications = async () => {
 // MARK AS READ
 // ========================================
 
-export const markNotificationAsRead = async (
-  id
-) => {
+export const markNotificationAsRead = async (id) => {
   try {
-    const response = await api.put(
-      `${BASE_URL}/${id}/read`,
-      {}
-    );
+    const response = await api.put(`${BASE_URL}/${id}/read`, {});
     return response.data;
   } catch (error) {
-    console.error(
-      "Error marking notification as read:",
-      error
-    );
+    console.error("Error marking notification as read:", error);
     throw error;
   }
 };
@@ -58,15 +44,10 @@ export const markNotificationAsRead = async (
 
 export const deleteNotification = async (id) => {
   try {
-    const response = await api.delete(
-      `${BASE_URL}/${id}`
-    );
+    const response = await api.delete(`${BASE_URL}/${id}`);
     return response.data;
   } catch (error) {
-    console.error(
-      "Error deleting notification:",
-      error
-    );
+    console.error("Error deleting notification:", error);
     throw error;
   }
 };
@@ -80,10 +61,7 @@ export const clearAllNotifications = async () => {
     const response = await api.delete(BASE_URL);
     return response.data;
   } catch (error) {
-    console.error(
-      "Error clearing notifications:",
-      error
-    );
+    console.error("Error clearing notifications:", error);
     throw error;
   }
 };

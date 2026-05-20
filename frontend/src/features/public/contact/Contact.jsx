@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   ContactHero,
   ContactInfoCards,
@@ -6,8 +6,8 @@ import {
   ContactMap,
   ContactFAQ,
   ContactSocials,
-} from './components';
-import { PageGlow } from '@/components/ui';
+} from "./components";
+import { PageGlow } from "@/components/ui";
 
 const Contact = () => {
   return (

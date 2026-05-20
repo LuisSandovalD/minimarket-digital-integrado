@@ -19,7 +19,7 @@ import {
   InventoryCTA,
 } from "./components";
 
-import {PageGlow} from "@/components/ui";
+import { PageGlow } from "@/components/ui";
 
 export default function Inventory() {
   return (

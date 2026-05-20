@@ -2,17 +2,13 @@
 // components/layout/AsideFooter.jsx
 // ========================================
 
-import { useState }
-  from "react";
+import { useState } from "react";
 
-import { LogOut }
-  from "lucide-react";
+import { LogOut } from "lucide-react";
 
-import UserAvatar
-  from "@/components/avatar/UserAvatar";
+import UserAvatar from "@/components/avatar/UserAvatar";
 
-import AccountModal
-  from "@/features/account/components/AccountModal";
+import AccountModal from "@/features/account/components/AccountModal";
 
 export default function AsideFooter({
   isCollapsed,
@@ -21,14 +17,9 @@ export default function AsideFooter({
   branch,
   onLogout,
 }) {
-
-  const [
-    openProfile,
-    setOpenProfile,
-  ] = useState(false);
+  const [openProfile, setOpenProfile] = useState(false);
 
   return (
-
     <div
       className="
         border-t
@@ -38,13 +29,12 @@ export default function AsideFooter({
         p-3
       "
     >
-
       {/* ========================================
        * USER CARD
        * ====================================== */}
 
       <div
-          className="
+        className="
             rounded-3xl
             border border-slate-200/70 dark:border-slate-800/70
 
@@ -55,19 +45,15 @@ export default function AsideFooter({
 
             p-3
           "
-        >
-
+      >
         <UserAvatar
           user={user}
           size="md"
           showInfo={!isCollapsed}
           showEmail={!isCollapsed}
           showStatus
-          onClick={() =>
-            setOpenProfile(true)
-          }
+          onClick={() => setOpenProfile(true)}
         />
-
       </div>
 
       {/* ========================================
@@ -92,7 +78,6 @@ export default function AsideFooter({
           dark:hover:bg-red-950/20
         "
       >
-
         <div
           className="
             flex
@@ -107,20 +92,16 @@ export default function AsideFooter({
             dark:bg-slate-800
           "
         >
-
           <LogOut
             className="
               h-4
               w-4
             "
           />
-
         </div>
 
         {!isCollapsed && (
-
           <div>
-
             <div
               className="
                 text-sm
@@ -138,11 +119,8 @@ export default function AsideFooter({
             >
               Salir del sistema
             </div>
-
           </div>
-
         )}
-
       </button>
 
       {/* ========================================
@@ -151,16 +129,11 @@ export default function AsideFooter({
 
       <AccountModal
         open={openProfile}
-        onClose={() =>
-          setOpenProfile(false)
-        }
+        onClose={() => setOpenProfile(false)}
         user={user}
         company={company}
         branch={branch}
       />
-
     </div>
-
   );
-
 }

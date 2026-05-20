@@ -126,9 +126,7 @@ export default function InventoryCTA() {
               "
             >
               Optimiza el control
-              <span className="block text-[#dbeafe]">
-                de tu inventario
-              </span>
+              <span className="block text-[#dbeafe]">de tu inventario</span>
             </h2>
 
             <p
@@ -143,8 +141,8 @@ export default function InventoryCTA() {
                 text-[#e7ecef]
               "
             >
-              Gestiona productos, almacenes y movimientos desde
-              una plataforma moderna, rápida y escalable.
+              Gestiona productos, almacenes y movimientos desde una plataforma
+              moderna, rápida y escalable.
             </p>
           </div>
 

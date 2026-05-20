@@ -76,8 +76,7 @@ export default function InventoryDevices() {
                   text-transparent
                 "
               >
-              desde cualquier lugar
-
+                desde cualquier lugar
               </span>
             </h2>
 
@@ -93,9 +92,9 @@ export default function InventoryDevices() {
                 dark:text-[#cbd5e1]
               "
             >
-              Compatible con computadoras, tablets y dispositivos
-              móviles para administrar productos, stock y movimientos
-              en tiempo real con una experiencia fluida y moderna.
+              Compatible con computadoras, tablets y dispositivos móviles para
+              administrar productos, stock y movimientos en tiempo real con una
+              experiencia fluida y moderna.
             </p>
 
             {/* MINI STATS */}

@@ -1,6 +1,4 @@
-import {
-  LockKeyhole,
-} from "lucide-react";
+import { LockKeyhole } from "lucide-react";
 
 export default function LoginBadge() {
   return (
@@ -28,7 +26,6 @@ export default function LoginBadge() {
         "
       >
         <LockKeyhole size={14} />
-
         Acceso Seguro
       </div>
     </div>

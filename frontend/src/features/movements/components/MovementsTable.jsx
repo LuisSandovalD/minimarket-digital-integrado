@@ -15,36 +15,30 @@ import {
   RefreshCcw,
 } from "lucide-react";
 
-import {
-  Table,
-  THead,
-} from "@/components/table";
+import { Table, THead } from "@/components/table";
 
-import MovementTypeBadge
-  from "./MovementTypeBadge";
+import MovementTypeBadge from "./MovementTypeBadge";
 
 export default function MovementsTable({
-
   movements = [],
 
   loading = false,
-
 }) {
-
   // ========================================
   // TABLE COLUMNS
   // ========================================
 
   const columns = [
-
     {
       key: "date",
       label: (
-        <div className="
+        <div
+          className="
           flex
           items-center
           gap-2
-        ">
+        "
+        >
           <CalendarDays size={14} />
           Fecha
         </div>
@@ -54,11 +48,13 @@ export default function MovementsTable({
     {
       key: "product",
       label: (
-        <div className="
+        <div
+          className="
           flex
           items-center
           gap-2
-        ">
+        "
+        >
           <Package size={14} />
           Producto
         </div>
@@ -68,11 +64,13 @@ export default function MovementsTable({
     {
       key: "branch",
       label: (
-        <div className="
+        <div
+          className="
           flex
           items-center
           gap-2
-        ">
+        "
+        >
           <Building2 size={14} />
           Sucursal
         </div>
@@ -82,11 +80,13 @@ export default function MovementsTable({
     {
       key: "type",
       label: (
-        <div className="
+        <div
+          className="
           flex
           items-center
           gap-2
-        ">
+        "
+        >
           <History size={14} />
           Tipo
         </div>
@@ -96,11 +96,13 @@ export default function MovementsTable({
     {
       key: "quantity",
       label: (
-        <div className="
+        <div
+          className="
           flex
           items-center
           gap-2
-        ">
+        "
+        >
           <Boxes size={14} />
           Cantidad
         </div>
@@ -110,11 +112,13 @@ export default function MovementsTable({
     {
       key: "previous",
       label: (
-        <div className="
+        <div
+          className="
           flex
           items-center
           gap-2
-        ">
+        "
+        >
           <ArrowDown size={14} />
           Stock Antes
         </div>
@@ -124,11 +128,13 @@ export default function MovementsTable({
     {
       key: "new",
       label: (
-        <div className="
+        <div
+          className="
           flex
           items-center
           gap-2
-        ">
+        "
+        >
           <ArrowUp size={14} />
           Stock Después
         </div>
@@ -138,59 +144,57 @@ export default function MovementsTable({
     {
       key: "reason",
       label: (
-        <div className="
+        <div
+          className="
           flex
           items-center
           gap-2
-        ">
+        "
+        >
           <FileText size={14} />
           Motivo
         </div>
       ),
     },
-
   ];
 
   return (
-    <div className="
+    <div
+      className="
       space-y-5
-    ">
-
+    "
+    >
       {/* ========================================
        * TABLE CONTAINER
        * ====================================== */}
 
       <Table>
-
         <THead columns={columns} />
 
         <tbody>
-
-          {
-            loading
-              ? (
-                <tr>
-
-                  <td
-                    colSpan={8}
-                    className="
+          {loading ? (
+            <tr>
+              <td
+                colSpan={8}
+                className="
                       px-6
                       py-16
                       text-center
                       text-slate-500
                     "
-                  >
-
-                    <div className="
+              >
+                <div
+                  className="
                       flex
                       items-center
                       justify-center
                       gap-2
                       text-sm
                       font-medium
-                    ">
-
-                      <div className="
+                    "
+                >
+                  <div
+                    className="
                         h-4
                         w-4
                         animate-spin
@@ -198,24 +202,17 @@ export default function MovementsTable({
                         border-2
                         border-slate-500
                         border-t-transparent
-                      " />
-
-                      Cargando movimientos...
-
-                    </div>
-
-                  </td>
-
-                </tr>
-              )
-              : movements.length > 0
-                ? (
-                  movements.map(
-                    movement => (
-
-                      <tr
-                        key={movement.id}
-                        className="
+                      "
+                  />
+                  Cargando movimientos...
+                </div>
+              </td>
+            </tr>
+          ) : movements.length > 0 ? (
+            movements.map((movement) => (
+              <tr
+                key={movement.id}
+                className="
                           border-b
                           border-slate-200/50
                           dark:border-slate-800
@@ -223,156 +220,134 @@ export default function MovementsTable({
                           hover:bg-slate-50
                           dark:hover:bg-slate-900/40
                         "
-                      >
+              >
+                {/* DATE */}
 
-                        {/* DATE */}
-
-                        <td className="
+                <td
+                  className="
                           px-6
                           py-5
                           text-sm
                           text-slate-600
                           dark:text-slate-300
                           whitespace-nowrap
-                        ">
+                        "
+                >
+                  {new Date(movement.createdAt).toLocaleString()}
+                </td>
 
-                          {
-                            new Date(
-                              movement.createdAt
-                            ).toLocaleString()
-                          }
+                {/* PRODUCT */}
 
-                        </td>
-
-                        {/* PRODUCT */}
-
-                        <td className="
+                <td
+                  className="
                           px-6
                           py-5
-                        ">
-
-                          <div>
-
-                            <h3 className="
+                        "
+                >
+                  <div>
+                    <h3
+                      className="
                               text-sm
                               font-semibold
                               text-slate-800
                               dark:text-white
-                            ">
-                              {
-                                movement.product?.name ||
-                                "Sin producto"
-                              }
-                            </h3>
+                            "
+                    >
+                      {movement.product?.name || "Sin producto"}
+                    </h3>
 
-                            <p className="
+                    <p
+                      className="
                               mt-1
                               text-xs
                               text-slate-500
-                            ">
-                              SKU:
-                              {" "}
-                              {
-                                movement.product?.sku ||
-                                "-"
-                              }
-                            </p>
+                            "
+                    >
+                      SKU: {movement.product?.sku || "-"}
+                    </p>
+                  </div>
+                </td>
 
-                          </div>
+                {/* BRANCH */}
 
-                        </td>
-
-                        {/* BRANCH */}
-
-                        <td className="
+                <td
+                  className="
                           px-6
                           py-5
                           text-sm
                           font-medium
                           text-slate-600
                           dark:text-slate-300
-                        ">
+                        "
+                >
+                  {movement.branch?.name || "-"}
+                </td>
 
-                          {
-                            movement.branch?.name ||
-                            "-"
-                          }
+                {/* TYPE */}
 
-                        </td>
-
-                        {/* TYPE */}
-
-                        <td className="
+                <td
+                  className="
                           px-6
                           py-5
-                        ">
+                        "
+                >
+                  <MovementTypeBadge type={movement.type} />
+                </td>
 
-                          <MovementTypeBadge
-                            type={
-                              movement.type
-                            }
-                          />
+                {/* QUANTITY */}
 
-                        </td>
-
-                        {/* QUANTITY */}
-
-                        <td className="
+                <td
+                  className="
                           px-6
                           py-5
                           text-sm
                           font-bold
                           text-slate-800
                           dark:text-slate-100
-                        ">
+                        "
+                >
+                  {movement.quantity}
+                </td>
 
-                          {
-                            movement.quantity
-                          }
+                {/* PREVIOUS */}
 
-                        </td>
-
-                        {/* PREVIOUS */}
-
-                        <td className="
+                <td
+                  className="
                           px-6
                           py-5
                           text-sm
                           text-slate-600
                           dark:text-slate-300
-                        ">
+                        "
+                >
+                  {movement.previousStock}
+                </td>
 
-                          {
-                            movement.previousStock
-                          }
+                {/* NEW */}
 
-                        </td>
-
-                        {/* NEW */}
-
-                        <td className="
+                <td
+                  className="
                           px-6
                           py-5
                           text-sm
                           font-semibold
                           text-slate-800
                           dark:text-slate-100
-                        ">
+                        "
+                >
+                  {movement.newStock}
+                </td>
 
-                          {
-                            movement.newStock
-                          }
+                {/* REASON */}
 
-                        </td>
-
-                        {/* REASON */}
-
-                        <td className="
+                <td
+                  className="
                           px-6
                           py-5
-                        ">
-
-                          <div className="
+                        "
+                >
+                  <div
+                    className="
                             inline-flex
                             items-center
                             gap-2
@@ -384,64 +359,41 @@ export default function MovementsTable({
                             text-xs
                             text-slate-600
                             dark:text-slate-300
-                          ">
+                          "
+                  >
+                    {movement.type === "DAMAGED" ? (
+                      <PackageX size={13} />
+                    ) : movement.type === "TRANSFER" ? (
+                      <RefreshCcw size={13} />
+                    ) : (
+                      <FileText size={13} />
+                    )}
 
-                            {
-                              movement.type ===
-                              "DAMAGED"
-                                ? (
-                                  <PackageX
-                                    size={13}
-                                  />
-                                )
-                                : movement.type ===
-                                  "TRANSFER"
-                                  ? (
-                                    <RefreshCcw
-                                      size={13}
-                                    />
-                                  )
-                                  : (
-                                    <FileText
-                                      size={13}
-                                    />
-                                  )
-                            }
-
-                            {
-                              movement.reason ||
-                              "Sin motivo"
-                            }
-
-                          </div>
-
-                        </td>
-
-                      </tr>
-
-                    )
-                  )
-                )
-                : (
-                  <tr>
-
-                    <td
-                      colSpan={8}
-                      className="
+                    {movement.reason || "Sin motivo"}
+                  </div>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td
+                colSpan={8}
+                className="
                         px-6
                         py-16
                         text-center
                       "
-                    >
-
-                      <div className="
+              >
+                <div
+                  className="
                         flex
                         flex-col
                         items-center
                         justify-center
-                      ">
-
-                        <div className="
+                      "
+                >
+                  <div
+                    className="
                           mb-4
                           flex
                           h-16
@@ -451,47 +403,43 @@ export default function MovementsTable({
                           rounded-2xl
                           bg-slate-100
                           dark:bg-slate-800
-                        ">
-
-                          <History className="
+                        "
+                  >
+                    <History
+                      className="
                             h-8
                             w-8
                             text-slate-400
-                          " />
+                          "
+                    />
+                  </div>
 
-                        </div>
-
-                        <h3 className="
+                  <h3
+                    className="
                           text-sm
                           font-semibold
                           text-slate-700
                           dark:text-slate-200
-                        ">
-                          Sin movimientos registrados
-                        </h3>
+                        "
+                  >
+                    Sin movimientos registrados
+                  </h3>
 
-                        <p className="
+                  <p
+                    className="
                           mt-1
                           text-sm
                           text-slate-500
-                        ">
-                          No se encontraron movimientos
-                          de inventario.
-                        </p>
-
-                      </div>
-
-                    </td>
-
-                  </tr>
-                )
-          }
-
+                        "
+                  >
+                    No se encontraron movimientos de inventario.
+                  </p>
+                </div>
+              </td>
+            </tr>
+          )}
         </tbody>
-
       </Table>
-
     </div>
   );
-
 }

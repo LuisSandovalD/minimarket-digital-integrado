@@ -2,14 +2,10 @@
 // components/users/UsersEmpty.jsx
 // ========================================
 
-import {
-  Users,
-} from "lucide-react";
+import { Users } from "lucide-react";
 
 export default function UsersEmpty() {
-
   return (
-
     <div
       className="
         relative
@@ -25,7 +21,6 @@ export default function UsersEmpty() {
         backdrop-blur-2xl
       "
     >
-
       {/* Glow */}
 
       <div
@@ -51,7 +46,6 @@ export default function UsersEmpty() {
           items-center
         "
       >
-
         {/* ICON */}
 
         <div
@@ -70,9 +64,7 @@ export default function UsersEmpty() {
             shadow-[0_4px_20px_rgba(255,255,255,0.05)]
           "
         >
-
           <Users size={28} />
-
         </div>
 
         {/* TITLE */}
@@ -101,15 +93,9 @@ export default function UsersEmpty() {
             text-slate-500
           "
         >
-          Actualmente no existen
-          usuarios registrados
-          en el sistema.
+          Actualmente no existen usuarios registrados en el sistema.
         </p>
-
       </div>
-
     </div>
-
   );
-
 }

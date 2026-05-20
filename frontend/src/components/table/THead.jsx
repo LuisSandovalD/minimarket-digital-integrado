@@ -2,14 +2,9 @@
 // components/ui/table/THead.jsx
 // ============================================
 
-export default function THead({
-  columns = [],
-}) {
-
+export default function THead({ columns = [] }) {
   return (
-
     <thead>
-
       <tr
         className="
           border-b
@@ -17,9 +12,7 @@ export default function THead({
           bg-white/[0.03]
         "
       >
-
         {columns.map((column) => (
-
           <th
             key={column.key}
             className="
@@ -36,13 +29,8 @@ export default function THead({
           >
             {column.label}
           </th>
-
         ))}
-
       </tr>
-
     </thead>
-
   );
-
 }

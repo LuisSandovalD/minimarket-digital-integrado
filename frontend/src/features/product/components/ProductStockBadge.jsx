@@ -2,10 +2,7 @@
 // features/product/components/ProductStockBadge.jsx
 // ========================================
 
-export default function ProductStockBadge({
-  stock = 0,
-  minStock = 0,
-}) {
+export default function ProductStockBadge({ stock = 0, minStock = 0 }) {
   const isLow = stock <= minStock;
   const isOut = stock <= 0;
 

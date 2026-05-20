@@ -6,29 +6,21 @@ import { Bell } from "lucide-react";
 
 import { useState } from "react";
 
-import ModernButton
-  from "@/components/buttons/ModernButton";
+import ModernButton from "@/components/buttons/ModernButton";
 
-import Modal
-  from "@/components/modals/Modal";
+import Modal from "@/components/modals/Modal";
 
-import HeaderModal
-  from "@/components/modals/HeaderModal";
+import HeaderModal from "@/components/modals/HeaderModal";
 
-import FooterModal
-  from "@/components/modals/FooterModal";
+import FooterModal from "@/components/modals/FooterModal";
 
-import useNotifications
-  from "../hooks/useNotifications";
+import useNotifications from "../hooks/useNotifications";
 
-import NotificationItem
-  from "./NotificationItem";
+import NotificationItem from "./NotificationItem";
 
-import NotificationsEmpty
-  from "./NotificationsEmpty";
+import NotificationsEmpty from "./NotificationsEmpty";
 
 export default function NotificationsModal() {
-
   const [open, setOpen] = useState(false);
 
   const {
@@ -44,15 +36,9 @@ export default function NotificationsModal() {
   // ========================================
 
   const handleClearAll = () => {
-
-    notifications.forEach(
-      (notification) => {
-
-        removeNotification(notification.id);
-
-      }
-    );
-
+    notifications.forEach((notification) => {
+      removeNotification(notification.id);
+    });
   };
 
   return (
@@ -60,7 +46,6 @@ export default function NotificationsModal() {
       {/* BUTTON */}
 
       <div className="relative">
-
         <ModernButton
           onClick={() => setOpen(true)}
           icon={Bell}
@@ -81,7 +66,6 @@ export default function NotificationsModal() {
         {/* BADGE */}
 
         {unreadCount > 0 && (
-
           <span
             className="
               absolute
@@ -109,19 +93,12 @@ export default function NotificationsModal() {
           >
             {unreadCount}
           </span>
-
         )}
-
       </div>
 
       {/* MODAL */}
 
-      <Modal
-        open={open}
-        onClose={() => setOpen(false)}
-        size="lg"
-      >
-
+      <Modal open={open} onClose={() => setOpen(false)} size="lg">
         {/* HEADER */}
 
         <HeaderModal
@@ -140,9 +117,7 @@ export default function NotificationsModal() {
             space-y-3
           "
         >
-
           {loading ? (
-
             <div
               className="
                 flex
@@ -163,31 +138,22 @@ export default function NotificationsModal() {
                 "
               />
             </div>
-
           ) : notifications.length === 0 ? (
-
             <NotificationsEmpty />
-
           ) : (
-
             notifications.map((notification) => (
-
               <NotificationItem
                 key={notification.id}
                 notification={notification}
                 onToggleRead={toggleRead}
               />
-
             ))
-
           )}
-
         </div>
 
         {/* FOOTER */}
 
         <FooterModal align="center">
-
           <p
             className="
               text-sm
@@ -196,11 +162,8 @@ export default function NotificationsModal() {
           >
             {notifications.length} notificaciones
           </p>
-
         </FooterModal>
-
       </Modal>
     </>
   );
-
 }

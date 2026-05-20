@@ -4,7 +4,6 @@ import { categories } from "../constants/categories";
 export default function CategoriesSection() {
   return (
     <section className="relative py-8 lg:py-12">
-
       <div className="relative space-y-8 max-w-7xl mx-auto">
         {/* HEADER */}
         <div className="max-w-7xl">
@@ -173,7 +172,6 @@ export default function CategoriesSection() {
                       {category.count} productos
                     </p>
                   </div>
-
                 </div>
 
                 {/* BOTTOM BORDER ACCENT */}

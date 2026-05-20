@@ -1,4 +1,4 @@
-import { forwardRef } from 'react';
+import { forwardRef } from "react";
 
 const Input = forwardRef(
   (
@@ -8,8 +8,8 @@ const Input = forwardRef(
 
       icon: Icon,
 
-      className = '',
-      inputClassName = '',
+      className = "",
+      inputClassName = "",
 
       disabled = false,
       fullWidth = true,
@@ -18,7 +18,7 @@ const Input = forwardRef(
 
       ...props
     },
-    ref
+    ref,
   ) => {
     return (
       <div
@@ -27,11 +27,7 @@ const Input = forwardRef(
           flex-col
           gap-1.5
 
-          ${
-            fullWidth
-              ? 'w-full'
-              : ''
-          }
+          ${fullWidth ? "w-full" : ""}
 
           ${className}
         `}
@@ -57,11 +53,7 @@ const Input = forwardRef(
           >
             {label}
 
-            {props.required && (
-              <span className="text-rose-500">
-                *
-              </span>
-            )}
+            {props.required && <span className="text-rose-500">*</span>}
           </label>
         )}
 
@@ -122,11 +114,7 @@ const Input = forwardRef(
               transition-all
               duration-200
 
-              ${
-                Icon
-                  ? 'pl-11 pr-4'
-                  : 'px-4'
-              }
+              ${Icon ? "pl-11 pr-4" : "px-4"}
 
               ${
                 error
@@ -161,7 +149,7 @@ const Input = forwardRef(
                     cursor-not-allowed
                     opacity-60
                   `
-                  : ''
+                  : ""
               }
 
               ${inputClassName}
@@ -202,9 +190,9 @@ const Input = forwardRef(
         )}
       </div>
     );
-  }
+  },
 );
 
-Input.displayName = 'Input';
+Input.displayName = "Input";
 
 export default Input;

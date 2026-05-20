@@ -13,8 +13,7 @@ export const inventory = [
   {
     title: "Control de Stock",
 
-    description:
-      "Gestiona existencias y movimientos en tiempo real.",
+    description: "Gestiona existencias y movimientos en tiempo real.",
 
     icon: Package,
 
@@ -25,8 +24,7 @@ export const inventory = [
   {
     title: "Almacenes Inteligentes",
 
-    description:
-      "Organiza múltiples almacenes y transferencias internas.",
+    description: "Organiza múltiples almacenes y transferencias internas.",
 
     icon: Boxes,
 
@@ -37,8 +35,7 @@ export const inventory = [
   {
     title: "Escaneo de Productos",
 
-    description:
-      "Compatible con lectores de código de barras y QR.",
+    description: "Compatible con lectores de código de barras y QR.",
 
     icon: ScanLine,
 
@@ -49,8 +46,7 @@ export const inventory = [
   {
     title: "Alertas Automáticas",
 
-    description:
-      "Recibe notificaciones de stock mínimo y vencimientos.",
+    description: "Recibe notificaciones de stock mínimo y vencimientos.",
 
     icon: BellRing,
 
@@ -61,8 +57,7 @@ export const inventory = [
   {
     title: "Historial de Movimientos",
 
-    description:
-      "Audita entradas, salidas y modificaciones de inventario.",
+    description: "Audita entradas, salidas y modificaciones de inventario.",
 
     icon: Archive,
 
@@ -73,8 +68,7 @@ export const inventory = [
   {
     title: "Logística y Distribución",
 
-    description:
-      "Gestiona envíos, rutas y entregas empresariales.",
+    description: "Gestiona envíos, rutas y entregas empresariales.",
 
     icon: Truck,
 

@@ -2,42 +2,23 @@
 // features/product/components/ProductHeader.jsx
 // ========================================
 
-import {
-  Package,
-  Plus,
-  Boxes,
-  AlertTriangle,
-  Activity,
-} from "lucide-react";
+import { Package, Plus, Boxes, AlertTriangle, Activity } from "lucide-react";
 
-import PageHeader
-  from "@/components/ui/PageHeader";
+import PageHeader from "@/components/ui/PageHeader";
 
-import {
-  NotificationsModal,
-} from "@/features/notifications-product";
+import { NotificationsModal } from "@/features/notifications-product";
 
-export default function ProductHeader({
-  total = 0,
-  lowStock = 0,
-  onCreate,
-}) {
-
+export default function ProductHeader({ total = 0, lowStock = 0, onCreate }) {
   return (
-
     <PageHeader
       icon={Package}
-
       badge="Inventario"
-
       title="Gestión de Productos"
-
       description="
         Administra productos,
         stock, precios y
         vencimientos del sistema.
       "
-
       // ========================================
       // MAIN ACTION
       // ========================================
@@ -47,13 +28,11 @@ export default function ProductHeader({
         icon: Plus,
         onClick: onCreate,
       }}
-
       // ========================================
       // STATS
       // ========================================
 
       stats={[
-
         {
           icon: Boxes,
           label: "Productos",
@@ -71,10 +50,7 @@ export default function ProductHeader({
           label: "Activos",
           value: total - lowStock,
         },
-
       ]}
     />
-
   );
-
 }

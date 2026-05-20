@@ -9,7 +9,6 @@ import { useState } from "react";
 // ========================================
 
 const initialState = {
-
   // ========================================
   // GENERAL
   // ========================================
@@ -71,7 +70,6 @@ const initialState = {
   unitId: "",
 
   branchId: "",
-
 };
 
 // ========================================
@@ -79,31 +77,20 @@ const initialState = {
 // ========================================
 
 export default function useProductForm() {
-
-  const [form, setForm] =
-    useState(initialState);
+  const [form, setForm] = useState(initialState);
 
   // ========================================
   // HANDLE CHANGE
   // ========================================
 
   const handleChange = (e) => {
-
-    const {
-      name,
-      value,
-      type,
-      checked,
-    } = e.target;
+    const { name, value, type, checked } = e.target;
 
     // ========================================
     // BOOLEANS
     // ========================================
 
-    let finalValue =
-      type === "checkbox"
-        ? checked
-        : value;
+    let finalValue = type === "checkbox" ? checked : value;
 
     // ========================================
     // BOOLEAN SELECTS
@@ -114,10 +101,7 @@ export default function useProductForm() {
       name === "isFeatured" ||
       name === "requiresExpiration"
     ) {
-
-      finalValue =
-        value === "true";
-
+      finalValue = value === "true";
     }
 
     // ========================================
@@ -125,88 +109,60 @@ export default function useProductForm() {
     // ========================================
 
     const updatedForm = {
-
       ...form,
 
       [name]: finalValue,
-
     };
 
     // ========================================
     // PRICING ENGINE
     // ========================================
 
-    const purchasePrice =
-      Number(
-        updatedForm.purchasePrice || 0
-      );
+    const purchasePrice = Number(updatedForm.purchasePrice || 0);
 
-    const profitMargin =
-      Number(
-        updatedForm.profitMargin || 0
-      );
+    const profitMargin = Number(updatedForm.profitMargin || 0);
 
     // ========================================
     // VALIDATIONS
     // ========================================
 
-    const safePurchase =
-      purchasePrice < 0
-        ? 0
-        : purchasePrice;
+    const safePurchase = purchasePrice < 0 ? 0 : purchasePrice;
 
-    const safeMargin =
-      profitMargin < 0
-        ? 0
-        : profitMargin;
+    const safeMargin = profitMargin < 0 ? 0 : profitMargin;
 
     // ========================================
     // COST
     // ========================================
 
-    const costPrice =
-      safePurchase;
+    const costPrice = safePurchase;
 
     // ========================================
     // SALE PRICE
     // ========================================
 
-    const salePrice =
-      costPrice *
-      (1 + safeMargin / 100);
+    const salePrice = costPrice * (1 + safeMargin / 100);
 
     // ========================================
     // PROFIT
     // ========================================
 
-    const profitAmount =
-      salePrice - costPrice;
+    const profitAmount = salePrice - costPrice;
 
     // ========================================
     // SAVE CALCULATIONS
     // ========================================
 
-    updatedForm.costPrice =
-      Number(
-        costPrice.toFixed(2)
-      );
+    updatedForm.costPrice = Number(costPrice.toFixed(2));
 
-    updatedForm.salePrice =
-      Number(
-        salePrice.toFixed(2)
-      );
+    updatedForm.salePrice = Number(salePrice.toFixed(2));
 
-    updatedForm.profitAmount =
-      Number(
-        profitAmount.toFixed(2)
-      );
+    updatedForm.profitAmount = Number(profitAmount.toFixed(2));
 
     // ========================================
     // UPDATE STATE
     // ========================================
 
     setForm(updatedForm);
-
   };
 
   // ========================================
@@ -214,49 +170,33 @@ export default function useProductForm() {
   // ========================================
 
   const resetForm = () => {
-
     setForm(initialState);
-
   };
 
   // ========================================
   // SET FORM VALUES
   // ========================================
 
-  const setFormValues = (
-    values
-  ) => {
+  const setFormValues = (values) => {
+    const purchasePrice = Number(values?.purchasePrice || 0);
 
-    const purchasePrice =
-      Number(
-        values?.purchasePrice || 0
-      );
-
-    const profitMargin =
-      Number(
-        values?.profitMargin || 0
-      );
+    const profitMargin = Number(values?.profitMargin || 0);
 
     // ========================================
     // RECALCULATE
     // ========================================
 
-    const costPrice =
-      purchasePrice;
+    const costPrice = purchasePrice;
 
-    const salePrice =
-      costPrice *
-      (1 + profitMargin / 100);
+    const salePrice = costPrice * (1 + profitMargin / 100);
 
-    const profitAmount =
-      salePrice - costPrice;
+    const profitAmount = salePrice - costPrice;
 
     // ========================================
     // SET FORM
     // ========================================
 
     setForm({
-
       ...initialState,
 
       ...values,
@@ -265,14 +205,11 @@ export default function useProductForm() {
       // GENERAL
       // ========================================
 
-      id:
-        values?.id || "",
+      id: values?.id || "",
 
-      name:
-        values?.name || "",
+      name: values?.name || "",
 
-      description:
-        values?.description || "",
+      description: values?.description || "",
 
       // ========================================
       // PRICES
@@ -282,79 +219,52 @@ export default function useProductForm() {
 
       profitMargin,
 
-      costPrice:
-        Number(
-          costPrice.toFixed(2)
-        ),
+      costPrice: Number(costPrice.toFixed(2)),
 
-      salePrice:
-        Number(
-          salePrice.toFixed(2)
-        ),
+      salePrice: Number(salePrice.toFixed(2)),
 
-      profitAmount:
-        Number(
-          profitAmount.toFixed(2)
-        ),
+      profitAmount: Number(profitAmount.toFixed(2)),
 
       // ========================================
       // STOCK
       // ========================================
 
-      stock:
-        Number(
-          values?.stock || 0
-        ),
+      stock: Number(values?.stock || 0),
 
-      minStock:
-        Number(
-          values?.minStock ?? 5
-        ),
+      minStock: Number(values?.minStock ?? 5),
 
-      maxStock:
-        values?.maxStock || "",
+      maxStock: values?.maxStock || "",
 
       // ========================================
       // EXPIRATION
       // ========================================
 
-      batchNumber:
-        values?.batchNumber || "",
+      batchNumber: values?.batchNumber || "",
 
-      expirationDate:
-        values?.expirationDate
-          ? values.expirationDate
-              .split("T")[0]
-          : "",
+      expirationDate: values?.expirationDate
+        ? values.expirationDate.split("T")[0]
+        : "",
 
-      requiresExpiration:
-        values?.requiresExpiration ?? false,
+      requiresExpiration: values?.requiresExpiration ?? false,
 
       // ========================================
       // STATUS
       // ========================================
 
-      isActive:
-        values?.isActive ?? true,
+      isActive: values?.isActive ?? true,
 
-      isFeatured:
-        values?.isFeatured ?? false,
+      isFeatured: values?.isFeatured ?? false,
 
       // ========================================
       // RELATIONS
       // ========================================
 
-      categoryId:
-        values?.categoryId || "",
+      categoryId: values?.categoryId || "",
 
-      unitId:
-        values?.unitId || "",
+      unitId: values?.unitId || "",
 
-      branchId:
-        values?.branchId || "",
-
+      branchId: values?.branchId || "",
     });
-
   };
 
   // ========================================
@@ -362,7 +272,6 @@ export default function useProductForm() {
   // ========================================
 
   return {
-
     form,
 
     setForm,
@@ -372,7 +281,5 @@ export default function useProductForm() {
     resetForm,
 
     setFormValues,
-
   };
-
 }

@@ -10,12 +10,11 @@ import {
   ArrowRight,
 } from "lucide-react";
 
-import { alerts } from "../constants/alerts"
+import { alerts } from "../constants/alerts";
 
 export default function AlertsSection() {
   return (
     <section className="relative py-8 lg:py-12">
-
       <div className="relative space-y-8 max-w-7xl mx-auto">
         {/* HEADER */}
         <div className="max-w-3xl">
@@ -220,8 +219,6 @@ export default function AlertsSection() {
             );
           })}
         </div>
-
-
       </div>
     </section>
   );

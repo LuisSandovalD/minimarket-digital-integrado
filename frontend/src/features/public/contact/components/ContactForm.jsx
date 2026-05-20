@@ -14,23 +14,21 @@ import {
   Clock3,
 } from "lucide-react";
 
-import {Input} from "@/components/inputs/";
-import {ModernButton} from "@/components/buttons/";
+import { Input } from "@/components/inputs/";
+import { ModernButton } from "@/components/buttons/";
 import { benefits } from "../constants/benefits";
 import { inputs } from "../constants/inputs";
 
 export default function ContactForm() {
-  const [loading, setLoading] =
-    useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const [formData, setFormData] =
-    useState({
-      name: "",
-      email: "",
-      company: "",
-      phone: "",
-      message: "",
-    });
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    company: "",
+    phone: "",
+    message: "",
+  });
 
   const handleChange = (e) => {
     setFormData({
@@ -47,9 +45,7 @@ export default function ContactForm() {
       setLoading(true);
 
       // Simulación
-      await new Promise((resolve) =>
-        setTimeout(resolve, 1500)
-      );
+      await new Promise((resolve) => setTimeout(resolve, 1500));
 
       console.log(formData);
     } catch (error) {
@@ -71,8 +67,6 @@ export default function ContactForm() {
         dark:bg-[#020617]
       "
     >
-      
-
       <div
         className="
           relative
@@ -121,7 +115,6 @@ export default function ContactForm() {
             "
           >
             <MessageSquare size={16} />
-
             Formulario de contacto
           </div>
 
@@ -141,7 +134,6 @@ export default function ContactForm() {
             "
           >
             Hablemos sobre tu
-
             <span
               className="
                 mt-2
@@ -173,23 +165,19 @@ export default function ContactForm() {
               dark:text-[#cbd5e1]
             "
           >
-            Cuéntanos qué necesita tu
-            empresa y nuestro equipo te
-            ayudará a encontrar una
-            solución moderna, escalable
-            y preparada para crecer.
+            Cuéntanos qué necesita tu empresa y nuestro equipo te ayudará a
+            encontrar una solución moderna, escalable y preparada para crecer.
           </p>
 
           {/* BENEFITS */}
           <div className="mt-10 space-y-4">
-            {benefits.map(
-              (item, index) => {
-                const Icon = item.icon;
+            {benefits.map((item, index) => {
+              const Icon = item.icon;
 
-                return (
-                  <div
-                    key={index}
-                    className="
+              return (
+                <div
+                  key={index}
+                  className="
                       group
 
                       flex
@@ -217,10 +205,10 @@ export default function ContactForm() {
                       dark:border-white/10
                       dark:bg-white/[0.04]
                     "
-                  >
-                    {/* ICON */}
-                    <div
-                      className="
+                >
+                  {/* ICON */}
+                  <div
+                    className="
                         flex
                         h-12
                         w-12
@@ -237,14 +225,14 @@ export default function ContactForm() {
 
                         shadow-lg
                       "
-                    >
-                      <Icon size={20} />
-                    </div>
+                  >
+                    <Icon size={20} />
+                  </div>
 
-                    {/* CONTENT */}
-                    <div>
-                      <h3
-                        className="
+                  {/* CONTENT */}
+                  <div>
+                    <h3
+                      className="
                           text-sm
                           font-bold
 
@@ -252,12 +240,12 @@ export default function ContactForm() {
 
                           dark:text-white
                         "
-                      >
-                        {item.title}
-                      </h3>
+                    >
+                      {item.title}
+                    </h3>
 
-                      <p
-                        className="
+                    <p
+                      className="
                           mt-1
 
                           text-sm
@@ -267,14 +255,13 @@ export default function ContactForm() {
 
                           dark:text-[#cbd5e1]
                         "
-                      >
-                        {item.description}
-                      </p>
-                    </div>
+                    >
+                      {item.description}
+                    </p>
                   </div>
-                );
-              }
-            )}
+                </div>
+              );
+            })}
           </div>
         </div>
 
@@ -331,39 +318,27 @@ export default function ContactForm() {
                 dark:text-[#cbd5e1]
               "
             >
-              Completa el formulario y
-              nuestro equipo se pondrá
-              en contacto contigo.
+              Completa el formulario y nuestro equipo se pondrá en contacto
+              contigo.
             </p>
           </div>
 
           {/* FORM */}
-          <form
-            onSubmit={handleSubmit}
-            className="mt-10 space-y-6"
-          >
+          <form onSubmit={handleSubmit} className="mt-10 space-y-6">
             {/* INPUTS */}
             <div className="grid gap-5 md:grid-cols-2">
-              {inputs.map(
-                (item, index) => (
-                  <Input
-                    key={index}
-                    type={item.type}
-                    name={item.name}
-                    label={item.label}
-                    icon={item.icon}
-                    placeholder={
-                      item.placeholder
-                    }
-                    value={
-                      formData[item.name]
-                    }
-                    onChange={
-                      handleChange
-                    }
-                  />
-                )
-              )}
+              {inputs.map((item, index) => (
+                <Input
+                  key={index}
+                  type={item.type}
+                  name={item.name}
+                  label={item.label}
+                  icon={item.icon}
+                  placeholder={item.placeholder}
+                  value={formData[item.name]}
+                  onChange={handleChange}
+                />
+              ))}
             </div>
 
             {/* MESSAGE */}
@@ -423,23 +398,16 @@ export default function ContactForm() {
                     text-zinc-400
                   "
                 >
-                  <MessageSquare
-                    size={18}
-                  />
+                  <MessageSquare size={18} />
                 </div>
 
                 {/* TEXTAREA */}
                 <textarea
                   name="message"
-                  value={
-                    formData.message
-                  }
-                  onChange={
-                    handleChange
-                  }
+                  value={formData.message}
+                  onChange={handleChange}
                   placeholder="Cuéntanos sobre tu proyecto, empresa o necesidades..."
                   required
-
                   className="
                     min-h-[180px]
                     w-full
@@ -479,7 +447,6 @@ export default function ContactForm() {
             />
           </form>
         </div>
-
       </div>
     </section>
   );

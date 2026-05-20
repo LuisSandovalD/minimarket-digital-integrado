@@ -2,49 +2,32 @@
 // features/customers/pages/CustomerPage.jsx
 // ========================================
 
-import {
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { useEffect, useMemo, useState } from "react";
 
-import {
-  Plus,
-  Pencil,
-  Trash2,
-  Search,
-} from "lucide-react";
+import { Plus, Pencil, Trash2, Search } from "lucide-react";
 
-import customerService
-  from "../services/customer.service.js";
+import customerService from "../services/customer.service.js";
 
 // ========================================
 // PAGE
 // ========================================
 
 export default function CustomerPage() {
-
   // ========================================
   // STATES
   // ========================================
 
-  const [customers, setCustomers] =
-    useState([]);
+  const [customers, setCustomers] = useState([]);
 
-  const [loading, setLoading] =
-    useState(true);
+  const [loading, setLoading] = useState(true);
 
-  const [saving, setSaving] =
-    useState(false);
+  const [saving, setSaving] = useState(false);
 
-  const [search, setSearch] =
-    useState("");
+  const [search, setSearch] = useState("");
 
-  const [modalOpen, setModalOpen] =
-    useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
 
   const [form, setForm] = useState({
-
     id: null,
 
     name: "",
@@ -64,7 +47,6 @@ export default function CustomerPage() {
     notes: "",
 
     creditLimit: "",
-
   });
 
   // ========================================
@@ -72,70 +54,48 @@ export default function CustomerPage() {
   // ========================================
 
   useEffect(() => {
-
     fetchCustomers();
-
   }, []);
 
   async function fetchCustomers() {
-
     try {
-
       setLoading(true);
 
-      const response =
-        await customerService.getAll();
+      const response = await customerService.getAll();
 
-      setCustomers(
-        response?.data?.data || []
-      );
-
+      setCustomers(response?.data?.data || []);
     } catch (error) {
-
       console.error(error);
 
       setCustomers([]);
-
     } finally {
-
       setLoading(false);
-
     }
-
   }
 
   // ========================================
   // FILTER
   // ========================================
 
-  const filteredCustomers =
-    useMemo(() => {
-
-      return customers.filter(customer => {
-
-        const text = `
+  const filteredCustomers = useMemo(() => {
+    return customers.filter((customer) => {
+      const text = `
           ${customer.name || ""}
           ${customer.email || ""}
           ${customer.phone || ""}
           ${customer.documentNumber || ""}
         `.toLowerCase();
 
-        return text.includes(
-          search.toLowerCase()
-        );
-
-      });
-
-    }, [customers, search]);
+      return text.includes(search.toLowerCase());
+    });
+  }, [customers, search]);
 
   // ========================================
   // RESET FORM
   // ========================================
 
   function resetForm() {
-
     setForm({
-
       id: null,
 
       name: "",
@@ -155,9 +115,7 @@ export default function CustomerPage() {
       notes: "",
 
       creditLimit: "",
-
     });
-
   }
 
   // ========================================
@@ -165,11 +123,9 @@ export default function CustomerPage() {
   // ========================================
 
   function openCreate() {
-
     resetForm();
 
     setModalOpen(true);
-
   }
 
   // ========================================
@@ -177,43 +133,29 @@ export default function CustomerPage() {
   // ========================================
 
   function openEdit(customer) {
-
     setForm({
+      id: customer.id,
 
-      id:
-        customer.id,
+      name: customer.name || "",
 
-      name:
-        customer.name || "",
+      documentType: customer.documentType || "",
 
-      documentType:
-        customer.documentType || "",
+      documentNumber: customer.documentNumber || "",
 
-      documentNumber:
-        customer.documentNumber || "",
+      email: customer.email || "",
 
-      email:
-        customer.email || "",
+      phone: customer.phone || "",
 
-      phone:
-        customer.phone || "",
+      address: customer.address || "",
 
-      address:
-        customer.address || "",
+      city: customer.city || "",
 
-      city:
-        customer.city || "",
+      notes: customer.notes || "",
 
-      notes:
-        customer.notes || "",
-
-      creditLimit:
-        customer.creditLimit || "",
-
+      creditLimit: customer.creditLimit || "",
     });
 
     setModalOpen(true);
-
   }
 
   // ========================================
@@ -221,67 +163,39 @@ export default function CustomerPage() {
   // ========================================
 
   async function handleSave() {
-
     try {
-
       if (!form.name) {
-
-        alert(
-          "El nombre es obligatorio"
-        );
+        alert("El nombre es obligatorio");
 
         return;
-
       }
 
       setSaving(true);
 
       const payload = {
+        name: form.name,
 
-        name:
-          form.name,
+        documentType: form.documentType || null,
 
-        documentType:
-          form.documentType || null,
+        documentNumber: form.documentNumber || null,
 
-        documentNumber:
-          form.documentNumber || null,
+        email: form.email || null,
 
-        email:
-          form.email || null,
+        phone: form.phone || null,
 
-        phone:
-          form.phone || null,
+        address: form.address || null,
 
-        address:
-          form.address || null,
+        city: form.city || null,
 
-        city:
-          form.city || null,
+        notes: form.notes || null,
 
-        notes:
-          form.notes || null,
-
-        creditLimit:
-          form.creditLimit
-            ? Number(form.creditLimit)
-            : null,
-
+        creditLimit: form.creditLimit ? Number(form.creditLimit) : null,
       };
 
       if (form.id) {
-
-        await customerService.update(
-          form.id,
-          payload
-        );
-
+        await customerService.update(form.id, payload);
       } else {
-
-        await customerService.create(
-          payload
-        );
-
+        await customerService.create(payload);
       }
 
       setModalOpen(false);
@@ -289,21 +203,13 @@ export default function CustomerPage() {
       resetForm();
 
       fetchCustomers();
-
     } catch (error) {
-
       console.error(error);
 
-      alert(
-        "Ocurrió un error"
-      );
-
+      alert("Ocurrió un error");
     } finally {
-
       setSaving(false);
-
     }
-
   }
 
   // ========================================
@@ -311,30 +217,19 @@ export default function CustomerPage() {
   // ========================================
 
   async function handleDelete(id) {
-
-    const confirmed =
-      confirm(
-        "¿Eliminar cliente?"
-      );
+    const confirmed = confirm("¿Eliminar cliente?");
 
     if (!confirmed) return;
 
     try {
-
       await customerService.remove(id);
 
       fetchCustomers();
-
     } catch (error) {
-
       console.error(error);
 
-      alert(
-        "No se pudo eliminar"
-      );
-
+      alert("No se pudo eliminar");
     }
-
   }
 
   // ========================================
@@ -342,13 +237,7 @@ export default function CustomerPage() {
   // ========================================
 
   if (loading) {
-
-    return (
-      <div className="p-6">
-        Cargando clientes...
-      </div>
-    );
-
+    return <div className="p-6">Cargando clientes...</div>;
   }
 
   // ========================================
@@ -356,32 +245,33 @@ export default function CustomerPage() {
   // ========================================
 
   return (
-
     <div className="p-6 space-y-5">
-
       {/* HEADER */}
-      <div className="
+      <div
+        className="
         flex
         items-center
         justify-between
-      ">
-
+      "
+      >
         <div>
-
-          <h1 className="
+          <h1
+            className="
             text-2xl
             font-bold
-          ">
+          "
+          >
             Clientes
           </h1>
 
-          <p className="
+          <p
+            className="
             text-sm
             text-gray-500
-          ">
+          "
+          >
             Gestión de clientes
           </p>
-
         </div>
 
         <button
@@ -397,34 +287,29 @@ export default function CustomerPage() {
             rounded-lg
           "
         >
-
           <Plus size={18} />
-
           Nuevo
-
         </button>
-
       </div>
 
       {/* SEARCH */}
       <div className="relative">
-
-        <Search className="
+        <Search
+          className="
           absolute
           left-3
           top-3
           w-4
           h-4
           text-gray-400
-        " />
+        "
+        />
 
         <input
           type="text"
           placeholder="Buscar cliente..."
           value={search}
-          onChange={(e) =>
-            setSearch(e.target.value)
-          }
+          onChange={(e) => setSearch(e.target.value)}
           className="
             w-full
             border
@@ -434,116 +319,75 @@ export default function CustomerPage() {
             py-2
           "
         />
-
       </div>
 
       {/* TABLE */}
-      <div className="
+      <div
+        className="
         border
         rounded-xl
         overflow-hidden
-      ">
-
+      "
+      >
         <table className="w-full">
-
-          <thead className="
+          <thead
+            className="
             bg-gray-100
             text-left
-          ">
-
+          "
+          >
             <tr>
+              <th className="p-3">Nombre</th>
 
-              <th className="p-3">
-                Nombre
-              </th>
+              <th className="p-3">Documento</th>
 
-              <th className="p-3">
-                Documento
-              </th>
+              <th className="p-3">Email</th>
 
-              <th className="p-3">
-                Email
-              </th>
+              <th className="p-3">Teléfono</th>
 
-              <th className="p-3">
-                Teléfono
-              </th>
-
-              <th className="p-3">
-                Acciones
-              </th>
-
+              <th className="p-3">Acciones</th>
             </tr>
-
           </thead>
 
           <tbody>
-
-            {filteredCustomers.map(customer => (
-
-              <tr
-                key={customer.id}
-                className="border-t"
-              >
+            {filteredCustomers.map((customer) => (
+              <tr key={customer.id} className="border-t">
+                <td className="p-3">{customer.name}</td>
 
                 <td className="p-3">
-                  {customer.name}
+                  {customer.documentType} {customer.documentNumber}
                 </td>
 
-                <td className="p-3">
+                <td className="p-3">{customer.email || "-"}</td>
 
-                  {customer.documentType}
-                  {" "}
-                  {customer.documentNumber}
+                <td className="p-3">{customer.phone || "-"}</td>
 
-                </td>
-
-                <td className="p-3">
-                  {customer.email || "-"}
-                </td>
-
-                <td className="p-3">
-                  {customer.phone || "-"}
-                </td>
-
-                <td className="
+                <td
+                  className="
                   p-3
                   flex
                   gap-2
-                ">
-
+                "
+                >
                   <button
-                    onClick={() =>
-                      openEdit(customer)
-                    }
+                    onClick={() => openEdit(customer)}
                     className="text-blue-600"
                   >
-
                     <Pencil size={16} />
-
                   </button>
 
                   <button
-                    onClick={() =>
-                      handleDelete(customer.id)
-                    }
+                    onClick={() => handleDelete(customer.id)}
                     className="text-red-600"
                   >
-
                     <Trash2 size={16} />
-
                   </button>
-
                 </td>
-
               </tr>
-
             ))}
 
             {filteredCustomers.length === 0 && (
-
               <tr>
-
                 <td
                   colSpan={5}
                   className="
@@ -552,59 +396,52 @@ export default function CustomerPage() {
                     text-gray-500
                   "
                 >
-
                   No hay clientes
-
                 </td>
-
               </tr>
-
             )}
-
           </tbody>
-
         </table>
-
       </div>
 
       {/* MODAL */}
       {modalOpen && (
-
-        <div className="
+        <div
+          className="
           fixed
           inset-0
           bg-black/40
           flex
           items-center
           justify-center
-        ">
-
-          <div className="
+        "
+        >
+          <div
+            className="
             bg-white
             w-full
             max-w-xl
             rounded-xl
             p-5
             space-y-4
-          ">
-
-            <h2 className="
+          "
+          >
+            <h2
+              className="
               text-xl
               font-bold
-            ">
-
-              {form.id
-                ? "Editar cliente"
-                : "Nuevo cliente"}
-
+            "
+            >
+              {form.id ? "Editar cliente" : "Nuevo cliente"}
             </h2>
 
-            <div className="
+            <div
+              className="
               grid
               grid-cols-2
               gap-3
-            ">
-
+            "
+            >
               <input
                 placeholder="Nombre"
                 value={form.name}
@@ -627,8 +464,7 @@ export default function CustomerPage() {
                 onChange={(e) =>
                   setForm({
                     ...form,
-                    documentType:
-                      e.target.value,
+                    documentType: e.target.value,
                   })
                 }
                 className="
@@ -644,8 +480,7 @@ export default function CustomerPage() {
                 onChange={(e) =>
                   setForm({
                     ...form,
-                    documentNumber:
-                      e.target.value,
+                    documentNumber: e.target.value,
                   })
                 }
                 className="
@@ -661,8 +496,7 @@ export default function CustomerPage() {
                 onChange={(e) =>
                   setForm({
                     ...form,
-                    email:
-                      e.target.value,
+                    email: e.target.value,
                   })
                 }
                 className="
@@ -678,8 +512,7 @@ export default function CustomerPage() {
                 onChange={(e) =>
                   setForm({
                     ...form,
-                    phone:
-                      e.target.value,
+                    phone: e.target.value,
                   })
                 }
                 className="
@@ -695,8 +528,7 @@ export default function CustomerPage() {
                 onChange={(e) =>
                   setForm({
                     ...form,
-                    city:
-                      e.target.value,
+                    city: e.target.value,
                   })
                 }
                 className="
@@ -712,8 +544,7 @@ export default function CustomerPage() {
                 onChange={(e) =>
                   setForm({
                     ...form,
-                    address:
-                      e.target.value,
+                    address: e.target.value,
                   })
                 }
                 className="
@@ -730,8 +561,7 @@ export default function CustomerPage() {
                 onChange={(e) =>
                   setForm({
                     ...form,
-                    notes:
-                      e.target.value,
+                    notes: e.target.value,
                   })
                 }
                 className="
@@ -741,19 +571,17 @@ export default function CustomerPage() {
                   col-span-2
                 "
               />
-
             </div>
 
-            <div className="
+            <div
+              className="
               flex
               justify-end
               gap-2
-            ">
-
+            "
+            >
               <button
-                onClick={() =>
-                  setModalOpen(false)
-                }
+                onClick={() => setModalOpen(false)}
                 className="
                   border
                   px-4
@@ -775,23 +603,12 @@ export default function CustomerPage() {
                   rounded-lg
                 "
               >
-
-                {saving
-                  ? "Guardando..."
-                  : "Guardar"}
-
+                {saving ? "Guardando..." : "Guardar"}
               </button>
-
             </div>
-
           </div>
-
         </div>
-
       )}
-
     </div>
-
   );
-
 }

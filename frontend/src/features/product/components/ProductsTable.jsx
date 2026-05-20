@@ -14,33 +14,20 @@ import {
   Barcode,
 } from "lucide-react";
 
-import {
-  Table,
-  THead,
-} from "@/components/table";
+import { Table, THead } from "@/components/table";
 
-import ProductStatusBadge
-  from "./ProductStatusBadge";
+import ProductStatusBadge from "./ProductStatusBadge";
 
-import ProductActions
-  from "./ProductActions";
+import ProductActions from "./ProductActions";
 
-import {
-  formatPrice,
-} from "../utils/product.helpers";
+import { formatPrice } from "../utils/product.helpers";
 
-export default function ProductsTable({
-  products = [],
-  onEdit,
-  onDelete,
-}) {
-
+export default function ProductsTable({ products = [], onEdit, onDelete }) {
   // ========================================
   // TABLE COLUMNS
   // ========================================
 
   const columns = [
-
     {
       key: "product",
 
@@ -139,19 +126,15 @@ export default function ProductsTable({
         </div>
       ),
     },
-
   ];
 
   return (
-
     <div className="space-y-5">
-
       {/* ========================================
        * HEADER
        * ====================================== */}
 
       <div>
-
         <h2
           className="
             text-xl
@@ -171,10 +154,8 @@ export default function ProductsTable({
             text-slate-500
           "
         >
-          Gestiona inventario,
-          precios y productos.
+          Gestiona inventario, precios y productos.
         </p>
-
       </div>
 
       {/* ========================================
@@ -182,57 +163,45 @@ export default function ProductsTable({
        * ====================================== */}
 
       <Table>
-
         <THead columns={columns} />
 
         <tbody>
-
           {products.length > 0 ? (
-
             products.map((product) => {
-
               // ========================================
               // STOCK REAL
               // ========================================
 
-              const stock =
-                Number(
-                  product.totalStock ??
+              const stock = Number(
+                product.totalStock ??
                   product.availableStock ??
                   product.inventory?.reduce(
-                    (acc, item) =>
-                      acc + Number(item.stock || 0),
-                    0
+                    (acc, item) => acc + Number(item.stock || 0),
+                    0,
                   ) ??
-                  0
-                );
+                  0,
+              );
 
               // ========================================
               // PRICES
               // ========================================
 
-              const purchase =
-                Number(product.purchasePrice || 0);
+              const purchase = Number(product.purchasePrice || 0);
 
-              const cost =
-                Number(product.costPrice || 0);
+              const cost = Number(product.costPrice || 0);
 
-              const sale =
-                Number(product.salePrice || 0);
+              const sale = Number(product.salePrice || 0);
 
               // ========================================
               // PROFIT
               // ========================================
 
               // ✅ USA LOS CAMPOS REALES DE LA DB
-              const profit =
-                Number(product.profitAmount || 0);
+              const profit = Number(product.profitAmount || 0);
 
-              const margin =
-                Number(product.profitMargin || 0);
+              const margin = Number(product.profitMargin || 0);
 
               return (
-
                 <tr
                   key={product.id}
                   className="
@@ -244,15 +213,12 @@ export default function ProductsTable({
                     dark:hover:bg-slate-900/40
                   "
                 >
-
                   {/* ========================================
                    * PRODUCT
                    * ====================================== */}
 
                   <td className="px-6 py-5">
-
                     <div>
-
                       <h3
                         className="
                           text-sm
@@ -272,14 +238,9 @@ export default function ProductsTable({
                           line-clamp-2
                         "
                       >
-                        {
-                          product.description ||
-                          "Sin descripción"
-                        }
+                        {product.description || "Sin descripción"}
                       </p>
-
                     </div>
-
                   </td>
 
                   {/* ========================================
@@ -318,7 +279,6 @@ export default function ProductsTable({
                    * ====================================== */}
 
                   <td className="px-6 py-5">
-
                     <span
                       className="
                         inline-flex
@@ -333,12 +293,8 @@ export default function ProductsTable({
                         font-medium
                       "
                     >
-                      {
-                        product.category?.name ||
-                        "-"
-                      }
+                      {product.category?.name || "-"}
                     </span>
-
                   </td>
 
                   {/* ========================================
@@ -346,9 +302,7 @@ export default function ProductsTable({
                    * ====================================== */}
 
                   <td className="px-6 py-5">
-
                     <div className="flex flex-col gap-1">
-
                       <span
                         className="
                           text-sm
@@ -357,9 +311,7 @@ export default function ProductsTable({
                           dark:text-slate-100
                         "
                       >
-                        {stock}
-                        {" "}
-                        unidades
+                        {stock} unidades
                       </span>
 
                       <span
@@ -368,9 +320,7 @@ export default function ProductsTable({
                           text-slate-500
                         "
                       >
-                        Min:
-                        {" "}
-                        {product.minStock}
+                        Min: {product.minStock}
                       </span>
 
                       <span
@@ -379,13 +329,9 @@ export default function ProductsTable({
                           text-slate-500
                         "
                       >
-                        Max:
-                        {" "}
-                        {product.maxStock || "-"}
+                        Max: {product.maxStock || "-"}
                       </span>
-
                     </div>
-
                   </td>
 
                   {/* ========================================
@@ -393,11 +339,8 @@ export default function ProductsTable({
                    * ====================================== */}
 
                   <td className="px-6 py-5">
-
                     <div className="space-y-1">
-
                       <div>
-
                         <p
                           className="
                             text-xs
@@ -417,11 +360,9 @@ export default function ProductsTable({
                         >
                           {formatPrice(purchase)}
                         </h3>
-
                       </div>
 
                       <div>
-
                         <p
                           className="
                             text-xs
@@ -440,11 +381,9 @@ export default function ProductsTable({
                         >
                           {formatPrice(cost)}
                         </h3>
-
                       </div>
 
                       <div>
-
                         <p
                           className="
                             text-xs
@@ -463,11 +402,8 @@ export default function ProductsTable({
                         >
                           {formatPrice(sale)}
                         </h3>
-
                       </div>
-
                     </div>
-
                   </td>
 
                   {/* ========================================
@@ -475,25 +411,15 @@ export default function ProductsTable({
                    * ====================================== */}
 
                   <td className="px-6 py-5">
-
                     <div>
-
                       <p
                         className={`
                           text-sm
                           font-bold
-                          ${
-                            profit >= 0
-                              ? "text-emerald-600"
-                              : "text-red-500"
-                          }
+                          ${profit >= 0 ? "text-emerald-600" : "text-red-500"}
                         `}
                       >
-                        {
-                          profit >= 0
-                            ? "+"
-                            : ""
-                        }
+                        {profit >= 0 ? "+" : ""}
 
                         {formatPrice(profit)}
                       </p>
@@ -505,13 +431,9 @@ export default function ProductsTable({
                           text-slate-500
                         "
                       >
-                        {margin.toFixed(2)}%
-                        {" "}
-                        margen
+                        {margin.toFixed(2)}% margen
                       </p>
-
                     </div>
-
                   </td>
 
                   {/* ========================================
@@ -519,11 +441,7 @@ export default function ProductsTable({
                    * ====================================== */}
 
                   <td className="px-6 py-5">
-
-                    <ProductStatusBadge
-                      active={product.isActive}
-                    />
-
+                    <ProductStatusBadge active={product.isActive} />
                   </td>
 
                   {/* ========================================
@@ -531,25 +449,17 @@ export default function ProductsTable({
                    * ====================================== */}
 
                   <td className="px-6 py-5">
-
                     <ProductActions
                       product={product}
                       onEdit={onEdit}
                       onDelete={onDelete}
                     />
-
                   </td>
-
                 </tr>
-
               );
-
             })
-
           ) : (
-
             <tr>
-
               <td
                 colSpan={9}
                 className="
@@ -558,7 +468,6 @@ export default function ProductsTable({
                   text-center
                 "
               >
-
                 <div
                   className="
                     flex
@@ -567,7 +476,6 @@ export default function ProductsTable({
                     justify-center
                   "
                 >
-
                   <div
                     className="
                       mb-4
@@ -581,7 +489,6 @@ export default function ProductsTable({
                       dark:bg-slate-800
                     "
                   >
-
                     <Package
                       className="
                         h-8
@@ -589,7 +496,6 @@ export default function ProductsTable({
                         text-slate-400
                       "
                     />
-
                   </div>
 
                   <h3
@@ -610,24 +516,14 @@ export default function ProductsTable({
                       text-slate-500
                     "
                   >
-                    Empieza creando
-                    tu primer producto.
+                    Empieza creando tu primer producto.
                   </p>
-
                 </div>
-
               </td>
-
             </tr>
-
           )}
-
         </tbody>
-
       </Table>
-
     </div>
-
   );
-
 }

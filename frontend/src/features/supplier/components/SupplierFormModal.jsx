@@ -15,28 +15,19 @@ import {
   Building2,
 } from "lucide-react";
 
-import Modal
-  from "@/components/modals/Modal";
+import Modal from "@/components/modals/Modal";
 
-import HeaderModal
-  from "@/components/modals/HeaderModal";
+import HeaderModal from "@/components/modals/HeaderModal";
 
-import FooterModal
-  from "@/components/modals/FooterModal";
+import FooterModal from "@/components/modals/FooterModal";
 
-import {
-  ModernButton,
-  SubmitButton,
-} from "@/components/buttons";
+import { ModernButton, SubmitButton } from "@/components/buttons";
 
-import Input
-  from "@/components/inputs/Input";
+import Input from "@/components/inputs/Input";
 
-import Select
-  from "@/components/selects/Select";
+import Select from "@/components/selects/Select";
 
 export default function SupplierFormModal({
-
   open,
   onClose,
   onSubmit,
@@ -46,27 +37,15 @@ export default function SupplierFormModal({
 
   loading = false,
   isEdit = false,
-
 }) {
-
   return (
-
-    <Modal
-      open={open}
-      onClose={onClose}
-      size="lg"
-    >
-
+    <Modal open={open} onClose={onClose} size="lg">
       {/* ========================================
        * HEADER
        * ====================================== */}
 
       <HeaderModal
-        title={
-          isEdit
-            ? "Editar Proveedor"
-            : "Nuevo Proveedor"
-        }
+        title={isEdit ? "Editar Proveedor" : "Nuevo Proveedor"}
         subtitle="
           Configura toda la
           información del proveedor.
@@ -80,15 +59,12 @@ export default function SupplierFormModal({
 
       <form
         onSubmit={(e) => {
+          e.preventDefault();
 
-          e.preventDefault()
-
-          onSubmit()
-
+          onSubmit();
         }}
         className="flex flex-col"
       >
-
         <div
           className="
             max-h-[72vh]
@@ -98,15 +74,12 @@ export default function SupplierFormModal({
             py-6
           "
         >
-
           {/* ========================================
            * GENERAL INFO
            * ====================================== */}
 
           <section className="space-y-5">
-
             <div className="flex items-center gap-3 mb-5">
-
               <div
                 className="
                   flex h-10 w-10
@@ -118,7 +91,6 @@ export default function SupplierFormModal({
                   dark:bg-slate-950
                 "
               >
-
                 <Truck
                   size={20}
                   className="
@@ -126,11 +98,9 @@ export default function SupplierFormModal({
                     dark:text-slate-300
                   "
                 />
-
               </div>
 
               <div>
-
                 <h3
                   className="
                     text-sm font-semibold
@@ -149,9 +119,7 @@ export default function SupplierFormModal({
                 >
                   Datos principales del proveedor
                 </p>
-
               </div>
-
             </div>
 
             <div
@@ -160,7 +128,6 @@ export default function SupplierFormModal({
                 md:grid-cols-2
               "
             >
-
               <Input
                 label="Nombre"
                 name="name"
@@ -179,9 +146,7 @@ export default function SupplierFormModal({
                 icon={FileText}
                 placeholder="20123456789"
               />
-
             </div>
-
           </section>
 
           {/* ========================================
@@ -189,9 +154,7 @@ export default function SupplierFormModal({
            * ====================================== */}
 
           <section className="space-y-5">
-
             <div className="flex items-center gap-3 mb-5">
-
               <div
                 className="
                   flex h-10 w-10
@@ -203,7 +166,6 @@ export default function SupplierFormModal({
                   dark:bg-slate-950
                 "
               >
-
                 <User
                   size={20}
                   className="
@@ -211,11 +173,9 @@ export default function SupplierFormModal({
                     dark:text-slate-300
                   "
                 />
-
               </div>
 
               <div>
-
                 <h3
                   className="
                     text-sm font-semibold
@@ -234,9 +194,7 @@ export default function SupplierFormModal({
                 >
                   Información de contacto del proveedor
                 </p>
-
               </div>
-
             </div>
 
             <div
@@ -245,7 +203,6 @@ export default function SupplierFormModal({
                 md:grid-cols-2
               "
             >
-
               <Input
                 label="Persona de Contacto"
                 name="contactPerson"
@@ -282,9 +239,7 @@ export default function SupplierFormModal({
                 icon={Globe}
                 placeholder="https://empresa.com"
               />
-
             </div>
-
           </section>
 
           {/* ========================================
@@ -292,9 +247,7 @@ export default function SupplierFormModal({
            * ====================================== */}
 
           <section className="space-y-5">
-
             <div className="flex items-center gap-3 mb-5">
-
               <div
                 className="
                   flex h-10 w-10
@@ -306,7 +259,6 @@ export default function SupplierFormModal({
                   dark:bg-slate-950
                 "
               >
-
                 <MapPin
                   size={20}
                   className="
@@ -314,11 +266,9 @@ export default function SupplierFormModal({
                     dark:text-slate-300
                   "
                 />
-
               </div>
 
               <div>
-
                 <h3
                   className="
                     text-sm font-semibold
@@ -337,9 +287,7 @@ export default function SupplierFormModal({
                 >
                   Datos complementarios
                 </p>
-
               </div>
-
             </div>
 
             <div
@@ -348,7 +296,6 @@ export default function SupplierFormModal({
                 md:grid-cols-2
               "
             >
-
               <Input
                 label="Dirección"
                 name="address"
@@ -375,9 +322,7 @@ export default function SupplierFormModal({
                   },
                 ]}
               />
-
             </div>
-
           </section>
 
           {/* ========================================
@@ -385,9 +330,7 @@ export default function SupplierFormModal({
            * ====================================== */}
 
           <section className="space-y-5">
-
             <div className="flex items-center gap-3 mb-5">
-
               <div
                 className="
                   flex h-10 w-10
@@ -399,7 +342,6 @@ export default function SupplierFormModal({
                   dark:bg-slate-950
                 "
               >
-
                 <FileText
                   size={20}
                   className="
@@ -407,11 +349,9 @@ export default function SupplierFormModal({
                     dark:text-slate-300
                   "
                 />
-
               </div>
 
               <div>
-
                 <h3
                   className="
                     text-sm font-semibold
@@ -421,9 +361,7 @@ export default function SupplierFormModal({
                 >
                   Notas
                 </h3>
-
               </div>
-
             </div>
 
             <textarea
@@ -455,9 +393,7 @@ export default function SupplierFormModal({
                 focus:ring-blue-500/20
               "
             />
-
           </section>
-
         </div>
 
         {/* ========================================
@@ -465,25 +401,21 @@ export default function SupplierFormModal({
          * ====================================== */}
 
         <FooterModal>
-
           <div
             className="
               flex w-full items-center
               justify-between gap-4 pb-5
             "
           >
-
             <div
               className="
                 hidden sm:block
                 text-xs text-slate-500
               "
             >
-              {
-                isEdit
-                  ? "Los cambios serán actualizados inmediatamente."
-                  : "El proveedor será registrado en el sistema."
-              }
+              {isEdit
+                ? "Los cambios serán actualizados inmediatamente."
+                : "El proveedor será registrado en el sistema."}
             </div>
 
             <div
@@ -492,7 +424,6 @@ export default function SupplierFormModal({
                 items-center gap-3
               "
             >
-
               <ModernButton
                 type="button"
                 text="Cancelar"
@@ -511,17 +442,10 @@ export default function SupplierFormModal({
                 }
                 loading={loading}
               />
-
             </div>
-
           </div>
-
         </FooterModal>
-
       </form>
-
     </Modal>
-
-  )
-
+  );
 }

@@ -2,75 +2,58 @@
 // features/product/store/product.store.js
 // ========================================
 
-import { create }
-  from "zustand";
+import { create } from "zustand";
 
-const useProductStore = create(
-  (set) => ({
+const useProductStore = create((set) => ({
+  products: [],
 
-    products: [],
+  selectedProduct: null,
 
-    selectedProduct: null,
+  loading: false,
 
-    loading: false,
+  filters: {
+    search: "",
+    category: "",
+    status: "ALL",
+  },
 
-    filters: {
-
-      search: "",
-      category: "",
-      status: "ALL",
-
-    },
-
-    setProducts: (
-      products
-    ) => set({
-      products
+  setProducts: (products) =>
+    set({
+      products,
     }),
 
-    setSelectedProduct: (
-      product
-    ) => set({
-      selectedProduct: product
+  setSelectedProduct: (product) =>
+    set({
+      selectedProduct: product,
     }),
 
-    setLoading: (
-      loading
-    ) => set({
-      loading
+  setLoading: (loading) =>
+    set({
+      loading,
     }),
 
-    setFilters: (
-      filters
-    ) => set(
-      (state) => ({
-        filters: {
-          ...state.filters,
-          ...filters,
-        },
-      })
-    ),
+  setFilters: (filters) =>
+    set((state) => ({
+      filters: {
+        ...state.filters,
+        ...filters,
+      },
+    })),
 
-    resetStore: () =>
-      set({
+  resetStore: () =>
+    set({
+      products: [],
 
-        products: [],
+      selectedProduct: null,
 
-        selectedProduct: null,
+      loading: false,
 
-        loading: false,
-
-        filters: {
-
-          search: "",
-          category: "",
-          status: "ALL",
-
-        },
-
-      }),
-
-  })
-);
+      filters: {
+        search: "",
+        category: "",
+        status: "ALL",
+      },
+    }),
+}));
 
 export default useProductStore;

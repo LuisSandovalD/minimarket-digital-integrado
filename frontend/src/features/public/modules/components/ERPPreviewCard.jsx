@@ -1,17 +1,10 @@
 // models/components/ERPPreviewCard.jsx
 
-import {
-  ArrowUpRight,
-} from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 
-import {
-  motion,
-} from "framer-motion";
+import { motion } from "framer-motion";
 
-import {
-  fadeUp,
-  smoothTransition
-} from "@/components/animations/";
+import { fadeUp, smoothTransition } from "@/components/animations/";
 
 export default function ERPPreviewCard({
   title,
@@ -151,7 +144,6 @@ export default function ERPPreviewCard({
 
       {/* CONTENT */}
       <div className="p-8">
-
         {/* TITLE */}
         <h3
           className="

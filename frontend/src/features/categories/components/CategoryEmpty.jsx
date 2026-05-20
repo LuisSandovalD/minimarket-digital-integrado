@@ -1,11 +1,7 @@
-import {
-  FolderOpen,
-} from "lucide-react";
+import { FolderOpen } from "lucide-react";
 
 export default function CategoryEmpty() {
-
   return (
-
     <div
       className="
         rounded-3xl
@@ -18,7 +14,6 @@ export default function CategoryEmpty() {
         backdrop-blur-2xl
       "
     >
-
       <div
         className="
           mx-auto
@@ -34,11 +29,7 @@ export default function CategoryEmpty() {
           bg-white/[0.05]
         "
       >
-
-        <FolderOpen
-          size={30}
-        />
-
+        <FolderOpen size={30} />
       </div>
 
       <h3
@@ -57,12 +48,8 @@ export default function CategoryEmpty() {
           text-slate-500
         "
       >
-        Aún no existen
-        categorías registradas.
+        Aún no existen categorías registradas.
       </p>
-
     </div>
-
   );
-
 }

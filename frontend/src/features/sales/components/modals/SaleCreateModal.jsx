@@ -5,32 +5,20 @@
 
 import React from "react";
 
-import {
-  ShoppingCart,
-} from "lucide-react";
+import { ShoppingCart } from "lucide-react";
 
-import HeaderModal
-  from "@/components/modals/HeaderModal";
+import HeaderModal from "@/components/modals/HeaderModal";
 
-import FooterModal
-  from "@/components/modals/FooterModal";
+import FooterModal from "@/components/modals/FooterModal";
 
-import ModernButton
-  from "@/components/buttons/ModernButton";
+import ModernButton from "@/components/buttons/ModernButton";
 
-import { SaleForm }
-  from "../forms/SaleForm";
+import { SaleForm } from "../forms/SaleForm";
 
-export const SaleCreateModal = ({
-  open,
-  onClose,
-  onSubmit,
-}) => {
-
+export const SaleCreateModal = ({ open, onClose, onSubmit }) => {
   if (!open) return null;
 
   return (
-
     <div
       className="
         fixed
@@ -47,7 +35,6 @@ export const SaleCreateModal = ({
         p-4
       "
     >
-
       {/* MODAL */}
       <div
         className="
@@ -66,7 +53,6 @@ export const SaleCreateModal = ({
           dark:bg-[#0f172a]
         "
       >
-
         {/* HEADER */}
         <HeaderModal
           icon={ShoppingCart}
@@ -86,38 +72,18 @@ export const SaleCreateModal = ({
             p-6
           "
         >
-
-          <SaleForm
-            onSubmit={onSubmit}
-          />
-
+          <SaleForm onSubmit={onSubmit} />
         </div>
 
         {/* FOOTER */}
         <FooterModal align="between">
-
-          <ModernButton
-            text="Cancelar"
-            variant="secondary"
-            onClick={onClose}
-          />
+          <ModernButton text="Cancelar" variant="secondary" onClick={onClose} />
 
           <div className="flex items-center gap-3">
-
-            <ModernButton
-              text="Cerrar"
-              variant="ghost"
-              onClick={onClose}
-            />
-
+            <ModernButton text="Cerrar" variant="ghost" onClick={onClose} />
           </div>
-
         </FooterModal>
-
       </div>
-
     </div>
-
   );
-
 };

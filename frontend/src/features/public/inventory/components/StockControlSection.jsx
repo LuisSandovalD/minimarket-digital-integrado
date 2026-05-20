@@ -11,13 +11,9 @@ import {
 import { features } from "../constants/stock";
 
 export default function StockControlSection() {
-  
-
   return (
     <section className="relative isolate overflow-hidden py-24">
-
       <div className="relative grid gap-10 lg:gap-16 lg:grid-cols-12 items-center  max-w-7xl mx-auto">
-
         {/*  LEFT  COLUMN - IMAGE + SIDEBAR */}
         <div className="lg:col-span-7 relative">
           {/* MAIN IMAGE */}
@@ -142,7 +138,10 @@ export default function StockControlSection() {
                   const Icon = feature.icon;
                   return (
                     <div key={index} className="flex items-center gap-2">
-                      <Icon size={14} className="text-[#6096ba] dark:text-[#a3cef1] flex-shrink-0" />
+                      <Icon
+                        size={14}
+                        className="text-[#6096ba] dark:text-[#a3cef1] flex-shrink-0"
+                      />
                       <span className="text-[10px] text-[#5b6472] dark:text-[#cbd5e1]">
                         {feature.title}
                       </span>
@@ -154,7 +153,7 @@ export default function StockControlSection() {
           </div>
         </div>
 
-         {/* RIGHT COLUMN - CONTENT */}
+        {/* RIGHT COLUMN - CONTENT */}
         <div className="lg:col-span-5 space-y-6">
           {/* BADGE */}
           <span

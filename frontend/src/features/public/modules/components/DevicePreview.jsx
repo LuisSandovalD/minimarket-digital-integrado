@@ -1,21 +1,13 @@
 // models/components/DevicePreview.jsx
 
-import {
-  Monitor,
-  Smartphone,
-  Tablet,
-  Laptop,
-} from "lucide-react";
+import { Monitor, Smartphone, Tablet, Laptop } from "lucide-react";
 
-import {
-  devices,
-} from "../constants/devices";
+import { devices } from "../constants/devices";
 
 export default function DevicePreview() {
   return (
     <section className="relative py-20">
       <div className="mx-auto max-w-7xl">
-        
         <div
           className="
             grid
@@ -27,7 +19,6 @@ export default function DevicePreview() {
         >
           {/* LEFT */}
           <div>
-            
             {/* BADGE */}
             <div
               className="
@@ -57,7 +48,6 @@ export default function DevicePreview() {
               "
             >
               <Monitor size={16} />
-
               Compatibilidad Total
             </div>
 
@@ -113,11 +103,8 @@ export default function DevicePreview() {
                 md:text-lg
               "
             >
-              Accede al ERP POS desde
-              computadoras, laptops,
-              tablets o smartphones
-              con una experiencia fluida,
-              moderna y completamente
+              Accede al ERP POS desde computadoras, laptops, tablets o
+              smartphones con una experiencia fluida, moderna y completamente
               responsive.
             </p>
 
@@ -302,7 +289,6 @@ export default function DevicePreview() {
                   <img
                     src={item.image}
                     alt={item.title}
-
                     className="
                       h-56
                       w-full
@@ -336,17 +322,11 @@ export default function DevicePreview() {
                       text-white
                     "
                   >
-                    {index === 0 && (
-                      <Monitor size={18} />
-                    )}
+                    {index === 0 && <Monitor size={18} />}
 
-                    {index === 1 && (
-                      <Tablet size={18} />
-                    )}
+                    {index === 1 && <Tablet size={18} />}
 
-                    {index === 2 && (
-                      <Smartphone size={18} />
-                    )}
+                    {index === 2 && <Smartphone size={18} />}
                   </div>
 
                   <h3

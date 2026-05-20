@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 export default function AppFooter() {
   const currentYear = new Date().getFullYear();
@@ -9,20 +9,31 @@ export default function AppFooter() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-6">
           {/* Empresa */}
           <div>
-            <h3 className="font-semibold text-slate-900 dark:text-white mb-4">Empresa</h3>
+            <h3 className="font-semibold text-slate-900 dark:text-white mb-4">
+              Empresa
+            </h3>
             <ul className="space-y-2">
               <li>
-                <a href="#" className="text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-sm">
+                <a
+                  href="#"
+                  className="text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-sm"
+                >
                   Acerca de
                 </a>
               </li>
               <li>
-                <a href="#" className="text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-sm">
+                <a
+                  href="#"
+                  className="text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-sm"
+                >
                   Carreras
                 </a>
               </li>
               <li>
-                <a href="#" className="text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-sm">
+                <a
+                  href="#"
+                  className="text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-sm"
+                >
                   Blog
                 </a>
               </li>
@@ -31,20 +42,31 @@ export default function AppFooter() {
 
           {/* Producto */}
           <div>
-            <h3 className="font-semibold text-slate-900 dark:text-white mb-4">Producto</h3>
+            <h3 className="font-semibold text-slate-900 dark:text-white mb-4">
+              Producto
+            </h3>
             <ul className="space-y-2">
               <li>
-                <a href="#" className="text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-sm">
+                <a
+                  href="#"
+                  className="text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-sm"
+                >
                   Características
                 </a>
               </li>
               <li>
-                <a href="#" className="text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-sm">
+                <a
+                  href="#"
+                  className="text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-sm"
+                >
                   Precios
                 </a>
               </li>
               <li>
-                <a href="#" className="text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-sm">
+                <a
+                  href="#"
+                  className="text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-sm"
+                >
                   Documentación
                 </a>
               </li>
@@ -53,20 +75,31 @@ export default function AppFooter() {
 
           {/* Legal */}
           <div>
-            <h3 className="font-semibold text-slate-900 dark:text-white mb-4">Legal</h3>
+            <h3 className="font-semibold text-slate-900 dark:text-white mb-4">
+              Legal
+            </h3>
             <ul className="space-y-2">
               <li>
-                <a href="#" className="text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-sm">
+                <a
+                  href="#"
+                  className="text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-sm"
+                >
                   Privacidad
                 </a>
               </li>
               <li>
-                <a href="#" className="text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-sm">
+                <a
+                  href="#"
+                  className="text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-sm"
+                >
                   Términos
                 </a>
               </li>
               <li>
-                <a href="#" className="text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-sm">
+                <a
+                  href="#"
+                  className="text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-sm"
+                >
                   Cookies
                 </a>
               </li>
@@ -75,26 +108,25 @@ export default function AppFooter() {
 
           {/* Redes sociales */}
           <div>
-            <h3 className="font-semibold text-slate-900 dark:text-white mb-4">Síguenos</h3>
+            <h3 className="font-semibold text-slate-900 dark:text-white mb-4">
+              Síguenos
+            </h3>
             <div className="flex gap-3">
               <a
                 href="#"
                 className="w-9 h-9 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-blue-100 dark:hover:bg-blue-900 flex items-center justify-center transition-colors"
                 aria-label="GitHub"
-              >
-              </a>
+              ></a>
               <a
                 href="#"
                 className="w-9 h-9 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-blue-100 dark:hover:bg-blue-900 flex items-center justify-center transition-colors"
                 aria-label="Twitter"
-              >
-              </a>
+              ></a>
               <a
                 href="#"
                 className="w-9 h-9 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-blue-100 dark:hover:bg-blue-900 flex items-center justify-center transition-colors"
                 aria-label="LinkedIn"
-              >
-              </a>
+              ></a>
             </div>
           </div>
         </div>
@@ -106,10 +138,14 @@ export default function AppFooter() {
               © {currentYear} Tu Empresa. Todos los derechos reservados.
             </p>
             <div className="flex items-center gap-4">
-              <a href="#" className="text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-sm inline-flex items-center gap-1">
-              </a>
-              <a href="#" className="text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-sm inline-flex items-center gap-1">
-              </a>
+              <a
+                href="#"
+                className="text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-sm inline-flex items-center gap-1"
+              ></a>
+              <a
+                href="#"
+                className="text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-sm inline-flex items-center gap-1"
+              ></a>
             </div>
           </div>
         </div>

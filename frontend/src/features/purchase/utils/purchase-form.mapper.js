@@ -2,70 +2,45 @@
 // features/purchase/utils/purchase-form.mapper.js
 // ========================================
 
-export function mapPurchaseToForm(
-  purchase = {}
-) {
-
+export function mapPurchaseToForm(purchase = {}) {
   return {
+    supplierId: purchase.supplierId || "",
 
-    supplierId:
-      purchase.supplierId || "",
+    notes: purchase.notes || "",
 
+    details: Array.isArray(purchase.details)
+      ? purchase.details.map((detail) => ({
+          productId: detail.productId || "",
 
-    notes:
-      purchase.notes || "",
+          productName: detail.product?.name || "",
 
-    details:
-      Array.isArray(purchase.details)
+          sku: detail.product?.sku || "",
 
-        ? purchase.details.map(detail => ({
+          stock: detail.product?.stock || 0,
 
-            productId:
-              detail.productId || "",
+          quantity: detail.quantity || 1,
 
-            productName:
-              detail.product?.name || "",
+          // 🔥 BACKEND USES costPrice
+          costPrice: Number(detail.price || 0),
 
-            sku:
-              detail.product?.sku || "",
+          subtotal: Number(detail.subtotal || 0),
+        }))
+      : [
+          {
+            productId: "",
 
-            stock:
-              detail.product?.stock || 0,
+            productName: "",
 
-            quantity:
-              detail.quantity || 1,
+            sku: "",
 
-            // 🔥 BACKEND USES costPrice
-            costPrice:
-              Number(detail.price || 0),
+            stock: 0,
 
-            subtotal:
-              Number(detail.subtotal || 0),
+            quantity: 1,
 
-          }))
+            costPrice: 0,
 
-        : [
-
-            {
-
-              productId: "",
-
-              productName: "",
-
-              sku: "",
-
-              stock: 0,
-
-              quantity: 1,
-
-              costPrice: 0,
-
-              subtotal: 0,
-
-            }
-
-          ],
-
+            subtotal: 0,
+          },
+        ],
   };
-
 }

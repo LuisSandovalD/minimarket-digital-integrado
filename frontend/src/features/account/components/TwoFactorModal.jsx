@@ -1,53 +1,27 @@
-import {
-  useEffect,
-  useState,
-} from "react";
+import { useEffect, useState } from "react";
 
-import {
-  Lock,
-  AlertCircle,
-  CheckCircle,
-} from "lucide-react";
+import { Lock, AlertCircle, CheckCircle } from "lucide-react";
 
-import {
-  Modal,
-  HeaderModal,
-  FooterModal,
-} from "@/components/modals";
+import { Modal, HeaderModal, FooterModal } from "@/components/modals";
 
-import {
-  ModernButton,
-} from "@/components/buttons";
+import { ModernButton } from "@/components/buttons";
 
-import useTwoFactor
-  from "../hooks/useTwoFactor";
+import useTwoFactor from "../hooks/useTwoFactor";
 
-export default function TwoFactorModal({
-
-  open,
-  onClose,
-
-}) {
-
+export default function TwoFactorModal({ open, onClose }) {
   const {
-
     toggleTwoFactor,
 
     twoFactorLoading,
 
     enabled,
-
   } = useTwoFactor();
 
-  const [status, setStatus] =
-    useState(false);
+  const [status, setStatus] = useState(false);
 
   useEffect(() => {
-
-    setStatus(
-      Boolean(enabled)
-    );
-
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setStatus(Boolean(enabled));
   }, [enabled]);
 
   /* ======================================
@@ -55,38 +29,19 @@ export default function TwoFactorModal({
    * ==================================== */
 
   async function handleToggle() {
-
     try {
+      const newStatus = !status;
 
-      const newStatus =
-        !status;
+      await toggleTwoFactor(newStatus);
 
-      await toggleTwoFactor(
-        newStatus
-      );
-
-      setStatus(
-        newStatus
-      );
-
+      setStatus(newStatus);
     } catch (error) {
-
-      console.error(
-        "2FA ERROR:",
-        error
-      );
-
+      console.error("2FA ERROR:", error);
     }
-
   }
 
   return (
-
-    <Modal
-      open={open}
-      onClose={onClose}
-      size="md"
-    >
+    <Modal open={open} onClose={onClose} size="md">
       <HeaderModal
         title="Autenticación de Dos Factores"
         subtitle="
@@ -97,15 +52,12 @@ export default function TwoFactorModal({
       />
 
       <div className="px-6 py-6">
-
         <div className="space-y-5">
-
           {/* ======================================
            * STATUS CARD
            * ==================================== */}
 
           {status ? (
-
             <div
               className="
                 rounded-2xl
@@ -120,9 +72,7 @@ export default function TwoFactorModal({
                 p-5
               "
             >
-
               <div className="flex gap-3">
-
                 <div
                   className="
                     flex
@@ -137,7 +87,6 @@ export default function TwoFactorModal({
                     dark:bg-emerald-900/30
                   "
                 >
-
                   <CheckCircle
                     size={20}
                     className="
@@ -145,11 +94,9 @@ export default function TwoFactorModal({
                       dark:text-emerald-400
                     "
                   />
-
                 </div>
 
                 <div className="flex-1">
-
                   <p
                     className="
                       text-sm
@@ -173,20 +120,13 @@ export default function TwoFactorModal({
                       dark:text-emerald-300
                     "
                   >
-                    Tu cuenta ahora requiere
-                    una verificación adicional
-                    al iniciar sesión desde
-                    nuevos dispositivos.
+                    Tu cuenta ahora requiere una verificación adicional al
+                    iniciar sesión desde nuevos dispositivos.
                   </p>
-
                 </div>
-
               </div>
-
             </div>
-
           ) : (
-
             <div
               className="
                 rounded-2xl
@@ -201,9 +141,7 @@ export default function TwoFactorModal({
                 p-5
               "
             >
-
               <div className="flex gap-3">
-
                 <div
                   className="
                     flex
@@ -218,7 +156,6 @@ export default function TwoFactorModal({
                     dark:bg-amber-900/30
                   "
                 >
-
                   <AlertCircle
                     size={20}
                     className="
@@ -226,11 +163,9 @@ export default function TwoFactorModal({
                       dark:text-amber-400
                     "
                   />
-
                 </div>
 
                 <div className="flex-1">
-
                   <p
                     className="
                       text-sm
@@ -254,18 +189,12 @@ export default function TwoFactorModal({
                       dark:text-amber-300
                     "
                   >
-                    Activa la autenticación
-                    de dos factores para
-                    proteger tu cuenta frente
-                    a accesos no autorizados.
+                    Activa la autenticación de dos factores para proteger tu
+                    cuenta frente a accesos no autorizados.
                   </p>
-
                 </div>
-
               </div>
-
             </div>
-
           )}
 
           {/* ======================================
@@ -286,9 +215,7 @@ export default function TwoFactorModal({
               p-4
             "
           >
-
             <div className="flex gap-3">
-
               <div
                 className="
                   flex
@@ -303,7 +230,6 @@ export default function TwoFactorModal({
                   dark:bg-slate-800
                 "
               >
-
                 <Lock
                   size={18}
                   className="
@@ -311,11 +237,9 @@ export default function TwoFactorModal({
                     dark:text-slate-300
                   "
                 />
-
               </div>
 
               <div>
-
                 <p
                   className="
                     text-sm
@@ -339,25 +263,17 @@ export default function TwoFactorModal({
                     dark:text-slate-400
                   "
                 >
-                  Cuando el 2FA está activado,
-                  necesitarás confirmar tu
-                  identidad mediante un código
-                  temporal durante el inicio
-                  de sesión.
+                  Cuando el 2FA está activado, necesitarás confirmar tu
+                  identidad mediante un código temporal durante el inicio de
+                  sesión.
                 </p>
-
               </div>
-
             </div>
-
           </div>
-
         </div>
-
       </div>
 
       <FooterModal>
-
         <div
           className="
             flex
@@ -367,12 +283,7 @@ export default function TwoFactorModal({
 
           "
         >
-
-          <ModernButton
-            text="Cancelar"
-            variant="outline"
-            onClick={onClose}
-          />
+          <ModernButton text="Cancelar" variant="outline" onClick={onClose} />
 
           <ModernButton
             text={
@@ -384,22 +295,11 @@ export default function TwoFactorModal({
             }
             icon={Lock}
             onClick={handleToggle}
-            disabled={
-              twoFactorLoading
-            }
-            variant={
-              status
-                ? "outline"
-                : "default"
-            }
+            disabled={twoFactorLoading}
+            variant={status ? "outline" : "default"}
           />
-
         </div>
-
       </FooterModal>
-
     </Modal>
-
   );
-
 }

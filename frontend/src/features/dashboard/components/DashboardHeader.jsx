@@ -1,7 +1,5 @@
 export default function DashboardHeader() {
-
   return (
-
     <div
       className="
         flex
@@ -9,9 +7,7 @@ export default function DashboardHeader() {
         justify-between
       "
     >
-
       <div>
-
         <h1
           className="
             text-3xl
@@ -36,11 +32,7 @@ export default function DashboardHeader() {
         >
           Bienvenido al panel principal
         </p>
-
       </div>
-
     </div>
-
   );
-
 }

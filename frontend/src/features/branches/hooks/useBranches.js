@@ -2,96 +2,53 @@
 // hooks/useBranches.js
 // ========================================
 
-import {
-  useEffect,
-  useState,
-} from "react";
+import { useEffect, useState } from "react";
 
-import {
-  getBranches,
-} from "../services/branch.service";
+import { getBranches } from "../services/branch.service";
 
 export default function useBranches() {
+  const [branches, setBranches] = useState([]);
 
-  const [branches, setBranches] =
-    useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const [loading, setLoading] =
-    useState(true);
-
-  const [error, setError] =
-    useState("");
+  const [error, setError] = useState("");
 
   /* ========================================
    * FETCH BRANCHES
    * ====================================== */
 
-  const fetchBranches =
-    async () => {
+  const fetchBranches = async () => {
+    try {
+      setLoading(true);
 
-      try {
+      const data = await getBranches();
 
-        setLoading(true);
-
-        const data =
-          await getBranches();
-
-        setBranches(data);
-
-      } catch (error) {
-
-        setError(
-          error.message
-        );
-
-      } finally {
-
-        setLoading(false);
-
-      }
-
-    };
+      setBranches(data);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   /* ========================================
    * ADD BRANCH
    * ====================================== */
 
-  const addBranch = (
-    newBranch
-  ) => {
-
-    setBranches((prev) => [
-
-      newBranch,
-
-      ...prev,
-
-    ]);
-
+  const addBranch = (newBranch) => {
+    setBranches((prev) => [newBranch, ...prev]);
   };
 
   /* ========================================
    * UPDATE BRANCH
    * ====================================== */
 
-  const updateBranchLocal = (
-    updatedBranch
-  ) => {
-
+  const updateBranchLocal = (updatedBranch) => {
     setBranches((prev) =>
-
       prev.map((branch) =>
-
-        branch.id ===
-        updatedBranch.id
-
-          ? updatedBranch
-          : branch
-
-      )
-
+        branch.id === updatedBranch.id ? updatedBranch : branch,
+      ),
     );
-
   };
 
   /* ========================================
@@ -99,13 +56,11 @@ export default function useBranches() {
    * ====================================== */
 
   useEffect(() => {
-
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchBranches();
-
   }, []);
 
   return {
-
     branches,
 
     loading,
@@ -117,7 +72,5 @@ export default function useBranches() {
     addBranch,
 
     updateBranchLocal,
-
   };
-
 }

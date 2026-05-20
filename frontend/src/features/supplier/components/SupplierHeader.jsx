@@ -2,16 +2,9 @@
 // features/supplier/components/SupplierHeader.jsx
 // ========================================
 
-import {
-  Truck,
-  Plus,
-  Users,
-  Activity,
-  AlertCircle,
-} from "lucide-react";
+import { Truck, Plus, Users, Activity, AlertCircle } from "lucide-react";
 
-import PageHeader
-  from "@/components/ui/PageHeader";
+import PageHeader from "@/components/ui/PageHeader";
 
 export default function SupplierHeader({
   total = 0,
@@ -19,29 +12,23 @@ export default function SupplierHeader({
   inactive = 0,
   onCreate,
 }) {
-
   return (
-
     <PageHeader
-
       // ========================================
       // ICON
       // ========================================
 
       icon={Truck}
-
       // ========================================
       // BADGE
       // ========================================
 
       badge="Proveedores"
-
       // ========================================
       // TITLE
       // ========================================
 
       title="Gestión de Proveedores"
-
       // ========================================
       // DESCRIPTION
       // ========================================
@@ -51,27 +38,22 @@ export default function SupplierHeader({
         contactos, información
         comercial y compras.
       "
-
       // ========================================
       // MAIN ACTION
       // ========================================
 
       action={{
-
         label: "Nuevo Proveedor",
 
         icon: Plus,
 
         onClick: onCreate,
-
       }}
-
       // ========================================
       // EXTRA ACTIONS
       // ========================================
 
       headerActions={
-
         <div
           className="
             flex
@@ -79,19 +61,14 @@ export default function SupplierHeader({
             gap-3
           "
         >
-
           {/* EXTRA BUTTONS */}
-
         </div>
-
       }
-
       // ========================================
       // STATS
       // ========================================
 
       stats={[
-
         {
           icon: Users,
           label: "Total",
@@ -109,10 +86,7 @@ export default function SupplierHeader({
           label: "Inactivos",
           value: inactive,
         },
-
       ]}
     />
-
   );
-
 }

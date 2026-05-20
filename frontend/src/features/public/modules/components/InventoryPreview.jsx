@@ -1,17 +1,10 @@
 // models/components/InventoryPreview.jsx
 
-import {
-  motion,
-} from "framer-motion";
+import { motion } from "framer-motion";
 
-import {
-  Boxes,
-  PackageCheck,
-} from "lucide-react";
+import { Boxes, PackageCheck } from "lucide-react";
 
-import {
-  inventory,
-} from "../constants/inventory";
+import { inventory } from "../constants/inventory";
 
 import ERPPreviewCard from "./ERPPreviewCard";
 
@@ -51,13 +44,11 @@ export default function InventoryPreview() {
             opacity: [0.2, 0.45, 0.2],
             scale: [1, 1.08, 1],
           }}
-
           transition={{
             duration: 8,
             repeat: Infinity,
             ease: "easeInOut",
           }}
-
           className="
             absolute
             left-0
@@ -87,14 +78,12 @@ export default function InventoryPreview() {
           lg:px-10
         "
       >
-
         {/* HEADER */}
         <motion.div
           variants={staggerContainer}
           initial="hidden"
           whileInView="show"
           viewport={defaultViewport}
-
           className="
             flex
             flex-col
@@ -107,12 +96,10 @@ export default function InventoryPreview() {
         >
           {/* LEFT */}
           <div className="max-w-3xl">
-
             {/* BADGE */}
             <motion.div
               variants={fadeScale}
               transition={springTransition}
-
               className="
                 inline-flex
                 items-center
@@ -144,7 +131,6 @@ export default function InventoryPreview() {
               "
             >
               <Boxes size={16} />
-
               Inventario Inteligente
             </motion.div>
 
@@ -152,7 +138,6 @@ export default function InventoryPreview() {
             <motion.h2
               variants={fadeUp}
               transition={smoothTransition}
-
               className="
                 mt-7
 
@@ -169,7 +154,6 @@ export default function InventoryPreview() {
               "
             >
               Control total del stock
-
               <span
                 className="
                   mt-2
@@ -192,7 +176,6 @@ export default function InventoryPreview() {
             <motion.p
               variants={fadeUp}
               transition={smoothTransition}
-
               className="
                 mt-7
                 max-w-2xl
@@ -207,11 +190,8 @@ export default function InventoryPreview() {
                 md:text-lg
               "
             >
-              Supervisa productos,
-              movimientos, almacenes,
-              entradas, salidas y niveles
-              de stock desde una sola
-              plataforma moderna.
+              Supervisa productos, movimientos, almacenes, entradas, salidas y
+              niveles de stock desde una sola plataforma moderna.
             </motion.p>
           </div>
 
@@ -219,9 +199,7 @@ export default function InventoryPreview() {
           <motion.div
             variants={fadeScale}
             transition={springTransition}
-
             whileHover={hoverLift}
-
             className="
               flex
               items-center
@@ -251,11 +229,9 @@ export default function InventoryPreview() {
                 scale: 1.08,
                 rotate: 4,
               }}
-
               transition={{
                 duration: 0.3,
               }}
-
               className="
                 flex
                 h-12
@@ -297,8 +273,7 @@ export default function InventoryPreview() {
                   dark:text-[#cbd5e1]
                 "
               >
-                Control inteligente
-                de inventario.
+                Control inteligente de inventario.
               </p>
             </div>
           </motion.div>
@@ -310,7 +285,6 @@ export default function InventoryPreview() {
           initial="hidden"
           whileInView="show"
           viewport={defaultViewport}
-
           className="
             mt-16
 
@@ -324,17 +298,13 @@ export default function InventoryPreview() {
           {inventory.map((item, index) => (
             <motion.div
               key={index}
-
               variants={fadeUp}
-
               transition={{
                 ...smoothTransition,
                 delay: index * 0.08,
               }}
             >
-              <ERPPreviewCard
-                {...item}
-              />
+              <ERPPreviewCard {...item} />
             </motion.div>
           ))}
         </motion.div>

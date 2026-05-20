@@ -2,49 +2,32 @@
 // features/employees/pages/EmployeesPage.jsx
 // ========================================
 
-import {
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { useEffect, useMemo, useState } from "react";
 
-import {
-  Plus,
-  Pencil,
-  Trash2,
-  Search,
-} from "lucide-react";
+import { Plus, Pencil, Trash2, Search } from "lucide-react";
 
-import employeeService
-  from "../services/employee.service.js";
+import employeeService from "../services/employee.service.js";
 
 // ========================================
 // PAGE
 // ========================================
 
 export default function EmployeesPage() {
-
   // ========================================
   // STATES
   // ========================================
 
-  const [employees, setEmployees] =
-    useState([]);
+  const [employees, setEmployees] = useState([]);
 
-  const [loading, setLoading] =
-    useState(true);
+  const [loading, setLoading] = useState(true);
 
-  const [search, setSearch] =
-    useState("");
+  const [search, setSearch] = useState("");
 
-  const [modalOpen, setModalOpen] =
-    useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
 
-  const [saving, setSaving] =
-    useState(false);
+  const [saving, setSaving] = useState(false);
 
   const [form, setForm] = useState({
-
     id: null,
 
     name: "",
@@ -60,7 +43,6 @@ export default function EmployeesPage() {
     department: "",
 
     branchId: 1,
-
   });
 
   // ========================================
@@ -68,49 +50,34 @@ export default function EmployeesPage() {
   // ========================================
 
   useEffect(() => {
-
     fetchEmployees();
-
   }, []);
 
   async function fetchEmployees() {
-
     try {
-
       setLoading(true);
 
-      const response =
-        await employeeService.getAll();
+      const response = await employeeService.getAll();
 
-      const data =
-        response?.data?.data || [];
+      const data = response?.data?.data || [];
 
       setEmployees(data);
-
     } catch (error) {
-
       console.error(error);
 
       setEmployees([]);
-
     } finally {
-
       setLoading(false);
-
     }
-
   }
 
   // ========================================
   // FILTER
   // ========================================
 
-  const filteredEmployees =
-    useMemo(() => {
-
-      return employees.filter(employee => {
-
-        const text = `
+  const filteredEmployees = useMemo(() => {
+    return employees.filter((employee) => {
+      const text = `
           ${employee.name || ""}
           ${employee.email || ""}
           ${employee.phone || ""}
@@ -118,22 +85,16 @@ export default function EmployeesPage() {
           ${employee.employeeProfile?.department || ""}
         `.toLowerCase();
 
-        return text.includes(
-          search.toLowerCase()
-        );
-
-      });
-
-    }, [employees, search]);
+      return text.includes(search.toLowerCase());
+    });
+  }, [employees, search]);
 
   // ========================================
   // RESET FORM
   // ========================================
 
   function resetForm() {
-
     setForm({
-
       id: null,
 
       name: "",
@@ -149,9 +110,7 @@ export default function EmployeesPage() {
       department: "",
 
       branchId: 1,
-
     });
-
   }
 
   // ========================================
@@ -159,11 +118,9 @@ export default function EmployeesPage() {
   // ========================================
 
   function openCreate() {
-
     resetForm();
 
     setModalOpen(true);
-
   }
 
   // ========================================
@@ -171,36 +128,25 @@ export default function EmployeesPage() {
   // ========================================
 
   function openEdit(employee) {
-
     setForm({
+      id: employee.id,
 
-      id:
-        employee.id,
+      name: employee.name || "",
 
-      name:
-        employee.name || "",
-
-      email:
-        employee.email || "",
+      email: employee.email || "",
 
       password: "",
 
-      phone:
-        employee.phone || "",
+      phone: employee.phone || "",
 
-      position:
-        employee.employeeProfile?.position || "",
+      position: employee.employeeProfile?.position || "",
 
-      department:
-        employee.employeeProfile?.department || "",
+      department: employee.employeeProfile?.department || "",
 
-      branchId:
-        employee.branch?.id || 1,
-
+      branchId: employee.branch?.id || 1,
     });
 
     setModalOpen(true);
-
   }
 
   // ========================================
@@ -208,53 +154,31 @@ export default function EmployeesPage() {
   // ========================================
 
   async function handleSave() {
-
     try {
-
       setSaving(true);
 
       const payload = {
+        name: form.name,
 
-        name:
-          form.name,
+        email: form.email,
 
-        email:
-          form.email,
+        phone: form.phone,
 
-        phone:
-          form.phone,
+        position: form.position,
 
-        position:
-          form.position,
+        department: form.department,
 
-        department:
-          form.department,
-
-        branchId:
-          Number(form.branchId),
-
+        branchId: Number(form.branchId),
       };
 
       if (form.password) {
-
-        payload.password =
-          form.password;
-
+        payload.password = form.password;
       }
 
       if (form.id) {
-
-        await employeeService.update(
-          form.id,
-          payload
-        );
-
+        await employeeService.update(form.id, payload);
       } else {
-
-        await employeeService.create(
-          payload
-        );
-
+        await employeeService.create(payload);
       }
 
       setModalOpen(false);
@@ -262,19 +186,13 @@ export default function EmployeesPage() {
       resetForm();
 
       fetchEmployees();
-
     } catch (error) {
-
       console.error(error);
 
       alert("Ocurrió un error");
-
     } finally {
-
       setSaving(false);
-
     }
-
   }
 
   // ========================================
@@ -282,30 +200,19 @@ export default function EmployeesPage() {
   // ========================================
 
   async function handleDelete(id) {
-
-    const confirmed =
-      confirm(
-        "¿Eliminar empleado?"
-      );
+    const confirmed = confirm("¿Eliminar empleado?");
 
     if (!confirmed) return;
 
     try {
-
       await employeeService.remove(id);
 
       fetchEmployees();
-
     } catch (error) {
-
       console.error(error);
 
-      alert(
-        "No se pudo eliminar"
-      );
-
+      alert("No se pudo eliminar");
     }
-
   }
 
   // ========================================
@@ -313,13 +220,7 @@ export default function EmployeesPage() {
   // ========================================
 
   if (loading) {
-
-    return (
-      <div className="p-6">
-        Cargando empleados...
-      </div>
-    );
-
+    return <div className="p-6">Cargando empleados...</div>;
   }
 
   // ========================================
@@ -327,32 +228,33 @@ export default function EmployeesPage() {
   // ========================================
 
   return (
-
     <div className="p-6 space-y-5">
-
       {/* HEADER */}
-      <div className="
+      <div
+        className="
         flex
         items-center
         justify-between
-      ">
-
+      "
+      >
         <div>
-
-          <h1 className="
+          <h1
+            className="
             text-2xl
             font-bold
-          ">
+          "
+          >
             Empleados
           </h1>
 
-          <p className="
+          <p
+            className="
             text-sm
             text-gray-500
-          ">
+          "
+          >
             Gestión de empleados
           </p>
-
         </div>
 
         <button
@@ -369,34 +271,29 @@ export default function EmployeesPage() {
             rounded-lg
           "
         >
-
           <Plus size={16} />
-
           Nuevo
-
         </button>
-
       </div>
 
       {/* SEARCH */}
       <div className="relative">
-
-        <Search className="
+        <Search
+          className="
           absolute
           left-3
           top-3
           w-4
           h-4
           text-gray-400
-        " />
+        "
+        />
 
         <input
           type="text"
           placeholder="Buscar empleado..."
           value={search}
-          onChange={(e) =>
-            setSearch(e.target.value)
-          }
+          onChange={(e) => setSearch(e.target.value)}
           className="
             w-full
             border
@@ -406,134 +303,93 @@ export default function EmployeesPage() {
             py-2
           "
         />
-
       </div>
 
       {/* TABLE */}
-      <div className="
+      <div
+        className="
         bg-white
         border
         rounded-xl
         overflow-hidden
-      ">
-
+      "
+      >
         <table className="w-full text-sm">
-
-          <thead className="
+          <thead
+            className="
             bg-gray-100
             text-left
-          ">
-
+          "
+          >
             <tr>
+              <th className="p-3">Nombre</th>
 
-              <th className="p-3">
-                Nombre
-              </th>
+              <th className="p-3">Cargo</th>
 
-              <th className="p-3">
-                Cargo
-              </th>
+              <th className="p-3">Departamento</th>
 
-              <th className="p-3">
-                Departamento
-              </th>
+              <th className="p-3">Teléfono</th>
 
-              <th className="p-3">
-                Teléfono
-              </th>
-
-              <th className="p-3">
-                Acciones
-              </th>
-
+              <th className="p-3">Acciones</th>
             </tr>
-
           </thead>
 
           <tbody>
-
-            {filteredEmployees.map(employee => (
-
-              <tr
-                key={employee.id}
-                className="border-t"
-              >
-
+            {filteredEmployees.map((employee) => (
+              <tr key={employee.id} className="border-t">
                 <td className="p-3">
+                  <div className="font-medium">{employee.name}</div>
 
-                  <div className="font-medium">
-                    {employee.name}
-                  </div>
-
-                  <div className="
+                  <div
+                    className="
                     text-xs
                     text-gray-500
-                  ">
+                  "
+                  >
                     {employee.email}
                   </div>
-
                 </td>
 
                 <td className="p-3">
-
                   {employee.employeeProfile?.position || "-"}
-
                 </td>
 
                 <td className="p-3">
-
                   {employee.employeeProfile?.department || "-"}
-
                 </td>
 
-                <td className="p-3">
+                <td className="p-3">{employee.phone || "-"}</td>
 
-                  {employee.phone || "-"}
-
-                </td>
-
-                <td className="
+                <td
+                  className="
                   p-3
                   flex
                   gap-2
-                ">
-
+                "
+                >
                   <button
-                    onClick={() =>
-                      openEdit(employee)
-                    }
+                    onClick={() => openEdit(employee)}
                     className="
                       text-blue-600
                     "
                   >
-
                     <Pencil size={16} />
-
                   </button>
 
                   <button
-                    onClick={() =>
-                      handleDelete(employee.id)
-                    }
+                    onClick={() => handleDelete(employee.id)}
                     className="
                       text-red-600
                     "
                   >
-
                     <Trash2 size={16} />
-
                   </button>
-
                 </td>
-
               </tr>
-
             ))}
 
             {filteredEmployees.length === 0 && (
-
               <tr>
-
                 <td
                   colSpan={5}
                   className="
@@ -542,51 +398,43 @@ export default function EmployeesPage() {
                     text-gray-500
                   "
                 >
-
                   No hay empleados
-
                 </td>
-
               </tr>
-
             )}
-
           </tbody>
-
         </table>
-
       </div>
 
       {/* MODAL */}
       {modalOpen && (
-
-        <div className="
+        <div
+          className="
           fixed
           inset-0
           bg-black/40
           flex
           items-center
           justify-center
-        ">
-
-          <div className="
+        "
+        >
+          <div
+            className="
             bg-white
             w-full
             max-w-md
             rounded-xl
             p-5
             space-y-4
-          ">
-
-            <h2 className="
+          "
+          >
+            <h2
+              className="
               text-lg
               font-bold
-            ">
-
-              {form.id
-                ? "Editar empleado"
-                : "Nuevo empleado"}
-
+            "
+            >
+              {form.id ? "Editar empleado" : "Nuevo empleado"}
             </h2>
 
             <input
@@ -626,7 +474,6 @@ export default function EmployeesPage() {
             />
 
             {!form.id && (
-
               <input
                 type="password"
                 placeholder="Contraseña"
@@ -644,7 +491,6 @@ export default function EmployeesPage() {
                   p-2
                 "
               />
-
             )}
 
             <input
@@ -701,16 +547,15 @@ export default function EmployeesPage() {
               "
             />
 
-            <div className="
+            <div
+              className="
               flex
               justify-end
               gap-2
-            ">
-
+            "
+            >
               <button
-                onClick={() =>
-                  setModalOpen(false)
-                }
+                onClick={() => setModalOpen(false)}
                 className="
                   border
                   px-4
@@ -733,23 +578,12 @@ export default function EmployeesPage() {
                   rounded-lg
                 "
               >
-
-                {saving
-                  ? "Guardando..."
-                  : "Guardar"}
-
+                {saving ? "Guardando..." : "Guardar"}
               </button>
-
             </div>
-
           </div>
-
         </div>
-
       )}
-
     </div>
-
   );
-
 }

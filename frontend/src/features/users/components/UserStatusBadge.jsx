@@ -2,12 +2,8 @@
 // components/users/UserStatusBadge.jsx
 // ========================================
 
-export default function UserStatusBadge({
-  active,
-}) {
-
+export default function UserStatusBadge({ active }) {
   return (
-
     <div
       className={`
         inline-flex
@@ -32,27 +28,17 @@ export default function UserStatusBadge({
         }
       `}
     >
-
       <div
         className={`
           h-2
           w-2
           rounded-full
 
-          ${
-            active
-              ? "bg-emerald-400"
-              : "bg-rose-400"
-          }
+          ${active ? "bg-emerald-400" : "bg-rose-400"}
         `}
       />
 
-      {active
-        ? "Activo"
-        : "Inactivo"}
-
+      {active ? "Activo" : "Inactivo"}
     </div>
-
   );
-
 }

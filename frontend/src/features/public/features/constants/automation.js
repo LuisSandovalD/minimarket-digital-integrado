@@ -1,10 +1,4 @@
-import {
-  Bot,
-  BellRing,
-  RefreshCcw,
-  MailCheck,
-  Sparkles,
-} from "lucide-react";
+import { Bot, BellRing, RefreshCcw, MailCheck, Sparkles } from "lucide-react";
 export const automation = [
   {
     title: "Alertas Automáticas",
@@ -15,22 +9,19 @@ export const automation = [
 
   {
     title: "Procesos Inteligentes",
-    description:
-      "Automatiza tareas repetitivas dentro del ERP.",
+    description: "Automatiza tareas repetitivas dentro del ERP.",
     icon: Bot,
   },
 
   {
     title: "Sincronización",
-    description:
-      "Actualización automática entre módulos y sucursales.",
+    description: "Actualización automática entre módulos y sucursales.",
     icon: RefreshCcw,
   },
 
   {
     title: "Correos Empresariales",
-    description:
-      "Envía reportes y comprobantes automáticamente.",
+    description: "Envía reportes y comprobantes automáticamente.",
     icon: MailCheck,
   },
 ];

@@ -2,18 +2,11 @@
 // hooks/useBranchForm.js
 // ========================================
 
-import {
-  useEffect,
-  useState,
-} from "react";
+import { useEffect, useState } from "react";
 
-import {
-  createBranch,
-  updateBranch,
-} from "../services/branch.service";
+import { createBranch, updateBranch } from "../services/branch.service";
 
 const INITIAL_STATE = {
-
   name: "",
 
   code: "",
@@ -35,20 +28,12 @@ const INITIAL_STATE = {
   country: "",
 
   postalCode: "",
-
 };
 
-export default function useBranchForm({
-  branch,
-  onClose,
-  onSuccess,
-}) {
+export default function useBranchForm({ branch, onClose, onSuccess }) {
+  const [loading, setLoading] = useState(false);
 
-  const [loading, setLoading] =
-    useState(false);
-
-  const [formData, setFormData] =
-    useState(INITIAL_STATE);
+  const [formData, setFormData] = useState(INITIAL_STATE);
 
   /* ========================================
    * EDIT MODE
@@ -61,54 +46,36 @@ export default function useBranchForm({
    * ====================================== */
 
   useEffect(() => {
-
     if (!branch) {
-
-      setFormData(
-        INITIAL_STATE
-      );
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setFormData(INITIAL_STATE);
 
       return;
-
     }
 
     setFormData({
+      name: branch.name || "",
 
-      name:
-        branch.name || "",
+      code: branch.code || "",
 
-      code:
-        branch.code || "",
+      address: branch.address || "",
 
-      address:
-        branch.address || "",
+      phone: branch.phone || "",
 
-      phone:
-        branch.phone || "",
+      email: branch.email || "",
 
-      email:
-        branch.email || "",
+      logo: branch.logo || "",
 
-      logo:
-        branch.logo || "",
+      description: branch.description || "",
 
-      description:
-        branch.description || "",
+      city: branch.city || "",
 
-      city:
-        branch.city || "",
+      state: branch.state || "",
 
-      state:
-        branch.state || "",
+      country: branch.country || "",
 
-      country:
-        branch.country || "",
-
-      postalCode:
-        branch.postalCode || "",
-
+      postalCode: branch.postalCode || "",
     });
-
   }, [branch]);
 
   /* ========================================
@@ -116,155 +83,101 @@ export default function useBranchForm({
    * ====================================== */
 
   const handleChange = (e) => {
-
-    const {
-      name,
-      value,
-    } = e.target;
+    const { name, value } = e.target;
 
     setFormData((prev) => ({
-
       ...prev,
 
-      [name]:
-        value,
-
+      [name]: value,
     }));
-
   };
 
   /* ========================================
    * HANDLE IMAGE
    * ====================================== */
 
-  const handleImageChange =
-    (e) => {
+  const handleImageChange = (e) => {
+    const file = e.target.files?.[0];
 
-      const file =
-        e.target.files?.[0];
+    if (!file) return;
 
-      if (!file) return;
+    const reader = new FileReader();
 
-      const reader =
-        new FileReader();
+    reader.onloadend = () => {
+      setFormData((prev) => ({
+        ...prev,
 
-      reader.onloadend =
-        () => {
-
-          setFormData((prev) => ({
-
-            ...prev,
-
-            logo:
-              reader.result,
-
-          }));
-
-        };
-
-      reader.readAsDataURL(
-        file
-      );
-
+        logo: reader.result,
+      }));
     };
+
+    reader.readAsDataURL(file);
+  };
 
   /* ========================================
    * RESET
    * ====================================== */
 
   const resetForm = () => {
-
-    setFormData(
-      INITIAL_STATE
-    );
-
+    setFormData(INITIAL_STATE);
   };
 
   /* ========================================
    * SUBMIT
    * ====================================== */
 
-  const handleSubmit =
-    async (e) => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-      e.preventDefault();
+    if (loading) return;
 
-      if (loading) return;
+    try {
+      setLoading(true);
 
-      try {
+      let response;
 
-        setLoading(true);
+      /* ================================
+       * UPDATE
+       * ============================== */
 
-        let response;
+      if (isEdit) {
+        response = await updateBranch(
+          branch.id,
 
-        /* ================================
-         * UPDATE
-         * ============================== */
-
-        if (isEdit) {
-
-          response =
-            await updateBranch(
-
-              branch.id,
-
-              formData
-
-            );
-
-        }
-
+          formData,
+        );
+      } else {
         /* ================================
          * CREATE
          * ============================== */
-
-        else {
-
-          response =
-            await createBranch(
-              formData
-            );
-
-        }
-
-        /* ================================
-         * UPDATE UI INSTANTLY
-         * ============================== */
-
-        onSuccess?.(
-          response,
-          isEdit
-        );
-
-        /* ================================
-         * CLOSE MODAL
-         * ============================== */
-
-        onClose?.();
-
-        /* ================================
-         * RESET
-         * ============================== */
-
-        resetForm();
-
-      } catch (error) {
-
-        console.error(
-          "Error saving branch:",
-          error
-        );
-
-      } finally {
-
-        setLoading(false);
-
+        response = await createBranch(formData);
       }
 
-    };
+      /* ================================
+       * UPDATE UI INSTANTLY
+       * ============================== */
+
+      onSuccess?.(response, isEdit);
+
+      /* ================================
+       * CLOSE MODAL
+       * ============================== */
+
+      onClose?.();
+
+      /* ================================
+       * RESET
+       * ============================== */
+
+      resetForm();
+    } catch (error) {
+      console.error("Error saving branch:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return {
-
     loading,
 
     formData,
@@ -278,7 +191,5 @@ export default function useBranchForm({
     handleSubmit,
 
     resetForm,
-
   };
-
 }

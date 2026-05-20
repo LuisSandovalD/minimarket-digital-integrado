@@ -1,33 +1,19 @@
-import {
-  Mail,
-  Lock,
-} from "lucide-react";
+import { Mail, Lock } from "lucide-react";
 
-import {
-  Input,
-  PasswordInput,
-  Checkbox,
-  FormError,
-} from "@/components/inputs";
+import { Input, PasswordInput, Checkbox, FormError } from "@/components/inputs";
 
-import {
-  SubmitButton,
-} from "@/components/buttons";
+import { SubmitButton } from "@/components/buttons";
 
 import LoginOptions from "./LoginOptions";
 
 import useLoginForm from "../../hooks/useLoginForm";
 
-export default function LoginForm({
-  onClose,
-}) {
-
+export default function LoginForm({ onClose }) {
   // ======================================
   // LOGIN HOOK
   // ======================================
 
   const {
-
     form,
 
     loading,
@@ -37,7 +23,6 @@ export default function LoginForm({
     handleChange,
 
     handleSubmit,
-
   } = useLoginForm(onClose);
 
   // ======================================
@@ -45,13 +30,7 @@ export default function LoginForm({
   // ======================================
 
   return (
-
-    <form
-      id="login-form"
-      onSubmit={handleSubmit}
-      className="space-y-5"
-    >
-
+    <form id="login-form" onSubmit={handleSubmit} className="space-y-5">
       {/* ======================================
           EMAIL
       ====================================== */}
@@ -87,23 +66,19 @@ export default function LoginForm({
           ERROR
       ====================================== */}
 
-      <FormError
-        message={error}
-      />
+      <FormError message={error} />
 
       {/* ======================================
           OPTIONS
       ====================================== */}
 
       <LoginOptions>
-
         <Checkbox
           name="remember"
           label="Recordarme"
           checked={form.remember}
           onChange={handleChange}
         />
-
       </LoginOptions>
 
       {/* ======================================
@@ -113,11 +88,7 @@ export default function LoginForm({
       <SubmitButton
         form="login-form"
         type="submit"
-        text={
-          loading
-            ? "Ingresando..."
-            : "Iniciar Sesión"
-        }
+        text={loading ? "Ingresando..." : "Iniciar Sesión"}
         loading={loading}
         disabled={loading}
         once
@@ -142,9 +113,6 @@ export default function LoginForm({
           active:scale-[0.99]
         "
       />
-
     </form>
-
   );
-
 }

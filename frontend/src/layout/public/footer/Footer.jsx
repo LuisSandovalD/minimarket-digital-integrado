@@ -47,15 +47,13 @@ export default function Footer() {
               lg:grid-cols-4
             "
           >
-            {footerLinks.map(
-              (section, index) => (
-                <FooterLinks
-                  key={index}
-                  title={section.title}
-                  links={section.links}
-                />
-              )
-            )}
+            {footerLinks.map((section, index) => (
+              <FooterLinks
+                key={index}
+                title={section.title}
+                links={section.links}
+              />
+            ))}
           </div>
         </div>
 
