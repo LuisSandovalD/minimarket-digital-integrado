@@ -11,17 +11,26 @@ jobs:
       - name: Descargar codigo
         uses: actions/checkout@v4
 
-      # Usamos $GITHUB_WORKSPACE para asegurar la ruta absoluta correcta
-      - name: Crear archivo .env real
+      # Diagnóstico: Vamos a ver qué carpetas existen realmente en el servidor
+      - name: Ver estructura de carpetas actual
         run: |
-          mkdir -p "$GITHUB_WORKSPACE/backend"
-          echo 'DATABASE_URL="${{ secrets.DATABASE_URL }}"' > "$GITHUB_WORKSPACE/backend/.env"
-          echo 'JWT_SECRET="${{ secrets.JWT_SECRET }}"' >> "$GITHUB_WORKSPACE/backend/.env"
-          echo "PORT=5000" >> "$GITHUB_WORKSPACE/backend/.env"
+          echo "=== Dónde estoy parado ==="
+          pwd
+          echo "=== Qué carpetas hay aquí ==="
+          ls -R
 
-      # Verificamos rápido en la consola si el archivo realmente se creó ahí
-      - name: Verificar archivo .env
-        run: ls -la "$GITHUB_WORKSPACE/backend"
+      # Creamos el archivo .env en la raíz Y en la subcarpeta por si acaso
+      - name: Crear archivo .env en todas partes
+        run: |
+          # Intentar crear en la raíz directa
+          echo 'DATABASE_URL="${{ secrets.DATABASE_URL }}"' > .env
+          echo 'JWT_SECRET="${{ secrets.JWT_SECRET }}"' >> .env
+          echo "PORT=5000" >> .env
+          
+          # Intentar crear dentro de backend si existe la carpeta
+          mkdir -p backend
+          cp .env backend/.env
 
-      - name: Levantar Docker
-        run: docker compose up -d
+      # Forzamos a Docker a leer el archivo directamente
+      - name: Levantar Docker especificando el archivo env
+        run: docker compose --env-file backend/.env up -d
