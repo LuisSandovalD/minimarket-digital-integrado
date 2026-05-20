@@ -10,7 +10,6 @@ import {
   HeaderModal,
   FooterModal,
 } from "@/components/modals";
-
 import {
   ModernButton,
 } from "@/components/buttons";

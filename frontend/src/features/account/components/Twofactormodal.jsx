@@ -87,7 +87,6 @@ export default function TwoFactorModal({
       onClose={onClose}
       size="md"
     >
-
       <HeaderModal
         title="Autenticación de Dos Factores"
         subtitle="
