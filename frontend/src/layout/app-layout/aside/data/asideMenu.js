@@ -49,6 +49,7 @@ import {
   FileText,
   FileBarChart,
   User,
+
 } from "lucide-react";
 
 // ========================================
@@ -59,7 +60,6 @@ export const menuByRole = {
 
   // =====================================================
   // ADMIN
-  // Control total del sistema
   // =====================================================
 
   ADMIN: [
@@ -73,28 +73,28 @@ export const menuByRole = {
           id: "dashboard",
           label: "Dashboard",
           icon: LayoutDashboard,
-          href: "/dashboard",
+          href: "dashboard",
         },
 
         {
           id: "analytics",
           label: "Analítica",
           icon: BarChart3,
-          href: "/analytics",
+          href: "analytics",
         },
 
         {
           id: "reports",
           label: "Reportes",
           icon: FileBarChart,
-          href: "/reports",
+          href: "reports",
         },
 
         {
           id: "activity",
           label: "Actividad",
           icon: Activity,
-          href: "/activity",
+          href: "activity",
         },
 
       ],
@@ -109,14 +109,14 @@ export const menuByRole = {
           id: "companies",
           label: "Empresas",
           icon: Building2,
-          href: "/companies",
+          href: "companies",
         },
 
         {
           id: "branches",
           label: "Sucursales",
           icon: Store,
-          href: "/branches",
+          href: "branches",
         },
 
       ],
@@ -131,35 +131,35 @@ export const menuByRole = {
           id: "users",
           label: "Usuarios",
           icon: Users,
-          href: "/users",
+          href: "users",
         },
 
         {
           id: "employees",
           label: "Empleados",
           icon: UserCog,
-          href: "/employees",
+          href: "employees",
         },
 
         {
           id: "customers",
           label: "Clientes",
           icon: User,
-          href: "/customers",
+          href: "customers",
         },
 
         {
           id: "roles",
           label: "Roles",
           icon: ShieldCheck,
-          href: "/roles",
+          href: "roles",
         },
 
         {
           id: "audit",
           label: "Auditoría",
           icon: History,
-          href: "/audit",
+          href: "audit",
         },
 
       ],
@@ -174,35 +174,35 @@ export const menuByRole = {
           id: "sales",
           label: "Ventas",
           icon: ShoppingCart,
-          href: "/sales",
+          href: "sales",
         },
 
         {
           id: "purchases",
           label: "Compras",
           icon: Truck,
-          href: "/purchases",
+          href: "purchases",
         },
 
         {
           id: "inventory",
           label: "Inventario",
           icon: Warehouse,
-          href: "/inventory",
+          href: "inventory",
         },
 
         {
           id: "inventory-history",
           label: "Movimientos",
           icon: Archive,
-          href: "/inventory-history",
+          href: "inventory-history",
         },
 
         {
           id: "payments",
           label: "Pagos",
           icon: CreditCard,
-          href: "/payments",
+          href: "payments",
         },
 
       ],
@@ -217,42 +217,42 @@ export const menuByRole = {
           id: "notifications",
           label: "Notificaciones",
           icon: Bell,
-          href: "/notifications",
+          href: "notifications",
         },
 
         {
           id: "support",
           label: "Soporte",
           icon: LifeBuoy,
-          href: "/support",
+          href: "support",
         },
 
         {
           id: "tickets",
           label: "Tickets",
           icon: Ticket,
-          href: "/tickets",
+          href: "tickets",
         },
 
         {
           id: "database",
           label: "Base de datos",
           icon: Database,
-          href: "/database",
+          href: "database",
         },
 
         {
           id: "automation",
           label: "IA",
           icon: Cpu,
-          href: "/automation",
+          href: "automation",
         },
 
         {
           id: "settings",
           label: "Configuración",
           icon: Settings,
-          href: "/settings",
+          href: "settings",
         },
 
       ],
@@ -262,7 +262,6 @@ export const menuByRole = {
 
   // =====================================================
   // MANAGER
-  // Gerente de empresa
   // =====================================================
 
   MANAGER: [
@@ -276,28 +275,28 @@ export const menuByRole = {
           id: "dashboard",
           label: "Dashboard",
           icon: LayoutDashboard,
-          href: "/dashboard",
+          href: "dashboard",
         },
 
         {
           id: "analytics",
           label: "Analítica",
           icon: BarChart3,
-          href: "/analytics",
+          href: "analytics",
         },
 
         {
           id: "reports",
           label: "Reportes",
           icon: FileBarChart,
-          href: "/reports",
+          href: "reports",
         },
 
         {
           id: "statistics",
           label: "Estadísticas",
           icon: PieChart,
-          href: "/statistics",
+          href: "statistics",
         },
 
       ],
@@ -312,42 +311,42 @@ export const menuByRole = {
           id: "sales",
           label: "Ventas",
           icon: ShoppingCart,
-          href: "/sales",
+          href: "sales",
         },
 
         {
           id: "sale-details",
           label: "Detalle ventas",
           icon: ClipboardList,
-          href: "/sale-details",
+          href: "sale-details",
         },
 
         {
           id: "payments",
           label: "Pagos",
           icon: CreditCard,
-          href: "/payments",
+          href: "payments",
         },
 
         {
           id: "cashbox",
           label: "Caja",
           icon: Wallet,
-          href: "/cashbox",
+          href: "cashbox",
         },
 
         {
           id: "finance",
           label: "Finanzas",
           icon: TrendingUp,
-          href: "/finance",
+          href: "finance",
         },
 
         {
           id: "invoices",
           label: "Facturación",
           icon: Receipt,
-          href: "/invoices",
+          href: "invoices",
         },
 
       ],
@@ -362,28 +361,28 @@ export const menuByRole = {
           id: "products",
           label: "Productos",
           icon: Package,
-          href: "/products",
+          href: "products",
         },
 
         {
           id: "inventory",
           label: "Inventario",
           icon: Warehouse,
-          href: "/inventory",
+          href: "inventory",
         },
 
         {
           id: "inventory-history",
           label: "Movimientos",
           icon: Archive,
-          href: "/inventory-history",
+          href: "inventory-history",
         },
 
         {
           id: "barcode",
           label: "Código barras",
           icon: ScanLine,
-          href: "/barcode",
+          href: "barcode",
         },
 
       ],
@@ -398,7 +397,7 @@ export const menuByRole = {
           id: "purchases",
           label: "Compras",
           icon: Truck,
-          href: "/purchases",
+          href: "purchases",
         },
 
       ],
@@ -413,14 +412,14 @@ export const menuByRole = {
           id: "categories",
           label: "Categorías",
           icon: FileText,
-          href: "/categories",
+          href: "categories",
         },
 
         {
           id: "units",
           label: "Unidades",
           icon: PackageSearch,
-          href: "/units",
+          href: "units",
         },
 
       ],
@@ -435,21 +434,21 @@ export const menuByRole = {
           id: "employees",
           label: "Empleados",
           icon: Users,
-          href: "/employees",
+          href: "employees",
         },
 
         {
           id: "customers",
           label: "Clientes",
           icon: User,
-          href: "/customers",
+          href: "customers",
         },
 
         {
           id: "notifications",
           label: "Notificaciones",
           icon: Bell,
-          href: "/notifications",
+          href: "notifications",
         },
 
       ],
@@ -472,49 +471,49 @@ export const menuByRole = {
           id: "dashboard",
           label: "Dashboard",
           icon: LayoutDashboard,
-          href: "/dashboard",
+          href: "dashboard",
         },
 
         {
           id: "sales",
           label: "Ventas",
           icon: ShoppingCart,
-          href: "/sales",
+          href: "sales",
         },
 
         {
           id: "inventory",
           label: "Inventario",
           icon: Warehouse,
-          href: "/inventory",
+          href: "inventory",
         },
 
         {
           id: "inventory-history",
           label: "Movimientos",
           icon: Archive,
-          href: "/inventory-history",
+          href: "inventory-history",
         },
 
         {
           id: "employees",
           label: "Personal",
           icon: Users,
-          href: "/employees",
+          href: "employees",
         },
 
         {
           id: "customers",
           label: "Clientes",
           icon: User,
-          href: "/customers",
+          href: "customers",
         },
 
         {
           id: "reports",
           label: "Reportes",
           icon: FileBarChart,
-          href: "/reports",
+          href: "reports",
         },
 
       ],
@@ -537,56 +536,56 @@ export const menuByRole = {
           id: "dashboard",
           label: "Dashboard",
           icon: LayoutDashboard,
-          href: "/dashboard",
+          href: "dashboard",
         },
 
         {
           id: "sales",
           label: "Ventas",
           icon: ShoppingCart,
-          href: "/sales",
+          href: "sales",
         },
 
         {
           id: "customers",
           label: "Clientes",
           icon: User,
-          href: "/customers",
+          href: "customers",
         },
 
         {
           id: "payments",
           label: "Pagos",
           icon: CreditCard,
-          href: "/payments",
+          href: "payments",
         },
 
         {
           id: "cashbox",
           label: "Caja",
           icon: Wallet,
-          href: "/cashbox",
+          href: "cashbox",
         },
 
         {
           id: "products",
           label: "Productos",
           icon: Package,
-          href: "/products",
+          href: "products",
         },
 
         {
           id: "inventory",
           label: "Consultar stock",
           icon: Warehouse,
-          href: "/inventory",
+          href: "inventory",
         },
 
         {
           id: "barcode",
           label: "Escáner",
           icon: ScanLine,
-          href: "/barcode",
+          href: "barcode",
         },
 
       ],
@@ -609,35 +608,35 @@ export const menuByRole = {
           id: "dashboard",
           label: "Dashboard",
           icon: LayoutDashboard,
-          href: "/dashboard",
+          href: "dashboard",
         },
 
         {
           id: "analytics",
           label: "Analítica",
           icon: BarChart3,
-          href: "/analytics",
+          href: "analytics",
         },
 
         {
           id: "reports",
           label: "Reportes",
           icon: FileBarChart,
-          href: "/reports",
+          href: "reports",
         },
 
         {
           id: "inventory",
           label: "Inventario",
           icon: Warehouse,
-          href: "/inventory",
+          href: "inventory",
         },
 
         {
           id: "sales",
           label: "Ventas",
           icon: ShoppingCart,
-          href: "/sales",
+          href: "sales",
         },
 
       ],
