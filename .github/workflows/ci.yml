@@ -1,21 +1,16 @@
 name: Main CI Pipeline
 
 on:
-
   push:
-
     branches:
       - main
       - develop
-
   pull_request:
-
     branches:
       - main
       - develop
 
 jobs:
-
   backend:
     uses: ./.github/workflows/backend.yml
 
@@ -27,3 +22,7 @@ jobs:
       - backend
       - frontend
     uses: ./.github/workflows/docker.yml
+    # Le pasamos los secretos al workflow de docker para que pueda usarlos
+    secrets:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}

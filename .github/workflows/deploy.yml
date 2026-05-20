@@ -11,17 +11,25 @@ jobs:
       - name: Descargar codigo
         uses: actions/checkout@v4
 
-      # Creamos el archivo EXACTAMENTE en la ruta que Docker está reclamando
-      - name: Crear archivo .env en la carpeta backend
+      - name: Crear archivo .env en todas las ubicaciones posibles
         run: |
+          # 1. Asegurar que existe la carpeta backend
           mkdir -p backend
-          echo 'DATABASE_URL="${{ secrets.DATABASE_URL }}"' > backend/.env
-          echo 'JWT_SECRET="${{ secrets.JWT_SECRET }}"' >> backend/.env
-          echo "PORT=5000" >> backend/.env
+          
+          # 2. Definir el contenido del archivo de entorno
+          echo 'DATABASE_URL="${{ secrets.DATABASE_URL }}"' > .env
+          echo 'JWT_SECRET="${{ secrets.JWT_SECRET }}"' >> .env
+          echo "PORT=5000" >> .env
+          
+          # 3. Copiarlo exactamente a la subcarpeta backend también
+          cp .env backend/.env
 
-      # Paso de seguridad para asegurarnos de que el archivo existe antes de correr Docker
-      - name: Verificar que el archivo existe
-        run: ls -la backend/.env
+      - name: Verificar ubicacion de archivos
+        run: |
+          echo "=== Archivo en la raiz ==="
+          ls -la .env || echo "No esta en la raiz"
+          echo "=== Archivo en backend ==="
+          ls -la backend/.env || echo "No esta en backend"
 
       - name: Construir imagenes de Docker
         run: docker compose build
