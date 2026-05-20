@@ -11,26 +11,18 @@ jobs:
       - name: Descargar codigo
         uses: actions/checkout@v4
 
-      # Diagnóstico: Vamos a ver qué carpetas existen realmente en el servidor
-      - name: Ver estructura de carpetas actual
+      - name: Crear archivo .env temporal para el despliegue
         run: |
-          echo "=== Dónde estoy parado ==="
-          pwd
-          echo "=== Qué carpetas hay aquí ==="
-          ls -R
-
-      # Creamos el archivo .env en la raíz Y en la subcarpeta por si acaso
-      - name: Crear archivo .env en todas partes
-        run: |
-          # Intentar crear en la raíz directa
           echo 'DATABASE_URL="${{ secrets.DATABASE_URL }}"' > .env
           echo 'JWT_SECRET="${{ secrets.JWT_SECRET }}"' >> .env
           echo "PORT=5000" >> .env
-          
-          # Intentar crear dentro de backend si existe la carpeta
-          mkdir -p backend
-          cp .env backend/.env
 
-      # Forzamos a Docker a leer el archivo directamente
-      - name: Levantar Docker especificando el archivo env
-        run: docker compose --env-file backend/.env up -d
+      - name: Construir imagenes de Docker
+        env:
+          ENV_FILE_PATH: .env
+        run: docker compose build
+
+      - name: Levantar contenedores con Docker Compose
+        env:
+          ENV_FILE_PATH: .env
+        run: docker compose up -d
