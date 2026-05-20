@@ -16,21 +16,78 @@ const express =
 module.exports = (app) => {
 
   // ========================================
+  // ALLOWED ORIGINS
+  // ========================================
+
+  const allowedOrigins = [
+
+    // LOCAL FRONTEND
+    "http://localhost:5173",
+
+    // VERCEL PRODUCTION
+    "https://minimarket-digital-integrado.vercel.app",
+
+    // VERCEL PREVIEW
+    "https://minimarket-digital-integrado-294oiexip-luis-sandoval.vercel.app",
+
+  ];
+
+  // ========================================
   // CORS
   // ========================================
+
   app.use(
 
     cors({
 
-      origin: [
+      origin: (origin, callback) => {
 
-        "http://localhost:5173",
+        // PERMITIR REQUESTS SIN ORIGIN
+        // (POSTMAN, MOBILE APPS, ETC)
+        if (!origin) {
 
-        "https://minimarket-digital-integrado-294oiexip-luis-sandoval.vercel.app",
+          return callback(null, true);
+
+        }
+
+        // VALIDAR ORIGIN
+        if (allowedOrigins.includes(origin)) {
+
+          return callback(null, true);
+
+        }
+
+        return callback(
+
+          new Error(
+            `CORS bloqueado para origin: ${origin}`
+          ),
+
+          false
+
+        );
+
+      },
+
+      credentials: true,
+
+      methods: [
+
+        "GET",
+        "POST",
+        "PUT",
+        "PATCH",
+        "DELETE",
+        "OPTIONS",
 
       ],
 
-      credentials: true,
+      allowedHeaders: [
+
+        "Content-Type",
+        "Authorization",
+
+      ],
 
     })
 
@@ -40,13 +97,23 @@ module.exports = (app) => {
   // SECURITY
   // ========================================
 
-  app.use(helmet());
+  app.use(
+
+    helmet({
+
+      crossOriginResourcePolicy: false,
+
+    })
+
+  );
 
   // ========================================
   // COOKIES
   // ========================================
 
-  app.use(cookieParser());
+  app.use(
+    cookieParser()
+  );
 
   // ========================================
   // BODY PARSER
