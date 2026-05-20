@@ -18,14 +18,17 @@ module.exports = (app) => {
   // ========================================
   // CORS
   // ========================================
-
   app.use(
 
     cors({
 
-      origin:
-        process.env.FRONTEND_URL ||
+      origin: [
+
         "http://localhost:5173",
+
+        "https://minimarket-digital-integrado-294oiexip-luis-sandoval.vercel.app",
+
+      ],
 
       credentials: true,
 
