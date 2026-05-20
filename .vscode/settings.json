@@ -1,0 +1,54 @@
+{
+    // ========================================
+    // PRISMA
+    // ========================================
+    "prisma.pinToPrisma6": true,
+    // ========================================
+    // FORMAT
+    // ========================================
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    // ========================================
+    // ESLINT AUTO FIX
+    // ========================================
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit",
+        "source.organizeImports": "explicit"
+    },
+    // ========================================
+    // ESLINT
+    // ========================================
+    "eslint.validate": [
+        "javascript",
+        "javascriptreact"
+    ],
+    "eslint.format.enable": true,
+    // ========================================
+    // PRETTIER
+    // ========================================
+    "prettier.useTabs": false,
+    "prettier.tabWidth": 2,
+    "prettier.singleQuote": false,
+    "prettier.semi": true,
+    "prettier.trailingComma": "all",
+    "prettier.printWidth": 80,
+    // ========================================
+    // FILES
+    // ========================================
+    "files.autoSave": "afterDelay",
+    "files.autoSaveDelay": 1000,
+    // ========================================
+    // TERMINAL
+    // ========================================
+    "terminal.integrated.defaultProfile.windows": "PowerShell",
+    // ========================================
+    // TYPESCRIPT / JS
+    // ========================================
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    // ========================================
+    // EXPLORER
+    // ========================================
+    "explorer.confirmDelete": false,
+    "explorer.confirmDragAndDrop": false
+}
