@@ -1,20 +1,19 @@
-import { useEffect, useState } from "react";
+import { ModernButton } from "@/components/buttons";
+import { Input } from "@/components/forms/";
+import { ModernImageUpload } from "@/components/media/";
+import { FooterModal, HeaderModal, Modal } from "@/components/overlays/";
 import {
-  User2,
+  Briefcase,
+  Building2,
+  Calendar,
+  Camera,
   Mail,
   Phone,
-  Building2,
   Save,
   Shield,
-  Briefcase,
-  Camera,
-  Calendar,
-  Lock,
+  User2,
 } from "lucide-react";
-import { Modal, HeaderModal, FooterModal } from "@/components/modals";
-import { ModernButton } from "@/components/buttons";
-import Input from "@/components/inputs/Input";
-import ModernImageUpload from "@/components/ui/ModernImageUpload";
+import { useEffect, useState } from "react";
 
 export default function EditProfileModal({
   open,

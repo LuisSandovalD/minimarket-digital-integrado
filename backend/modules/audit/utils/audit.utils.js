@@ -1,2 +1,0 @@
-exports.formatAudit =
-(data) => data;

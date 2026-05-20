@@ -1,6 +1,6 @@
-import { Mail, Lock } from "lucide-react";
+import { Lock, Mail } from "lucide-react";
 
-import { Input, PasswordInput, Checkbox, FormError } from "@/components/inputs";
+import { Checkbox, FormError, Input, PasswordInput } from "@/components/forms/";
 
 import { SubmitButton } from "@/components/buttons";
 

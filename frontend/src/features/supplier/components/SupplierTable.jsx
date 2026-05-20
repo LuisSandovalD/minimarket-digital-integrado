@@ -2,9 +2,9 @@
 // features/supplier/components/SupplierTable.jsx
 // ========================================
 
-import { Building2, Mail, Phone, User2, Globe, Settings2 } from "lucide-react";
+import { Building2, Globe, Mail, Phone, Settings2, User2 } from "lucide-react";
 
-import { Table, THead } from "@/components/table";
+import { Table, THead } from "@/components/data-display/";
 
 import SupplierActions from "./SupplierActions";
 

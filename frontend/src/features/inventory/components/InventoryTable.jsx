@@ -1,18 +1,18 @@
 import {
-  Package,
-  Building2,
-  Boxes,
-  Lock,
-  AlertTriangle,
-  CheckCircle2,
   Activity,
-  Settings2,
-  Plus,
+  AlertTriangle,
+  Boxes,
+  Building2,
+  CheckCircle2,
+  Lock,
   Minus,
+  Package,
+  Plus,
+  Settings2,
   ShieldAlert,
 } from "lucide-react";
 
-import { Table, THead } from "@/components/table";
+import { Table, THead } from "@/components/data-display/";
 
 import { getStockStatus } from "../utils/stockStatus";
 

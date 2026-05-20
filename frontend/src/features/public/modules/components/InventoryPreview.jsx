@@ -9,14 +9,14 @@ import { inventory } from "../constants/inventory";
 import ERPPreviewCard from "./ERPPreviewCard";
 
 import {
-  fadeUp,
+  defaultViewport,
   fadeScale,
-  staggerContainer,
+  fadeUp,
+  hoverLift,
   smoothTransition,
   springTransition,
-  defaultViewport,
-  hoverLift,
-} from "@/components/animations";
+  staggerContainer,
+} from "@/components/effects/";
 
 export default function InventoryPreview() {
   return (

@@ -1,8 +1,8 @@
-import { X, User2, Shield, BarChart3, Pencil } from "lucide-react";
+import { BarChart3, Pencil, Shield, User2, X } from "lucide-react";
 
 import { useState } from "react";
 
-import { Modal, HeaderModal, FooterModal } from "@/components/modals";
+import { FooterModal, HeaderModal, Modal } from "@/components/overlays";
 
 import { ModernButton } from "@/components/buttons";
 

@@ -1,4 +1,4 @@
-import SearchInput from "@/components/inputs/SearchInput";
+import { SearchInput } from "@/components/forms/";
 
 export default function BarcodeSearch({
   value,

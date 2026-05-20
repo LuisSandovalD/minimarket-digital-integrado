@@ -2,9 +2,9 @@
 // components/categories/CategoryHeader.jsx
 // ========================================
 
-import { FolderTree, Plus, Layers3, Archive } from "lucide-react";
+import { Archive, FolderTree, Layers3, Plus } from "lucide-react";
 
-import { PageHeader } from "@/components/ui/";
+import { PageHeader } from "@/components/data-display/";
 
 export default function CategoryHeader({
   categories = [],

@@ -1,4 +1,4 @@
-import { Input } from "@/components/inputs";
+import { Input } from "@/components/forms/";
 
 import { ModernButton } from "@/components/buttons";
 

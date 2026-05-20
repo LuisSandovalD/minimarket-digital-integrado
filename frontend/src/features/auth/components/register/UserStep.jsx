@@ -1,6 +1,6 @@
-import { Mail, LockKeyhole, User, Phone, AtSign } from "lucide-react";
+import { AtSign, LockKeyhole, Mail, Phone, User } from "lucide-react";
 
-import { Input, PasswordInput } from "@/components/inputs";
+import { Input, PasswordInput } from "@/components/forms/";
 
 export default function UserStep({ form, handleChange }) {
   return (

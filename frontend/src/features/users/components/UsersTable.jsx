@@ -2,7 +2,7 @@
 // components/users/UsersTable.jsx
 // ========================================
 
-import { Building2, Calendar, Mail, Phone, ChevronRight } from "lucide-react";
+import { Building2, Calendar, ChevronRight, Mail, Phone } from "lucide-react";
 
 import { useMemo, useState } from "react";
 
@@ -14,11 +14,9 @@ import UserStatusBadge from "./UserStatusBadge";
 
 import UserActions from "./UserActions";
 
-import ModernButton from "@/components/buttons/ModernButton";
+import { ModernButton } from "@/components/buttons/";
 
 import { getSession } from "../../auth/services/session.service";
-
-import { FormatDate } from "@/components/ui";
 
 export default function UsersTable({
   users = [],

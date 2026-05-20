@@ -1,21 +1,21 @@
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
-import { Sparkles, ArrowUpRight, ChevronDown, ChevronUp } from "lucide-react";
+import { ArrowUpRight, ChevronDown, ChevronUp, Sparkles } from "lucide-react";
 
 import { useState } from "react";
 
 import { features } from "../constants/feactures";
 
 import {
-  fadeUp,
-  fadeScale,
-  staggerContainer,
-  smoothTransition,
-  springTransition,
   defaultViewport,
+  fadeScale,
+  fadeUp,
   hoverLift,
   hoverScale,
-} from "@/components/animations/";
+  smoothTransition,
+  springTransition,
+  staggerContainer,
+} from "@/components/effects/";
 
 export default function FeaturesSection() {
   const [showAll, setShowAll] = useState(false);

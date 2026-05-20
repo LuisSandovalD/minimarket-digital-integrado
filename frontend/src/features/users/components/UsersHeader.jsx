@@ -2,9 +2,9 @@
 // components/UserHeader.jsx
 // ========================================
 
-import { ShieldCheck, Users, UserCog, Eye, Plus, Layers3 } from "lucide-react";
+import { Eye, Plus, ShieldCheck, UserCog, Users } from "lucide-react";
 
-import { PageHeader } from "@/components/ui/";
+import { PageHeader } from "@/components/data-display/";
 
 export default function UserHeader({ onCreate }) {
   return (

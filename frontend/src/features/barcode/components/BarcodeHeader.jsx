@@ -2,10 +2,10 @@
 // components/BarcodeHeader.jsx
 // ========================================
 
-import { Barcode, FileText, Printer, CheckSquare, Plus } from "lucide-react";
+import { Barcode, CheckSquare, FileText, Printer } from "lucide-react";
 
-import { PageHeader } from "@/components/ui";
-import ModernButton from "../../../components/buttons/ModernButton";
+import { ModernButton } from "@/components/buttons/";
+import { PageHeader } from "@/components/data-display";
 
 export default function BarcodeHeader({
   products,

@@ -1,17 +1,17 @@
+import { PageGlow } from "@/components/effects/";
 import {
+  AutomationSection,
+  FAQFeatures,
+  FeaturesGrid,
   FeaturesHeroSection,
   FeatureStats,
-  FeaturesGrid,
-  AutomationSection,
-  ReportsSection,
-  SecurityFeatures,
+  FeatureWorkflow,
   IntegrationsFeatures,
   MobileFeatures,
   PerformanceSection,
-  FeatureWorkflow,
-  FAQFeatures,
+  ReportsSection,
+  SecurityFeatures,
 } from "./components";
-import { PageGlow } from "@/components/ui";
 
 export default function Features() {
   return (

@@ -1,17 +1,17 @@
 import { motion } from "framer-motion";
 
-import { Building2, ShoppingCart, ShieldCheck, TrendingUp } from "lucide-react";
+import { Building2, ShieldCheck, ShoppingCart, TrendingUp } from "lucide-react";
 
 import { stats } from "../constants/stats";
 
 import {
-  fadeUp,
-  staggerContainer,
-  smoothTransition,
   defaultViewport,
+  fadeUp,
   hoverLift,
   hoverRotate,
-} from "@/components/animations/";
+  smoothTransition,
+  staggerContainer,
+} from "@/components/effects/";
 
 const icons = [Building2, ShoppingCart, ShieldCheck, TrendingUp];
 

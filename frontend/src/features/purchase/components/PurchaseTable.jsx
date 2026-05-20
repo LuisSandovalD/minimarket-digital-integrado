@@ -2,22 +2,22 @@
 // features/purchase/components/PurchaseTable.jsx
 // ========================================
 
-import React, { useState } from "react";
+import { useState } from "react";
 
 import {
-  Receipt,
-  DollarSign,
-  Percent,
+  Activity,
   BadgeDollarSign,
   ClipboardList,
-  Activity,
-  Settings2,
+  DollarSign,
+  Eye,
   FileText,
   Package,
-  Eye,
+  Percent,
+  Receipt,
+  Settings2,
 } from "lucide-react";
 
-import { Table, THead } from "@/components/table";
+import { Table, THead } from "@/components/data-display/";
 
 import { ModernButton } from "@/components/buttons";
 

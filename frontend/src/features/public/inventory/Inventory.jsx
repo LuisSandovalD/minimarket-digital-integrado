@@ -1,25 +1,25 @@
 // pages/public/inventory/Inventory.jsx
 
 import {
-  InventoryHeroSection,
-  InventoryStats,
-  StockControlSection,
-  WarehouseSection,
+  AlertsSection,
   BarcodeSection,
   CategoriesSection,
-  SuppliersSection,
-  AlertsSection,
-  MovementsSection,
   InventoryAnalytics,
-  MultiWarehouseSection,
-  InventoryDevices,
-  InventorySecurity,
-  InventoryPerformance,
-  InventoryFAQ,
   InventoryCTA,
+  InventoryDevices,
+  InventoryFAQ,
+  InventoryHeroSection,
+  InventoryPerformance,
+  InventorySecurity,
+  InventoryStats,
+  MovementsSection,
+  MultiWarehouseSection,
+  StockControlSection,
+  SuppliersSection,
+  WarehouseSection,
 } from "./components";
 
-import { PageGlow } from "@/components/ui";
+import { PageGlow } from "@/components/effects/";
 
 export default function Inventory() {
   return (

@@ -4,7 +4,7 @@ import { ArrowUpRight } from "lucide-react";
 
 import { motion } from "framer-motion";
 
-import { fadeUp, smoothTransition } from "@/components/animations/";
+import { fadeUp, smoothTransition } from "@/components/effects/";
 
 export default function ERPPreviewCard({
   title,

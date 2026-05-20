@@ -3,14 +3,14 @@
 // ========================================
 
 import {
-  Receipt,
-  Plus,
+  Activity,
   ClipboardList,
   DollarSign,
-  Activity,
+  Plus,
+  Receipt,
 } from "lucide-react";
 
-import PageHeader from "@/components/ui/PageHeader";
+import { PageHeader } from "@/components/data-display/";
 
 export default function PurchaseHeader({
   total = 0,

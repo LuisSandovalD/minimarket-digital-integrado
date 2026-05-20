@@ -1,6 +1,6 @@
 import { Building2, Globe, MapPin, ReceiptText } from "lucide-react";
 
-import { Input } from "@/components/inputs";
+import { Input } from "@/components/forms/";
 
 import { plans } from "../../constants/plans";
 

@@ -1,6 +1,6 @@
-import { Building2, Package, Boxes, TrendingUp, Plus } from "lucide-react";
+import { Boxes, Building2, Package, TrendingUp } from "lucide-react";
 
-import { PageHeader } from "@/components/ui/";
+import { PageHeader } from "@/components/data-display/";
 
 import { NotificationsModal } from "@/features/notifications-product";
 

@@ -1,17 +1,18 @@
 // models/Models.jsx
 
+import { PageGlow } from "@/components/effects/";
 import {
-  ModulePreview,
-  DashboardPreview,
   AnalyticsPreview,
+  DashboardPreview,
+  DevicePreview,
   InventoryPreview,
+  ModulePreview,
+  MultiCompanyPreview,
   POSPreview,
   SecurityPreview,
-  DevicePreview,
-  MultiCompanyPreview,
 } from "./components";
+
 import ModulesHeroSection from "./components/ModulesHeroSection";
-import { PageGlow } from "@/components/ui";
 
 export default function Models() {
   return (

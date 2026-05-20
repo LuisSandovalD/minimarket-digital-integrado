@@ -3,26 +3,24 @@
 // CONNECTADO AL BACKEND
 // ========================================
 
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import {
-  Plus,
-  Trash2,
-  ShoppingCart,
-  User,
-  Phone,
-  Package,
   Calculator,
+  Package,
+  Phone,
+  Plus,
+  ShoppingCart,
+  Trash2,
+  User,
 } from "lucide-react";
 
 // API
 import getProducts from "../../../product/services/product.service";
 
 // UI
-import { Input } from "@/components/inputs/";
-import { Select } from "@/components/selects/";
-
 import { ModernButton } from "@/components/buttons/";
+import { Input, Select } from "@/components/forms/";
 
 // ========================================
 // FORM

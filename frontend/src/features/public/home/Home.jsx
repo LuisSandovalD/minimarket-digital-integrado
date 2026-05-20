@@ -1,14 +1,14 @@
+import { PageGlow } from "@/components/effects/";
 import {
-  HeroSection,
+  BenefitsSection,
+  DashboardPreviewSection,
   FeaturesSection,
+  HeroSection,
+  StatsSection,
   TestimonialsSection,
   WorkflowSection,
-  StatsSection,
-  DashboardPreviewSection,
-  BenefitsSection,
 } from "./components";
 import CTASection from "./components/CTASection";
-import { PageGlow } from "@/components/ui";
 
 export default function Home() {
   return (

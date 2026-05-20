@@ -2,13 +2,10 @@
 // features/purchase/components/PurchaseProductsModal.jsx
 // ========================================
 
-import { Package, Barcode, Boxes, DollarSign, X } from "lucide-react";
-
-import Modal from "@/components/modals/Modal";
-import HeaderModal from "@/components/modals/HeaderModal";
-import FooterModal from "@/components/modals/FooterModal";
+import { Barcode, Boxes, DollarSign, Package, X } from "lucide-react";
 
 import { ModernButton } from "@/components/buttons";
+import { FooterModal, HeaderModal, Modal } from "@/components/overlays/";
 
 export default function PurchaseProductsModal({ open, onClose, purchase }) {
   const details = Array.isArray(purchase?.details) ? purchase.details : [];

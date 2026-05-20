@@ -2,20 +2,10 @@
 
 import { useState } from "react";
 
-import {
-  Send,
-  User,
-  Mail,
-  MessageSquare,
-  Building2,
-  Phone,
-  Sparkles,
-  ShieldCheck,
-  Clock3,
-} from "lucide-react";
+import { MessageSquare, Send } from "lucide-react";
 
-import { Input } from "@/components/inputs/";
 import { ModernButton } from "@/components/buttons/";
+import { Input } from "@/components/forms/";
 import { benefits } from "../constants/benefits";
 import { inputs } from "../constants/inputs";
 

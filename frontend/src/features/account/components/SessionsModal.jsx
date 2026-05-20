@@ -1,7 +1,7 @@
-import { LogOut, Monitor, MapPin, Clock } from "lucide-react";
+import { Clock, LogOut, MapPin, Monitor } from "lucide-react";
 
-import { Modal, HeaderModal, FooterModal } from "@/components/modals";
 import { ModernButton } from "@/components/buttons";
+import { FooterModal, HeaderModal, Modal } from "@/components/overlays/";
 
 import useSessions from "../hooks/useSessions";
 

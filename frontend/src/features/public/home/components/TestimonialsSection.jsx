@@ -1,12 +1,12 @@
 import { motion } from "framer-motion";
 
 import {
-  Quote,
-  Star,
   BadgeCheck,
-  MapPin,
   ChevronLeft,
   ChevronRight,
+  MapPin,
+  Quote,
+  Star,
 } from "lucide-react";
 
 import { useRef } from "react";
@@ -14,15 +14,15 @@ import { useRef } from "react";
 import { testimonials } from "../constants/testimonials";
 
 import {
-  fadeUp,
-  fadeScale,
-  staggerContainer,
-  smoothTransition,
-  springTransition,
   defaultViewport,
+  fadeScale,
+  fadeUp,
   hoverLift,
   hoverScale,
-} from "@/components/animations";
+  smoothTransition,
+  springTransition,
+  staggerContainer,
+} from "@/components/effects/";
 
 export default function TestimonialsSection() {
   const sliderRef = useRef(null);

@@ -3,18 +3,18 @@
 // ========================================
 
 import {
-  Package,
-  Hash,
-  Boxes,
-  Tag,
-  DollarSign,
   Activity,
-  Settings2,
-  TrendingUp,
   Barcode,
+  Boxes,
+  DollarSign,
+  Hash,
+  Package,
+  Settings2,
+  Tag,
+  TrendingUp,
 } from "lucide-react";
 
-import { Table, THead } from "@/components/table";
+import { Table, THead } from "@/components/data-display/";
 
 import ProductStatusBadge from "./ProductStatusBadge";
 

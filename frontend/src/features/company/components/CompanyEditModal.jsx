@@ -7,18 +7,17 @@ import {
   ReceiptText,
   ShieldCheck,
   User2,
-  ImagePlus,
 } from "lucide-react";
 
-import { Modal, HeaderModal, FooterModal } from "@/components/modals";
+import { FooterModal, HeaderModal, Modal } from "@/components/overlays/";
 
-import { Input } from "@/components/inputs";
+import { Input } from "@/components/forms/";
 
 import { ModernButton, SubmitButton } from "@/components/buttons";
 
 import useCompanyEdit from "../hooks/useCompanyEdit";
 
-import ModernImageUpload from "@/components/ui/ModernImageUpload";
+import { ModernImageUpload } from "@/components/media/";
 
 export default function CompanyEditModal({
   open,

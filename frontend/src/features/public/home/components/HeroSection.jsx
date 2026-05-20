@@ -7,15 +7,15 @@ import { ModernButton } from "@/components/buttons";
 import { heroFeatures } from "../constants/heroFeatures";
 
 import {
-  fadeUp,
-  fadeScale,
-  staggerContainer,
-  smoothTransition,
-  springTransition,
   defaultViewport,
+  fadeScale,
+  fadeUp,
   hoverLift,
   hoverScale,
-} from "@/components/animations";
+  smoothTransition,
+  springTransition,
+  staggerContainer,
+} from "@/components/effects/";
 
 export default function HeroSection() {
   return (

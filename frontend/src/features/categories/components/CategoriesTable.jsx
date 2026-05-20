@@ -3,15 +3,15 @@
 // ========================================
 
 import {
-  FolderTree,
   CalendarDays,
+  CornerDownRight,
+  FolderTree,
   Layers3,
   Pencil,
   Trash2,
-  CornerDownRight,
 } from "lucide-react";
 
-import { Table, THead, TFooter } from "@/components/table/";
+import { Table, TFooter, THead } from "@/components/data-display/";
 
 import ModernButton from "@/components/buttons/ModernButton";
 

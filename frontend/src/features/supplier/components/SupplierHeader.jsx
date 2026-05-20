@@ -2,9 +2,9 @@
 // features/supplier/components/SupplierHeader.jsx
 // ========================================
 
-import { Truck, Plus, Users, Activity, AlertCircle } from "lucide-react";
+import { Activity, AlertCircle, Plus, Truck, Users } from "lucide-react";
 
-import PageHeader from "@/components/ui/PageHeader";
+import { PageHeader } from "@/components/data-display/";
 
 export default function SupplierHeader({
   total = 0,

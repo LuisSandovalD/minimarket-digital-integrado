@@ -2,25 +2,15 @@
 // components/BranchModal.jsx
 // ========================================
 
-import {
-  Building2,
-  Mail,
-  MapPin,
-  Phone,
-  Store,
-  X,
-  FileText,
-  Hash,
-  Globe,
-} from "lucide-react";
+import { FileText, Globe, Mail, MapPin, Phone, Store, X } from "lucide-react";
 
-import { Modal, HeaderModal, FooterModal } from "@/components/modals";
+import { FooterModal, HeaderModal, Modal } from "@/components/overlays/";
 
-import { Input } from "@/components/inputs";
+import { Input } from "@/components/forms/";
 
-import { ModernButton, SubmitButton } from "@/components/buttons";
+import { ModernButton, SubmitButton } from "@/components/buttons/";
 
-import ModernImageUpload from "@/components/ui/ModernImageUpload";
+import { ModernImageUpload } from "@/components/media/";
 
 import useBranchForm from "../hooks/useBranchForm";
 

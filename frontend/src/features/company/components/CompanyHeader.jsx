@@ -2,9 +2,9 @@
 // components/CompanyHeader.jsx
 // ========================================
 
-import { Building2, ShieldCheck, Sparkles, Plus } from "lucide-react";
+import { Building2, ShieldCheck, Sparkles } from "lucide-react";
 
-import PageHeader from "@/components/ui/PageHeader";
+import { PageHeader } from "@/components/data-display/";
 
 export default function CompanyHeader({ onCreate }) {
   return (

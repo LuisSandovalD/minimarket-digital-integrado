@@ -1,10 +1,8 @@
-import { FileText, Layers3, Tag, X, FolderTree } from "lucide-react";
+import { FileText, FolderTree, Layers3, Tag, X } from "lucide-react";
 
-import { Modal, HeaderModal, FooterModal } from "@/components/modals";
+import { FooterModal, HeaderModal, Modal } from "@/components/overlays/";
 
-import { Input, Checkbox } from "@/components/inputs";
-
-import { Select } from "@/components/selects/";
+import { Checkbox, Input, Select } from "@/components/forms/";
 
 import { ModernButton, SubmitButton } from "@/components/buttons";
 

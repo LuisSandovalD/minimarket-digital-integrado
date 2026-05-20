@@ -5,15 +5,15 @@ import { ArrowRight } from "lucide-react";
 import { ModernButton } from "@/components/buttons";
 
 import {
-  fadeUp,
+  defaultViewport,
   fadeScale,
-  staggerContainer,
+  fadeUp,
+  hoverLift,
+  hoverScale,
   smoothTransition,
   springTransition,
-  defaultViewport,
-  hoverScale,
-  hoverLift,
-} from "@/components/animations/";
+  staggerContainer,
+} from "@/components/effects/";
 
 export default function CTASection() {
   return (

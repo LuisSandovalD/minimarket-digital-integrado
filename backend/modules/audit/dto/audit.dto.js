@@ -1,2 +1,0 @@
-exports.auditDTO =
-(data) => data;

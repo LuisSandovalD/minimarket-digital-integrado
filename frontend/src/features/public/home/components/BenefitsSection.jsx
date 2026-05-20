@@ -3,15 +3,15 @@ import { motion } from "framer-motion";
 import { workflow } from "../constants/workflow";
 
 import {
-  fadeUp,
-  fadeScale,
-  staggerContainer,
-  smoothTransition,
-  springTransition,
   defaultViewport,
+  fadeScale,
+  fadeUp,
   hoverLift,
   hoverScale,
-} from "@/components/animations/";
+  smoothTransition,
+  springTransition,
+  staggerContainer,
+} from "@/components/effects/";
 
 export default function WorkflowSection() {
   return (

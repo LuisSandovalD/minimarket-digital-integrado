@@ -1,12 +1,10 @@
-import React from "react";
-
 import { Menu, Settings } from "lucide-react";
 
-import ThemeToggle from "../../../components/theme/ThemeToggle";
+import { ThemeToggle } from "@/components/theme/";
 
-import ModernButton from "../../../components/buttons/ModernButton";
+import { ModernButton } from "@/components/buttons/";
 
-import SearchInput from "../../../components/inputs/SearchInput";
+import { SearchInput } from "@/components/forms/";
 
 export default function AppHeader({ onToggleAside }) {
   return (

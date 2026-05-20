@@ -2,7 +2,7 @@
 // features/product/components/ProductFilters.jsx
 // ========================================
 
-import SearchInput from "@/components/inputs/SearchInput";
+import { SearchInput } from "@/components/forms/";
 
 export default function ProductFilters({ search, setSearch }) {
   return (

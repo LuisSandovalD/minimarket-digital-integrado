@@ -2,11 +2,9 @@
 // features/product/components/ProductHeader.jsx
 // ========================================
 
-import { Package, Plus, Boxes, AlertTriangle, Activity } from "lucide-react";
+import { AlertTriangle, Boxes, Package, Plus } from "lucide-react";
 
-import PageHeader from "@/components/ui/PageHeader";
-
-import { NotificationsModal } from "@/features/notifications-product";
+import { PageHeader } from "@/components/data-display/";
 
 export default function ProductHeader({ total = 0, lowStock = 0, onCreate }) {
   return (

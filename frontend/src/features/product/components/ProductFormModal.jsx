@@ -3,27 +3,20 @@
 // ========================================
 
 import {
-  Package,
-  DollarSign,
   Boxes,
+  DollarSign,
   Layers3,
-  FileText,
+  Package,
   Percent,
-  CalendarDays,
-  Star,
-  ShieldCheck,
-  X,
   TrendingUp,
+  X,
 } from "lucide-react";
 
-import Modal from "@/components/modals/Modal";
-import HeaderModal from "@/components/modals/HeaderModal";
-import FooterModal from "@/components/modals/FooterModal";
+import { FooterModal, HeaderModal, Modal } from "@/components/overlays/";
 
 import { ModernButton, SubmitButton } from "@/components/buttons";
 
-import Input from "@/components/inputs/Input";
-import Select from "@/components/selects/Select";
+import { Input, Select } from "@/components/forms/";
 
 export default function ProductFormModal({
   open,

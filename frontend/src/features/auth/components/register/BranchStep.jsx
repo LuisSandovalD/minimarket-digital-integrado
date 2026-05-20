@@ -1,6 +1,6 @@
 import { Building, MapPin, Phone } from "lucide-react";
 
-import { Input } from "@/components/inputs";
+import { Input } from "@/components/forms/";
 
 export default function BranchStep({ form, handleChange }) {
   return (

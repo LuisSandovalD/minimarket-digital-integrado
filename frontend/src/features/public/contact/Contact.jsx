@@ -1,13 +1,13 @@
-import React from "react";
 import {
+  ContactFAQ,
+  ContactForm,
   ContactHero,
   ContactInfoCards,
-  ContactForm,
   ContactMap,
-  ContactFAQ,
   ContactSocials,
 } from "./components";
-import { PageGlow } from "@/components/ui";
+
+import { PageGlow } from "@/components/effects/";
 
 const Contact = () => {
   return (

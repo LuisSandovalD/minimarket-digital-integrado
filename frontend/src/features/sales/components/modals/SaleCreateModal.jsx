@@ -3,15 +3,11 @@
 // Reutilizando HeaderModal + FooterModal
 // ========================================
 
-import React from "react";
-
 import { ShoppingCart } from "lucide-react";
 
-import HeaderModal from "@/components/modals/HeaderModal";
+import { FooterModal, HeaderModal } from "@/components/overlays/";
 
-import FooterModal from "@/components/modals/FooterModal";
-
-import ModernButton from "@/components/buttons/ModernButton";
+import { ModernButton } from "@/components/buttons/";
 
 import { SaleForm } from "../forms/SaleForm";
 

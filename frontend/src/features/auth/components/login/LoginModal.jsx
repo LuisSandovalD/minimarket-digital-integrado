@@ -1,4 +1,4 @@
-import { Modal } from "@/components/modals";
+import { Modal } from "@/components/overlays/";
 
 import LoginHeader from "./LoginHeader";
 

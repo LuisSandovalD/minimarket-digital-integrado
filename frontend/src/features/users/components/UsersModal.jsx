@@ -12,13 +12,13 @@ import {
   X,
 } from "lucide-react";
 
-import { FooterModal, HeaderModal, Modal } from "@/components/modals";
+import { FooterModal, HeaderModal, Modal } from "@/components/overlays/";
 
-import { Input } from "@/components/inputs";
+import { Input } from "@/components/forms/";
 
 import { ModernButton, SubmitButton } from "@/components/buttons";
 
-import ModernImageUpload from "@/components/ui/ModernImageUpload";
+import { ModernImageUpload } from "@/components/media/";
 
 import useUserForm from "../hooks/useUsersForm";
 

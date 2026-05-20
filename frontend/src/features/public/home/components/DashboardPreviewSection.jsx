@@ -1,15 +1,15 @@
 import { motion } from "framer-motion";
 
 import {
-  fadeUp,
+  defaultViewport,
   fadeScale,
+  fadeUp,
+  hoverLift,
   slideRight,
-  staggerContainer,
   smoothTransition,
   springTransition,
-  defaultViewport,
-  hoverLift,
-} from "@/components/animations/";
+  staggerContainer,
+} from "@/components/effects/";
 
 export default function DashboardPreviewSection() {
   return (

@@ -6,13 +6,9 @@ import { Bell } from "lucide-react";
 
 import { useState } from "react";
 
-import ModernButton from "@/components/buttons/ModernButton";
+import { ModernButton } from "@/components/buttons/";
 
-import Modal from "@/components/modals/Modal";
-
-import HeaderModal from "@/components/modals/HeaderModal";
-
-import FooterModal from "@/components/modals/FooterModal";
+import { FooterModal, HeaderModal, Modal } from "@/components/overlays/";
 
 import useNotifications from "../hooks/useNotifications";
 

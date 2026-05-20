@@ -3,19 +3,19 @@
 // ========================================
 
 import {
-  CalendarDays,
-  Package,
-  Building2,
-  Boxes,
-  History,
-  FileText,
-  ArrowUp,
   ArrowDown,
+  ArrowUp,
+  Boxes,
+  Building2,
+  CalendarDays,
+  FileText,
+  History,
+  Package,
   PackageX,
   RefreshCcw,
 } from "lucide-react";
 
-import { Table, THead } from "@/components/table";
+import { Table, THead } from "@/components/data-display/";
 
 import MovementTypeBadge from "./MovementTypeBadge";
 

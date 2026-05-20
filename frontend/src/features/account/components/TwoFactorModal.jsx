@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 
-import { Lock, AlertCircle, CheckCircle } from "lucide-react";
+import { AlertCircle, CheckCircle, Lock } from "lucide-react";
 
-import { Modal, HeaderModal, FooterModal } from "@/components/modals";
+import { FooterModal, HeaderModal, Modal } from "@/components/overlays/";
 
 import { ModernButton } from "@/components/buttons";
 

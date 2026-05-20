@@ -1,6 +1,6 @@
 import { ShieldCheck } from "lucide-react";
 
-import { HeaderModal } from "@/components/modals";
+import { HeaderModal } from "@/components/overlays/";
 
 export default function LoginHeader({ onClose }) {
   return (

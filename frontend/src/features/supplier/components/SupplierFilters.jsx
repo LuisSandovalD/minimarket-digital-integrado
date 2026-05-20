@@ -2,7 +2,7 @@
 // features/supplier/components/SupplierFilters.jsx
 // ========================================
 
-import SearchInput from "@/components/inputs/SearchInput";
+import { SearchInput } from "@/components/forms/";
 
 export default function SupplierFilters({ search, setSearch }) {
   return (

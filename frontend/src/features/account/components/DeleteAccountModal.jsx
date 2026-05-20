@@ -1,8 +1,8 @@
-import { useState } from "react";
-import { Trash2, AlertTriangle, Lock } from "lucide-react";
-import { Modal, HeaderModal, FooterModal } from "@/components/modals";
 import { ModernButton } from "@/components/buttons";
-import Input from "@/components/inputs/Input";
+import { Input } from "@/components/forms";
+import { FooterModal, HeaderModal, Modal } from "@/components/overlays/";
+import { AlertTriangle, Lock, Trash2 } from "lucide-react";
+import { useState } from "react";
 import useDeleteAccount from "../hooks/useDeleteAccount";
 
 export default function DeleteAccountModal({ open, onClose }) {

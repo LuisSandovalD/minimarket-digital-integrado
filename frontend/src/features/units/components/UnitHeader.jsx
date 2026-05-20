@@ -2,9 +2,9 @@
 // components/units/UnitHeader.jsx
 // ========================================
 
-import { Plus, Scale, Activity, Calculator } from "lucide-react";
+import { Activity, Calculator, Plus, Scale } from "lucide-react";
 
-import PageHeader from "@/components/ui/PageHeader";
+import { PageHeader } from "@/components/data-display/";
 
 export default function UnitHeader({
   units = [],

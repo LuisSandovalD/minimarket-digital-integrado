@@ -1,8 +1,8 @@
-import { useMemo, useState } from "react";
-import { ShieldCheck, Check, X } from "lucide-react";
-import { Modal, HeaderModal, FooterModal } from "@/components/modals";
 import { ModernButton } from "@/components/buttons";
-import PasswordInput from "@/components/inputs/PasswordInput";
+import { PasswordInput } from "@/components/forms/";
+import { FooterModal, HeaderModal, Modal } from "@/components/overlays/";
+import { Check, ShieldCheck, X } from "lucide-react";
+import { useMemo, useState } from "react";
 
 export default function ChangePasswordModal({
   open,

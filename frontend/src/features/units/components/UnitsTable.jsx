@@ -3,19 +3,19 @@
 // ========================================
 
 import {
-  Scale,
-  Hash,
-  Ruler,
-  Calculator,
   Activity,
-  Settings2,
-  Pencil,
-  Trash2,
+  Calculator,
   CheckCircle2,
+  Hash,
+  Pencil,
+  Ruler,
+  Scale,
+  Settings2,
+  Trash2,
   XCircle,
 } from "lucide-react";
 
-import { Table, THead } from "@/components/table/";
+import { Table, THead } from "@/components/data-display/";
 
 import { ModernButton } from "@/components/buttons/";
 

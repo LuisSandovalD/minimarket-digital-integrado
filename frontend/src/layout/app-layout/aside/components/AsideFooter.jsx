@@ -6,7 +6,7 @@ import { useState } from "react";
 
 import { LogOut } from "lucide-react";
 
-import UserAvatar from "@/components/avatar/UserAvatar";
+import { UserAvatar } from "@/components/media/";
 
 import AccountModal from "@/features/account/components/AccountModal";
 

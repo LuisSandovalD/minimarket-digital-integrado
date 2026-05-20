@@ -4,7 +4,7 @@
 
 import { Building2, Database, Layers3, Plus } from "lucide-react";
 
-import { PageHeader } from "@/components/ui/";
+import { PageHeader } from "@/components/data-display/";
 
 export default function BranchHeader({ onCreate }) {
   return (

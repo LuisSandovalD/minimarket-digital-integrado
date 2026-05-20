@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 
 import { Building2, ShieldCheck, Store } from "lucide-react";
 
-import { Modal, HeaderModal, FooterModal } from "@/components/modals";
+import { FooterModal, HeaderModal, Modal } from "@/components/overlays/";
 
 import { ModernButton, SubmitButton } from "@/components/buttons";
 

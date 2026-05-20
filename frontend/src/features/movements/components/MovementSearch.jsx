@@ -2,7 +2,7 @@
 // features/movements/components/MovementSearch.jsx
 // ========================================
 
-import SearchInput from "@/components/inputs/SearchInput";
+import { SearchInput } from "@/components/forms/";
 
 export default function MovementSearch({
   value,
