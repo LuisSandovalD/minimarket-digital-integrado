@@ -252,7 +252,7 @@ model Customer {
   @@index([companyId])
   @@index([name])
 }
-
+// Información de proveedores asociados a compras
 model Supplier {
   id            Int        @id @default(autoincrement())
   name          String     @db.VarChar(255)
