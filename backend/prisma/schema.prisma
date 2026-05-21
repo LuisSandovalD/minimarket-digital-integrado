@@ -359,7 +359,7 @@ model Sale {
   @@index([branchId])
   @@index([status])
 }
-
+// Registro detallado de productos vendidos
 model SaleDetail {
   id        Int     @id @default(autoincrement())
   quantity  Int
