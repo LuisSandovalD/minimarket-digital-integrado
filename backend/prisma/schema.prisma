@@ -332,7 +332,7 @@ model PaymentMethod_DB {
 
   @@unique([type, companyId])
 }
-
+// Registro centralizado de operaciones de venta
 model Sale {
   id         Int          @id @default(autoincrement())
   saleNumber String       @unique @db.VarChar(50)
