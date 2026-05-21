@@ -1,11 +1,7 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
-import PublicLayout from "./layout/public/PublicLayout";
-import AppLayout from "./layout/app-layout/AppLayout";
-import RequireAuth from "./features/auth/guards/RequireAuth";
 
 import { useRoutes } from "react-router-dom";
 import { routes } from "./routes/routes";
@@ -17,7 +13,8 @@ import {
   setAuthLoading,
 } from "./features/auth/store/authActions";
 
-import { getUser, getToken } from "./features/auth/services/session.service";
+import { LoadingScreen } from "./components/loading/LoadingScreen";
+import { getToken, getUser } from "./features/auth/services/session.service";
 
 export default function App() {
   const dispatch = useDispatch();
@@ -54,11 +51,7 @@ export default function App() {
   }, [dispatch]);
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <div className="animate-pulse text-gray-500">Cargando sesión...</div>
-      </div>
-    );
+    return <LoadingScreen />;
   }
 
   return (
@@ -68,7 +61,6 @@ export default function App() {
   );
 }
 
-// 🔥 AQUÍ está la clave (useRoutes)
 function AppRoutes() {
   return useRoutes(routes);
 }
