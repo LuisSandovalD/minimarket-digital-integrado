@@ -136,7 +136,7 @@ model EmployeeProfile {
 
   @@index([userId])
 }
-
+// Administración de sesiones activas de usuario
 model UserSession {
   id               Int      @id @default(autoincrement())
   token            String   @unique
