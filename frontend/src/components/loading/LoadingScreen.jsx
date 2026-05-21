@@ -1,34 +1,39 @@
+import { ShoppingBag } from "lucide-react";
+
 export function LoadingScreen() {
   return (
-    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#f6f8fb] text-slate-900 transition-colors duration-300 dark:bg-[#020617] dark:text-slate-100">
-      {/* Fondo decorativo */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-32 -left-32 h-72 w-72 rounded-full bg-slate-200/40 blur-3xl dark:bg-slate-700/20"></div>
-        <div className="absolute -bottom-32 -right-32 h-72 w-72 rounded-full bg-slate-300/30 blur-3xl dark:bg-slate-600/10"></div>
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#fafafa] text-slate-900 transition-colors duration-500 dark:bg-[#09090b] dark:text-slate-50">
+      {/* Luces de fondo decorativas muy sutiles (sin sombras duras) */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none select-none">
+        <div className="absolute -top-40 -left-40 h-96 w-96 rounded-full bg-slate-100 blur-[128px] dark:bg-slate-900/40"></div>
+        <div className="absolute -bottom-40 -right-40 h-96 w-96 rounded-full bg-slate-100 blur-[128px] dark:bg-slate-900/30"></div>
       </div>
 
-      {/* Card principal */}
-      <div className="relative z-10 w-[340px] rounded-3xl border border-slate-200/60 bg-white/70 p-10 text-center shadow-2xl backdrop-blur-xl transition-all duration-300 dark:border-slate-800 dark:bg-slate-900/60">
-        {/* Logo/Icon */}
-        <div className="mx-auto mb-8 flex h-24 w-24 items-center justify-center rounded-3xl bg-slate-100 shadow-inner dark:bg-slate-800">
-          <i className="ti ti-shopping-cart text-5xl text-slate-900 dark:text-slate-100 animate-pulse"></i>
+      {/* Card principal limpia (Flat & Border-focused) */}
+      <div className="relative z-10 w-[360px] rounded-2xl border border-slate-200/80 bg-white/40 p-8 text-center backdrop-blur-md transition-all dark:border-slate-800/80 dark:bg-zinc-950/40">
+        {/* Contenedor del Icono Lucide */}
+        <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl border border-slate-200/60 bg-white dark:border-slate-800 dark:bg-zinc-900">
+          <ShoppingBag
+            className="h-6 w-6 text-slate-800 dark:text-slate-200 animate-pulse"
+            strokeWidth={1.5}
+          />
         </div>
 
         {/* Título */}
-        <h1 className="mb-3 text-3xl font-semibold tracking-tight">
+        <h1 className="mb-2 text-xl font-medium tracking-tight text-slate-900 dark:text-zinc-100">
           Abriendo tu tienda
         </h1>
 
         {/* Descripción */}
-        <p className="mb-8 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+        <p className="mb-8 text-sm leading-relaxed text-slate-500 dark:text-zinc-400">
           Estamos preparando todo para que ingreses a tu minimarket digital.
         </p>
 
-        {/* Loader elegante */}
-        <div className="flex items-center justify-center gap-2">
-          <span className="h-2.5 w-2.5 animate-bounce rounded-full bg-slate-400 dark:bg-slate-500"></span>
-          <span className="h-2.5 w-2.5 animate-bounce rounded-full bg-slate-500 dark:bg-slate-400 [animation-delay:0.15s]"></span>
-          <span className="h-2.5 w-2.5 animate-bounce rounded-full bg-slate-700 dark:bg-slate-200 [animation-delay:0.3s]"></span>
+        {/* Loader elegante lineal y minimalista */}
+        <div className="flex items-center justify-center gap-1.5">
+          <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-slate-400/80 dark:bg-zinc-500"></span>
+          <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-slate-400/80 dark:bg-zinc-500 [animation-delay:0.15s]"></span>
+          <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-slate-600 dark:bg-zinc-300 [animation-delay:0.3s]"></span>
         </div>
       </div>
     </div>

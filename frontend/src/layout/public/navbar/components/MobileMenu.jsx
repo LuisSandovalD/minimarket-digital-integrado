@@ -1,8 +1,7 @@
-import { X } from "lucide-react";
-
-import MobileMenuLinks from "./MobileMenuLinks";
+import { Store, X } from "lucide-react";
 
 import MobileMenuFooter from "./MobileMenuFooter";
+import MobileMenuLinks from "./MobileMenuLinks";
 
 export default function MobileMenu({ open, onClose, links }) {
   return (
@@ -11,16 +10,13 @@ export default function MobileMenu({ open, onClose, links }) {
       <div
         onClick={onClose}
         className={`
-          fixed
-          inset-0
-          z-40
-          bg-[#274c77]/40
-          backdrop-blur-md
-          transition-all
-          duration-300
-          
-          dark:bg-black/50
-          
+          fixed inset-0 z-40
+          bg-black/30
+          backdrop-blur-sm
+          transition-all duration-300
+
+          dark:bg-black/60
+
           ${open ? "visible opacity-100" : "invisible opacity-0"}
         `}
       />
@@ -28,90 +24,91 @@ export default function MobileMenu({ open, onClose, links }) {
       {/* MENU */}
       <aside
         className={`
-          fixed
-          top-0
-          right-0
-          z-50
-          flex
-          h-screen
-          w-[320px]
-          flex-col
-          border-l
-          border-[#d7e0e7]
-          bg-white/95
-          shadow-2xl
+          fixed top-0 right-0 z-50
+          flex h-screen w-[330px] flex-col
+          border-l border-slate-200/70
+          bg-white/80
+          shadow-[0_20px_80px_rgba(0,0,0,0.12)]
           backdrop-blur-2xl
-          transition-all
-          duration-500
+          transition-all duration-500
 
-          dark:border-[#365d86]/30
-          dark:bg-[#0f172a]/95
+          dark:border-slate-800
+          dark:bg-[#020617]/90
 
           ${open ? "translate-x-0" : "translate-x-full"}
         `}
       >
+        {/* Decorative Blur */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -top-20 -right-20 h-56 w-56 rounded-full bg-slate-200/40 blur-3xl dark:bg-slate-700/10"></div>
+        </div>
+
         {/* HEADER */}
         <div
           className="
-            flex
-            items-center
-            justify-between
-            border-b
-            border-[#e7ecef]
-            px-6
-            py-5
+            relative z-10
+            flex items-center justify-between
+            border-b border-slate-200/70
+            px-6 py-5
 
-            dark:border-[#365d86]/20
+            dark:border-slate-800
           "
         >
           {/* BRAND */}
-          <div>
-            <h2
+          <div className="flex items-center gap-3">
+            <div
               className="
-                text-xl
-                font-black
-                tracking-tight
-                text-[#274c77]
+                flex h-12 w-12 items-center justify-center
+                rounded-2xl
+                bg-slate-100
+                shadow-inner
 
-                dark:text-[#a3cef1]
+                dark:bg-slate-800
               "
             >
-              ERP POS
-            </h2>
+              <Store size={22} className="text-slate-800 dark:text-slate-100" />
+            </div>
 
-            <p
-              className="
-                mt-1
-                text-xs
-                font-medium
-                tracking-wide
-                text-[#6096ba]
+            <div>
+              <h2
+                className="
+                  text-lg font-semibold tracking-tight
+                  text-slate-900
 
-                dark:text-[#8fb8d8]
-              "
-            >
-              Sistema Multiempresa
-            </p>
+                  dark:text-slate-100
+                "
+              >
+                ERP POS
+              </h2>
+
+              <p
+                className="
+                  text-xs font-medium
+                  text-slate-500
+
+                  dark:text-slate-400
+                "
+              >
+                Sistema Multiempresa
+              </p>
+            </div>
           </div>
 
           {/* CLOSE */}
           <button
             onClick={onClose}
             className="
-              flex
-              h-11
-              w-11
-              items-center
-              justify-center
-              rounded-xl
-              text-[#274c77]
-              transition-all
-              duration-300
-              hover:bg-[#e7ecef]
-              hover:text-[#1f3c5d]
+              flex h-11 w-11 items-center justify-center
+              rounded-2xl
+              text-slate-600
+              transition-all duration-300
 
-              dark:text-[#a3cef1]
-              dark:hover:bg-[#365d86]/20
+              hover:bg-slate-100
+              hover:text-slate-900
+
+              dark:text-slate-300
+              dark:hover:bg-slate-800
+              dark:hover:text-white
             "
           >
             <X size={22} />
@@ -119,10 +116,14 @@ export default function MobileMenu({ open, onClose, links }) {
         </div>
 
         {/* LINKS */}
-        <MobileMenuLinks links={links} />
+        <div className="relative z-10 flex-1 overflow-y-auto">
+          <MobileMenuLinks links={links} />
+        </div>
 
         {/* FOOTER */}
-        <MobileMenuFooter />
+        <div className="relative z-10">
+          <MobileMenuFooter />
+        </div>
       </aside>
     </>
   );
