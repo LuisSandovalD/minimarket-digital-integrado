@@ -404,7 +404,7 @@ model Purchase {
   @@index([branchId])
   @@index([status])
 }
-
+// Detalle individual de productos adquiridoss
 model PurchaseDetail {
   id         Int      @id @default(autoincrement())
   quantity   Int
