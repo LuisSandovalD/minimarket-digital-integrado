@@ -153,7 +153,7 @@ model UserSession {
 
   @@index([userId])
 }
-
+// Definición de unidades de medida para productoss
 model Unit {
   id               Int       @id @default(autoincrement())
   name             String    @db.VarChar(100)
