@@ -227,7 +227,7 @@ model Product {
   @@index([companyId])
   @@index([categoryId])
 }
-
+// Gestión de clientes y control de deuda comercial
 model Customer {
   id             Int       @id @default(autoincrement())
   name           String    @db.VarChar(255)
