@@ -123,7 +123,7 @@ model User {
   @@index([branchId])
   @@index([role])
 }
-
+// Información laboral complementaria del empleado
 model EmployeeProfile {
   id         Int      @id @default(autoincrement())
   userId     Int      @unique
