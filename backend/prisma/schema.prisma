@@ -188,7 +188,7 @@ model Category {
 
   @@unique([name, companyId])
 }
-
+// Entidad principal de productos comercializados
 model Product {
   id                 Int                @id @default(autoincrement())
   name               String             @db.VarChar(255)
