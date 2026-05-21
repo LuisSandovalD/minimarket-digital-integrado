@@ -318,7 +318,7 @@ model InventoryHistory {
   @@index([productId])
   @@index([branchId])
 }
-
+// Configuración de métodos de pago habilitados
 model PaymentMethod_DB {
   id            Int           @id @default(autoincrement())
   name          String        @db.VarChar(100)
