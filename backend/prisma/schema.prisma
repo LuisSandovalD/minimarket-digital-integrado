@@ -79,7 +79,7 @@ model Branch {
   @@index([companyId])
   @@index([isActive])
 }
-
+// Gestión centralizada de usuarios del sistemas
 model User {
   id               Int              @id @default(autoincrement())
   name             String           @db.VarChar(255)
