@@ -506,7 +506,7 @@ model TicketComment {
   ticket      SupportTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
   user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
-
+// Configuración global personalizable por empresa
 model Configuration {
   id                    Int      @id @default(autoincrement())
   companyName           String?  @db.VarChar(255)
