@@ -46,7 +46,7 @@ model Company {
   @@index([isActive])
   @@index([isDeleted])
 }
-
+// Gestión de sucursales y sedes empresarialess
 model Branch {
   id               Int                @id @default(autoincrement())
   name             String             @db.VarChar(255)
