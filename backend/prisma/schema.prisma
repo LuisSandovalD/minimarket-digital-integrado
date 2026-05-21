@@ -419,7 +419,7 @@ model PurchaseDetail {
   @@index([purchaseId])
   @@index([productId])
 }
-
+// Relación entre métodos de pago y transacciones
 model Payment {
   id            Int              @id @default(autoincrement())
   amount        Decimal          @db.Decimal(10, 2)
