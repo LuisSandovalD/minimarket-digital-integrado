@@ -1,225 +1,166 @@
 // modules/company/controllers/company.controller.js
 
-const prisma =
-  require("../../../prisma/client");
+// Importamos el cliente de la base de datos para poder interactuar con las tablas
+const prisma = require("../../../prisma/client");
 
-const {
-  Prisma
-} = require("@prisma/client");
+// Importamos las herramientas de Prisma para poder detectar errores específicos (como datos duplicados)
+const { Prisma } = require("@prisma/client");
 
 // ==========================================
 // OBTENER TODAS LAS EMPRESAS
 // ==========================================
 
-exports.getCompanies = async (
-  req,
-  res
-) => {
-
+// Función para listar todas las empresas registradas en el sistema
+exports.getCompanies = async (req, res) => {
   try {
+    // Busca múltiples registros de empresas
+    const companies = await prisma.company.findMany({
+      // Filtra para traer solo las que NO han sido borradas
+      where: {
+        isDeleted: false,
+      },
 
-    const companies =
-      await prisma.company.findMany({
-
-        where: {
-          isDeleted: false
-        },
-
-        orderBy: {
-          createdAt: "desc"
-        }
-
-      });
-
-    res.json({
-
-      success: true,
-
-      data: companies
-
+      // Las ordena de la más reciente a la más antigua según su fecha de creación
+      orderBy: {
+        createdAt: "desc",
+      },
     });
 
-  } catch (error) {
+    // Responde con éxito y envía la lista de empresas
+    res.json({
+      success: true,
 
+      data: companies,
+    });
+  } catch (error) {
+    // Si hay error, lo imprime en consola y devuelve un código 500 (Error de servidor)
     console.error(error);
 
     res.status(500).json({
-
       success: false,
 
-      message: error.message
-
+      message: error.message,
     });
-
   }
-
 };
 
 // ==========================================
 // OBTENER EMPRESA POR ID
 // ==========================================
 
-exports.getCompanyById = async (
-  req,
-  res
-) => {
-
+// Función para buscar una sola empresa usando su número de identificación (ID)
+exports.getCompanyById = async (req, res) => {
   try {
+    // Convierte el ID que viene en la URL a formato número
+    const id = parseInt(req.params.id);
 
-    const id =
-      parseInt(req.params.id);
-
+    // Valida que el ID introducido sea realmente un número
     if (isNaN(id)) {
-
       return res.status(400).json({
-
         success: false,
 
-        message: "ID inválido"
-
+        message: "ID inválido",
       });
-
     }
 
-    const company =
-      await prisma.company.findFirst({
+    // Busca la primera empresa que coincida con ese ID y que no esté borrada
+    const company = await prisma.company.findFirst({
+      where: {
+        id,
 
-        where: {
-
-          id,
-
-          isDeleted: false
-
-        }
-
-      });
-
-    if (!company) {
-
-      return res.status(404).json({
-
-        success: false,
-
-        message: "Empresa no encontrada"
-
-      });
-
-    }
-
-    res.json({
-
-      success: true,
-
-      data: company
-
+        isDeleted: false,
+      },
     });
 
-  } catch (error) {
+    // Si no encuentra ninguna, devuelve un error 404 (No encontrado)
+    if (!company) {
+      return res.status(404).json({
+        success: false,
 
+        message: "Empresa no encontrada",
+      });
+    }
+
+    // Si la encuentra, devuelve los datos de la empresa
+    res.json({
+      success: true,
+
+      data: company,
+    });
+  } catch (error) {
     console.error(error);
 
     res.status(500).json({
-
       success: false,
 
-      message: error.message
-
+      message: error.message,
     });
-
   }
-
 };
 
 // ==========================================
 // OBTENER EMPRESA POR SLUG
 // ==========================================
 
-exports.getCompanyBySlug = async (
-  req,
-  res
-) => {
-
+// Busca una empresa usando su "slug" (el nombre en formato URL, ej: "mi-empresa-sac")
+exports.getCompanyBySlug = async (req, res) => {
   try {
+    // Extrae el slug de la petición
+    const slug = req.params.slug;
 
-    const slug =
-      req.params.slug;
-
+    // Si no enviaron ningún slug, devuelve error
     if (!slug) {
-
       return res.status(400).json({
-
         success: false,
 
-        message: "Slug inválido"
-
+        message: "Slug inválido",
       });
-
     }
 
-    const company =
-      await prisma.company.findFirst({
+    // Busca la empresa que coincida con el slug, que no esté borrada y que esté activa
+    const company = await prisma.company.findFirst({
+      where: {
+        slug,
 
-        where: {
+        isDeleted: false,
 
-          slug,
-
-          isDeleted: false,
-
-          isActive: true
-
-        }
-
-      });
+        isActive: true,
+      },
+    });
 
     if (!company) {
-
       return res.status(404).json({
-
         success: false,
 
-        message: "Empresa no encontrada"
-
+        message: "Empresa no encontrada",
       });
-
     }
 
     res.json({
-
       success: true,
 
-      data: company
-
+      data: company,
     });
-
   } catch (error) {
-
     console.error(error);
 
     res.status(500).json({
-
       success: false,
 
-      message: error.message
-
+      message: error.message,
     });
-
   }
-
 };
 
 // ==========================================
 // CREAR EMPRESA
 // ==========================================
 
-exports.createCompany = async (
-  req,
-  res
-) => {
-
+// Función para registrar una nueva empresa en el sistema
+exports.createCompany = async (req, res) => {
   try {
-
+    // Extraemos todos los datos que llenó el usuario en el formulario
     const {
-
       name,
       slug,
       ruc,
@@ -229,666 +170,465 @@ exports.createCompany = async (
       logo,
       website,
       taxId,
-      legalRepresentative
-
-    } = req.body;
-
-    // ==========================
+      legalRepresentative,
+    } = req.body; // ==========================
     // VALIDACIONES
     // ==========================
 
+    // El nombre es un campo obligatorio
     if (!name) {
-
       return res.status(400).json({
-
         success: false,
 
-        message: "El nombre es obligatorio"
-
+        message: "El nombre es obligatorio",
       });
-
     }
 
+    // El slug es un campo obligatorio
     if (!slug) {
-
       return res.status(400).json({
-
         success: false,
 
-        message: "El slug es obligatorio"
-
+        message: "El slug es obligatorio",
       });
-
-    }
-
-    // ==========================
+    } // ==========================
     // CREAR EMPRESA
     // ==========================
 
-    const company =
-      await prisma.company.create({
+    // Le decimos a la base de datos que guarde el nuevo registro
+    const company = await prisma.company.create({
+      data: {
+        name,
 
-        data: {
+        slug,
 
-          name,
+        ruc,
 
-          slug,
+        address,
 
-          ruc,
+        phone,
 
-          address,
+        email,
 
-          phone,
+        logo,
 
-          email,
+        website,
 
-          logo,
+        taxId,
 
-          website,
-
-          taxId,
-
-          legalRepresentative
-
-        }
-
-      });
-
-    res.status(201).json({
-
-      success: true,
-
-      data: company
-
+        legalRepresentative,
+      },
     });
 
+    // Código 201 significa "Creado exitosamente"
+    res.status(201).json({
+      success: true,
+
+      data: company,
+    });
   } catch (error) {
-
-    console.error(error);
-
-    // ==========================
+    console.error(error); // ==========================
     // ERRORES PRISMA
     // ==========================
 
-    if (
-      error instanceof
-      Prisma.PrismaClientKnownRequestError
-    ) {
-
+    // Prisma verifica si el error es de su propia base de datos
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
       // UNIQUE
+      // El código P2002 salta cuando intentas guardar un dato que ya existe y no se puede repetir (como un RUC o un Email)
       if (error.code === "P2002") {
-
         return res.status(400).json({
-
           success: false,
 
-          message:
-            "Ya existe una empresa con esos datos únicos"
-
+          message: "Ya existe una empresa con esos datos únicos",
         });
-
       }
-
     }
 
+    // Error general si el fallo fue por otra cosa
     res.status(500).json({
-
       success: false,
 
-      message: error.message
-
+      message: error.message,
     });
-
   }
-
 };
 
 // ==========================================
 // ACTUALIZAR EMPRESA
 // ==========================================
 
-exports.updateCompany = async (
-  req,
-  res
-) => {
-
+// Modifica los datos de una empresa existente (ej. cambiar su teléfono o dirección)
+exports.updateCompany = async (req, res) => {
   try {
-
-    const id =
-      parseInt(req.params.id);
+    // Toma el ID de la URL
+    const id = parseInt(req.params.id);
 
     if (isNaN(id)) {
-
       return res.status(400).json({
-
         success: false,
 
-        message: "ID inválido"
-
+        message: "ID inválido",
       });
-
     }
 
-    console.log(req.body);
-
-    // ==========================
+    console.log(req.body); // ==========================
     // VERIFICAR EXISTENCIA
     // ==========================
 
-    const exists =
-      await prisma.company.findFirst({
+    // Antes de actualizar, revisa que la empresa realmente exista en la base de datos
+    const exists = await prisma.company.findFirst({
+      where: {
+        id,
 
-        where: {
-
-          id,
-
-          isDeleted: false
-
-        }
-
-      });
+        isDeleted: false,
+      },
+    });
 
     if (!exists) {
-
       return res.status(404).json({
-
         success: false,
 
-        message: "Empresa no encontrada"
-
+        message: "Empresa no encontrada",
       });
-
-    }
-
-    // ==========================
+    } // ==========================
     // DATA DINÁMICA
     // ==========================
 
+    // Prepara un objeto vacío. Solo agregará los campos que el usuario realmente envió para actualizar.
     const data = {};
 
-    if (req.body.name !== undefined)
-      data.name = req.body.name;
+    if (req.body.name !== undefined) data.name = req.body.name;
 
-    if (req.body.slug !== undefined)
-      data.slug = req.body.slug;
+    if (req.body.slug !== undefined) data.slug = req.body.slug;
 
-    if (req.body.ruc !== undefined)
-      data.ruc = req.body.ruc;
+    if (req.body.ruc !== undefined) data.ruc = req.body.ruc;
 
-    if (req.body.address !== undefined)
-      data.address = req.body.address;
+    if (req.body.address !== undefined) data.address = req.body.address;
 
-    if (req.body.phone !== undefined)
-      data.phone = req.body.phone;
+    if (req.body.phone !== undefined) data.phone = req.body.phone;
 
-    if (req.body.email !== undefined)
-      data.email = req.body.email;
+    if (req.body.email !== undefined) data.email = req.body.email;
 
-    if (req.body.logo !== undefined)
-      data.logo = req.body.logo;
+    if (req.body.logo !== undefined) data.logo = req.body.logo;
 
-    if (req.body.website !== undefined)
-      data.website = req.body.website;
+    if (req.body.website !== undefined) data.website = req.body.website;
 
-    if (req.body.taxId !== undefined)
-      data.taxId = req.body.taxId;
+    if (req.body.taxId !== undefined) data.taxId = req.body.taxId;
 
-    if (
-      req.body.legalRepresentative !== undefined
-    )
-      data.legalRepresentative =
-        req.body.legalRepresentative;
-
-    // ==========================
+    if (req.body.legalRepresentative !== undefined)
+      data.legalRepresentative = req.body.legalRepresentative; // ==========================
     // ACTUALIZAR
     // ==========================
 
-    const company =
-      await prisma.company.update({
+    // Guarda los cambios en la base de datos
+    const company = await prisma.company.update({
+      where: {
+        id,
+      },
 
-        where: {
-          id
-        },
-
-        data
-
-      });
-
-    res.json({
-
-      success: true,
-
-      data: company
-
+      data,
     });
 
+    res.json({
+      success: true,
+
+      data: company,
+    });
   } catch (error) {
-
-    console.error(error);
-
-    // ==========================
+    console.error(error); // ==========================
     // ERRORES PRISMA
     // ==========================
 
-    if (
-      error instanceof
-      Prisma.PrismaClientKnownRequestError
-    ) {
-
-      // UNIQUE
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      // UNIQUE (Ej. Intentan poner un RUC que ya le pertenece a otra empresa)
       if (error.code === "P2002") {
-
         return res.status(400).json({
-
           success: false,
 
-          message:
-            "Ya existe una empresa con esos datos únicos"
-
+          message: "Ya existe una empresa con esos datos únicos",
         });
+      } // REGISTRO NO EXISTE
 
-      }
-
-      // REGISTRO NO EXISTE
+      // Código P2025 significa que Prisma intentó actualizar algo que no está en la base de datos
       if (error.code === "P2025") {
-
         return res.status(404).json({
-
           success: false,
 
-          message:
-            "Empresa no encontrada"
-
+          message: "Empresa no encontrada",
         });
-
       }
-
     }
 
     res.status(500).json({
-
       success: false,
 
-      message: error.message
-
+      message: error.message,
     });
-
   }
-
 };
 
 // ==========================================
 // ELIMINAR EMPRESA (SOFT DELETE)
 // ==========================================
 
-exports.deleteCompany = async (
-  req,
-  res
-) => {
-
+// Eliminación lógica: Oculta la empresa en el sistema, pero no la borra de la base de datos
+exports.deleteCompany = async (req, res) => {
   try {
-
-    const id =
-      parseInt(req.params.id);
+    // Valida el ID
+    const id = parseInt(req.params.id);
 
     if (isNaN(id)) {
-
       return res.status(400).json({
-
         success: false,
 
-        message: "ID inválido"
-
+        message: "ID inválido",
       });
-
     }
 
-    const exists =
-      await prisma.company.findFirst({
+    // Revisa que la empresa exista antes de intentar borrarla
+    const exists = await prisma.company.findFirst({
+      where: {
+        id,
 
-        where: {
-
-          id,
-
-          isDeleted: false
-
-        }
-
-      });
+        isDeleted: false,
+      },
+    });
 
     if (!exists) {
-
       return res.status(404).json({
-
         success: false,
 
-        message: "Empresa no encontrada"
-
+        message: "Empresa no encontrada",
       });
-
     }
 
+    // Cambia el estado de "isDeleted" a verdadero y le pone fecha de eliminación
     await prisma.company.update({
-
       where: {
-        id
+        id,
       },
 
       data: {
-
         isDeleted: true,
 
-        deletedAt: new Date()
-
-      }
-
+        deletedAt: new Date(),
+      },
     });
 
     res.json({
-
       success: true,
 
-      message:
-        "Empresa eliminada correctamente"
-
+      message: "Empresa eliminada correctamente",
     });
-
   } catch (error) {
-
     console.error(error);
 
     res.status(500).json({
-
       success: false,
 
-      message: error.message
-
+      message: error.message,
     });
-
   }
-
 };
 
 // ==========================================
 // OBTENER USUARIOS DE LA EMPRESA
 // ==========================================
 
-exports.getCompanyUsers = async (
-  req,
-  res
-) => {
-
+// Trae una lista de todas las personas que trabajan o están registradas en una empresa específica
+exports.getCompanyUsers = async (req, res) => {
   try {
+    // Busca los usuarios en la tabla 'user'
+    const users = await prisma.user.findMany({
+      // Filtra por el ID de la empresa del usuario que hace la consulta
+      where: {
+        companyId: req.user.companyId,
 
-    const users =
-      await prisma.user.findMany({
+        isDeleted: false,
+      },
 
-        where: {
+      orderBy: {
+        createdAt: "desc",
+      },
 
-          companyId:
-            req.user.companyId,
+      // "select" funciona para devolver solo datos seguros (no devuelve contraseñas)
+      select: {
+        id: true,
 
-          isDeleted: false
+        name: true,
 
-        },
+        email: true,
 
-        orderBy: {
+        role: true,
 
-          createdAt: "desc"
+        phone: true,
 
-        },
+        isActive: true,
 
-        select: {
-
-          id: true,
-
-          name: true,
-
-          email: true,
-
-          role: true,
-
-          phone: true,
-
-          isActive: true,
-
-          createdAt: true
-
-        }
-
-      });
-
-    res.json({
-
-      success: true,
-
-      data: users
-
+        createdAt: true,
+      },
     });
 
-  } catch (error) {
+    res.json({
+      success: true,
 
+      data: users,
+    });
+  } catch (error) {
     console.error(error);
 
     res.status(500).json({
-
       success: false,
 
-      message: error.message
-
+      message: error.message,
     });
-
   }
-
 };
 
 // ==========================================
 // OBTENER ADMINISTRADORES
 // ==========================================
 
-exports.getAdmins = async (
-  req,
-  res
-) => {
-
+// Igual que la función anterior, pero filtra para traer solo a los jefes/administradores
+exports.getAdmins = async (req, res) => {
   try {
+    const admins = await prisma.user.findMany({
+      where: {
+        companyId: req.user.companyId,
 
-    const admins =
-      await prisma.user.findMany({
+        // El filtro clave: rol de administrador
+        role: "ADMIN",
 
-        where: {
+        isDeleted: false,
+      },
 
-          companyId:
-            req.user.companyId,
+      orderBy: {
+        createdAt: "desc",
+      },
 
-          role: "ADMIN",
+      select: {
+        id: true,
 
-          isDeleted: false
+        name: true,
 
-        },
+        email: true,
 
-        orderBy: {
+        role: true,
 
-          createdAt: "desc"
+        phone: true,
 
-        },
+        isActive: true,
 
-        select: {
-
-          id: true,
-
-          name: true,
-
-          email: true,
-
-          role: true,
-
-          phone: true,
-
-          isActive: true,
-
-          createdAt: true
-
-        }
-
-      });
-
-    res.json({
-
-      success: true,
-
-      data: admins
-
+        createdAt: true,
+      },
     });
 
-  } catch (error) {
+    res.json({
+      success: true,
 
+      data: admins,
+    });
+  } catch (error) {
     console.error(error);
 
     res.status(500).json({
-
       success: false,
 
-      message: error.message
-
+      message: error.message,
     });
-
   }
-
 };
 
 // ==========================================
 // OBTENER EMPLEADOS
 // ==========================================
 
-exports.getEmployees = async (
-  req,
-  res
-) => {
-
+// Filtra la lista de usuarios para traer únicamente a los empleados regulares
+exports.getEmployees = async (req, res) => {
   try {
+    const employees = await prisma.user.findMany({
+      where: {
+        companyId: req.user.companyId,
 
-    const employees =
-      await prisma.user.findMany({
+        // El filtro clave: rol de empleado
+        role: "EMPLOYEE",
 
-        where: {
+        isDeleted: false,
+      },
 
-          companyId:
-            req.user.companyId,
+      orderBy: {
+        createdAt: "desc",
+      },
 
-          role: "EMPLOYEE",
+      select: {
+        id: true,
 
-          isDeleted: false
+        name: true,
 
-        },
+        email: true,
 
-        orderBy: {
+        role: true,
 
-          createdAt: "desc"
+        phone: true,
 
-        },
+        isActive: true,
 
-        select: {
-
-          id: true,
-
-          name: true,
-
-          email: true,
-
-          role: true,
-
-          phone: true,
-
-          isActive: true,
-
-          createdAt: true
-
-        }
-
-      });
-
-    res.json({
-
-      success: true,
-
-      data: employees
-
+        createdAt: true,
+      },
     });
 
-  } catch (error) {
+    res.json({
+      success: true,
 
+      data: employees,
+    });
+  } catch (error) {
     console.error(error);
 
     res.status(500).json({
-
       success: false,
 
-      message: error.message
-
+      message: error.message,
     });
-
   }
-
 };
 
 // ==========================================
 // OBTENER MI EMPRESA
 // ==========================================
 
-exports.getMyCompany = async (
-  req,
-  res
-) => {
-
+// El sistema lee a qué empresa pertenece el usuario actual y devuelve los datos de esa empresa
+exports.getMyCompany = async (req, res) => {
   try {
+    const company = await prisma.company.findFirst({
+      where: {
+        // Busca usando el companyId asociado al usuario logueado
+        id: req.user.companyId,
 
-    const company =
-      await prisma.company.findFirst({
-
-        where: {
-
-          id:
-            req.user.companyId,
-
-          isDeleted: false
-
-        }
-
-      });
+        isDeleted: false,
+      },
+    });
 
     if (!company) {
-
       return res.status(404).json({
-
         success: false,
 
-        message: "Empresa no encontrada"
-
+        message: "Empresa no encontrada",
       });
-
     }
 
     res.json({
-
       success: true,
 
-      data: company
-
+      data: company,
     });
-
   } catch (error) {
-
     console.error(error);
 
     res.status(500).json({
-
       success: false,
 
-      message: error.message
-
+      message: error.message,
     });
-
   }
-
 };

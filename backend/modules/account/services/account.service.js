@@ -2,734 +2,778 @@
 // services/account.service.js
 // ========================================
 
+// Importamos bcrypt, una herramienta de seguridad que sirve para encriptar (ocultar) las contraseñas
 const bcrypt =
-  require("bcryptjs");
+  require("bcryptjs");
 
+// Importamos prisma, que es nuestro comunicador oficial con la base de datos
 const prisma =
-  require("../../../prisma/client");
+  require("../../../prisma/client");
 
+// Importamos un "mapeador" que sirve para darle un formato limpio a los datos antes de enviarlos
 const mapper =
-  require("../utils/account.mapper");
+  require("../utils/account.mapper");
 
+// Importamos los validadores que revisan que la información enviada sea correcta
 const {
 
-  updateProfileValidation,
+  updateProfileValidation,
 
-  changePasswordValidation,
+  changePasswordValidation,
 
-  deleteAccountValidation,
+  deleteAccountValidation,
 
 } = require(
-  "../validations/account.validation"
+  "../validations/account.validation"
 );
 
 /* ======================================
- * GET MY ACCOUNT
- * ==================================== */
+ * GET MY ACCOUNT
+ * Busca y junta toda la información de un usuario
+ * ==================================== */
 
 exports.getMyAccount =
-  async (userId) => {
+  async (userId) => {
 
-    const user =
-      await prisma.user.findUnique({
+    // Le pedimos a la base de datos que busque a este usuario único por su ID
+    const user =
+      await prisma.user.findUnique({
 
-        where: {
-          id: Number(userId),
-        },
+        where: {
+          id: Number(userId),
+        },
 
-        include: {
+        // Con "include" le decimos que además del usuario, nos traiga toda esta información relacionada:
+        include: {
 
-          /* ======================================
-           * COMPANY
-           * ==================================== */
+          /* ======================================
+           * COMPANY
+           * Trae los datos de la empresa a la que pertenece
+           * ==================================== */
 
-          company: {
+          company: {
 
-            select: {
+            select: {
 
-              id: true,
+              id: true,
 
-              name: true,
+              name: true,
 
-              slug: true,
+              slug: true,
 
-              logo: true,
+              logo: true,
 
-              email: true,
+              email: true,
 
-              phone: true,
+              phone: true,
 
-              website: true,
+              website: true,
 
-              subscriptionTier: true,
+              subscriptionTier: true,
 
-            },
+            },
 
-          },
+          },
 
-          /* ======================================
-           * BRANCH
-           * ==================================== */
+          /* ======================================
+           * BRANCH
+           * Trae los datos de la sucursal específica
+           * ==================================== */
 
-          branch: {
+          branch: {
 
-            select: {
+            select: {
 
-              id: true,
+              id: true,
 
-              name: true,
+              name: true,
 
-              code: true,
+              code: true,
 
-              logo: true,
+              logo: true,
 
-              address: true,
+              address: true,
 
-              city: true,
+              city: true,
 
-              state: true,
+              state: true,
 
-              country: true,
+              country: true,
 
-            },
+            },
 
-          },
+          },
 
-          /* ======================================
-           * MANAGER
-           * ==================================== */
+          /* ======================================
+           * MANAGER
+           * Trae los datos de su jefe o gerente
+           * ==================================== */
 
-          manager: {
+          manager: {
 
-            select: {
+            select: {
 
-              id: true,
+              id: true,
 
-              name: true,
+              name: true,
 
-              email: true,
+              email: true,
 
-              role: true,
+              role: true,
 
-            },
+            },
 
-          },
+          },
 
-          /* ======================================
-           * SUBORDINATES
-           * ==================================== */
+          /* ======================================
+           * SUBORDINATES
+           * Trae los datos de los empleados a su cargo
+           * ==================================== */
 
-          subordinates: {
+          subordinates: {
 
-            select: {
+            select: {
 
-              id: true,
+              id: true,
 
-              name: true,
+              name: true,
 
-              email: true,
+              email: true,
 
-              role: true,
+              role: true,
 
-              avatar: true,
+              avatar: true,
 
-            },
+            },
 
-          },
+          },
 
-          /* ======================================
-           * SESSIONS
-           * ==================================== */
+          /* ======================================
+           * SESSIONS
+           * Trae un historial de sus últimas 10 sesiones activas
+           * ==================================== */
 
-          sessions: {
+          sessions: {
 
-            where: {
-              isActive: true,
-            },
+            where: {
+              isActive: true,
+            },
 
-            orderBy: {
-              createdAt: "desc",
-            },
+            orderBy: {
+              createdAt: "desc",
+            },
 
-            take: 10,
+            take: 10,
 
-          },
+          },
 
-          /* ======================================
-           * COUNTS
-           * ==================================== */
+          /* ======================================
+           * COUNTS
+           * Cuenta cuántas ventas, compras, tickets, etc. ha hecho
+           * ==================================== */
 
-          _count: {
+          _count: {
 
-            select: {
+            select: {
 
-              sales: true,
+              sales: true,
 
-              purchases: true,
+              purchases: true,
 
-              supportTickets: true,
+              supportTickets: true,
 
-              notifications: true,
+              notifications: true,
 
-              sessions: true,
+              sessions: true,
 
-            },
+            },
 
-          },
+          },
 
-        },
+        },
 
-      });
+      });
 
-    if (!user) {
+    // Si la base de datos no encuentra al usuario, arroja un error
+    if (!user) {
 
-      throw new Error(
-        "Usuario no encontrado"
-      );
+      throw new Error(
+        "Usuario no encontrado"
+      );
 
-    }
+    }
 
-    return mapper(user);
+    // Pasa los datos por el mapeador para darles formato y los envía de vuelta
+    return mapper(user);
 
-  };
+  };
 
 /* ======================================
- * UPDATE PROFILE
- * ==================================== */
+ * UPDATE PROFILE
+ * Lógica para actualizar los datos del usuario
+ * ==================================== */
 
 exports.updateMyAccount =
-  async (userId, data) => {
+  async (userId, data) => {
 
-    updateProfileValidation(
-      data
-    );
+    // Primero validamos que los datos nuevos estén correctos
+    updateProfileValidation(
+      data
+    );
 
-    /* ======================================
-     * VERIFY EMAIL
-     * ==================================== */
+    /* ======================================
+     * VERIFY EMAIL
+     * Revisa que el nuevo correo que quiere usar no pertenezca ya a otra persona
+     * ==================================== */
 
-    const exists =
-      await prisma.user.findFirst({
+    const exists =
+      await prisma.user.findFirst({
 
-        where: {
+        where: {
 
-          email: data.email,
+          email: data.email,
 
-          NOT: {
-            id: Number(userId),
-          },
+          NOT: {
+            id: Number(userId),
+          },
 
-        },
+        },
 
-      });
+      });
 
-    if (exists) {
+    if (exists) {
 
-      throw new Error(
-        "El correo ya está en uso"
-      );
+      throw new Error(
+        "El correo ya está en uso"
+      );
 
-    }
+    }
 
-    /* ======================================
-     * UPDATE USER
-     * ==================================== */
+    /* ======================================
+     * UPDATE USER
+     * Guarda el nuevo nombre, correo, teléfono o foto en la base de datos
+     * ==================================== */
 
-    const updated =
-      await prisma.user.update({
+    const updated =
+      await prisma.user.update({
 
-        where: {
-          id: Number(userId),
-        },
+        where: {
+          id: Number(userId),
+        },
 
-        data: {
+        data: {
 
-          name:
-            data.name,
+          name:
+            data.name,
 
-          email:
-            data.email,
+          email:
+            data.email,
 
-          phone:
-            data.phone,
+          phone:
+            data.phone,
 
-          avatar:
-            data.avatar,
+          avatar:
+            data.avatar,
 
-        },
+        },
 
-        include: {
+        // Incluye los datos relacionados para devolver el perfil actualizado completo
+        include: {
 
-          company: true,
+          company: true,
 
-          branch: true,
+          branch: true,
 
-          manager: true,
+          manager: true,
 
-          subordinates: true,
+          subordinates: true,
 
-          sessions: true,
+          sessions: true,
 
-          _count: {
+          _count: {
 
-            select: {
+            select: {
 
-              sales: true,
+              sales: true,
 
-              purchases: true,
+              purchases: true,
 
-              supportTickets: true,
+              supportTickets: true,
 
-              notifications: true,
+              notifications: true,
 
-              sessions: true,
+              sessions: true,
 
-            },
+            },
 
-          },
+          },
 
-        },
+        },
 
-      });
+      });
 
-    /* ======================================
-     * AUDIT LOG
-     * ==================================== */
+    /* ======================================
+     * AUDIT LOG
+     * Guarda un registro en la bitácora de que este usuario actualizó su perfil
+     * ==================================== */
 
-    await prisma.auditLog.create({
+    await prisma.auditLog.create({
 
-      data: {
+      data: {
 
-        action: "UPDATE",
+        action: "UPDATE",
 
-        entityType: "USER",
+        entityType: "USER",
 
-        entityId: updated.id,
+        entityId: updated.id,
 
-        description:
-          "Actualización de perfil",
+        description:
+          "Actualización de perfil",
 
-        userId: updated.id,
+        userId: updated.id,
 
-        companyId:
-          updated.companyId,
+        companyId:
+          updated.companyId,
 
-        branchId:
-          updated.branchId,
+        branchId:
+          updated.branchId,
 
-      },
+      },
 
-    });
+    });
 
-    return mapper(updated);
+    return mapper(updated);
 
-  };
+  };
 
 /* ======================================
- * UPDATE PASSWORD
- * ==================================== */
+ * UPDATE PASSWORD
+ * Lógica de seguridad para cambiar la contraseña
+ * ==================================== */
 
 exports.updatePassword =
-  async (userId, data) => {
+  async (userId, data) => {
 
-    changePasswordValidation(
-      data
-    );
+    // Valida que la nueva contraseña tenga los caracteres correctos
+    changePasswordValidation(
+      data
+    );
 
-    const user =
-      await prisma.user.findUnique({
+    // Busca al usuario en la base de datos
+    const user =
+      await prisma.user.findUnique({
 
-        where: {
-          id: Number(userId),
-        },
+        where: {
+          id: Number(userId),
+        },
 
-      });
+      });
 
-    if (!user) {
+    if (!user) {
 
-      throw new Error(
-        "Usuario no encontrado"
-      );
+      throw new Error(
+        "Usuario no encontrado"
+      );
 
-    }
+    }
 
-    /* ======================================
-     * VERIFY PASSWORD
-     * ==================================== */
+    /* ======================================
+     * VERIFY PASSWORD
+     * Compara la contraseña que el usuario escribió con la que está guardada (encriptada)
+     * ==================================== */
 
-    const valid =
-      await bcrypt.compare(
-        data.currentPassword,
-        user.password
-      );
+    const valid =
+      await bcrypt.compare(
+        data.currentPassword,
+        user.password
+      );
 
-    if (!valid) {
+    if (!valid) {
 
-      throw new Error(
-        "Contraseña actual incorrecta"
-      );
+      throw new Error(
+        "Contraseña actual incorrecta"
+      );
 
-    }
+    }
 
-    /* ======================================
-     * HASH PASSWORD
-     * ==================================== */
+    /* ======================================
+     * HASH PASSWORD
+     * Encripta la NUEVA contraseña para que sea ilegible en la base de datos
+     * ==================================== */
 
-    const hashed =
-      await bcrypt.hash(
-        data.newPassword,
-        10
-      );
+    const hashed =
+      await bcrypt.hash(
+        data.newPassword,
+        10
+      );
 
-    /* ======================================
-     * UPDATE PASSWORD
-     * ==================================== */
+    /* ======================================
+     * UPDATE PASSWORD
+     * Guarda la nueva contraseña y reinicia los intentos de inicio de sesión a 0
+     * ==================================== */
 
-    await prisma.user.update({
+    await prisma.user.update({
 
-      where: {
-        id: Number(userId),
-      },
+      where: {
+        id: Number(userId),
+      },
 
-      data: {
+      data: {
 
-        password: hashed,
+        password: hashed,
 
-        loginAttempts: 0,
+        loginAttempts: 0,
 
-      },
+      },
 
-    });
+    });
 
-    /* ======================================
-     * AUDIT LOG
-     * ==================================== */
+    /* ======================================
+     * AUDIT LOG
+     * Guarda en la bitácora que se cambió una contraseña
+     * ==================================== */
 
-    await prisma.auditLog.create({
+    await prisma.auditLog.create({
 
-      data: {
+      data: {
 
-        action: "UPDATE",
+        action: "UPDATE",
 
-        entityType: "PASSWORD",
+        entityType: "PASSWORD",
 
-        entityId:
-          Number(userId),
+        entityId:
+          Number(userId),
 
-        description:
-          "Cambio de contraseña",
+        description:
+          "Cambio de contraseña",
 
-        userId:
-          Number(userId),
+        userId:
+          Number(userId),
 
-        companyId:
-          user.companyId,
+        companyId:
+          user.companyId,
 
-        branchId:
-          user.branchId,
+        branchId:
+          user.branchId,
 
-      },
+      },
 
-    });
+    });
 
-  };
+  };
 
 /* ======================================
- * GET ACTIVE SESSIONS
- * ==================================== */
+ * GET ACTIVE SESSIONS
+ * Busca en la base de datos dónde está iniciada la cuenta actualmente
+ * ==================================== */
 
 exports.getSessions =
-  async (userId) => {
+  async (userId) => {
 
-    return prisma.userSession.findMany({
+    return prisma.userSession.findMany({
 
-      where: {
+      where: {
 
-        userId:
-          Number(userId),
+        userId:
+          Number(userId),
 
-        isActive: true,
+        isActive: true,
 
-      },
+      },
 
-      orderBy: {
-        createdAt: "desc",
-      },
+      orderBy: {
+        createdAt: "desc",
+      },
 
-    });
+    });
 
-  };
+  };
 
 /* ======================================
- * REVOKE SESSION
- * ==================================== */
+ * REVOKE SESSION
+ * Busca una sesión específica y la marca como inactiva (la cierra)
+ * ==================================== */
 
 exports.revokeSession =
-  async (userId, sessionId) => {
+  async (userId, sessionId) => {
 
-    const session =
-      await prisma.userSession.findFirst({
+    // Primero verifica que la sesión realmente exista y le pertenezca a este usuario
+    const session =
+      await prisma.userSession.findFirst({
 
-        where: {
+        where: {
 
-          id:
-            Number(sessionId),
+          id:
+            Number(sessionId),
 
-          userId:
-            Number(userId),
+          userId:
+            Number(userId),
 
-        },
+        },
 
-      });
+      });
 
-    if (!session) {
+    if (!session) {
 
-      throw new Error(
-        "Sesión no encontrada"
-      );
+      throw new Error(
+        "Sesión no encontrada"
+      );
 
-    }
+    }
 
-    await prisma.userSession.update({
+    // Cambia el estado a inactivo para cerrar la sesión de ese dispositivo
+    await prisma.userSession.update({
 
-      where: {
-        id:
-          Number(sessionId),
-      },
+      where: {
+        id:
+          Number(sessionId),
+      },
 
-      data: {
-        isActive: false,
-      },
+      data: {
+        isActive: false,
+      },
 
-    });
+    });
 
-  };
+  };
 
 /* ======================================
- * ENABLE 2FA
- * ==================================== */
+ * ENABLE 2FA
+ * Enciende la doble seguridad para el usuario
+ * ==================================== */
 
 exports.enable2FA =
-  async (userId) => {
+  async (userId) => {
 
-    await prisma.user.update({
+    await prisma.user.update({
 
-      where: {
-        id: Number(userId),
-      },
+      where: {
+        id: Number(userId),
+      },
 
-      data: {
-        twoFactorEnabled: true,
-      },
+      data: {
+        twoFactorEnabled: true,
+      },
 
-    });
+    });
 
-  };
+  };
 
 /* ======================================
- * DISABLE 2FA
- * ==================================== */
+ * DISABLE 2FA
+ * Apaga la doble seguridad para el usuario
+ * ==================================== */
 
 exports.disable2FA =
-  async (userId) => {
+  async (userId) => {
 
-    await prisma.user.update({
+    await prisma.user.update({
 
-      where: {
-        id: Number(userId),
-      },
+      where: {
+        id: Number(userId),
+      },
 
-      data: {
-        twoFactorEnabled: false,
-      },
+      data: {
+        twoFactorEnabled: false,
+      },
 
-    });
+    });
 
-  };
+  };
 
 /* ======================================
- * DELETE ACCOUNT
- * ==================================== */
+ * DELETE ACCOUNT
+ * Lógica para dar de baja a un usuario del minimarket
+ * ==================================== */
 
 exports.deleteMyAccount =
-  async (userId, data) => {
+  async (userId, data) => {
 
-    deleteAccountValidation(
-      data
-    );
+    // Revisa que la petición de eliminar esté bien formulada
+    deleteAccountValidation(
+      data
+    );
 
-    const user =
-      await prisma.user.findUnique({
+    // Busca al usuario
+    const user =
+      await prisma.user.findUnique({
 
-        where: {
-          id: Number(userId),
-        },
+        where: {
+          id: Number(userId),
+        },
 
-      });
+      });
 
-    if (!user) {
+    if (!user) {
 
-      throw new Error(
-        "Usuario no encontrado"
-      );
+      throw new Error(
+        "Usuario no encontrado"
+      );
 
-    }
+    }
 
-    /* ======================================
-     * VERIFY PASSWORD
-     * ==================================== */
+    /* ======================================
+     * VERIFY PASSWORD
+     * Por seguridad, pide y verifica la contraseña antes de borrar todo
+     * ==================================== */
 
-    const valid =
-      await bcrypt.compare(
-        data.password,
-        user.password
-      );
+    const valid =
+      await bcrypt.compare(
+        data.password,
+        user.password
+      );
 
-    if (!valid) {
+    if (!valid) {
 
-      throw new Error(
-        "Contraseña incorrecta"
-      );
+      throw new Error(
+        "Contraseña incorrecta"
+      );
 
-    }
+    }
 
-    /* ======================================
-     * SOFT DELETE
-     * ==================================== */
+    /* ======================================
+     * SOFT DELETE
+     * "Borrado lógico": En lugar de destruir los datos reales, solo oculta la cuenta y la marca como eliminada
+     * ==================================== */
 
-    await prisma.user.update({
+    await prisma.user.update({
 
-      where: {
-        id: Number(userId),
-      },
+      where: {
+        id: Number(userId),
+      },
 
-      data: {
+      data: {
 
-        isDeleted: true,
+        isDeleted: true,
 
-        isActive: false,
+        isActive: false,
 
-        isOnline: false,
+        isOnline: false,
 
-        deletedAt: new Date(),
+        deletedAt: new Date(),
 
-      },
+      },
 
-    });
+    });
 
-    /* ======================================
-     * CLOSE SESSIONS
-     * ==================================== */
+    /* ======================================
+     * CLOSE SESSIONS
+     * Cierra todas las sesiones que este usuario tuviera abiertas en cualquier dispositivo
+     * ==================================== */
 
-    await prisma.userSession.updateMany({
+    await prisma.userSession.updateMany({
 
-      where: {
-        userId:
-          Number(userId),
-      },
+      where: {
+        userId:
+          Number(userId),
+      },
 
-      data: {
-        isActive: false,
-      },
+      data: {
+        isActive: false,
+      },
 
-    });
+    });
 
-    /* ======================================
-     * AUDIT LOG
-     * ==================================== */
+    /* ======================================
+     * AUDIT LOG
+     * Deja constancia en la bitácora de que la cuenta fue dada de baja
+     * ==================================== */
 
-    await prisma.auditLog.create({
+    await prisma.auditLog.create({
 
-      data: {
+      data: {
 
-        action: "SOFT_DELETE",
+        action: "SOFT_DELETE",
 
-        entityType: "USER",
+        entityType: "USER",
 
-        entityId:
-          Number(userId),
+        entityId:
+          Number(userId),
 
-        description:
-          "Eliminación de cuenta",
+        description:
+          "Eliminación de cuenta",
 
-        userId:
-          Number(userId),
+        userId:
+          Number(userId),
 
-        companyId:
-          user.companyId,
+        companyId:
+          user.companyId,
 
-        branchId:
-          user.branchId,
+        branchId:
+          user.branchId,
 
-      },
+      },
 
-    });
+    });
 
-  };
+  };
 
-  /* ======================================
- * TOGGLE 2FA
- * ==================================== */
+  /* ======================================
+ * TOGGLE 2FA
+ * Interruptor general para encender o apagar el 2FA
+ * ==================================== */
 
 exports.toggleTwoFactor =
-  async (
-    userId,
-    enabled
-  ) => {
+  async (
+    userId,
+    enabled
+  ) => {
 
-    const updatedUser =
-      await prisma.user.update({
+    // Actualiza el estado del 2FA según lo que pida el usuario
+    const updatedUser =
+      await prisma.user.update({
 
-        where: {
-          id: Number(userId),
-        },
+        where: {
+          id: Number(userId),
+        },
 
-        data: {
+        data: {
 
-          twoFactorEnabled:
-            enabled,
+          twoFactorEnabled:
+            enabled,
 
-        },
+        },
 
-      });
+      });
 
-    /* ======================================
-     * AUDIT LOG
-     * ==================================== */
+    /* ======================================
+     * AUDIT LOG
+     * Registra en la bitácora si el 2FA fue encendido o apagado
+     * ==================================== */
 
-    await prisma.auditLog.create({
+    await prisma.auditLog.create({
 
-      data: {
+      data: {
 
-        action: "UPDATE",
+        action: "UPDATE",
 
-        entityType: "USER_2FA",
+        entityType: "USER_2FA",
 
-        entityId:
-          updatedUser.id,
+        entityId:
+          updatedUser.id,
 
-        description:
-          enabled
-            ? "2FA activado"
-            : "2FA desactivado",
+        description:
+          enabled
+            ? "2FA activado"
+            : "2FA desactivado",
 
-        userId:
-          updatedUser.id,
+        userId:
+          updatedUser.id,
 
-        companyId:
-          updatedUser.companyId,
+        companyId:
+          updatedUser.companyId,
 
-        branchId:
-          updatedUser.branchId,
+        branchId:
+          updatedUser.branchId,
 
-      },
+      },
 
-    });
+    });
 
-    return {
+    return {
 
-      enabled,
+      enabled,
 
-    };
+    };
 
-  };
+  };
