@@ -473,7 +473,7 @@ model AuditLog {
   company     Company     @relation(fields: [companyId], references: [id], onDelete: Cascade)
   user        User?       @relation("UserAudits", fields: [userId], references: [id])
 }
-
+// Sistema de soporte y seguimiento de incidencias
 model SupportTicket {
   id              Int             @id @default(autoincrement())
   ticketNumber    String          @unique @db.VarChar(50)
