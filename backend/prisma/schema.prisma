@@ -438,7 +438,7 @@ model Payment {
   purchase      Purchase?        @relation(fields: [purchaseId], references: [id])
   sale          Sale?            @relation(fields: [saleId], references: [id])
 }
-
+// Sistema de alertas y notificaciones operativas
 model Notification {
   id        Int              @id @default(autoincrement())
   title     String           @db.VarChar(255)
