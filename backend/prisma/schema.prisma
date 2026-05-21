@@ -561,7 +561,7 @@ enum PaymentStatus {
   REFUNDED
   PARTIAL
 }
-
+// Enumeración de estados operativos para ventass
 enum SaleStatus {
   DRAFT
   PENDING
