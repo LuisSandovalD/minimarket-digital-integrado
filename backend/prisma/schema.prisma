@@ -296,7 +296,7 @@ model Inventory {
   @@index([branchId])
   @@index([companyId])
 }
-
+// Historial de movimientos y variaciones de stock
 model InventoryHistory {
   id            Int       @id @default(autoincrement())
   type          String    @db.VarChar(50)
