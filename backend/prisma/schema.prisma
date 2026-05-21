@@ -375,7 +375,7 @@ model SaleDetail {
   @@index([saleId])
   @@index([productId])
 }
-
+// Registro de adquisiciones y compras empresariales
 model Purchase {
   id               Int              @id @default(autoincrement())
   purchaseNumber   String           @unique @db.VarChar(50)
