@@ -494,7 +494,7 @@ model SupportTicket {
   user            User            @relation("UserTickets", fields: [userId], references: [id], onDelete: Cascade)
   comments        TicketComment[]
 }
-
+// Registro conversacional asociado a incidencias
 model TicketComment {
   id          Int           @id @default(autoincrement())
   message     String
