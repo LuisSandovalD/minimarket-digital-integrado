@@ -169,7 +169,7 @@ model Unit {
   @@unique([abbreviation, companyId])
   @@unique([name, companyId])
 }
-
+// Asociación jerárquica de categorías de productos
 model Category {
   id          Int        @id @default(autoincrement())
   name        String     @db.VarChar(255)
