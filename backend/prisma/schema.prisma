@@ -536,7 +536,7 @@ model Configuration {
   companyId             Int      @unique
   company               Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
 }
-
+// Definición de permisos y jerarquías del sistema
 enum Role {
   ADMIN
   MANAGER
