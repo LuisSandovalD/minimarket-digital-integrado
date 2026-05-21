@@ -1,69 +1,94 @@
-version: "3.9"
+version: "3.9" # Versión del esquema de Docker Compose que se utilizará
+
+# ============================================================
+# SERVICIOS
+# Define cada contenedor que formará parte de la aplicación.
+# Cada servicio se ejecuta en su propio contenedor aislado.
+# ============================================================
 
 services:
 
   # ========================================
   # BACKEND
+  # Servicio Node.js que expone la API REST
+  # del minimarket en el puerto 5000.
   # ========================================
 
   backend:
 
     build:
-      context: ./backend
+      context: ./backend # Carpeta donde se encuentra el Dockerfile del backend
 
-    container_name: backend
+    container_name: backend # Nombre fijo del contenedor (útil para identificarlo con "docker ps")
 
-    restart: always
+    restart: always # Reinicia automáticamente el contenedor si falla o si Docker reinicia
 
     ports:
-      - "5000:5000"
+      - "5000:5000" # Mapea el puerto 5000 del host al puerto 5000 del contenedor
+                    # Formato: "HOST:CONTENEDOR"
 
     env_file:
-      - ${ENV_FILE_PATH:-./backend/.env}
+      - ${ENV_FILE_PATH:-./backend/.env} # Carga variables de entorno desde un archivo .env
+                                          # Si la variable ENV_FILE_PATH no está definida,
+                                          # usa ./backend/.env por defecto
 
     volumes:
-      - ./backend:/app
-      - /app/node_modules
+      - ./backend:/app        # Monta el código fuente local en /app dentro del contenedor
+                               # Permite hot-reload: los cambios locales se reflejan en tiempo real
+      - /app/node_modules      # Volumen anónimo para preservar node_modules del contenedor
+                               # Evita que el montaje anterior sobreescriba las dependencias instaladas
 
-    command: npm run dev
+    command: npm run dev # Comando que se ejecuta al iniciar el contenedor (modo desarrollo)
 
   # ========================================
   # FRONTEND
+  # Servicio React/Vite que sirve la interfaz
+  # de usuario a través del puerto 80 interno.
   # ========================================
 
   frontend:
 
     build:
-      context: ./frontend
+      context: ./frontend # Carpeta donde se encuentra el Dockerfile del frontend
 
-    container_name: frontend
+    container_name: frontend # Nombre fijo del contenedor
 
-    restart: always
+    restart: always # Reinicia automáticamente si el contenedor falla
 
     ports:
-      - "5173:80"
+      - "5173:80" # Mapea el puerto 5173 del host al puerto 80 del contenedor
+                  # El frontend se construye con Nginx internamente (ver Dockerfile)
 
     depends_on:
-      - backend
+      - backend # Asegura que el contenedor backend esté iniciado antes que el frontend
+                # Nota: solo garantiza el inicio, no que el servicio esté listo
 
   # ========================================
   # NGINX
+  # Actúa como reverse proxy (intermediario):
+  # - Redirige "/" al frontend (puerto 80)
+  # - Redirige "/api/" al backend (puerto 5000)
+  # Punto de entrada único para toda la app.
   # ========================================
 
   nginx:
 
-    image: nginx:stable-alpine
+    image: nginx:stable-alpine # Usa la imagen oficial de Nginx en su versión estable y ligera (Alpine Linux)
 
-    container_name: nginx
+    container_name: nginx # Nombre fijo del contenedor
 
-    restart: always
+    restart: always # Reinicia automáticamente si el contenedor falla
 
     ports:
-      - "80:80"
+      - "80:80" # Expone el puerto 80 al exterior (HTTP)
+                # Todo el tráfico de la app entra por aquí
 
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+        # Monta la configuración personalizada de Nginx dentro del contenedor
+        # Reemplaza la configuración por defecto de Nginx
 
     depends_on:
-      - frontend
-      - backend
+      - frontend # Nginx espera a que el frontend esté iniciado
+      - backend  # Nginx espera a que el backend esté iniciado
+                 # antes de levantar el proxy
