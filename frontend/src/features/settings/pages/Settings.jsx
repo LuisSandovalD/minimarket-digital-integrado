@@ -17,7 +17,6 @@ export default function ConfigurationPage() {
     requireTwoFactor: false,
     sessionTimeout: 3600,
   });
-
   /*
     GET CONFIGURATION
   */
