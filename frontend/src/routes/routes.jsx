@@ -39,13 +39,14 @@ import ProductsPage from "../features/product/pages/ProductsPage";
 import { SalesPage } from "../features/sales/pages/SalesPage";
 
 import BarcodePages from "../features/barcode/pages/BarcodePages";
-import ConfigurationPage from "../features/settings/pages/Settings";
 import CustomerPage from "../features/customer/pages/CustomerPage";
 import EmployeesPage from "../features/employee/pages/EmployeesPage";
 import InventoryPage from "../features/inventory/pages/InventoryPage";
 import MovementsPage from "../features/movements/pages/MovementsPage";
 import PurchasePage from "../features/purchase/page/PurchasePage";
+import ConfigurationPage from "../features/settings/pages/Settings";
 import SupplierPage from "../features/supplier/pages/SupplierPage";
+import SupportPage from "../features/support/pages/SupportPage";
 
 export const routes = [
   /* ========================================
@@ -170,12 +171,11 @@ export const routes = [
             path: "settings",
             element: <ConfigurationPage />,
           },
-        
-            {
-            path: "support",
-            element: <Support />,
-          },
 
+          {
+            path: "support",
+            element: <SupportPage />,
+          },
 
           {
             path: "inventory",
