@@ -703,6 +703,7 @@ enum Role {
   MANAGER
   SUPERVISOR
   EMPLOYEE
+  SUPPORT
   VIEWER
 }
 
