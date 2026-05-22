@@ -17,9 +17,7 @@ export default function ConfigurationPage() {
     requireTwoFactor: false,
     sessionTimeout: 3600,
   });
-  /*
-    GET CONFIGURATION
-  */
+  /*GET CONFIGURATION*/
 
   const fetchConfiguration = async () => {
     try {
