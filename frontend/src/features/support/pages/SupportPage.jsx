@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { MoreVertical, Paperclip, Search, Send } from "lucide-react";
 
-import api from "@/lib/api";
+import api from "../..//../api/axios";
 
 export default function SupportPage() {
   const messagesEndRef = useRef(null);
