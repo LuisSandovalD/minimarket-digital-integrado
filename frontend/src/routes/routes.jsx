@@ -170,6 +170,12 @@ export const routes = [
             path: "settings",
             element: <ConfigurationPage />,
           },
+        
+            {
+            path: "support",
+            element: <Support />,
+          },
+
 
           {
             path: "inventory",

@@ -4,7 +4,7 @@ import { MoreVertical, Paperclip, Search, Send } from "lucide-react";
 
 import api from "@/lib/api";
 
-export default function SupportCenter() {
+export default function SupportPage() {
   const messagesEndRef = useRef(null);
 
   const [tickets, setTickets] = useState([]);
