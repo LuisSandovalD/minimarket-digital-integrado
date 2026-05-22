@@ -474,37 +474,198 @@ model AuditLog {
   user        User?       @relation("UserAudits", fields: [userId], references: [id])
 }
 
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  WAITING
+  RESOLVED
+  CLOSED
+}
+
+enum TicketPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum MessageType {
+  TEXT
+  IMAGE
+  FILE
+  AUDIO
+  VIDEO
+  SYSTEM
+}
+
 model SupportTicket {
-  id              Int             @id @default(autoincrement())
-  ticketNumber    String          @unique @db.VarChar(50)
-  title           String          @db.VarChar(255)
-  description     String
-  status          TicketStatus    @default(OPEN)
-  priority        TicketPriority  @default(MEDIUM)
-  attachments     String?
-  resolutionNotes String?
-  createdAt       DateTime        @default(now())
-  updatedAt       DateTime        @updatedAt
-  resolvedAt      DateTime?
-  userId          Int
-  assignedTo      Int?
-  companyId       Int
-  assignedUser    User?           @relation("AssignedTickets", fields: [assignedTo], references: [id])
-  company         Company         @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  user            User            @relation("UserTickets", fields: [userId], references: [id], onDelete: Cascade)
-  comments        TicketComment[]
+  id                 Int                @id @default(autoincrement())
+
+  /*
+    INFORMACIÓN PRINCIPAL
+  */
+
+  ticketNumber       String             @unique @db.VarChar(50)
+
+  title              String             @db.VarChar(255)
+
+  description        String
+
+  status             TicketStatus       @default(OPEN)
+
+  priority           TicketPriority     @default(MEDIUM)
+
+  /*
+    ARCHIVOS
+  */
+
+  attachments        Json?
+
+  /*
+    RESOLUCIÓN
+  */
+
+  resolutionNotes    String?
+
+  resolvedAt         DateTime?
+
+  closedAt           DateTime?
+
+  /*
+    CHAT / MENSAJERÍA
+  */
+
+  lastMessage        String?
+
+  lastMessageAt      DateTime?
+
+  unreadCount        Int                @default(0)
+
+  isTyping           Boolean            @default(false)
+
+  /*
+    CONTROL
+  */
+
+  createdAt          DateTime           @default(now())
+
+  updatedAt          DateTime           @updatedAt
+
+  deletedAt          DateTime?
+
+  /*
+    RELACIONES
+  */
+
+  userId             Int
+
+  assignedTo         Int?
+
+  companyId          Int
+
+  /*
+    RELACIONES PRISMA
+  */
+
+  user               User               @relation("UserTickets",fields: [userId],references: [id],onDelete: Cascade)
+
+  assignedUser       User?              @relation("AssignedTickets",fields: [assignedTo],references: [id])
+
+  company            Company            @relation(fields: [companyId],references: [id],onDelete: Cascade)
+
+  comments           TicketComment[]
+
+  /*
+    ÍNDICES
+  */
+
+  @@index([companyId])
+
+  @@index([userId])
+
+  @@index([assignedTo])
+
+  @@index([status])
+
+  @@index([priority])
+
+  @@index([createdAt])
+
+  @@index([lastMessageAt])
 }
 
 model TicketComment {
-  id          Int           @id @default(autoincrement())
-  message     String
-  attachments String?
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  ticketId    Int
-  userId      Int
-  ticket      SupportTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
-  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                 Int                @id @default(autoincrement())
+
+  /*
+    MENSAJE
+  */
+
+  message            String
+
+  messageType        MessageType        @default(TEXT)
+
+  /*
+    ARCHIVOS
+  */
+
+  attachments        Json?
+
+  /*
+    CHAT
+  */
+
+  isEdited           Boolean            @default(false)
+
+  editedAt           DateTime?
+
+  isRead             Boolean            @default(false)
+
+  readAt             DateTime?
+
+  /*
+    SISTEMA
+  */
+
+  isInternal         Boolean            @default(false)
+
+  /*
+    CONTROL
+  */
+
+  createdAt          DateTime           @default(now())
+
+  updatedAt          DateTime           @updatedAt
+
+  deletedAt          DateTime?
+
+  /*
+    RELACIONES
+  */
+
+  ticketId           Int
+
+  userId             Int
+
+  /*
+    RELACIONES PRISMA
+  */
+
+  ticket             SupportTicket      @relation(fields: [ticketId],references: [id],onDelete: Cascade)
+
+  user               User               @relation(fields: [userId],references: [id],onDelete: Cascade)
+
+  /*
+    ÍNDICES
+  */
+
+  @@index([ticketId])
+
+  @@index([userId])
+
+  @@index([createdAt])
+
+  @@index([isRead])
 }
 
 model Configuration {
@@ -600,22 +761,6 @@ enum AuditAction {
   EXPORT
   IMPORT
   RESTORE
-}
-
-enum TicketStatus {
-  OPEN
-  IN_PROGRESS
-  WAITING
-  RESOLVED
-  CLOSED
-  REOPENED
-}
-
-enum TicketPriority {
-  LOW
-  MEDIUM
-  HIGH
-  CRITICAL
 }
 
 enum UnitType {
