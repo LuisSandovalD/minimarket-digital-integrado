@@ -1,58 +1,43 @@
-import { BrowserRouter } from "react-router-dom";
-
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { BrowserRouter, useRoutes } from "react-router-dom";
 
-import { useRoutes } from "react-router-dom";
 import { routes } from "./routes/routes";
 
 import { meService } from "./features/auth/services/auth.service";
-import {
-  loginSuccess,
-  logoutAction,
-  setAuthLoading,
-} from "./features/auth/store/authActions";
+import { loginSuccess, logoutAction } from "./features/auth/store/authActions";
 
-import { LoadingScreen } from "./components/loading/LoadingScreen";
 import { getToken, getUser } from "./features/auth/services/session.service";
 
 export default function App() {
   const dispatch = useDispatch();
-  const { loading } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.auth);
 
-  useEffect(() => {
-    async function loadSession() {
-      dispatch(setAuthLoading(true));
+  const loadSessionFromBackend = useCallback(async () => {
+    try {
+      const response = await meService();
 
-      try {
-        const storedUser = getUser();
-        const storedToken = getToken();
-
-        if (storedUser && storedToken) {
-          dispatch(loginSuccess(storedUser));
-          return;
-        }
-
-        const response = await meService();
-
-        if (response?.user) {
-          dispatch(loginSuccess(response.user));
-        } else {
-          dispatch(logoutAction());
-        }
-      } catch {
+      if (response?.user) {
+        dispatch(loginSuccess(response.user));
+      } else {
         dispatch(logoutAction());
-      } finally {
-        dispatch(setAuthLoading(false));
       }
+    } catch (error) {
+      dispatch(logoutAction());
     }
-
-    loadSession();
   }, [dispatch]);
 
-  if (loading) {
-    return <LoadingScreen />;
-  }
+  useEffect(() => {
+    const storedUser = getUser();
+    const storedToken = getToken();
+
+    if (storedUser && storedToken) {
+      dispatch(loginSuccess(storedUser));
+      return;
+    }
+
+    loadSessionFromBackend();
+  }, [dispatch, loadSessionFromBackend]);
 
   return (
     <BrowserRouter>

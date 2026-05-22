@@ -39,6 +39,7 @@ import ProductsPage from "../features/product/pages/ProductsPage";
 import { SalesPage } from "../features/sales/pages/SalesPage";
 
 import BarcodePages from "../features/barcode/pages/BarcodePages";
+import ConfigurationPage from "../features/settings/pages/Settings";
 import CustomerPage from "../features/customer/pages/CustomerPage";
 import EmployeesPage from "../features/employee/pages/EmployeesPage";
 import InventoryPage from "../features/inventory/pages/InventoryPage";
@@ -163,6 +164,11 @@ export const routes = [
           {
             path: "barcode",
             element: <BarcodePages />,
+          },
+
+          {
+            path: "settings",
+            element: <ConfigurationPage />,
           },
 
           {
