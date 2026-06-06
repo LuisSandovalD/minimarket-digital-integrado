@@ -25,198 +25,156 @@ module.exports = {
   // CREATE SALE
   // ========================================
 
-  createSaleService:
-    async (body) => {
+  // ========================================
+  // CREATE SALE
+  // ========================================
 
-      return prisma.$transaction(
+  createSaleService: async (
+    body,
+    user
+  ) => {
 
-        async (tx) => {
+    console.time("SALE_TOTAL");
 
-          // ========================================
-          // GENERATE SALE NUMBER
-          // ========================================
+    return prisma.$transaction(
 
-          const saleNumber =
-            await generateSaleNumber();
+      async (tx) => {
 
-          // ========================================
-          // CALCULATE TOTALS
-          // ========================================
+        console.time("GENERATE_NUMBER");
 
-          const subtotal =
-            body.details.reduce(
+        const saleNumber =
+          await generateSaleNumber();
 
-              (acc, item) => {
+        console.timeEnd("GENERATE_NUMBER");
 
-                return (
-                  acc +
-                  (
-                    Number(item.quantity) *
-                    Number(item.price)
-                  )
-                );
+        const subtotal =
+          body.details.reduce(
+            (acc, item) =>
+              acc +
+              (
+                Number(item.quantity) *
+                Number(item.price)
+              ),
+            0
+          );
 
-              },
+        const tax = subtotal * 0.18;
+        const discount = Number(body.discount || 0);
+        const total = subtotal + tax - discount;
 
-              0
+        console.time("CREATE_SALE");
 
-            );
+        const sale =
+          await createSale(
+            {
+              saleNumber,
 
-          const tax =
-            subtotal * 0.18;
+              // DATOS DESDE JWT
+              companyId:
+                Number(user.companyId),
 
-          const discount =
-            Number(body.discount || 0);
+              branchId:
+                Number(user.branchId),
 
-          const total =
-            subtotal +
-            tax -
-            discount;
+              userId:
+                Number(user.id),
 
-          // ========================================
-          // CREATE SALE
-          // ========================================
+              customerId:
+                body.customerId
+                  ? Number(body.customerId)
+                  : null,
 
-          const sale =
-            await createSale(
+              subtotal,
+              tax,
+              discount,
+              total,
 
-              {
+              notes:
+                body.notes || null,
 
-                saleNumber,
-
-                companyId:
-                  Number(body.companyId),
-
-                branchId:
-                  Number(body.branchId),
-
-                userId:
-                  Number(body.userId),
-
-                customerId:
-                  body.customerId
-                    ? Number(body.customerId)
-                    : null,
-
-                subtotal,
-                tax,
-                discount,
-                total,
-
-                notes:
-                  body.notes || null,
-
-                status:
-                  "COMPLETED",
-
-              },
-
-              tx
-
-            );
-
-          // ========================================
-          // PREPARE DETAILS
-          // ========================================
-
-          const details =
-            body.details.map(item => ({
-
-              saleId:
-                sale.id,
-
-              productId:
-                Number(item.productId),
-
-              quantity:
-                Number(item.quantity),
-
-              price:
-                Number(item.price),
-
-              subtotal:
-                (
-                  Number(item.quantity) *
-                  Number(item.price)
-                ),
-
-            }));
-
-          // ========================================
-          // CREATE DETAILS
-          // ========================================
-
-          await createManyDetails(
-            details,
+              status:
+                "COMPLETED",
+            },
             tx
           );
 
-          // ========================================
-          // UPDATE STOCK
-          // ========================================
+        console.timeEnd("CREATE_SALE");
 
-          for (const item of body.details) {
+        const details =
+          body.details.map(item => ({
+            saleId: sale.id,
+            productId: Number(item.productId),
+            quantity: Number(item.quantity),
+            price: Number(item.price),
+            subtotal:
+              Number(item.quantity) *
+              Number(item.price),
+          }));
 
-            await decreaseStock(
+        console.time("DETAILS");
 
-              Number(item.productId),
+        await createManyDetails(
+          details,
+          tx
+        );
 
-              Number(item.quantity),
+        console.timeEnd("DETAILS");
 
-              tx
+        console.time("STOCK");
 
-            );
+        for (const item of body.details) {
 
-          }
-
-          // ========================================
-          // CREATE PAYMENTS
-          // ========================================
-
-          if (
-
-            Array.isArray(body.payments) &&
-
-            body.payments.length > 0
-
-          ) {
-
-            const payments =
-              body.payments.map(payment => ({
-
-                paymentMethodId:
-                  Number(
-                    payment.paymentMethodId
-                  ),
-
-                amount:
-                  Number(payment.amount),
-
-                reference:
-                  payment.reference || null,
-
-              }));
-
-            await createManyPayments(
-
-              sale.id,
-              payments,
-              tx
-
-            );
-
-          }
-
-          // ========================================
-          // RETURN SALE
-          // ========================================
-
-          return sale;
+          await decreaseStock(
+            Number(item.productId),
+            Number(item.quantity),
+            tx
+          );
 
         }
 
-      );
+        console.timeEnd("STOCK");
 
-    },
+        if (
+          Array.isArray(body.payments) &&
+          body.payments.length > 0
+        ) {
+
+          console.time("PAYMENTS");
+
+          const payments =
+            body.payments.map(payment => ({
+              paymentMethodId:
+                Number(payment.paymentMethodId),
+
+              amount:
+                Number(payment.amount),
+
+              reference:
+                payment.reference || null,
+            }));
+
+          await createManyPayments(
+            sale.id,
+            payments,
+            tx
+          );
+
+          console.timeEnd("PAYMENTS");
+        }
+
+        console.timeEnd("SALE_TOTAL");
+
+        return sale;
+
+      },
+
+      {
+        timeout: 30000,
+        maxWait: 10000
+      }
+
+    );
+
+  },
 
 };

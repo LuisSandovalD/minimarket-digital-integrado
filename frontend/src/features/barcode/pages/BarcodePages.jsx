@@ -8,6 +8,7 @@ import BarcodeGrid from "../components/BarcodeGrid";
 
 import BarcodeSearch from "../components/BarcodeSearch";
 
+import BarcodeLoading from "../components/BarcodeLoading";
 import useBarcode from "../hooks/useBarcode";
 
 export default function BarcodePages() {
@@ -32,7 +33,7 @@ export default function BarcodePages() {
   } = useBarcode();
 
   if (loading) {
-    return <div className="p-6">Cargando...</div>;
+    return <BarcodeLoading />;
   }
 
   return (

@@ -1,200 +1,116 @@
 // ========================================
-// SALES PAGE (POS MAIN VIEW)
+// features/sales/pages/SalesPage.jsx
 // ========================================
 
-import React from "react";
-
-// HOOKS
-import { useSales } from "../hooks/useSales";
-import { useSaleModals } from "../hooks/useSaleModals";
-
-// COMPONENTS
 import SaleHeader from "../components/SaleHeader";
+import SaleTable from "../components/SaleTable";
 
-import { SaleTable } from "../components/table/SaleTable";
+import SaleCancelModal from "../components/modals/SaleCancelModal";
+import SaleDetailModal from "../components/modals/SaleDetailModal";
+import SaleFormModal from "../components/modals/SaleFormModal";
+import SalePaymentModal from "../components/modals/SalePaymentModal";
+import SaleReturnModal from "../components/modals/SaleReturnModal";
 
-import { SaleCreateModal } from "../components/modals/SaleCreateModal";
-import { SaleDetailModal } from "../components/modals/SaleDetailModal";
-import { SalePaymentModal } from "../components/modals/SalePaymentModal";
-import { SaleCancelModal } from "../components/modals/SaleCancelModal";
-import { SaleReturnModal } from "../components/modals/SaleReturnModal";
+import SalesLoading from "../components/SalesLoading";
 
-// ========================================
-// PAGE
-// ========================================
+import { useSaleForm } from "../hooks/useSaleForm";
+import { useSalesPage } from "../hooks/useSalesPage";
 
-export const SalesPage = () => {
-  // ======================================
-  // DATA
-  // ======================================
+export default function SalesPage() {
+  const { sales, loading, customers, products, metrics, modals, actions } =
+    useSalesPage();
 
-  const { sales, loading, addSale, removeSale, refundSale, fetchSales } =
-    useSales();
+  // ========================================
+  // FORMULARIO DE VENTA
+  // ========================================
 
-  // ======================================
-  // MODALS
-  // ======================================
+  const saleForm = useSaleForm({
+    onSubmit: actions.handleCreate,
+    onClose: () => modals.setCreateOpen(false),
+  });
 
-  const {
-    createOpen,
-    setCreateOpen,
+  // ========================================
+  // LOADING
+  // ========================================
 
-    detailOpen,
-    setDetailOpen,
-
-    paymentOpen,
-    setPaymentOpen,
-
-    cancelOpen,
-    setCancelOpen,
-
-    returnOpen,
-    setReturnOpen,
-
-    selectedSale,
-
-    openDetail,
-    openPayment,
-    openCancel,
-    openReturn,
-  } = useSaleModals();
-
-  // ======================================
-  // CREATE SALE
-  // ======================================
-
-  const handleCreate = async (data) => {
-    await addSale(data);
-
-    setCreateOpen(false);
-  };
-
-  // ======================================
-  // CANCEL SALE
-  // ======================================
-
-  const handleCancel = async (id) => {
-    await removeSale(id);
-
-    setCancelOpen(false);
-  };
-
-  // ======================================
-  // RETURN SALE
-  // ======================================
-
-  const handleReturn = async (id, items) => {
-    await refundSale(id, items);
-
-    setReturnOpen(false);
-  };
-
-  // ======================================
-  // PAYMENT
-  // ======================================
-
-  const handlePayment = async (id, amount) => {
-    console.log("Pago:", id, amount);
-
-    setPaymentOpen(false);
-  };
-
-  // ======================================
-  // STATS
-  // ======================================
-
-  const totalRevenue = sales.reduce(
-    (acc, sale) => acc + Number(sale.total || 0),
-    0,
-  );
-
-  const totalOrders = sales.length;
-
-  const averageTicket = totalOrders > 0 ? totalRevenue / totalOrders : 0;
-
-  // ======================================
-  // RENDER
-  // ======================================
+  if (loading) {
+    return <SalesLoading />;
+  }
 
   return (
     <div className="space-y-6">
-      {/* ==================================
+      {/* ========================================
        * HEADER
-       * ================================== */}
-
+       * ====================================== */}
       <SaleHeader
-        totalSales={totalOrders}
-        totalRevenue={totalRevenue}
-        totalOrders={totalOrders}
-        averageTicket={averageTicket}
-        onCreate={() => setCreateOpen(true)}
+        totalSales={metrics.totalOrders}
+        totalRevenue={metrics.totalRevenue}
+        totalOrders={metrics.totalOrders}
+        averageTicket={metrics.averageTicket}
+        onCreate={() => modals.setCreateOpen(true)}
       />
 
-      {/* ==================================
-       * TABLE
-       * ================================== */}
-
+      {/* ========================================
+       * TABLA
+       * ====================================== */}
       <SaleTable
         sales={sales}
+        onView={modals.openDetail}
+        onPayment={modals.openPayment}
+        onCancel={modals.openCancel}
+        onReturn={modals.openReturn}
+      />
+
+      {/* ========================================
+       * NUEVA VENTA
+       * ====================================== */}
+      <SaleFormModal
+        open={modals.createOpen}
+        onClose={() => modals.setCreateOpen(false)}
+        customers={customers}
+        products={products}
         loading={loading}
-        onView={openDetail}
-        onPay={openPayment}
-        onCancel={openCancel}
-        onReturn={openReturn}
+        {...saleForm}
       />
 
-      {/* ==================================
-       * CREATE MODAL
-       * ================================== */}
-
-      <SaleCreateModal
-        open={createOpen}
-        onClose={() => setCreateOpen(false)}
-        onSubmit={handleCreate}
-      />
-
-      {/* ==================================
-       * DETAIL MODAL
-       * ================================== */}
-
+      {/* ========================================
+       * DETALLE
+       * ====================================== */}
       <SaleDetailModal
-        open={detailOpen}
-        sale={selectedSale}
-        onClose={() => setDetailOpen(false)}
+        open={modals.detailOpen}
+        onClose={() => modals.setDetailOpen(false)}
+        sale={modals.selectedSale}
       />
 
-      {/* ==================================
-       * PAYMENT MODAL
-       * ================================== */}
-
+      {/* ========================================
+       * PAGOS
+       * ====================================== */}
       <SalePaymentModal
-        open={paymentOpen}
-        sale={selectedSale}
-        onClose={() => setPaymentOpen(false)}
-        onPay={handlePayment}
+        open={modals.paymentOpen}
+        onClose={() => modals.setPaymentOpen(false)}
+        sale={modals.selectedSale}
+        onSubmit={actions.handlePayment}
       />
 
-      {/* ==================================
-       * CANCEL MODAL
-       * ================================== */}
-
+      {/* ========================================
+       * ANULAR VENTA
+       * ====================================== */}
       <SaleCancelModal
-        open={cancelOpen}
-        sale={selectedSale}
-        onClose={() => setCancelOpen(false)}
-        onCancel={handleCancel}
+        open={modals.cancelOpen}
+        onClose={() => modals.setCancelOpen(false)}
+        sale={modals.selectedSale}
+        onConfirm={() => actions.handleCancel(modals.selectedSale?.id)}
       />
 
-      {/* ==================================
-       * RETURN MODAL
-       * ================================== */}
-
+      {/* ========================================
+       * DEVOLUCIONES
+       * ====================================== */}
       <SaleReturnModal
-        open={returnOpen}
-        sale={selectedSale}
-        onClose={() => setReturnOpen(false)}
-        onReturn={handleReturn}
+        open={modals.returnOpen}
+        onClose={() => modals.setReturnOpen(false)}
+        sale={modals.selectedSale}
+        onSubmit={actions.handleReturn}
       />
     </div>
   );
-};
+}

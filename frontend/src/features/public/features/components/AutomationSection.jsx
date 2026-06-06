@@ -2,7 +2,7 @@
 
 import { Bot, BellRing, RefreshCcw, MailCheck, Sparkles } from "lucide-react";
 
-import { automation } from "../constants/automation";
+import { automation } from "../constants/automation.js";
 
 export default function AutomationSection() {
   return (

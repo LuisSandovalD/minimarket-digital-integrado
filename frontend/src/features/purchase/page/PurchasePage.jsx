@@ -2,24 +2,20 @@
 // features/purchase/pages/PurchasePage.jsx
 // ========================================
 
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 import usePurchase from "../hooks/usePurchase";
 
+import useProducts from "@/features/product/hooks/useProducts";
 import useSuppliers from "@/features/supplier/hooks/useSuppliers";
 
-import useProducts from "@/features/product/hooks/useProducts";
-
-import PurchaseHeader from "../components/PurchaseHeader";
-
 import PurchaseFormModal from "../components/PurchaseFormModal";
-
+import PurchaseHeader from "../components/PurchaseHeader";
+import PurchaseLoading from "../components/PurchaseLoading";
 import PurchaseTable from "../components/PurchaseTable";
 
-import { initialPurchaseForm } from "../utils/purchase-form.util";
-
 import { mapPurchaseToForm } from "../utils/purchase-form.mapper";
-
+import { initialPurchaseForm } from "../utils/purchase-form.util";
 import { getPurchaseStats } from "../utils/purchase-stats.util";
 
 export default function PurchasePage() {
@@ -29,29 +25,16 @@ export default function PurchasePage() {
 
   const {
     purchases,
-
     loading,
-
     actionLoading,
-
     createPurchase,
-
     updatePurchase,
-
     deletePurchase,
   } = usePurchase();
 
-  const {
-    suppliers,
+  const { suppliers, loading: loadingSuppliers } = useSuppliers();
 
-    loading: loadingSuppliers,
-  } = useSuppliers();
-
-  const {
-    products,
-
-    loading: loadingProducts,
-  } = useProducts();
+  const { products, loading: loadingProducts } = useProducts();
 
   // ========================================
   // STATES
@@ -64,12 +47,18 @@ export default function PurchasePage() {
   const [form, setForm] = useState(initialPurchaseForm);
 
   // ========================================
-  // STATS
+  // MEMOS
   // ========================================
 
   const stats = useMemo(() => {
     return getPurchaseStats(purchases);
   }, [purchases]);
+
+  // ========================================
+  // PAGE LOADING
+  // ========================================
+
+  const pageLoading = loading || loadingSuppliers || loadingProducts;
 
   // ========================================
   // HANDLE CHANGE
@@ -80,7 +69,6 @@ export default function PurchasePage() {
 
     setForm((prev) => ({
       ...prev,
-
       [name]: value,
     }));
   }
@@ -106,8 +94,6 @@ export default function PurchasePage() {
 
     setForm({
       ...initialPurchaseForm,
-
-      // 🔥 SUCURSAL ACTUAL
       branchId: 1,
     });
 
@@ -120,10 +106,6 @@ export default function PurchasePage() {
 
   async function handleSubmit(payload) {
     try {
-      // ========================================
-      // BACKEND PAYLOAD
-      // ========================================
-
       const finalPayload = {
         supplierId: Number(payload.supplierId),
 
@@ -136,16 +118,11 @@ export default function PurchasePage() {
 
           quantity: Number(item.quantity),
 
-          // 🔥 BACKEND EXPECTS costPrice
           costPrice: Number(item.costPrice),
         })),
       };
 
       console.log("FINAL PURCHASE PAYLOAD:", finalPayload);
-
-      // ========================================
-      // CREATE / UPDATE
-      // ========================================
 
       let success = false;
 
@@ -154,10 +131,6 @@ export default function PurchasePage() {
       } else {
         success = await createPurchase(finalPayload);
       }
-
-      // ========================================
-      // SUCCESS
-      // ========================================
 
       if (success) {
         resetForm();
@@ -200,13 +173,19 @@ export default function PurchasePage() {
   }
 
   // ========================================
+  // LOADING SCREEN
+  // ========================================
+
+  if (pageLoading) {
+    return <PurchaseLoading />;
+  }
+
+  // ========================================
   // RENDER
   // ========================================
 
   return (
     <div className="space-y-6">
-      {/* HEADER */}
-
       <PurchaseHeader
         total={stats.total}
         pending={stats.pending}
@@ -214,16 +193,12 @@ export default function PurchasePage() {
         onCreate={handleCreate}
       />
 
-      {/* TABLE */}
-
       <PurchaseTable
         purchases={purchases}
-        loading={loading}
+        loading={false}
         onEdit={handleEdit}
         onDelete={handleDelete}
       />
-
-      {/* MODAL */}
 
       <PurchaseFormModal
         open={openModal}
@@ -234,7 +209,7 @@ export default function PurchasePage() {
         onChange={handleChange}
         suppliers={suppliers}
         products={products}
-        loading={actionLoading || loadingSuppliers || loadingProducts}
+        loading={actionLoading}
         isEdit={!!editingId}
       />
     </div>

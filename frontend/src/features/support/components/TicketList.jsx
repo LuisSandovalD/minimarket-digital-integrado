@@ -1,39 +1,45 @@
-import { Loader2 } from "lucide-react";
-
 import TicketItem from "./TicketItem";
 
 export default function TicketList({
   tickets = [],
-  loading = false,
   selectedTicket,
   onSelectTicket,
 }) {
   // ========================================
-  // LOADING
+  // EMPTY STATE (Elegante y limpio)
   // ========================================
-
-  if (loading) {
+  if (tickets.length === 0) {
     return (
-      <div className="flex items-center justify-center p-10">
-        <Loader2 className="animate-spin" />
+      <div className="p-8 text-center text-sm font-medium text-slate-500 dark:text-slate-400">
+        No se encontraron tickets
       </div>
     );
   }
 
   // ========================================
-  // EMPTY
+  // LIST (Renderizado inmediato con scroll premium)
   // ========================================
-
-  if (tickets.length === 0) {
-    return <div className="p-6 text-center text-gray-400">No hay tickets</div>;
-  }
-
-  // ========================================
-  // LIST
-  // ========================================
-
   return (
-    <div className="flex-1 overflow-y-auto">
+    <div
+      className="
+        flex-1 
+        overflow-y-auto 
+        divide-y divide-slate-100 dark:divide-slate-900/50
+        
+        /* Personalización de la barra de scroll (Scrollbar elegante) */
+        scrollbar-thin 
+        scrollbar-thumb-slate-800/60 
+        scrollbar-track-transparent 
+        hover:scrollbar-thumb-slate-700
+        
+        /* Reglas para motores Webkit (Chrome/Safari/Edge) */
+        [&::-webkit-scrollbar]:w-1.5
+        [&::-webkit-scrollbar-track]:bg-transparent
+        [&::-webkit-scrollbar-thumb]:rounded-full
+        [&::-webkit-scrollbar-thumb]:bg-slate-800/40
+        hover:[&::-webkit-scrollbar-thumb]:bg-slate-700/60
+      "
+    >
       {tickets.map((ticket) => (
         <TicketItem
           key={ticket.id}

@@ -2,7 +2,7 @@
 
 import { Activity, BarChart3, ShieldCheck, Zap } from "lucide-react";
 
-import { stats } from "../constants/stats";
+import { stats } from "../constants/stats.js";
 
 const icons = [Activity, BarChart3, ShieldCheck, Zap];
 

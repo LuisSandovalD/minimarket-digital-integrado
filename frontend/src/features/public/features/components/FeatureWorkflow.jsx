@@ -1,6 +1,6 @@
 // features/components/FeatureWorkflow.jsx
 
-import { workflow } from "../constants/workflow";
+import { workflow } from "../constants/workflow.js";
 
 export default function FeatureWorkflow() {
   return (

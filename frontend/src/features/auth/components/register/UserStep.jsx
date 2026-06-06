@@ -1,38 +1,25 @@
-import { AtSign, LockKeyhole, Mail, Phone, User } from "lucide-react";
-
 import { Input, PasswordInput } from "@/components/forms/";
+import { AtSign, LockKeyhole, Mail, Phone, User } from "lucide-react";
 
 export default function UserStep({ form, handleChange }) {
   return (
-    <div className="space-y-5">
-      {/* ======================================
-          USER INFO
-      ====================================== */}
-
-      <div className="grid gap-5 md:grid-cols-2">
-        <Input
-          label="Nombre completo"
-          name="name"
-          placeholder="Juan Pérez"
-          value={form.name || ""}
-          onChange={handleChange}
-          icon={User}
-          required
-        />
-
-        <Input
-          label="Teléfono"
-          name="phone"
-          placeholder="999 999 999"
-          value={form.phone || ""}
-          onChange={handleChange}
-          icon={Phone}
-        />
-      </div>
+    // 1. Convertimos a <fieldset> para mejorar la accesibilidad en formularios por pasos
+    <fieldset className="grid grid-cols-1 md:grid-cols-2 gap-5 animate-fadeIn">
+      {/* Leyenda oculta visualmente pero accesible para lectores de pantalla */}
+      <legend className="sr-only">Información de la cuenta de usuario</legend>
 
       {/* ======================================
-          USERNAME / SLUG
+          BLOQUE: IDENTIDAD (Fila 1 en Desktop)
       ====================================== */}
+      <Input
+        label="Nombre completo"
+        name="name"
+        placeholder="Juan Pérez"
+        value={form.name || ""}
+        onChange={handleChange}
+        icon={User}
+        required
+      />
 
       <Input
         label="Nombre de usuario"
@@ -45,9 +32,8 @@ export default function UserStep({ form, handleChange }) {
       />
 
       {/* ======================================
-          EMAIL
+          BLOQUE: CONTACTO (Fila 2 en Desktop)
       ====================================== */}
-
       <Input
         label="Correo electrónico"
         name="email"
@@ -59,19 +45,30 @@ export default function UserStep({ form, handleChange }) {
         required
       />
 
-      {/* ======================================
-          PASSWORD
-      ====================================== */}
-
-      <PasswordInput
-        label="Contraseña"
-        name="password"
-        placeholder="••••••••"
-        value={form.password || ""}
+      <Input
+        label="Teléfono"
+        name="phone"
+        placeholder="999 999 999"
+        value={form.phone || ""}
         onChange={handleChange}
-        icon={LockKeyhole}
-        required
+        icon={Phone}
       />
-    </div>
+
+      {/* ======================================
+          BLOQUE: SEGURIDAD (Fila 3 - Ancho Completo)
+      ====================================== */}
+      {/* Usamos md:col-span-2 para que la contraseña abarque todo el ancho de forma limpia */}
+      <div className="md:col-span-2">
+        <PasswordInput
+          label="Contraseña"
+          name="password"
+          placeholder="••••••••"
+          value={form.password || ""}
+          onChange={handleChange}
+          icon={LockKeyhole}
+          required
+        />
+      </div>
+    </fieldset>
   );
 }

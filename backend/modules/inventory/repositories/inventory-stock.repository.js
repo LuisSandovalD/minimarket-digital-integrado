@@ -7,6 +7,7 @@ const prisma = require("../../../prisma/client");
 // ========================================
 // CREATE
 // ========================================
+
 exports.create = async (data) => {
   return prisma.inventory.create({
     data,
@@ -16,6 +17,7 @@ exports.create = async (data) => {
 // ========================================
 // UPDATE STOCK (GENERICO)
 // ========================================
+
 exports.updateStock = async (inventoryId, data) => {
   return prisma.inventory.update({
     where: {
@@ -28,6 +30,7 @@ exports.updateStock = async (inventoryId, data) => {
 // ========================================
 // INCREMENT STOCK
 // ========================================
+
 exports.incrementStock = async (inventoryId, quantity) => {
   return prisma.inventory.update({
     where: {
@@ -35,7 +38,7 @@ exports.incrementStock = async (inventoryId, quantity) => {
     },
     data: {
       stock: {
-        increment: quantity,
+        increment: Number(quantity),
       },
     },
   });
@@ -44,88 +47,11 @@ exports.incrementStock = async (inventoryId, quantity) => {
 // ========================================
 // DECREMENT STOCK
 // ========================================
+
 exports.decrementStock = async (inventoryId, quantity) => {
   return prisma.inventory.update({
     where: {
       id: inventoryId,
-    },
-    data: {
-      stock: {
-        decrement: quantity,
-      },
-    },
-  });
-};
-
-// ========================================
-// RESERVE STOCK
-// ========================================
-exports.reserveStock = async (inventoryId, quantity) => {
-  return prisma.inventory.update({
-    where: {
-      id: inventoryId,
-    },
-    data: {
-      reservedStock: {
-        increment: quantity,
-      },
-    },
-  });
-};
-
-// ========================================
-// RELEASE RESERVED STOCK
-// ========================================
-exports.releaseReservedStock = async (inventoryId, quantity) => {
-  return prisma.inventory.update({
-    where: {
-      id: inventoryId,
-    },
-    data: {
-      reservedStock: {
-        decrement: quantity,
-      },
-    },
-  });
-};
-
-// ========================================
-// ADD DAMAGED STOCK
-// ========================================
-exports.addDamagedStock = async (inventoryId, quantity) => {
-  return prisma.inventory.update({
-    where: {
-      id: inventoryId,
-    },
-    data: {
-      damagedStock: {
-        increment: quantity,
-      },
-      stock: {
-        decrement: quantity,
-      },
-    },
-  });
-};
-
-// ========================================
-// DELETE INVENTORY
-// ========================================
-exports.deleteInventory = async (inventoryId) => {
-  return prisma.inventory.delete({
-    where: {
-      id: inventoryId,
-    },
-  });
-};
-
-// ========================================
-// METODOS POR PRODUCTO (Para compatibilidad)
-// ========================================
-exports.decreaseStockByProduct = async (productId, quantity, tx = prisma) => {
-  return tx.inventory.updateMany({
-    where: {
-      productId,
     },
     data: {
       stock: {
@@ -135,10 +61,101 @@ exports.decreaseStockByProduct = async (productId, quantity, tx = prisma) => {
   });
 };
 
-exports.increaseStockByProduct = async (productId, quantity, tx = prisma) => {
+// ========================================
+// RESERVE STOCK
+// ========================================
+
+exports.reserveStock = async (inventoryId, quantity) => {
+  return prisma.inventory.update({
+    where: {
+      id: inventoryId,
+    },
+    data: {
+      reservedStock: {
+        increment: Number(quantity),
+      },
+    },
+  });
+};
+
+// ========================================
+// RELEASE RESERVED STOCK
+// ========================================
+
+exports.releaseReservedStock = async (inventoryId, quantity) => {
+  return prisma.inventory.update({
+    where: {
+      id: inventoryId,
+    },
+    data: {
+      reservedStock: {
+        decrement: Number(quantity),
+      },
+    },
+  });
+};
+
+// ========================================
+// ADD DAMAGED STOCK
+// ========================================
+
+exports.addDamagedStock = async (inventoryId, quantity) => {
+  return prisma.inventory.update({
+    where: {
+      id: inventoryId,
+    },
+    data: {
+      damagedStock: {
+        increment: Number(quantity),
+      },
+      stock: {
+        decrement: Number(quantity),
+      },
+    },
+  });
+};
+
+// ========================================
+// DELETE INVENTORY
+// ========================================
+
+exports.deleteInventory = async (inventoryId) => {
+  return prisma.inventory.delete({
+    where: {
+      id: inventoryId,
+    },
+  });
+};
+
+// ========================================
+// STOCK POR PRODUCTO
+// ========================================
+
+exports.decreaseStockByProduct = async (
+  productId,
+  quantity,
+  tx = prisma,
+) => {
   return tx.inventory.updateMany({
     where: {
-      productId,
+      productId: Number(productId),
+    },
+    data: {
+      stock: {
+        decrement: Number(quantity),
+      },
+    },
+  });
+};
+
+exports.increaseStockByProduct = async (
+  productId,
+  quantity,
+  tx = prisma,
+) => {
+  return tx.inventory.updateMany({
+    where: {
+      productId: Number(productId),
     },
     data: {
       stock: {
@@ -146,4 +163,32 @@ exports.increaseStockByProduct = async (productId, quantity, tx = prisma) => {
       },
     },
   });
+};
+
+// ========================================
+// COMPATIBILIDAD SALES MODULE
+// ========================================
+
+exports.decreaseStock = async (
+  productId,
+  quantity,
+  tx = prisma,
+) => {
+  return exports.decreaseStockByProduct(
+    productId,
+    quantity,
+    tx,
+  );
+};
+
+exports.increaseStock = async (
+  productId,
+  quantity,
+  tx = prisma,
+) => {
+  return exports.increaseStockByProduct(
+    productId,
+    quantity,
+    tx,
+  );
 };

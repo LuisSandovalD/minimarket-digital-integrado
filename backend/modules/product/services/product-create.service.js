@@ -36,30 +36,19 @@ function calculatePricing({
   const margin =
     Number(profitMargin || 0);
 
-  // ========================================
-  // VALIDATIONS
-  // ========================================
-
   if (purchase < 0) {
-
     throw new Error(
       "El precio de compra no puede ser negativo"
     );
   }
 
   if (margin < 0) {
-
     throw new Error(
       "El margen de ganancia no puede ser negativo"
     );
   }
 
-  // ========================================
-  // CALCULATIONS
-  // ========================================
-
-  const cost =
-    purchase;
+  const cost = purchase;
 
   const sale =
     cost * (1 + margin / 100);
@@ -67,23 +56,13 @@ function calculatePricing({
   const profit =
     sale - cost;
 
-  // ========================================
-  // SECURITY VALIDATION
-  // ========================================
-
   if (sale < cost) {
-
     throw new Error(
       "El precio de venta no puede ser menor al costo"
     );
   }
 
-  // ========================================
-  // RETURN
-  // ========================================
-
   return {
-
     purchasePrice:
       Number(purchase.toFixed(2)),
 
@@ -136,7 +115,7 @@ exports.create = async (
   }
 
   // ========================================
-  // 3. VALIDATE INPUT
+  // 3. VALIDATION
   // ========================================
 
   await validateProductCreate(
@@ -145,12 +124,11 @@ exports.create = async (
   );
 
   // ========================================
-  // 4. CALCULATE PRICING
+  // 4. PRICING
   // ========================================
 
   const pricing =
     calculatePricing({
-
       purchasePrice:
         body.purchasePrice,
 
@@ -162,213 +140,152 @@ exports.create = async (
   // 5. TRANSACTION
   // ========================================
 
-  const result =
-    await prisma.$transaction(
-      async (tx) => {
+  return prisma.$transaction(
+    async (tx) => {
 
-        // ========================================
-        // CREATE PRODUCT
-        // ========================================
+      // ========================================
+      // PRODUCT
+      // ========================================
 
-        const product =
-          await tx.product.create({
-            data: {
-
-              // ========================================
-              // BASIC INFO
-              // ========================================
-
-              name:
-                body.name,
-
-              description:
-                body.description,
-
-              // ========================================
-              // IDENTIFIERS
-              // ========================================
-
-              sku:
-                body.sku,
-
-              barcode:
-                body.barcode,
-
-              // ========================================
-              // PRICING
-              // ========================================
-
-              purchasePrice:
-                pricing.purchasePrice,
-
-              costPrice:
-                pricing.costPrice,
-
-              salePrice:
-                pricing.salePrice,
-
-              profitMargin:
-                pricing.profitMargin,
-
-              profitAmount:
-                pricing.profitAmount,
-
-              // ========================================
-              // STOCK CONFIG
-              // ========================================
-
-              minStock:
-                body.minStock || 5,
-
-              maxStock:
-                body.maxStock || null,
-
-              // ========================================
-              // RELATIONS
-              // ========================================
-
-              categoryId:
-                Number(body.categoryId),
-
-              unitId:
-                Number(body.unitId),
-
-              // ========================================
-              // EXTRA INFO
-              // ========================================
-
-              expirationDate:
-                body.expirationDate || null,
-
-              batchNumber:
-                body.batchNumber || null,
-
-              requiresExpiration:
-                Boolean(
-                  body.requiresExpiration
-                ),
-
-              isActive:
-                body.isActive !== undefined
-                  ? Boolean(body.isActive)
-                  : true,
-
-              isFeatured:
-                body.isFeatured !== undefined
-                  ? Boolean(body.isFeatured)
-                  : false,
-
-              // ========================================
-              // COMPANY
-              // ========================================
-
-              companyId:
-                user.companyId,
-            },
-          });
-
-        // ========================================
-        // CREATE INVENTORY
-        // ========================================
-
-        let inventory = null;
-
-        if (body.branchId) {
-
-          inventory =
-            await tx.inventory.create({
-              data: {
-
-                productId:
-                  product.id,
-
-                branchId:
-                  Number(body.branchId),
-
-                companyId:
-                  user.companyId,
-
-                stock:
-                  Number(body.stock || 0),
-
-                reservedStock: 0,
-
-                damagedStock: 0,
-              },
-            });
-
-          // ========================================
-          // INVENTORY HISTORY
-          // ========================================
-
-          if (Number(body.stock) > 0) {
-
-            await tx.inventoryHistory.create({
-              data: {
-
-                type:
-                  "INITIAL_STOCK",
-
-                quantity:
-                  Number(body.stock),
-
-                previousStock: 0,
-
-                newStock:
-                  Number(body.stock),
-
-                reason:
-                  "Stock inicial del producto",
-
-                reference:
-                  product.sku,
-
-                productId:
-                  product.id,
-
-                inventoryId:
-                  inventory.id,
-
-                branchId:
-                  Number(body.branchId),
-
-                companyId:
-                  user.companyId,
-              },
-            });
-          }
-        }
-
-        // ========================================
-        // AUDIT LOG
-        // ========================================
-
-        await tx.auditLog.create({
+      const product =
+        await tx.product.create({
           data: {
 
-            action:
-              "CREATE",
-
-            entityType:
-              "Product",
-
-            entityId:
-              product.id,
+            name:
+              body.name,
 
             description:
-              `Producto ${product.name} creado correctamente`,
+              body.description,
+
+            sku:
+              body.sku,
+
+            barcode:
+              body.barcode,
+
+            purchasePrice:
+              pricing.purchasePrice,
+
+            costPrice:
+              pricing.costPrice,
+
+            salePrice:
+              pricing.salePrice,
+
+            profitMargin:
+              pricing.profitMargin,
+
+            profitAmount:
+              pricing.profitAmount,
+
+            minStock:
+              body.minStock || 5,
+
+            maxStock:
+              body.maxStock || null,
+
+            requiresExpiration:
+              Boolean(
+                body.requiresExpiration
+              ),
+
+            trackBatches:
+              Boolean(
+                body.trackBatches
+              ),
+
+            isActive:
+              body.isActive !== undefined
+                ? Boolean(body.isActive)
+                : true,
+
+            isFeatured:
+              body.isFeatured !== undefined
+                ? Boolean(body.isFeatured)
+                : false,
+
+            categoryId:
+              Number(
+                body.categoryId
+              ),
+
+            unitId:
+              Number(
+                body.unitId
+              ),
 
             companyId:
               user.companyId,
-
-            userId:
-              user.id,
           },
         });
 
-        return product;
-      }
-    );
+      // ========================================
+      // INVENTORY
+      // ========================================
 
-  return result;
+      let inventory = null;
+
+      if (body.branchId) {
+
+        inventory =
+          await tx.inventory.create({
+            data: {
+
+              productId:
+                product.id,
+
+              branchId:
+                Number(
+                  body.branchId
+                ),
+
+              companyId:
+                user.companyId,
+
+              stock: 0,
+
+              reservedStock: 0,
+
+              damagedStock: 0,
+            },
+          });
+      }
+
+      // ========================================
+      // AUDIT LOG
+      // ========================================
+
+      await tx.auditLog.create({
+        data: {
+
+          action:
+            "CREATE",
+
+          entityType:
+            "Product",
+
+          entityId:
+            product.id,
+
+          description:
+            `Producto ${product.name} creado correctamente`,
+
+          companyId:
+            user.companyId,
+
+          userId:
+            user.id,
+        },
+      });
+
+      // ========================================
+      // RESPONSE
+      // ========================================
+
+      return {
+        ...product,
+        inventory,
+      };
+    }
+  );
 };

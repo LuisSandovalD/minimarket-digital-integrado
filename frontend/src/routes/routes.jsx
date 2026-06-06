@@ -36,14 +36,17 @@ import UnitPage from "../features/units";
 
 import ProductsPage from "../features/product/pages/ProductsPage";
 
-import { SalesPage } from "../features/sales/pages/SalesPage";
+import SalesPage from "../features/sales/pages/SalesPage";
 
 import BarcodePages from "../features/barcode/pages/BarcodePages";
 import CustomerPage from "../features/customer/pages/CustomerPage";
+import DataBasePage from "../features/database/pages/DataBasePage";
 import EmployeesPage from "../features/employee/pages/EmployeesPage";
 import InventoryPage from "../features/inventory/pages/InventoryPage";
 import MovementsPage from "../features/movements/pages/MovementsPage";
+import PaymentsPage from "../features/payments/pages/PaymentsPage";
 import PurchasePage from "../features/purchase/page/PurchasePage";
+import SaleDetailPage from "../features/sale-detail/pages/SaleDetailsPage";
 import ConfigurationPage from "../features/settings/pages/Settings";
 import SupplierPage from "../features/supplier/pages/SupplierPage";
 import SupportPage from "../features/support/pages/SupportPage";
@@ -134,6 +137,11 @@ export const routes = [
           },
 
           {
+            path: "database",
+            element: <DataBasePage />,
+          },
+
+          {
             path: "companies",
             element: <CompaniesPage />,
           },
@@ -180,6 +188,16 @@ export const routes = [
           {
             path: "inventory",
             element: <InventoryPage />,
+          },
+
+          {
+            path: "sale-details",
+            element: <SaleDetailPage />,
+          },
+
+          {
+            path: "payments",
+            element: <PaymentsPage />,
           },
         ],
       },

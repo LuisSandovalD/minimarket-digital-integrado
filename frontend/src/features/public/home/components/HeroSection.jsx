@@ -17,7 +17,16 @@ import {
   staggerContainer,
 } from "@/components/effects/";
 
+import { useState } from "react";
+
+import VideoDemoModal from "./VideoDemoModal";
+
+import herosection from "@/assets/imagenes/home/hero/hero-section.svg";
+import heroBanner from "@/assets/imagenes/home/hero/hero_banner.svg";
+
 export default function HeroSection() {
+  const [demoOpen, setDemoOpen] = useState(false);
+
   return (
     <section
       className="
@@ -58,7 +67,7 @@ export default function HeroSection() {
             duration: 1.4,
             ease: [0.16, 1, 0.3, 1],
           }}
-          src="https://images.unsplash.com/photo-1556740749-887f6717d7e4?q=80&w=2070&auto=format&fit=crop"
+          src={herosection}
           alt="ERP POS"
           className="
             h-full
@@ -367,7 +376,12 @@ export default function HeroSection() {
               </motion.div>
 
               <motion.div whileHover={hoverScale}>
-                <ModernButton text="Ver Demo" icon={Play} variant="secondary" />
+                <ModernButton
+                  text="Ver Demo"
+                  icon={Play}
+                  variant="secondary"
+                  onClick={() => setDemoOpen(true)}
+                />
               </motion.div>
             </motion.div>
           </motion.div>
@@ -413,7 +427,7 @@ export default function HeroSection() {
               transition={{
                 duration: 0.4,
               }}
-              src="https://images.unsplash.com/photo-1556740749-887f6717d7e4?q=80&w=2070&auto=format&fit=crop"
+              src={heroBanner}
               alt="ERP POS"
               className="
                 relative
@@ -421,17 +435,18 @@ export default function HeroSection() {
                 h-full
                 w-full
 
-                rounded-3xl
-
                 object-cover
-
-                shadow-2xl
-                shadow-[#274c77]/20
               "
             />
           </motion.div>
         </div>
       </div>
+
+      <VideoDemoModal
+        open={demoOpen}
+        onClose={() => setDemoOpen(false)}
+        videoUrl="/videos/minimarket-demo.mp4"
+      />
     </section>
   );
 }

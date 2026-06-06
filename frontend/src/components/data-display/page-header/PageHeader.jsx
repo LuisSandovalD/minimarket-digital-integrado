@@ -37,7 +37,7 @@ export default function PageHeader({
 
         backdrop-blur-2xl
 
-        shadow-[0_10px_40px_rgba(0,0,0,0.18)]
+        shadow-lg
 
         ${className}
       `}

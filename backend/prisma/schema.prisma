@@ -4,82 +4,124 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
-// Entidad principal multiempresa del sistema
+
 model Company {
   id                  Int                @id @default(autoincrement())
+
   name                String             @unique @db.VarChar(255)
   slug                String             @unique @db.VarChar(100)
+
   ruc                 String?            @unique @db.VarChar(20)
+  taxId               String?            @unique @db.VarChar(50)
+
   address             String?            @db.VarChar(500)
   phone               String?            @db.VarChar(20)
   email               String?            @db.VarChar(255)
+
   logo                String?
   website             String?            @db.VarChar(255)
-  taxId               String?            @unique @db.VarChar(50)
+
   legalRepresentative String?            @db.VarChar(255)
+
+  subscriptionTier    String             @default("FREE") @db.VarChar(50)
+
   isActive            Boolean            @default(true)
   isDeleted           Boolean            @default(false)
-  subscriptionTier    String             @default("FREE") @db.VarChar(50)
+
   createdAt           DateTime           @default(now())
   updatedAt           DateTime           @updatedAt
   deletedAt           DateTime?
-  auditLogs           AuditLog[]
+
   branches            Branch[]
+  users               User[]             @relation("CompanyUsers")
+
+  products            Product[]
   categories          Category[]
-  configuration       Configuration?
-  customers           Customer[]
+  units               Unit[]
+
   inventory           Inventory[]
   inventoryHistory    InventoryHistory[]
-  notifications       Notification[]
-  paymentMethods      PaymentMethod_DB[]
-  products            Product[]
-  purchases           Purchase[]
+
   sales               Sale[]
+  purchases           Purchase[]
+
+  customers           Customer[]
   suppliers           Supplier[]
+
+  paymentMethods      PaymentMethod_DB[]
+
+  notifications       Notification[]
+  auditLogs           AuditLog[]
+
   supportTickets      SupportTicket[]
-  units               Unit[]
-  users               User[]             @relation("CompanyUsers")
+
+  configuration       Configuration?
+
+  batches             ProductBatch[]
 
   @@index([isActive])
   @@index([isDeleted])
+
+  @@index([name])
+  @@index([slug])
 }
 
 model Branch {
   id               Int                @id @default(autoincrement())
+
   name             String             @db.VarChar(255)
   code             String?            @db.VarChar(20)
+
   logo             String?
   description      String?
+
   address          String             @db.VarChar(500)
   phone            String?            @db.VarChar(20)
   email            String?            @db.VarChar(255)
+
   city             String?            @db.VarChar(100)
   state            String?            @db.VarChar(100)
   country          String?            @db.VarChar(100)
   postalCode       String?            @db.VarChar(20)
+
   isActive         Boolean            @default(true)
   isDeleted        Boolean            @default(false)
+
   createdAt        DateTime           @default(now())
   updatedAt        DateTime           @updatedAt
   deletedAt        DateTime?
+
   companyId        Int
-  auditLogs        AuditLog[]
+
   company          Company            @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  users            User[]             @relation("BranchUsers")
+
   inventory        Inventory[]
   inventoryHistory InventoryHistory[]
+
   purchases        Purchase[]
   sales            Sale[]
-  users            User[]             @relation("BranchUsers")
+
+  auditLogs        AuditLog[]
+
+  batches          ProductBatch[]
 
   @@unique([name, companyId])
   @@unique([code, companyId])
-  @@index([companyId])
-  @@index([isActive])
-}
 
+  @@index([companyId])
+
+  @@index([isActive])
+  @@index([isDeleted])
+
+  @@index([city])
+  @@index([country])
+}
 model User {
   id               Int              @id @default(autoincrement())
   name             String           @db.VarChar(255)
@@ -188,44 +230,68 @@ model Category {
 
   @@unique([name, companyId])
 }
-
 model Product {
   id                 Int                @id @default(autoincrement())
+
   name               String             @db.VarChar(255)
   description        String?
+
   sku                String?            @db.VarChar(50)
   barcode            String?            @db.VarChar(50)
+
   purchasePrice      Decimal            @db.Decimal(10, 2)
   salePrice          Decimal            @db.Decimal(10, 2)
   costPrice          Decimal            @db.Decimal(10, 2)
+
+  profitAmount       Decimal            @default(0) @db.Decimal(10, 2)
+  profitMargin       Decimal            @default(0) @db.Decimal(10, 2)
+
   minStock           Int                @default(5)
   maxStock           Int?
-  expirationDate     DateTime?
-  batchNumber        String?            @db.VarChar(100)
+
   requiresExpiration Boolean            @default(false)
+  trackBatches       Boolean            @default(false)
+
   isActive           Boolean            @default(true)
   isDeleted          Boolean            @default(false)
   isFeatured         Boolean            @default(false)
+
   createdAt          DateTime           @default(now())
   updatedAt          DateTime           @updatedAt
   deletedAt          DateTime?
+
   companyId          Int
   categoryId         Int
   unitId             Int
-  profitAmount       Decimal            @default(0) @db.Decimal(10, 2)
-  profitMargin       Decimal            @default(0) @db.Decimal(10, 2)
-  inventory          Inventory[]
-  inventoryHistory   InventoryHistory[]
-  notifications      Notification[]
+
   category           Category           @relation(fields: [categoryId], references: [id])
   company            Company            @relation(fields: [companyId], references: [id], onDelete: Cascade)
   unit               Unit               @relation(fields: [unitId], references: [id])
+
+  inventory          Inventory[]
+  inventoryHistory   InventoryHistory[]
+
+  notifications      Notification[]
+
   purchaseDetails    PurchaseDetail[]
   saleDetails        SaleDetail[]
 
+  batches            ProductBatch[]
+
   @@unique([sku, companyId])
+
   @@index([companyId])
   @@index([categoryId])
+  @@index([unitId])
+
+  @@index([isActive])
+  @@index([isDeleted])
+
+  @@index([name])
+  @@index([barcode])
+
+  @@index([companyId, name])
+  @@index([companyId, sku])
 }
 
 model Customer {
@@ -276,23 +342,30 @@ model Supplier {
   @@index([companyId])
   @@index([name])
 }
-// Control de inventario por sucursal y producto
+
 model Inventory {
-  id            Int                @id @default(autoincrement())
-  stock         Int                @default(0)
-  reservedStock Int                @default(0)
-  damagedStock  Int                @default(0)
+  id            Int      @id @default(autoincrement())
+
+  stock         Int      @default(0)
+  reservedStock Int      @default(0)
+  damagedStock  Int      @default(0)
+
   productId     Int
   branchId      Int
   companyId     Int
-  lastUpdated   DateTime           @updatedAt
-  createdAt     DateTime           @default(now())
-  branch        Branch             @relation(fields: [branchId], references: [id], onDelete: Cascade)
-  company       Company            @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  product       Product            @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  createdAt     DateTime @default(now())
+  lastUpdated   DateTime @updatedAt
+
+  product       Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  branch        Branch   @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  company       Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
   movements     InventoryHistory[]
 
   @@unique([productId, branchId])
+
+  @@index([productId])
   @@index([branchId])
   @@index([companyId])
 }
@@ -367,13 +440,18 @@ model SaleDetail {
   subtotal  Decimal @db.Decimal(10, 2)
   discount  Decimal @default(0) @db.Decimal(10, 2)
   tax       Decimal @default(0) @db.Decimal(10, 2)
+
   saleId    Int
   productId Int
-  product   Product @relation(fields: [productId], references: [id])
-  sale      Sale    @relation(fields: [saleId], references: [id], onDelete: Cascade)
+  batchId   Int?
+
+  product   Product       @relation(fields: [productId], references: [id])
+  sale      Sale          @relation(fields: [saleId], references: [id], onDelete: Cascade)
+  batch     ProductBatch? @relation(fields: [batchId], references: [id])
 
   @@index([saleId])
   @@index([productId])
+  @@index([batchId])
 }
 
 model Purchase {
@@ -407,17 +485,26 @@ model Purchase {
 
 model PurchaseDetail {
   id         Int      @id @default(autoincrement())
+
   quantity   Int
   price      Decimal  @db.Decimal(10, 2)
   subtotal   Decimal  @db.Decimal(10, 2)
   tax        Decimal  @default(0) @db.Decimal(10, 2)
+
+  batchNumber    String?   @db.VarChar(100)
+  expirationDate DateTime?
+
   purchaseId Int
   productId  Int
-  product    Product  @relation(fields: [productId], references: [id])
-  purchase   Purchase @relation(fields: [purchaseId], references: [id], onDelete: Cascade)
+
+  product  Product  @relation(fields: [productId], references: [id])
+  purchase Purchase @relation(fields: [purchaseId], references: [id], onDelete: Cascade)
+
+  batches ProductBatch[]
 
   @@index([purchaseId])
   @@index([productId])
+  @@index([expirationDate])
 }
 
 model Payment {
@@ -474,197 +561,74 @@ model AuditLog {
   user        User?       @relation("UserAudits", fields: [userId], references: [id])
 }
 
-enum TicketStatus {
-  OPEN
-  IN_PROGRESS
-  WAITING
-  RESOLVED
-  CLOSED
-}
-
-enum TicketPriority {
-  LOW
-  MEDIUM
-  HIGH
-  URGENT
-}
-
-enum MessageType {
-  TEXT
-  IMAGE
-  FILE
-  AUDIO
-  VIDEO
-  SYSTEM
-}
-
 model SupportTicket {
-  id                 Int                @id @default(autoincrement())
-
-  /*
-    INFORMACIÓN PRINCIPAL
-  */
-
-  ticketNumber       String             @unique @db.VarChar(50)
-
-  title              String             @db.VarChar(255)
-
-  description        String
-
-  status             TicketStatus       @default(OPEN)
-
-  priority           TicketPriority     @default(MEDIUM)
-
-  /*
-    ARCHIVOS
-  */
-
-  attachments        Json?
-
-  /*
-    RESOLUCIÓN
-  */
-
-  resolutionNotes    String?
-
-  resolvedAt         DateTime?
-
-  closedAt           DateTime?
-
-  /*
-    CHAT / MENSAJERÍA
-  */
-
-  lastMessage        String?
-
-  lastMessageAt      DateTime?
-
-  unreadCount        Int                @default(0)
-
-  isTyping           Boolean            @default(false)
-
-  /*
-    CONTROL
-  */
-
-  createdAt          DateTime           @default(now())
-
-  updatedAt          DateTime           @updatedAt
-
-  deletedAt          DateTime?
-
-  /*
-    RELACIONES
-  */
-
-  userId             Int
-
-  assignedTo         Int?
-
-  companyId          Int
-
-  /*
-    RELACIONES PRISMA
-  */
-
-  user               User               @relation("UserTickets",fields: [userId],references: [id],onDelete: Cascade)
-
-  assignedUser       User?              @relation("AssignedTickets",fields: [assignedTo],references: [id])
-
-  company            Company            @relation(fields: [companyId],references: [id],onDelete: Cascade)
-
-  comments           TicketComment[]
-
-  /*
-    ÍNDICES
-  */
+  id              Int             @id @default(autoincrement())
+  /// INFORMACIÓN PRINCIPAL
+  ticketNumber    String          @unique @db.VarChar(50)
+  title           String          @db.VarChar(255)
+  description     String
+  status          TicketStatus    @default(OPEN)
+  priority        TicketPriority  @default(MEDIUM)
+  /// RESOLUCIÓN
+  resolutionNotes String?
+  /// CONTROL
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  resolvedAt      DateTime?
+  /// RELACIONES
+  userId          Int
+  assignedTo      Int?
+  companyId       Int
+  closedAt        DateTime?
+  deletedAt       DateTime?
+  isTyping        Boolean         @default(false)
+  /// CHAT / MENSAJERÍA
+  lastMessage     String?
+  lastMessageAt   DateTime?
+  unreadCount     Int             @default(0)
+  /// ARCHIVOS
+  attachments     Json?
+  assignedUser    User?           @relation("AssignedTickets", fields: [assignedTo], references: [id])
+  company         Company         @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  user            User            @relation("UserTickets", fields: [userId], references: [id], onDelete: Cascade)
+  comments        TicketComment[]
 
   @@index([companyId])
-
   @@index([userId])
-
   @@index([assignedTo])
-
   @@index([status])
-
   @@index([priority])
-
   @@index([createdAt])
-
   @@index([lastMessageAt])
 }
 
 model TicketComment {
-  id                 Int                @id @default(autoincrement())
-
-  /*
-    MENSAJE
-  */
-
-  message            String
-
-  messageType        MessageType        @default(TEXT)
-
-  /*
-    ARCHIVOS
-  */
-
-  attachments        Json?
-
-  /*
-    CHAT
-  */
-
-  isEdited           Boolean            @default(false)
-
-  editedAt           DateTime?
-
-  isRead             Boolean            @default(false)
-
-  readAt             DateTime?
-
-  /*
-    SISTEMA
-  */
-
-  isInternal         Boolean            @default(false)
-
-  /*
-    CONTROL
-  */
-
-  createdAt          DateTime           @default(now())
-
-  updatedAt          DateTime           @updatedAt
-
-  deletedAt          DateTime?
-
-  /*
-    RELACIONES
-  */
-
-  ticketId           Int
-
-  userId             Int
-
-  /*
-    RELACIONES PRISMA
-  */
-
-  ticket             SupportTicket      @relation(fields: [ticketId],references: [id],onDelete: Cascade)
-
-  user               User               @relation(fields: [userId],references: [id],onDelete: Cascade)
-
-  /*
-    ÍNDICES
-  */
+  id          Int           @id @default(autoincrement())
+  /// MENSAJE
+  message     String
+  /// CONTROL
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  /// RELACIONES
+  ticketId    Int
+  userId      Int
+  deletedAt   DateTime?
+  editedAt    DateTime?
+  /// CHAT
+  isEdited    Boolean       @default(false)
+  /// SISTEMA
+  isInternal  Boolean       @default(false)
+  isRead      Boolean       @default(false)
+  messageType MessageType   @default(TEXT)
+  readAt      DateTime?
+  /// ARCHIVOS
+  attachments Json?
+  ticket      SupportTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([ticketId])
-
   @@index([userId])
-
   @@index([createdAt])
-
   @@index([isRead])
 }
 
@@ -698,13 +662,37 @@ model Configuration {
   company               Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
 }
 
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  WAITING
+  RESOLVED
+  CLOSED
+}
+
+enum TicketPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum MessageType {
+  TEXT
+  IMAGE
+  FILE
+  AUDIO
+  VIDEO
+  SYSTEM
+}
+
 enum Role {
   ADMIN
   MANAGER
   SUPERVISOR
   EMPLOYEE
-  SUPPORT
   VIEWER
+  SUPPORT
 }
 
 enum PaymentMethod {
@@ -777,4 +765,43 @@ enum UnitType {
   DOZEN
   METER
   SQUARE_METER
+}
+
+model ProductBatch {
+  id               Int       @id @default(autoincrement())
+
+  batchNumber      String    @db.VarChar(100)
+  expirationDate   DateTime?
+
+  initialQuantity  Int
+  currentQuantity  Int
+
+  purchasePrice    Decimal?  @db.Decimal(10, 2)
+
+  isActive         Boolean   @default(true)
+
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  depletedAt       DateTime?
+
+  productId        Int
+  purchaseDetailId Int
+  branchId         Int
+  companyId        Int
+
+  product          Product         @relation(fields: [productId], references: [id], onDelete: Cascade)
+  purchaseDetail   PurchaseDetail  @relation(fields: [purchaseDetailId], references: [id], onDelete: Cascade)
+  branch           Branch          @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  company          Company         @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  saleDetails      SaleDetail[]
+
+  @@index([productId])
+  @@index([expirationDate])
+  @@index([productId, expirationDate])
+  @@index([branchId])
+  @@index([companyId])
+
+  @@unique([batchNumber, productId, branchId])
 }

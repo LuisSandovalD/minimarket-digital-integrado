@@ -2,7 +2,7 @@
 
 import { Layers3 } from "lucide-react";
 
-import { features } from "../constants/features";
+import { features } from "../constants/features.js";
 
 import FeatureCard from "./FeatureCard";
 

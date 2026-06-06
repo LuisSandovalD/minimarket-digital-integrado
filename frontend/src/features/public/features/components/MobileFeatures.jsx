@@ -7,7 +7,7 @@ import {
   Laptop,
   ArrowUpRight,
 } from "lucide-react";
-import { devices } from "../constants/devices";
+import { devices } from "../constants/devices.js";
 
 export default function MobileFeatures() {
   return (

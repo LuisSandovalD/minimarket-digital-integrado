@@ -15,21 +15,15 @@ class NotificationRepository {
     companyId
   ) {
 
-    const minStockDefault = 5;
-
     return prisma.inventory.findMany({
 
       where: {
 
         companyId,
 
-        stock: {
-          lte: minStockDefault,
-        },
-
         product: {
 
-          deletedAt: null,
+          isDeleted: false,
 
           isActive: true,
 
@@ -63,7 +57,7 @@ class NotificationRepository {
 
             minStock: true,
 
-            expirationDate: true,
+            trackBatches: true,
 
             category: {
 
@@ -95,13 +89,11 @@ class NotificationRepository {
 
       },
 
-      orderBy: [
+      orderBy: {
 
-        {
-          stock: "asc",
-        },
+        stock: "asc",
 
-      ],
+      },
 
     });
 

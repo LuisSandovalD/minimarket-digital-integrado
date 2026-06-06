@@ -2,8 +2,7 @@
 // repositories/sale-payment.repository.js
 // ========================================
 
-const prisma =
-  require("../../../prisma/client");
+const prisma = require("../../../prisma/client");
 
 module.exports = {
 
@@ -11,134 +10,120 @@ module.exports = {
   // CREATE PAYMENT
   // ========================================
 
-  createPayment:
-    async (
+  createPayment: async (
+    data,
+    tx = prisma
+  ) => {
+
+    return await tx.payment.create({
       data,
-      tx = prisma
-    ) => {
+    });
 
-      return tx.payment.create({
-
-        data,
-
-      });
-
-    },
+  },
 
   // ========================================
   // CREATE MANY PAYMENTS
   // ========================================
 
-  createManyPayments:
-    async (
-      saleId,
-      payments = [],
-      tx = prisma
-    ) => {
+  createManyPayments: async (
+    saleId,
+    payments = [],
+    tx = prisma
+  ) => {
 
-      return Promise.all(
+    const createdPayments = [];
 
-        payments.map(payment =>
+    for (const payment of payments) {
 
-          tx.payment.create({
+      const createdPayment =
+        await tx.payment.create({
 
-            data: {
+          data: {
 
-              // RELATION SALE
-
-              sale: {
-
-                connect: {
-                  id: saleId,
-                },
-
+            sale: {
+              connect: {
+                id: saleId,
               },
-
-              // RELATION PAYMENT METHOD
-
-              method: {
-
-                connect: {
-                  id: payment.paymentMethodId,
-                },
-
-              },
-
-              amount:
-                Number(payment.amount),
-
-              reference:
-                payment.reference || null,
-
-              // ========================================
-              // USE VALID ENUM
-              // ========================================
-
-              status:
-                "COMPLETED",
-
             },
 
-          })
+            method: {
+              connect: {
+                id: Number(
+                  payment.paymentMethodId
+                ),
+              },
+            },
 
-        )
+            amount:
+              Number(payment.amount),
 
+            reference:
+              payment.reference || null,
+
+            status:
+              "COMPLETED",
+
+          },
+
+        });
+
+      createdPayments.push(
+        createdPayment
       );
 
-    },
+    }
 
+    return createdPayments;
+
+  },
   // ========================================
   // GET PAYMENTS
   // ========================================
 
-  getSalePayments:
-    async (
-      saleId
-    ) => {
+  getSalePayments: async (
+    saleId
+  ) => {
 
-      return prisma.payment.findMany({
+    return prisma.payment.findMany({
 
-        where: {
-          saleId,
-        },
+      where: {
+        saleId,
+      },
 
-        include: {
+      include: {
+        method: true,
+      },
 
-          method: true,
+      orderBy: {
+        createdAt: "desc",
+      },
 
-        },
+    });
 
-        orderBy: {
-          createdAt: "desc",
-        },
-
-      });
-
-    },
+  },
 
   // ========================================
   // UPDATE PAYMENT STATUS
   // ========================================
 
-  updatePaymentStatus:
-    async (
-      id,
-      status,
-      tx = prisma
-    ) => {
+  updatePaymentStatus: async (
+    id,
+    status,
+    tx = prisma
+  ) => {
 
-      return tx.payment.update({
+    return await tx.payment.update({
 
-        where: {
-          id,
-        },
+      where: {
+        id,
+      },
 
-        data: {
-          status,
-        },
+      data: {
+        status,
+      },
 
-      });
+    });
 
-    },
+  },
 
 };

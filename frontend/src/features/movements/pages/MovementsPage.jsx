@@ -10,7 +10,7 @@ import MovementSearch from "../components/MovementSearch";
 
 import MovementsTable from "../components/MovementsTable";
 
-import LoadingMovements from "../components/LoadingMovements";
+import MovementsLoading from "../components/MovementsLoading";
 
 // ========================================
 // PAGE
@@ -38,7 +38,7 @@ export default function MovementsPage() {
   // ========================================
 
   if (loading) {
-    return <LoadingMovements />;
+    return <MovementsLoading />;
   }
 
   // ========================================

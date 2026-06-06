@@ -2,7 +2,7 @@
 
 import { ShieldCheck, LockKeyhole } from "lucide-react";
 
-import { security } from "../constants/security";
+import { security } from "../constants/security.js";
 
 import FeatureCard from "./FeatureCard";
 

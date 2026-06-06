@@ -10,6 +10,8 @@ import UnitFormModal from "./components/UnitFormModal";
 
 import UnitDeleteModal from "./components/UnitDeleteModal";
 
+import UnitLoading from "./components/UnitLoading";
+
 export default function UnitPage() {
   const { units, loading, reload } = useUnits();
 
@@ -38,7 +40,7 @@ export default function UnitPage() {
   };
 
   if (loading) {
-    return <p>Cargando...</p>;
+    return <UnitLoading />;
   }
 
   return (

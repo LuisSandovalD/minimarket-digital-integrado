@@ -11,24 +11,6 @@ const Joi =
 
 const schema = Joi.object({
 
-  companyId:
-    Joi.number()
-      .integer()
-      .positive()
-      .required(),
-
-  branchId:
-    Joi.number()
-      .integer()
-      .positive()
-      .required(),
-
-  userId:
-    Joi.number()
-      .integer()
-      .positive()
-      .required(),
-
   customerId:
     Joi.number()
       .integer()

@@ -1,251 +1,267 @@
-import { useEffect, useState } from "react";
-import api from "../../../api/axios";
+import { useConfiguration } from "../hooks/useConfiguration";
+
+import { PageHeader } from "@/components/data-display/";
+import { Building2, Settings } from "lucide-react";
+
+// forms reutilizables
+import { Checkbox, Input, Select } from "@/components/forms/";
+
+// loading
 
 export default function ConfigurationPage() {
-  const [loading, setLoading] = useState(true);
+  const { form, loading, saving, updateField, saveConfiguration } =
+    useConfiguration();
 
-  const [saving, setSaving] = useState(false);
-
-  const [form, setForm] = useState({
-    companyName: "",
-    theme: "light",
-    language: "es",
-    currency: "PEN",
-    taxRate: 0,
-    notifyLowStock: true,
-    lowStockThreshold: 5,
-    requireTwoFactor: false,
-    sessionTimeout: 3600,
-  });
-  /*GET CONFIGURATION*/
-
-  const fetchConfiguration = async () => {
-    try {
-      setLoading(true);
-
-      const response = await api.get("/configuration");
-
-      if (response.data.success) {
-        setForm(response.data.data);
-      }
-    } catch (error) {
-      console.error(error);
-
-      alert("Error al cargar configuración");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  /*
-    UPDATE FORM
-  */
-
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-
-    setForm((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-  };
-
-  /*
-    SAVE CONFIGURATION
-  */
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-      setSaving(true);
-
-      const payload = {
-        ...form,
-        taxRate: Number(form.taxRate),
-        lowStockThreshold: Number(form.lowStockThreshold),
-        sessionTimeout: Number(form.sessionTimeout),
-      };
-
-      const response = await api.put("/configuration", payload);
-
-      if (response.data.success) {
-        alert("Configuración guardada correctamente");
-      }
-    } catch (error) {
-      console.error(error);
-
-      alert(error?.response?.data?.message || "Error al guardar");
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    fetchConfiguration();
-  }, []);
-
+  // =========================
+  // LOADING STATE
+  // =========================
   if (loading) {
-    return (
-      <div className="flex items-center justify-center p-10">Cargando...</div>
-    );
+    return <div>cargando</div>;
   }
 
   return (
-    <div className="mx-auto max-w-3xl p-6">
-      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-        <h1 className="mb-6 text-2xl font-bold">Configuración</h1>
+    <div className="w-full min-h-screen px-6 space-y-6">
+      {/* =========================
+          HEADER
+      ========================= */}
+      <PageHeader
+        icon={Settings}
+        badge="Sistema"
+        title="Configuración"
+        description="Administra la configuración general del sistema."
+        stats={[
+          {
+            icon: Building2,
+            label: "Empresa",
+            value: form.companyName || "Sin nombre",
+          },
+        ]}
+      />
 
-        <form onSubmit={handleSubmit} className="space-y-5">
-          {/* COMPANY */}
+      {/* =========================
+          FORM
+      ========================= */}
+      <form
+        onSubmit={saveConfiguration}
+        className="
+          w-full
+          rounded-2xl
+          border border-white/10
+          bg-transparent
+          backdrop-blur-xl
+          p-6
+          space-y-10
+        "
+      >
+        {/* 🏢 EMPRESA */}
+        <div className="space-y-2">
+          <h2 className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+            Empresa
+          </h2>
 
-          <div>
-            <label className="mb-1 block text-sm font-medium">
-              Nombre Empresa
-            </label>
+          <Input
+            label="Nombre Empresa"
+            name="companyName"
+            value={form.companyName || ""}
+            onChange={updateField}
+          />
+        </div>
 
-            <input
-              type="text"
-              name="companyName"
-              value={form.companyName || ""}
-              onChange={handleChange}
-              className="w-full rounded-lg border p-3 outline-none"
-            />
-          </div>
+        {/* 🎨 APARIENCIA */}
+        <div className="space-y-3">
+          <h2 className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+            Apariencia
+          </h2>
 
-          {/* THEME */}
+          <Select
+            label="Tema"
+            name="theme"
+            value={form.theme}
+            onChange={updateField}
+            options={[
+              { value: "light", label: "Light" },
+              { value: "dark", label: "Dark" },
+            ]}
+          />
 
-          <div>
-            <label className="mb-1 block text-sm font-medium">Tema</label>
+          <Select
+            label="Idioma"
+            name="language"
+            value={form.language}
+            onChange={updateField}
+            options={[
+              { value: "es", label: "Español" },
+              { value: "en", label: "Inglés" },
+            ]}
+          />
 
-            <select
-              name="theme"
-              value={form.theme}
-              onChange={handleChange}
-              className="w-full rounded-lg border p-3 outline-none"
-            >
-              <option value="light">Light</option>
+          <Select
+            label="Moneda"
+            name="currency"
+            value={form.currency}
+            onChange={updateField}
+            options={[
+              { value: "PEN", label: "PEN" },
+              { value: "USD", label: "USD" },
+            ]}
+          />
+        </div>
 
-              <option value="dark">Dark</option>
-            </select>
-          </div>
+        {/* 💰 IMPUESTOS */}
+        <div className="space-y-3">
+          <h2 className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+            Impuestos
+          </h2>
 
-          {/* LANGUAGE */}
+          <Input
+            label="IGV (%)"
+            type="number"
+            name="taxRate"
+            value={form.taxRate}
+            onChange={updateField}
+          />
 
-          <div>
-            <label className="mb-1 block text-sm font-medium">Idioma</label>
+          <Checkbox
+            label="Impuesto por defecto"
+            name="defaultTaxEnabled"
+            checked={form.defaultTaxEnabled}
+            onChange={updateField}
+          />
+        </div>
 
-            <select
-              name="language"
-              value={form.language}
-              onChange={handleChange}
-              className="w-full rounded-lg border p-3 outline-none"
-            >
-              <option value="es">Español</option>
+        {/* 📦 INVENTARIO */}
+        <div className="space-y-3">
+          <h2 className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+            Inventario
+          </h2>
 
-              <option value="en">Inglés</option>
-            </select>
-          </div>
+          <Checkbox
+            label="Notificar stock bajo"
+            name="notifyLowStock"
+            checked={form.notifyLowStock}
+            onChange={updateField}
+          />
 
-          {/* CURRENCY */}
+          <Input
+            label="Umbral stock bajo"
+            type="number"
+            name="lowStockThreshold"
+            value={form.lowStockThreshold}
+            onChange={updateField}
+          />
 
-          <div>
-            <label className="mb-1 block text-sm font-medium">Moneda</label>
+          <Checkbox
+            label="Notificar vencimiento"
+            name="notifyExpiring"
+            checked={form.notifyExpiring}
+            onChange={updateField}
+          />
 
-            <select
-              name="currency"
-              value={form.currency}
-              onChange={handleChange}
-              className="w-full rounded-lg border p-3 outline-none"
-            >
-              <option value="PEN">PEN</option>
+          <Input
+            label="Días alerta vencimiento"
+            type="number"
+            name="expiringDaysAlert"
+            value={form.expiringDaysAlert}
+            onChange={updateField}
+          />
+        </div>
 
-              <option value="USD">USD</option>
-            </select>
-          </div>
+        {/* 🔐 SEGURIDAD */}
+        <div className="space-y-3">
+          <h2 className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+            Seguridad
+          </h2>
 
-          {/* TAX */}
+          <Checkbox
+            label="Requerir 2FA"
+            name="requireTwoFactor"
+            checked={form.requireTwoFactor}
+            onChange={updateField}
+          />
 
-          <div>
-            <label className="mb-1 block text-sm font-medium">IGV (%)</label>
+          <Input
+            label="Timeout sesión (segundos)"
+            type="number"
+            name="sessionTimeout"
+            value={form.sessionTimeout}
+            onChange={updateField}
+          />
 
-            <input
-              type="number"
-              name="taxRate"
-              value={form.taxRate}
-              onChange={handleChange}
-              className="w-full rounded-lg border p-3 outline-none"
-            />
-          </div>
+          <Input
+            label="Min password length"
+            type="number"
+            name="passwordMinLength"
+            value={form.passwordMinLength}
+            onChange={updateField}
+          />
 
-          {/* LOW STOCK */}
+          <Input
+            label="Max intentos login"
+            type="number"
+            name="maxLoginAttempts"
+            value={form.maxLoginAttempts}
+            onChange={updateField}
+          />
+        </div>
 
-          <div className="flex items-center gap-3">
-            <input
-              type="checkbox"
-              name="notifyLowStock"
-              checked={form.notifyLowStock}
-              onChange={handleChange}
-            />
+        {/* 🔄 SISTEMA */}
+        <div className="space-y-3">
+          <h2 className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+            Sistema
+          </h2>
 
-            <label>Notificar stock bajo</label>
-          </div>
+          <Checkbox
+            label="Backup automático"
+            name="autoBackup"
+            checked={form.autoBackup}
+            onChange={updateField}
+          />
 
-          <div>
-            <label className="mb-1 block text-sm font-medium">
-              Límite stock bajo
-            </label>
+          <Select
+            label="Frecuencia backup"
+            name="backupFrequency"
+            value={form.backupFrequency}
+            onChange={updateField}
+            options={[
+              { value: "DAILY", label: "Diario" },
+              { value: "WEEKLY", label: "Semanal" },
+            ]}
+          />
 
-            <input
-              type="number"
-              name="lowStockThreshold"
-              value={form.lowStockThreshold}
-              onChange={handleChange}
-              className="w-full rounded-lg border p-3 outline-none"
-            />
-          </div>
+          <Checkbox
+            label="Permitir exportación"
+            name="allowExport"
+            checked={form.allowExport}
+            onChange={updateField}
+          />
 
-          {/* 2FA */}
+          <Checkbox
+            label="Permitir importación"
+            name="allowImport"
+            checked={form.allowImport}
+            onChange={updateField}
+          />
+        </div>
 
-          <div className="flex items-center gap-3">
-            <input
-              type="checkbox"
-              name="requireTwoFactor"
-              checked={form.requireTwoFactor}
-              onChange={handleChange}
-            />
-
-            <label>Requerir 2FA</label>
-          </div>
-
-          {/* SESSION */}
-
-          <div>
-            <label className="mb-1 block text-sm font-medium">
-              Timeout sesión (segundos)
-            </label>
-
-            <input
-              type="number"
-              name="sessionTimeout"
-              value={form.sessionTimeout}
-              onChange={handleChange}
-              className="w-full rounded-lg border p-3 outline-none"
-            />
-          </div>
-
-          {/* BUTTON */}
-
-          <button
-            type="submit"
-            disabled={saving}
-            className="w-full rounded-xl bg-slate-900 p-3 font-medium text-white transition hover:opacity-90 disabled:opacity-50"
-          >
-            {saving ? "Guardando..." : "Guardar Configuración"}
-          </button>
-        </form>
-      </div>
+        {/* =========================
+            BUTTON
+        ========================= */}
+        <button
+          type="submit"
+          disabled={saving}
+          className="
+            w-full
+            rounded-xl
+            bg-slate-900
+            p-3
+            text-white
+            hover:opacity-90
+            transition
+          "
+        >
+          {saving ? "Guardando..." : "Guardar configuración"}
+        </button>
+      </form>
     </div>
   );
 }

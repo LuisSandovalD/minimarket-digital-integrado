@@ -9,7 +9,7 @@ import {
   TrendingUp,
 } from "lucide-react";
 
-import { features } from "../constants/performance";
+import { features } from "../constants/performance.js";
 
 export default function PerformanceSection() {
   return (

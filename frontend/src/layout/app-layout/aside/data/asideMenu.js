@@ -4,50 +4,43 @@
 // ========================================
 
 import {
-  // GENERAL
-  LayoutDashboard,
-  BarChart3,
-  PieChart,
   Activity,
-  TrendingUp,
-
-  // SALES
-  ShoppingCart,
-  Receipt,
-  CreditCard,
-  Wallet,
-  ClipboardList,
-
-  // INVENTORY
-  Package,
-  Warehouse,
   Archive,
-  ScanLine,
-  Truck,
-  PackageSearch,
-
-  // USERS
-  Users,
-  UserCog,
-  ShieldCheck,
-
-  // BUSINESS
-  Building2,
-  Store,
-
+  BarChart3,
   // SYSTEM
   Bell,
-  Settings,
-  Database,
+  // BUSINESS
+  Building2,
+  ClipboardList,
   Cpu,
-  LifeBuoy,
-  Ticket,
-  History,
-
+  CreditCard,
+  Database,
+  FileBarChart,
   // EXTRA
   FileText,
-  FileBarChart,
+  History,
+  // GENERAL
+  LayoutDashboard,
+  LifeBuoy,
+  // INVENTORY
+  Package,
+  PackageSearch,
+  PieChart,
+  Receipt,
+  ScanLine,
+  Settings,
+  ShieldCheck,
+  // SALES
+  ShoppingCart,
+  Store,
+  TrendingUp,
+  Truck,
   User,
+  UserCog,
+  // USERS
+  Users,
+  Wallet,
+  Warehouse,
 } from "lucide-react";
 
 // ========================================
@@ -160,13 +153,6 @@ export const menuByRole = {
 
       items: [
         {
-          id: "sales",
-          label: "Ventas",
-          icon: ShoppingCart,
-          href: "sales",
-        },
-
-        {
           id: "purchases",
           label: "Compras",
           icon: Truck,
@@ -212,13 +198,6 @@ export const menuByRole = {
           label: "Soporte",
           icon: LifeBuoy,
           href: "support",
-        },
-
-        {
-          id: "tickets",
-          label: "Tickets",
-          icon: Ticket,
-          href: "tickets",
         },
 
         {

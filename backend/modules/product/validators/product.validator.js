@@ -209,21 +209,6 @@ exports.validateProductCreate =
     }
 
     // ====================================
-    // VALIDATE EXPIRATION
-    // ====================================
-
-    if (
-      body.requiresExpiration &&
-      !body.expirationDate
-    ) {
-
-      throw new Error(
-        "Debe ingresar fecha de vencimiento"
-      );
-
-    }
-
-    // ====================================
     // VALIDATE SKU
     // ====================================
 

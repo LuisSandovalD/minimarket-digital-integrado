@@ -1,21 +1,78 @@
-// ========================================
-// CANCEL SALE MODAL
-// ========================================
+import { AlertTriangle } from "lucide-react";
 
-import React from "react";
+import { ModernButton } from "@/components/buttons";
+import { FooterModal, HeaderModal, Modal } from "@/components/overlays";
 
-export const SaleCancelModal = ({ open, onClose, sale, onCancel }) => {
-  if (!open || !sale) return null;
-
+export default function SaleCancelModal({ open, onClose, onConfirm }) {
   return (
-    <div>
-      <h2>Cancelar venta</h2>
+    <Modal open={open} onClose={onClose} maxWidth="sm">
+      <HeaderModal title="Cancelar Venta" onClose={onClose} />
 
-      <p>¿Seguro que deseas cancelar la venta #{sale.id}?</p>
+      <div className="p-6">
+        <div
+          className="
+            flex
+            items-start
+            gap-4
+          "
+        >
+          <div
+            className="
+              flex
+              items-center
+              justify-center
 
-      <button onClick={() => onCancel(sale.id)}>Sí, cancelar</button>
+              h-10
+              w-10
 
-      <button onClick={onClose}>No</button>
-    </div>
+              rounded-xl
+
+              bg-amber-100
+              dark:bg-amber-500/10
+            "
+          >
+            <AlertTriangle
+              size={20}
+              className="
+                text-amber-600
+              "
+            />
+          </div>
+
+          <div>
+            <h4
+              className="
+                font-semibold
+                mb-1
+              "
+            >
+              ¿Cancelar venta actual?
+            </h4>
+
+            <p
+              className="
+                text-sm
+                text-slate-500
+              "
+            >
+              Se perderán los productos agregados, los datos del cliente y la
+              información de pago registrada.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <FooterModal>
+        <div className="flex justify-end gap-2">
+          <ModernButton text="Continuar venta" onClick={onClose} />
+
+          <ModernButton
+            variant="danger"
+            text="Sí, cancelar"
+            onClick={onConfirm}
+          />
+        </div>
+      </FooterModal>
+    </Modal>
   );
-};
+}

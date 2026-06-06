@@ -10,6 +10,8 @@ import CategoryHeader from "../../categories/components/CategoryHeader";
 
 import CategoryFormModal from "../../categories/components/CategoryFormModal";
 
+import CategoriesLoading from "../../categories/components/CategoriesLoading";
+
 export default function CategoriesPage() {
   // ========================================
   // STATES
@@ -52,18 +54,7 @@ export default function CategoriesPage() {
   // ========================================
 
   if (loading) {
-    return (
-      <div
-        className="
-          flex
-          items-center
-          justify-center
-          py-20
-        "
-      >
-        Cargando...
-      </div>
-    );
+    return <CategoriesLoading />;
   }
 
   // ========================================

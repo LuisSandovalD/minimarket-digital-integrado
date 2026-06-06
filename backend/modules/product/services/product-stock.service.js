@@ -13,23 +13,32 @@ exports.getLowStock = async (companyId) => {
     where: {
       companyId,
 
-      // 🔥 stock real (más preciso ERP)
       OR: [
         {
-          stock: { lte: 5 },
+          stock: {
+            lte: 5,
+          },
         },
         {
           AND: [
-            { stock: { lte: 5 } },
-            { reservedStock: { lte: 2 } },
+            {
+              stock: {
+                lte: 5,
+              },
+            },
+            {
+              reservedStock: {
+                lte: 2,
+              },
+            },
           ],
         },
       ],
 
       product: {
-        isDeleted: false,
+        companyId,
         isActive: true,
-        companyId, // 🔥 importante para multiempresa
+        isDeleted: false,
       },
     },
 
@@ -53,11 +62,65 @@ exports.getLowStock = async (companyId) => {
 // EXPIRING PRODUCTS (MEJORADO)
 // ========================================
 
-exports.getExpiring = async (companyId, next30Days) => {
-  return prisma.product.findMany({
+exports.getLowStock = async (companyId) => {
+  return prisma.inventory.findMany({
     where: {
       companyId,
-      isDeleted: false,
+
+      product: {
+        companyId,
+        isDeleted: false,
+        isActive: true,
+      },
+
+      OR: [
+        {
+          stock: {
+            lte: 5,
+          },
+        },
+        {
+          AND: [
+            {
+              stock: {
+                lte: 5,
+              },
+            },
+            {
+              reservedStock: {
+                lte: 2,
+              },
+            },
+          ],
+        },
+      ],
+    },
+
+    include: {
+      product: {
+        include: {
+          category: true,
+          unit: true,
+        },
+      },
+
+      branch: true,
+    },
+
+    orderBy: {
+      stock: "asc",
+    },
+  });
+};
+
+exports.getExpiring = async (
+  companyId,
+  next30Days
+) => {
+  return prisma.productBatch.findMany({
+    where: {
+      companyId,
+
       isActive: true,
 
       expirationDate: {
@@ -65,25 +128,34 @@ exports.getExpiring = async (companyId, next30Days) => {
         lte: next30Days,
       },
 
-      // 🔥 evita productos sin inventario real
-      inventory: {
-        some: {
-          stock: { gt: 0 },
-          companyId,
-        },
+      currentQuantity: {
+        gt: 0,
+      },
+
+      product: {
+        companyId,
+        isDeleted: false,
+        isActive: true,
       },
     },
 
     include: {
-      category: true,
-      unit: true,
-
-      inventory: {
-        where: {
-          companyId,
-        },
+      product: {
         include: {
-          branch: true,
+          category: true,
+          unit: true,
+        },
+      },
+
+      branch: true,
+
+      purchaseDetail: {
+        include: {
+          purchase: {
+            include: {
+              supplier: true,
+            },
+          },
         },
       },
     },

@@ -3,13 +3,6 @@
 // ========================================
 
 const {
-  addDays,
-  isBefore,
-  isAfter,
-  differenceInDays,
-} = require("date-fns");
-
-const {
   NotificationRepository,
 } = require(
   "../repositories/notification.repository"
@@ -24,19 +17,14 @@ class NotificationService {
   // GET NOTIFICATIONS
   // ========================================
 
-  async getNotifications(companyId) {
+  async getNotifications(
+    companyId
+  ) {
 
     const inventories =
-      await repository
-        .getProductsForNotifications(
-          companyId
-        );
-
-    const today =
-      new Date();
-
-    const next30Days =
-      addDays(today, 30);
+      await repository.getProductsForNotifications(
+        companyId
+      );
 
     const notifications = [];
 
@@ -53,175 +41,6 @@ class NotificationService {
         Number(inventory.stock || 0) -
         Number(inventory.reservedStock || 0) -
         Number(inventory.damagedStock || 0);
-
-      const expirationDate =
-        product.expirationDate
-          ? new Date(
-              product.expirationDate
-            )
-          : null;
-
-      // ========================================
-      // PRODUCT EXPIRED
-      // ========================================
-
-      if (
-        expirationDate &&
-        isBefore(
-          expirationDate,
-          today
-        )
-      ) {
-
-        notifications.push({
-
-          id:
-            `expired-${inventory.id}`,
-
-          type:
-            "expired",
-
-          priority:
-            "high",
-
-          title:
-            `${product.name} venció`,
-
-          message:
-            `Producto vencido desde ${expirationDate.toLocaleDateString("es-ES")}`,
-
-          description:
-            `Venció el ${expirationDate.toLocaleDateString("es-ES")}`,
-
-          product: {
-
-            id:
-              product.id,
-
-            name:
-              product.name,
-
-            sku:
-              product.sku,
-
-            stock:
-              availableStock,
-
-            minStock:
-              product.minStock,
-
-            expirationDate:
-              product.expirationDate,
-
-          },
-
-          branch: {
-
-            id:
-              inventory.branch?.id,
-
-            name:
-              inventory.branch?.name,
-
-          },
-
-          timestamp:
-            expirationDate.toISOString(),
-
-          read: false,
-
-          createdAt:
-            expirationDate,
-
-        });
-
-      }
-
-      // ========================================
-      // PRODUCT EXPIRING SOON
-      // ========================================
-
-      else if (
-        expirationDate &&
-        isAfter(
-          expirationDate,
-          today
-        ) &&
-        isBefore(
-          expirationDate,
-          next30Days
-        )
-      ) {
-
-        const diffDays =
-          differenceInDays(
-            expirationDate,
-            today
-          );
-
-        notifications.push({
-
-          id:
-            `expiring-${inventory.id}`,
-
-          type:
-            "expiring",
-
-          priority:
-            "medium",
-
-          title:
-            `${product.name} por vencer`,
-
-          message:
-            `Vence en ${diffDays} días (${expirationDate.toLocaleDateString("es-ES")})`,
-
-          description:
-            `Vence en ${diffDays} días`,
-
-          product: {
-
-            id:
-              product.id,
-
-            name:
-              product.name,
-
-            sku:
-              product.sku,
-
-            stock:
-              availableStock,
-
-            minStock:
-              product.minStock,
-
-            expirationDate:
-              product.expirationDate,
-
-          },
-
-          branch: {
-
-            id:
-              inventory.branch?.id,
-
-            name:
-              inventory.branch?.name,
-
-          },
-
-          timestamp:
-            expirationDate.toISOString(),
-
-          read: false,
-
-          createdAt:
-            expirationDate,
-
-        });
-
-      }
 
       // ========================================
       // OUT OF STOCK
@@ -246,7 +65,7 @@ class NotificationService {
             `${product.name} sin stock`,
 
           message:
-            "Producto agotado - necesita reorden",
+            "Producto agotado - necesita reposición",
 
           description:
             "Producto agotado",
@@ -283,7 +102,8 @@ class NotificationService {
           timestamp:
             new Date().toISOString(),
 
-          read: false,
+          read:
+            false,
 
           createdAt:
             new Date(),
@@ -297,11 +117,14 @@ class NotificationService {
       // ========================================
 
       else if (
+
         availableStock > 0 &&
+
         availableStock <=
         Number(
           product.minStock || 5
         )
+
       ) {
 
         notifications.push({
@@ -319,7 +142,7 @@ class NotificationService {
             `${product.name} con stock bajo`,
 
           message:
-            `Quedan ${availableStock} unidades (mínimo: ${product.minStock || 5})`,
+            `Quedan ${availableStock} unidades (mínimo ${product.minStock || 5})`,
 
           description:
             `Quedan ${availableStock} unidades`,
@@ -356,7 +179,8 @@ class NotificationService {
           timestamp:
             new Date().toISOString(),
 
-          read: false,
+          read:
+            false,
 
           createdAt:
             new Date(),
@@ -368,7 +192,7 @@ class NotificationService {
     }
 
     // ========================================
-    // SORT PRIORITY
+    // PRIORITY SORT
     // ========================================
 
     const priorityOrder = {
@@ -395,7 +219,10 @@ class NotificationService {
       Array.from(
         new Map(
           notifications.map(
-            (n) => [n.id, n]
+            (notification) => [
+              notification.id,
+              notification,
+            ]
           )
         ).values()
       );

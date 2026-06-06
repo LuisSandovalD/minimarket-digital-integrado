@@ -11,15 +11,12 @@ export default function useTicketMessages(ticketId) {
     error,
   } = useQuery({
     queryKey: ["ticket-messages", ticketId],
-
     queryFn: () => getTicketMessages(ticketId),
-
     enabled: !!ticketId,
-
-    staleTime: 1000 * 5,
-
+    // Reducimos staleTime a 0 para que siempre considere que requiere datos frescos al consultar
+    staleTime: 0,
+    // Mantiene tu consulta al backend en segundo plano de manera limpia cada 3 segundos
     refetchInterval: 3000,
-
     refetchOnWindowFocus: false,
   });
 
@@ -31,11 +28,8 @@ export default function useTicketMessages(ticketId) {
 
   return {
     messages: data,
-
     loading: isLoading,
-
     error,
-
     refreshMessages,
   };
 }

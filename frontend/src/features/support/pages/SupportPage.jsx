@@ -1,106 +1,68 @@
-import { useMemo, useState } from "react";
-
+import ChatFlotante from "../components/ChatFlotante";
+import CreateTicketModal from "../components/CreateTicketModal";
+import SupportHeader from "../components/SupportHeader";
 import SupportSidebar from "../components/SupportSidebar";
 
-import ChatMessages from "../components/ChatMessages";
-
-import ChatHeader from "../components/ChatHeader";
-
-import MessageInput from "../components/MessageInput";
-
-import useSupportTickets from "../hooks/useSupportTickets";
-
-import useTicketMessages from "../hooks/useTicketMessages";
-
-import useSupportMutations from "../hooks/useSupportMutations";
+import useSupportPage from "../hooks/useSupportPage";
 
 export default function SupportPage() {
-  const user = useMemo(() => {
-    try {
-      return JSON.parse(localStorage.getItem("user"));
-    } catch {
-      return null;
-    }
-  }, []);
+  const { state, actions } = useSupportPage();
 
-  const currentUserId = user?.id;
-
-  const currentUserRole = user?.role;
-
-  const isSupport = ["ADMIN", "MANAGER", "SUPPORT"].includes(currentUserRole);
-
-  const [selectedTicket, setSelectedTicket] = useState(null);
-
-  const [search, setSearch] = useState("");
-
-  // ========================================
-  // QUERIES
-  // ========================================
-
-  const { tickets, loading: loadingTickets } = useSupportTickets();
-
-  const { messages, loading: loadingMessages } = useTicketMessages(
-    selectedTicket?.id,
-  );
-
-  // ========================================
-  // MUTATIONS
-  // ========================================
-
-  const { sendMessageMutation, updateStatusMutation } = useSupportMutations();
+  // =========================
+  // LOADING GLOBAL SAFE ENTRY
+  // =========================
+  if (state.loadingTickets && !state.selectedTicket) {
+    return <>cargando</>;
+  }
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[#0f172a] text-white">
-      <SupportSidebar
-        tickets={tickets}
-        loading={loadingTickets}
-        selectedTicket={selectedTicket}
-        onSelectTicket={setSelectedTicket}
-        search={search}
-        setSearch={setSearch}
+    <div className="relative flex min-h-[86dvh] flex-col gap-6 pb-8 font-sans text-slate-100">
+      {/* =========================
+       * 1. HEADER
+       * ========================= */}
+      <SupportHeader
+        search={state.search}
+        onSearchChange={actions.setSearch}
+        stats={state.stats}
+        onCreate={() => actions.setShowCreateModal(true)}
       />
 
-      <div className="flex flex-1 flex-col">
-        {!selectedTicket ? (
-          <div className="flex flex-1 items-center justify-center">
-            Selecciona un ticket
-          </div>
-        ) : (
-          <>
-            <ChatHeader
-              ticket={selectedTicket}
-              isSupport={isSupport}
-              onChangeStatus={(status) =>
-                updateStatusMutation.mutate({
-                  ticketId: selectedTicket.id,
-                  status,
-                })
-              }
-            />
-
-            <ChatMessages
-              messages={messages}
-              loading={loadingMessages}
-              currentUserId={currentUserId}
-            />
-
-            <MessageInput
-              sending={sendMessageMutation.isPending}
-              onSend={(message) =>
-                sendMessageMutation.mutate({
-                  ticketId: selectedTicket.id,
-
-                  data: {
-                    message,
-
-                    messageType: "TEXT",
-                  },
-                })
-              }
-            />
-          </>
-        )}
+      {/* =========================
+       * 2. SIDEBAR / MAIN
+       * ========================= */}
+      <div className="flex w-full flex-1 flex-col">
+        <SupportSidebar
+          tickets={state.tickets}
+          filteredTickets={state.filteredTickets}
+          loading={state.loadingTickets}
+          selectedTicket={state.selectedTicket}
+          onSelectTicket={actions.setSelectedTicket}
+          search={state.search}
+          filters={state.filters}
+          onFiltersChange={actions.setFilters}
+        />
       </div>
+
+      {/* =========================
+       * 3. FLOAT CHAT
+       * ========================= */}
+      <ChatFlotante
+        ticketId={state.selectedTicket?.id}
+        selectedTicket={state.selectedTicket}
+        currentUserId={state.currentUserId}
+      />
+
+      {/* =========================
+       * 4. MODAL CREATE TICKET
+       * ========================= */}
+      {state.showCreateModal && (
+        <CreateTicketModal
+          open={state.showCreateModal}
+          loading={state.isCreateLoading}
+          onCreate={actions.handleCreateTicket}
+          onCancel={() => actions.setShowCreateModal(false)}
+        />
+      )}
     </div>
   );
 }

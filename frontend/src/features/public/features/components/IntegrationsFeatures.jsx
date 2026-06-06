@@ -1,7 +1,7 @@
 // features/components/IntegrationsFeatures.jsx
 
 import { Globe, ArrowUpRight } from "lucide-react";
-import { integrations } from "../constants/integrations";
+import { integrations } from "../constants/integrations.js";
 
 export default function IntegrationsFeatures() {
   return (
