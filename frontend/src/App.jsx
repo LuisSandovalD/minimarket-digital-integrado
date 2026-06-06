@@ -1,5 +1,5 @@
 import { useCallback, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { BrowserRouter, useRoutes } from "react-router-dom";
 
 import { routes } from "./routes/routes";
@@ -7,11 +7,13 @@ import { routes } from "./routes/routes";
 import { meService } from "./features/auth/services/auth.service";
 import { loginSuccess, logoutAction } from "./features/auth/store/authActions";
 
-import { getToken, getUser } from "./features/auth/services/session.service";
+import {
+  clearSession,
+  getToken,
+} from "./features/auth/services/session.service";
 
 export default function App() {
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.auth);
 
   const loadSessionFromBackend = useCallback(async () => {
     try {
@@ -20,19 +22,21 @@ export default function App() {
       if (response?.user) {
         dispatch(loginSuccess(response.user));
       } else {
+        clearSession();
         dispatch(logoutAction());
       }
     } catch (error) {
+      clearSession();
       dispatch(logoutAction());
     }
   }, [dispatch]);
 
   useEffect(() => {
-    const storedUser = getUser();
-    const storedToken = getToken();
+    const token = getToken();
 
-    if (storedUser && storedToken) {
-      dispatch(loginSuccess(storedUser));
+    if (!token) {
+      clearSession();
+      dispatch(logoutAction());
       return;
     }
 
