@@ -5,94 +5,94 @@ import { registerService } from "../services/register.services";
 import { loginSuccess } from "../store/authActions";
 
 export default function useRegisterSubmit({
-    form,
-    setLoading,
-    setError,
-    resetForm,
-    onClose,
+  form,
+  setLoading,
+  setError,
+  resetForm,
+  onClose,
 }) {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-    const handleSubmit = async (event) => {
-        event?.preventDefault();
+  const handleSubmit = async (event) => {
+    event?.preventDefault();
 
-        setError(null);
+    setError(null);
 
-        setLoading(true);
+    setLoading(true);
 
-        try {
-            const payload = {
-                name: form.name,
+    try {
+      const payload = {
+        name: form.name,
 
-                email: form.email,
+        email: form.email,
 
-                password: form.password,
+        password: form.password,
 
-                role: form.role,
+        role: form.role,
 
-                phone: form.phone,
+        phone: form.phone,
 
-                plan: form.plan,
+        plan: form.plan,
 
-                company: {
-                    name: form.companyName,
+        company: {
+          name: form.companyName,
 
-                    email: form.companyEmail || null,
+          email: form.companyEmail || null,
 
-                    phone: form.companyPhone || null,
+          phone: form.companyPhone || null,
 
-                    address: form.companyAddress || null,
+          address: form.companyAddress || null,
 
-                    ruc: form.companyRuc || null,
-                },
-            };
+          ruc: form.companyRuc || null,
+        },
+      };
 
-            if (form.branchName?.trim()) {
-                payload.branch = {
-                    name: form.branchName,
+      if (form.branchName?.trim()) {
+        payload.branch = {
+          name: form.branchName,
 
-                    code: form.branchCode,
+          code: form.branchCode,
 
-                    address: form.branchAddress,
+          address: form.branchAddress,
 
-                    phone: form.branchPhone,
+          phone: form.branchPhone,
 
-                    city: form.branchCity,
+          city: form.branchCity,
 
-                    state: form.branchState,
+          state: form.branchState,
 
-                    country: form.branchCountry,
-                };
-            }
+          country: form.branchCountry,
+        };
+      }
 
-            const response = await registerService(payload);
+      const response = await registerService(payload);
 
-            dispatch(loginSuccess(response.user));
+      dispatch(loginSuccess(response.user));
 
-            resetForm();
+      resetForm();
 
-            onClose?.();
+      onClose?.();
 
-            navigate(`/${response.company.slug}/dashboard`);
+      navigate(`/${response.company.slug}/dashboard`);
 
-            return response;
-        } catch (error) {
-            const message =
-                error.response?.data?.message ||
-                error.message ||
-                "Error al registrarse";
+      return response;
+    } catch (error) {
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        "Error al registrarse";
 
-            setError(message);
+      setError(message);
 
-            throw error;
-        } finally {
-            setLoading(false);
-        }
-    };
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    return {
-        handleSubmit,
-    };
+  return {
+    handleSubmit,
+  };
 }
