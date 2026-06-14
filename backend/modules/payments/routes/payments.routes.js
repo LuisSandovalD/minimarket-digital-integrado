@@ -29,6 +29,7 @@ const {
     deletePaymentController,
 
 } = require("../controllers/payments.controller");
+const reportPayments = require('../controllers/report-payments.controller')
 
 // ========================================
 // MIDDLEWARES
@@ -110,6 +111,11 @@ router.delete(
     authMiddleware,
     deletePaymentController
 );
+
+// REPORTS
+// REPORTS
+router.get('/reports/payments/pdf', authMiddleware, reportPayments.downloadPaymentsPDFController);
+router.get('/reports/payments/excel', authMiddleware, reportPayments.downloadPaymentsExcelController);
 
 module.exports =
     router;

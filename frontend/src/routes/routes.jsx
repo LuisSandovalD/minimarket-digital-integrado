@@ -46,6 +46,7 @@ import InventoryPage from "../features/inventory/pages/InventoryPage";
 import MovementsPage from "../features/movements/pages/MovementsPage";
 import PaymentsPage from "../features/payments/pages/PaymentsPage";
 import PurchasePage from "../features/purchase/page/PurchasePage";
+import ReportsPage from "../features/reports/pages/ReportsPage";
 import SaleDetailPage from "../features/sale-detail/pages/SaleDetailsPage";
 import ConfigurationPage from "../features/settings/pages/Settings";
 import SupplierPage from "../features/supplier/pages/SupplierPage";
@@ -104,6 +105,11 @@ export const routes = [
           {
             path: "dashboard",
             element: <Dashboard />,
+          },
+
+          {
+            path: "reports",
+            element: <ReportsPage />,
           },
 
           {

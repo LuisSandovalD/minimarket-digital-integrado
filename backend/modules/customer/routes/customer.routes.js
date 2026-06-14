@@ -23,6 +23,8 @@ const {
   "../controllers/customer.controller"
 );
 
+const reportCustomer = require("../controllers/report-customer.controller");
+
 router.get(
   "/",
   auth,
@@ -52,6 +54,10 @@ router.delete(
   auth,
   deleteCustomer
 );
+
+// REPORTS
+router.get("/reports/customers/pdf", auth, reportCustomer.downloadCustomersPDFController);
+router.get("/reports/customers/excel", auth, reportCustomer.downloadCustomersExcelController);
 
 module.exports =
   router;

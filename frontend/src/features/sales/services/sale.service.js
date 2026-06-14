@@ -70,9 +70,10 @@ export const getSalePayments = async (id) => {
 // GET DAILY REPORT
 // ========================================
 
-export const getDailySalesReport = async (startDate, endDate) => {
+export const getDailySalesReport = async (startDate, endDate, companyId) => {
   const res = await axios.get("/sale/reports/daily", {
     params: {
+      companyId,
       startDate,
       endDate,
     },

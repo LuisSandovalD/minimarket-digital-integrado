@@ -1,7 +1,3 @@
-// ========================================
-// features/purchase/components/PurchaseTable.jsx
-// ========================================
-
 import { useState } from "react";
 
 import {
@@ -17,31 +13,25 @@ import {
   Settings2,
 } from "lucide-react";
 
-import { Table, THead } from "@/components/data-display/";
-
 import { ModernButton } from "@/components/buttons";
+import { Table, THead } from "@/components/data-display";
 
 import PurchaseActions from "./PurchaseActions";
-
 import PurchaseProductsModal from "./PurchaseProductsModal";
 
-export default function PurchaseTable({ purchases = [], onEdit, onDelete }) {
-  // ========================================
-  // MODAL
-  // ========================================
-
+export default function PurchaseTable({
+  purchases = [],
+  onEdit,
+  onDelete,
+  readOnly = false,
+}) {
   const [selectedPurchase, setSelectedPurchase] = useState(null);
 
   const [openProducts, setOpenProducts] = useState(false);
 
-  // ========================================
-  // TABLE COLUMNS
-  // ========================================
-
   const columns = [
     {
       key: "number",
-
       label: (
         <div className="flex items-center gap-2">
           <Receipt size={14} />
@@ -52,7 +42,6 @@ export default function PurchaseTable({ purchases = [], onEdit, onDelete }) {
 
     {
       key: "subtotal",
-
       label: (
         <div className="flex items-center gap-2">
           <DollarSign size={14} />
@@ -63,7 +52,6 @@ export default function PurchaseTable({ purchases = [], onEdit, onDelete }) {
 
     {
       key: "tax",
-
       label: (
         <div className="flex items-center gap-2">
           <Percent size={14} />
@@ -74,7 +62,6 @@ export default function PurchaseTable({ purchases = [], onEdit, onDelete }) {
 
     {
       key: "discount",
-
       label: (
         <div className="flex items-center gap-2">
           <BadgeDollarSign size={14} />
@@ -85,7 +72,6 @@ export default function PurchaseTable({ purchases = [], onEdit, onDelete }) {
 
     {
       key: "total",
-
       label: (
         <div className="flex items-center gap-2">
           <DollarSign size={14} />
@@ -96,7 +82,6 @@ export default function PurchaseTable({ purchases = [], onEdit, onDelete }) {
 
     {
       key: "products",
-
       label: (
         <div className="flex items-center gap-2">
           <Package size={14} />
@@ -107,7 +92,6 @@ export default function PurchaseTable({ purchases = [], onEdit, onDelete }) {
 
     {
       key: "status",
-
       label: (
         <div className="flex items-center gap-2">
           <Activity size={14} />
@@ -118,7 +102,6 @@ export default function PurchaseTable({ purchases = [], onEdit, onDelete }) {
 
     {
       key: "notes",
-
       label: (
         <div className="flex items-center gap-2">
           <FileText size={14} />
@@ -127,32 +110,26 @@ export default function PurchaseTable({ purchases = [], onEdit, onDelete }) {
       ),
     },
 
-    {
-      key: "actions",
-
-      label: (
-        <div className="flex items-center gap-2">
-          <Settings2 size={14} />
-          Acciones
-        </div>
-      ),
-    },
+    ...(!readOnly
+      ? [
+          {
+            key: "actions",
+            label: (
+              <div className="flex items-center gap-2">
+                <Settings2 size={14} />
+                Acciones
+              </div>
+            ),
+          },
+        ]
+      : []),
   ];
 
-  // ========================================
-  // FORMAT PRICE
-  // ========================================
-
-  const formatPrice = (value) => {
-    return new Intl.NumberFormat("es-PE", {
+  const formatPrice = (value) =>
+    new Intl.NumberFormat("es-PE", {
       style: "currency",
       currency: "PEN",
     }).format(Number(value || 0));
-  };
-
-  // ========================================
-  // STATUS STYLES
-  // ========================================
 
   const getStatusStyles = (status) => {
     switch (status) {
@@ -190,31 +167,18 @@ export default function PurchaseTable({ purchases = [], onEdit, onDelete }) {
     }
   };
 
-  // ========================================
-  // OPEN PRODUCTS
-  // ========================================
-
   const handleOpenProducts = (purchase) => {
     setSelectedPurchase(purchase);
-
     setOpenProducts(true);
   };
 
   return (
     <>
-      {/* ========================================
-       * MODAL PRODUCTS
-       * ====================================== */}
-
       <PurchaseProductsModal
         open={openProducts}
         onClose={() => setOpenProducts(false)}
         purchase={selectedPurchase}
       />
-
-      {/* ========================================
-       * TABLE
-       * ====================================== */}
 
       <div className="space-y-5">
         <div>
@@ -257,16 +221,8 @@ export default function PurchaseTable({ purchases = [], onEdit, onDelete }) {
                     dark:hover:bg-slate-900/40
                   "
                 >
-                  {/* NUMBER */}
-
                   <td className="px-6 py-5">
-                    <div
-                      className="
-                        flex
-                        items-center
-                        gap-3
-                      "
-                    >
+                    <div className="flex items-center gap-3">
                       <div
                         className="
                           flex
@@ -297,25 +253,17 @@ export default function PurchaseTable({ purchases = [], onEdit, onDelete }) {
                     </div>
                   </td>
 
-                  {/* SUBTOTAL */}
-
                   <td className="px-6 py-5 text-sm">
                     {formatPrice(purchase.subtotal)}
                   </td>
-
-                  {/* TAX */}
 
                   <td className="px-6 py-5 text-sm">
                     {formatPrice(purchase.tax)}
                   </td>
 
-                  {/* DISCOUNT */}
-
                   <td className="px-6 py-5 text-sm">
                     {formatPrice(purchase.discount)}
                   </td>
-
-                  {/* TOTAL */}
 
                   <td className="px-6 py-5">
                     <p
@@ -330,8 +278,6 @@ export default function PurchaseTable({ purchases = [], onEdit, onDelete }) {
                     </p>
                   </td>
 
-                  {/* PRODUCTS */}
-
                   <td className="px-6 py-5">
                     <ModernButton
                       type="button"
@@ -341,8 +287,6 @@ export default function PurchaseTable({ purchases = [], onEdit, onDelete }) {
                       variant="secondary"
                     />
                   </td>
-
-                  {/* STATUS */}
 
                   <td className="px-6 py-5">
                     <span
@@ -361,8 +305,6 @@ export default function PurchaseTable({ purchases = [], onEdit, onDelete }) {
                     </span>
                   </td>
 
-                  {/* NOTES */}
-
                   <td
                     className="
                       px-6
@@ -377,21 +319,21 @@ export default function PurchaseTable({ purchases = [], onEdit, onDelete }) {
                     </p>
                   </td>
 
-                  {/* ACTIONS */}
-
-                  <td className="px-6 py-5">
-                    <PurchaseActions
-                      purchase={purchase}
-                      onEdit={onEdit}
-                      onDelete={onDelete}
-                    />
-                  </td>
+                  {!readOnly && (
+                    <td className="px-6 py-5">
+                      <PurchaseActions
+                        purchase={purchase}
+                        onEdit={onEdit}
+                        onDelete={onDelete}
+                      />
+                    </td>
+                  )}
                 </tr>
               ))
             ) : (
               <tr>
                 <td
-                  colSpan={9}
+                  colSpan={readOnly ? 8 : 9}
                   className="
                     px-6
                     py-16

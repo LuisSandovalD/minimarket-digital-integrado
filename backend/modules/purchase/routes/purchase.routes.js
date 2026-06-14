@@ -25,6 +25,10 @@ const updatePurchaseStatusController =
 
 const cancelPurchaseController =
   require("../controllers/cancel-purchase.controller").cancelPurchaseController;
+const {
+  downloadDailyPurchasesPDFController,
+  downloadDailyPurchasesExcelController,
+} = require("../controllers/report-purchase.controller");
 
 // ========================================
 // ROUTES
@@ -58,6 +62,19 @@ router.patch(
   "/:id/cancel",
   auth,
   cancelPurchaseController
+);
+
+// REPORTS
+router.get(
+  "/reports/daily/pdf",
+  auth,
+  downloadDailyPurchasesPDFController
+);
+
+router.get(
+  "/reports/daily/excel",
+  auth,
+  downloadDailyPurchasesExcelController
 );
 
 module.exports = router;

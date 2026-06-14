@@ -4,7 +4,7 @@ import { AtSign, LockKeyhole, Mail, Phone, User } from "lucide-react";
 export default function UserStep({ form, handleChange }) {
   return (
     // 1. Convertimos a <fieldset> para mejorar la accesibilidad en formularios por pasos
-    <fieldset className="grid grid-cols-1 md:grid-cols-2 gap-5 animate-fadeIn">
+    <div className="grid grid-cols-1 gap-5 animate-fadeIn">
       {/* Leyenda oculta visualmente pero accesible para lectores de pantalla */}
       <legend className="sr-only">Información de la cuenta de usuario</legend>
 
@@ -69,6 +69,6 @@ export default function UserStep({ form, handleChange }) {
           required
         />
       </div>
-    </fieldset>
+    </div>
   );
 }

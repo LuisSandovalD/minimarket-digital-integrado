@@ -2,8 +2,7 @@
 // repositories/sale-report.repository.js
 // ========================================
 
-const prisma =
-  require("../../../prisma/client");
+const prisma = require("../../../prisma/client");
 
 module.exports = {
 
@@ -11,77 +10,190 @@ module.exports = {
   // DAILY SALES
   // ========================================
 
-  getDailySales:
-    async (
-      companyId,
-      startDate,
-      endDate
-    ) => {
+  getDailySales: async (
+    companyId,
+    startDate,
+    endDate
+  ) => {
 
-      return prisma.sale.aggregate({
+    const where = {
+      status: {
+        not: "CANCELLED",
+      },
+    };
 
-        where: {
+    if (
+      startDate &&
+      !isNaN(new Date(startDate).getTime())
+    ) {
+      where.createdAt = {
+        ...(where.createdAt || {}),
+        gte: new Date(startDate),
+      };
+    }
 
-          companyId,
+    if (
+      endDate &&
+      !isNaN(new Date(endDate).getTime())
+    ) {
+      where.createdAt = {
+        ...(where.createdAt || {}),
+        lte: new Date(endDate),
+      };
+    }
 
-          status: {
-            not: "CANCELLED",
+    if (
+      companyId !== undefined &&
+      companyId !== null &&
+      companyId !== ""
+    ) {
+      where.companyId = Number(companyId);
+    }
+
+    return prisma.sale.findMany({
+
+      where,
+
+      orderBy: {
+        createdAt: "desc",
+      },
+
+      include: {
+
+        customer: {
+          select: {
+            id: true,
+            name: true,
+            documentNumber: true,
+            phone: true,
           },
-
-          createdAt: {
-            gte: startDate,
-            lte: endDate,
-          },
-
         },
 
-        _sum: {
-          total: true,
+        details: {
+          include: {
+            product: {
+              select: {
+                id: true,
+                name: true,
+                sku: true,
+              },
+            },
+          },
         },
 
-        _count: true,
+        seller: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
 
-      });
+        branch: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
 
-    },
+      },
+
+    });
+
+  },
 
   // ========================================
   // TOP PRODUCTS
   // ========================================
 
-  getTopProducts:
-    async (
-      companyId
-    ) => {
+  getTopProducts: async (
+    companyId
+  ) => {
 
-      return prisma.saleDetail.groupBy({
+    const where = {};
 
-        by: [
-          "productId",
-        ],
+    if (
+      companyId !== undefined &&
+      companyId !== null &&
+      companyId !== ""
+    ) {
+      where.sale = {
+        companyId: Number(companyId),
+      };
+    }
 
-        where: {
+    const rows =
+      await prisma.saleDetail.groupBy({
 
-          sale: {
-            companyId,
-          },
+        by: ["productId"],
 
-        },
+        where,
 
         _sum: {
           quantity: true,
+          subtotal: true,
         },
 
         orderBy: {
-
           _sum: {
             quantity: "desc",
           },
+        },
 
+        take: 10,
+
+      });
+
+    const products =
+      await prisma.product.findMany({
+
+        where: {
+          id: {
+            in: rows.map(
+              (r) => r.productId
+            ),
+          },
+        },
+
+        select: {
+          id: true,
+          name: true,
+          sku: true,
         },
 
       });
 
-    },
+    return rows.map((row) => {
+
+      const product =
+        products.find(
+          (p) =>
+            p.id === row.productId
+        );
+
+      return {
+
+        productId: row.productId,
+
+        productName:
+          product?.name || "Sin nombre",
+
+        sku:
+          product?.sku || "",
+
+        quantity:
+          Number(
+            row._sum.quantity || 0
+          ),
+
+        total:
+          Number(
+            row._sum.subtotal || 0
+          ),
+
+      };
+
+    });
+
+  },
 
 };

@@ -8,6 +8,7 @@ const router = express.Router();
 // 📂 IMPORTAMOS AMBOS CONTROLADORES
 const inventoryController = require("../controllers/inventory.controller"); // El general (trae consultas y transferencias)
 const stockController = require("../controllers/inventory-stock.controller"); // El nuevo (trae addStock, removeStock, reserve, release y damaged)
+const reportInventory = require("../controllers/report-inventory.controller");
 
 // MIDDLEWARES
 const auth = require("../../../middleware/auth");
@@ -52,6 +53,10 @@ router.get("/movements/branch/:branchId", auth, inventoryController.getBranchMov
 router.get("/history/:inventoryId", auth, inventoryController.getHistoryByInventory);
 router.get("/history", auth, validate(historyRangeSchema, "query"), inventoryController.getHistoryByDateRange);
 router.get("/metrics", auth, inventoryController.getInventoryMetrics);
+
+// REPORTS: PDF / EXCEL
+router.get("/reports/inventory/pdf", auth, reportInventory.downloadInventoryPDFController);
+router.get("/reports/inventory/excel", auth, reportInventory.downloadInventoryExcelController);
 
 // ========================================
 // TRANSFERS

@@ -3,6 +3,7 @@ const express = require('express')
 const router = express.Router()
 
 const supplierController = require('../controllers/supplier.controller')
+const reportSupplier = require('../controllers/report-supplier.controller')
 
 // MIDDLEWARES
 const auth = require('../../../middleware/auth')
@@ -84,5 +85,9 @@ router.patch(
   auth,
   supplierController.restoreSupplier
 )
+
+// REPORTS
+router.get('/reports/suppliers/pdf', auth, reportSupplier.downloadSuppliersPDFController)
+router.get('/reports/suppliers/excel', auth, reportSupplier.downloadSuppliersExcelController)
 
 module.exports = router

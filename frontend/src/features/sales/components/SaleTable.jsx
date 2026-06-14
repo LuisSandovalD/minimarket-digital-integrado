@@ -1,7 +1,3 @@
-// ========================================
-// features/sales/components/SalesTable.jsx
-// ========================================
-
 import {
   Activity,
   BadgeDollarSign,
@@ -17,15 +13,16 @@ import {
 import { ModernButton } from "@/components/buttons";
 import { Table, THead } from "@/components/data-display";
 
-import SaleActions from "./SaleActions.jsx";
+import SaleActions from "./SaleActions";
 
 export default function SalesTable({
   sales = [],
-  onView, // <-- Cambiado: Recibe el disparador del modal de Detalle
-  onPayment, // <-- Añadido: Recibe el disparador de Gestión de Pagos
-  onCancel, // <-- Añadido: Recibe el disparador de Anulación
-  onReturn, // <-- Añadido: Recibe el disparador de Devoluciones
-  onPrint, // <-- Añadido por si manejas impresión de tickets
+  onView,
+  onPayment,
+  onCancel,
+  onReturn,
+  onPrint,
+  readOnly = false,
 }) {
   const columns = [
     {
@@ -91,7 +88,10 @@ export default function SalesTable({
         </div>
       ),
     },
-    {
+  ];
+
+  if (!readOnly) {
+    columns.push({
       key: "actions",
       label: (
         <div className="flex items-center gap-2">
@@ -99,8 +99,8 @@ export default function SalesTable({
           Acciones
         </div>
       ),
-    },
-  ];
+    });
+  }
 
   const formatPrice = (value) =>
     new Intl.NumberFormat("es-PE", {
@@ -111,46 +111,32 @@ export default function SalesTable({
   const getStatusStyles = (status) => {
     switch (status) {
       case "COMPLETED":
-        return `
-          bg-green-100
-          text-green-700
-          dark:bg-green-900/30
-          dark:text-green-400
-        `;
+        return "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400";
+
       case "PENDING":
-        return `
-          bg-yellow-100
-          text-yellow-700
-          dark:bg-yellow-900/30
-          dark:text-yellow-400
-        `;
+        return "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400";
+
       case "CANCELLED":
-        return `
-          bg-red-100
-          text-red-700
-          dark:bg-red-900/30
-          dark:text-red-400
-        `;
+        return "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400";
+
       default:
-        return `
-          bg-slate-100
-          text-slate-700
-          dark:bg-slate-800
-          dark:text-slate-300
-        `;
+        return "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300";
     }
   };
 
   return (
     <div className="space-y-5">
-      <div>
-        <h2 className="text-xl font-semibold tracking-tight text-slate-900 dark:text-white">
-          Ventas
-        </h2>
-        <p className="mt-1 text-sm text-slate-500">
-          Gestiona comprobantes, clientes y movimientos de venta.
-        </p>
-      </div>
+      {!readOnly && (
+        <div>
+          <h2 className="text-xl font-semibold tracking-tight text-slate-900 dark:text-white">
+            Ventas
+          </h2>
+
+          <p className="mt-1 text-sm text-slate-500">
+            Gestiona comprobantes, clientes y movimientos de venta.
+          </p>
+        </div>
+      )}
 
       <Table>
         <THead columns={columns} />
@@ -168,58 +154,61 @@ export default function SalesTable({
                   dark:hover:bg-slate-900/40
                 "
               >
-                {/* SALE NUMBER */}
+                {/* Venta */}
                 <td className="px-6 py-5">
                   <div className="flex items-center gap-3">
                     <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-100 dark:bg-slate-800">
                       <ShoppingCart size={18} className="text-slate-500" />
                     </div>
-                    <div>
-                      <h3 className="text-sm font-semibold text-slate-800 dark:text-white">
-                        {sale.saleNumber}
-                      </h3>
-                    </div>
+
+                    <h3 className="text-sm font-semibold text-slate-800 dark:text-white">
+                      {sale.saleNumber}
+                    </h3>
                   </div>
                 </td>
 
-                {/* CUSTOMER */}
+                {/* Cliente */}
                 <td className="px-6 py-5">
-                  <div>
-                    <p className="text-sm font-medium text-slate-900 dark:text-white">
-                      {sale.customer?.name || "Cliente General"}
-                    </p>
-                  </div>
+                  <p className="text-sm font-medium text-slate-900 dark:text-white">
+                    {sale.customer?.name || "Cliente General"}
+                  </p>
                 </td>
 
-                {/* SUBTOTAL */}
+                {/* Subtotal */}
                 <td className="px-6 py-5 text-sm">
                   {formatPrice(sale.subtotal)}
                 </td>
 
-                {/* DISCOUNT */}
+                {/* Descuento */}
                 <td className="px-6 py-5 text-sm">
                   {formatPrice(sale.discount)}
                 </td>
 
-                {/* TOTAL */}
+                {/* Total */}
                 <td className="px-6 py-5">
                   <span className="text-sm font-bold text-slate-900 dark:text-white">
                     {formatPrice(sale.total)}
                   </span>
                 </td>
 
-                {/* PRODUCTS BUTTON */}
+                {/* Productos */}
                 <td className="px-6 py-5">
-                  <ModernButton
-                    type="button"
-                    icon={Eye}
-                    variant="secondary"
-                    text={`${sale.details?.length || 0} Productos`}
-                    onClick={() => onView?.(sale)} // <-- CORREGIDO: Abre también el modal de lectura
-                  />
+                  {readOnly ? (
+                    <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                      {sale.details?.length || 0} Productos
+                    </span>
+                  ) : (
+                    <ModernButton
+                      type="button"
+                      icon={Eye}
+                      variant="secondary"
+                      text={`${sale.details?.length || 0} Productos`}
+                      onClick={() => onView?.(sale)}
+                    />
+                  )}
                 </td>
 
-                {/* STATUS */}
+                {/* Estado */}
                 <td className="px-6 py-5">
                   <span
                     className={`
@@ -237,30 +226,33 @@ export default function SalesTable({
                   </span>
                 </td>
 
-                {/* ACTIONS DROP-DOWN */}
-                <td className="px-6 py-5">
-                  {/* Conectamos SaleActions con todos los modales de la página base */}
-                  <SaleActions
-                    sale={sale}
-                    onView={onView}
-                    onPayment={onPayment}
-                    onCancel={onCancel}
-                    onReturn={onReturn}
-                    onPrint={onPrint}
-                  />
-                </td>
+                {/* Acciones */}
+                {!readOnly && (
+                  <td className="px-6 py-5">
+                    <SaleActions
+                      sale={sale}
+                      onView={onView}
+                      onPayment={onPayment}
+                      onCancel={onCancel}
+                      onReturn={onReturn}
+                      onPrint={onPrint}
+                    />
+                  </td>
+                )}
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan={8} className="px-6 py-16 text-center">
+              <td colSpan={readOnly ? 7 : 8} className="px-6 py-16 text-center">
                 <div className="flex flex-col items-center">
                   <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-100 dark:bg-slate-800">
                     <ShoppingCart className="h-8 w-8 text-slate-400" />
                   </div>
+
                   <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200">
                     No hay ventas
                   </h3>
+
                   <p className="mt-1 text-sm text-slate-500">
                     Empieza registrando tu primera venta.
                   </p>

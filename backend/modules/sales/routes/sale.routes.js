@@ -25,6 +25,10 @@ const {
   getDailySalesController,
 
   getTopProductsController,
+  downloadDailySalesPDFController,
+  downloadDailySalesExcelController,
+  downloadTopProductsPDFController,
+  downloadTopProductsExcelController,
 
 } = require("../controllers/sale.controller");
 
@@ -71,6 +75,20 @@ router.get(
   getDailySalesController
 );
 
+// DOWNLOAD: PDF
+router.get(
+  "/reports/daily/pdf",
+  authMiddleware,
+  downloadDailySalesPDFController
+);
+
+// DOWNLOAD: EXCEL
+router.get(
+  "/reports/daily/excel",
+  authMiddleware,
+  downloadDailySalesExcelController
+);
+
 // ========================================
 // TOP PRODUCTS
 // ========================================
@@ -79,6 +97,20 @@ router.get(
   "/reports/top-products",
   authMiddleware,
   getTopProductsController
+);
+
+// DOWNLOAD: TOP PRODUCTS PDF
+router.get(
+  "/reports/top-products/pdf",
+  authMiddleware,
+  downloadTopProductsPDFController
+);
+
+// DOWNLOAD: TOP PRODUCTS EXCEL
+router.get(
+  "/reports/top-products/excel",
+  authMiddleware,
+  downloadTopProductsExcelController
 );
 
 // ========================================

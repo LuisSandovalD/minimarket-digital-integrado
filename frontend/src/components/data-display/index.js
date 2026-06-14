@@ -1,4 +1,4 @@
-export * from "./charts/BarChart";
+export * from "./charts";
 export * from "./date";
 
 export * from "./page-header";
