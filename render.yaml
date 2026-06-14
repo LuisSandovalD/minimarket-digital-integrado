@@ -1,0 +1,26 @@
+# Exported from Render on 2026-06-14T16:08:10Z
+version: "1"
+projects:
+- name: My project
+  environments:
+  - name: Production
+    services:
+    - type: web
+      name: minimarket-digital-api
+      runtime: node
+      repo: https://github.com/LuisSandovalD/minimarket-digital-integrado
+      plan: free
+      envVars:
+      - key: PORT
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      region: oregon
+      buildCommand: npm install && npx prisma generate
+      startCommand: npm start
+      autoDeployTrigger: commit
+      rootDir: backend
+      previews:
+        generation: automatic
