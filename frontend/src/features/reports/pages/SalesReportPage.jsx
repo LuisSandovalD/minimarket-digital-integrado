@@ -5,8 +5,8 @@
 import SaleTable from "../../sales/components/SaleTable";
 
 import {
-    getDailySalesReport,
-    getSales,
+  getDailySalesReport,
+  getSales,
 } from "../../sales/services/sale.service";
 
 import { SkeletonTable } from "@/components/skeletons";

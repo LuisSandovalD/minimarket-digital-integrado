@@ -12,7 +12,7 @@ const {
 
     getSaleDetailsByProduct,
 
-} = require("../services/saledetail.service");
+} = require("../services/saleDetail.service");
 
 // ========================================
 // GET ALL

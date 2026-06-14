@@ -38,6 +38,7 @@ export default function useDashboard() {
   }, [period, startDate, endDate]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadDashboard();
   }, [loadDashboard]);
 
