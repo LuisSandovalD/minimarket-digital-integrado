@@ -1,14 +1,21 @@
+// ========================================
+// stores/accountStore.js (Zustand)
+// ========================================
 import { create } from "zustand";
 
 import {
-  getMyAccount,
-  updateMyAccount,
   changePassword,
-  deleteMyAccount,
-  getSessions,
   closeSession as closeSessionService,
-  toggleTwoFactor,
+  deleteMyAccount,
+  disableTwoFactor as disable2FAService,
+  enableTwoFactor as enable2FAService,
+  getMyAccount,
+  getSessions,
+  setupTwoFactor as setup2FAService,
+  updateMyAccount,
 } from "../services/account.service";
+
+import { mapAccount, mapUserSession } from "../utils/account.mapper";
 
 const useAccountStore = create((set, get) => ({
   /* =========================
@@ -25,16 +32,15 @@ const useAccountStore = create((set, get) => ({
   error: null,
 
   /* =========================
-   * ACCOUNT
+   * ACCOUNT ACTIONS
    * ========================= */
 
   fetchAccount: async () => {
     set({ loading: true, error: null });
-
     try {
-      const user = await getMyAccount();
-
-      set({ user, loading: false });
+      const rawUser = await getMyAccount();
+      // Aplana y estandariza la estructura del usuario (roles, compañía, sucursales)
+      set({ user: mapAccount(rawUser), loading: false });
     } catch (error) {
       set({
         loading: false,
@@ -45,34 +51,29 @@ const useAccountStore = create((set, get) => ({
 
   updateProfile: async (data) => {
     set({ saving: true, error: null });
-
     try {
       const response = await updateMyAccount(data);
+      const rawUser = response.user || response.data?.user || response.data;
 
       set({
-        user: response.user,
+        user: mapAccount(rawUser),
         saving: false,
       });
-
       return response;
     } catch (error) {
       set({
         saving: false,
         error: error?.response?.data?.message || "Error actualizando perfil",
       });
-
       throw error;
     }
   },
 
   updatePassword: async (data) => {
     set({ passwordLoading: true, error: null });
-
     try {
       const response = await changePassword(data);
-
       set({ passwordLoading: false });
-
       return response;
     } catch (error) {
       set({
@@ -80,23 +81,26 @@ const useAccountStore = create((set, get) => ({
         error:
           error?.response?.data?.message || "Error actualizando contraseña",
       });
-
       throw error;
     }
   },
 
   /* =========================
-   * SESSIONS
+   * SESSIONS ACTIONS
    * ========================= */
 
   fetchSessions: async () => {
     set({ sessionsLoading: true, error: null });
-
     try {
-      const sessions = await getSessions();
+      const rawSessions = await getSessions();
+
+      // Procesa cada sesión transformando el User-Agent crudo en texto amigable para la UI
+      const normalizedSessions = Array.isArray(rawSessions)
+        ? rawSessions.map(mapUserSession)
+        : [];
 
       set({
-        sessions,
+        sessions: normalizedSessions,
         sessionsLoading: false,
       });
     } catch (error) {
@@ -111,37 +115,49 @@ const useAccountStore = create((set, get) => ({
     try {
       await closeSessionService(sessionId);
 
+      // Remoción reactiva optimista filtrando el ID entero de la sesión revocada
       set({
-        sessions: get().sessions.filter((s) => s.id !== sessionId),
+        sessions: get().sessions.filter(
+          (s) => s.id !== sessionId && s.sessionId !== sessionId,
+        ),
       });
     } catch (error) {
       set({
         error: error?.response?.data?.message || "Error cerrando sesión",
       });
+      throw error;
     }
   },
 
   /* =========================
-   * 🔐 2FA FIXED
+   * 🔐 TWO FACTOR AUTH (2FA)
    * ========================= */
 
-  toggleTwoFactor: async (enable) => {
+  setupTwoFactor: async () => {
     set({ twoFactorLoading: true, error: null });
-
     try {
-      // 🔥 AQUÍ SE ENVÍA EL BODY CORRECTAMENTE
-      const response = await toggleTwoFactor({
-        enabled: enable,
+      const response = await setup2FAService();
+      set({ twoFactorLoading: false });
+      return response; // Entrega { success, secret, qrCode } al componente visual
+    } catch (error) {
+      set({
+        twoFactorLoading: false,
+        error:
+          error?.response?.data?.message ||
+          "Error al iniciar configuración 2FA",
       });
+      throw error;
+    }
+  },
 
+  enableTwoFactor: async (token) => {
+    set({ twoFactorLoading: true, error: null });
+    try {
+      const response = await enable2FAService(token);
+
+      // Activa de inmediato el flag reactivo en la sesión del usuario actual
       set((state) => ({
-        user: state.user
-          ? {
-              ...state.user,
-              twoFactorEnabled: response.twoFactorEnabled ?? enable,
-            }
-          : state.user,
-
+        user: state.user ? { ...state.user, twoFactorEnabled: true } : null,
         twoFactorLoading: false,
       }));
 
@@ -149,9 +165,28 @@ const useAccountStore = create((set, get) => ({
     } catch (error) {
       set({
         twoFactorLoading: false,
-        error: error?.response?.data?.message || "Error actualizando 2FA",
+        error: error?.response?.data?.message || "Error al activar 2FA",
       });
+      throw error;
+    }
+  },
 
+  disableTwoFactor: async (password) => {
+    set({ twoFactorLoading: true, error: null });
+    try {
+      const response = await disable2FAService(password);
+
+      set((state) => ({
+        user: state.user ? { ...state.user, twoFactorEnabled: false } : null,
+        twoFactorLoading: false,
+      }));
+
+      return response;
+    } catch (error) {
+      set({
+        twoFactorLoading: false,
+        error: error?.response?.data?.message || "Error al desactivar 2FA",
+      });
       throw error;
     }
   },
@@ -160,14 +195,15 @@ const useAccountStore = create((set, get) => ({
    * DELETE ACCOUNT
    * ========================= */
 
-  removeAccount: async () => {
+  removeAccount: async (password) => {
     set({ deleteLoading: true, error: null });
-
     try {
-      const response = await deleteMyAccount();
+      const response = await deleteMyAccount(password);
 
+      // Destrucción total de los estados de sesión local al darse de baja
       set({
         user: null,
+        sessions: [],
         deleteLoading: false,
       });
 
@@ -177,13 +213,12 @@ const useAccountStore = create((set, get) => ({
         deleteLoading: false,
         error: error?.response?.data?.message || "Error eliminando cuenta",
       });
-
       throw error;
     }
   },
 
   /* =========================
-   * CLEAR
+   * CLEAR STORE
    * ========================= */
 
   clearAccount: () => {

@@ -2,73 +2,86 @@
 // services/user.service.js
 // ========================================
 
-const bcrypt =
-  require("bcryptjs");
+const bcrypt = require("bcryptjs");
 
-const repository =
-  require("../repositories/auth.repository");
+// Importación explícita de los sub-repositorios especializados necesarios
+const userRepository = require("../repositories/user.repository");
+const userAuthRepository = require("../repositories/user-auth.repository");
 
-const {
-  SALT_ROUNDS,
-} = require("../constants/auth.constants");
-
-/* ======================================
- * SANITIZE USER
- * ==================================== */
-
-exports.sanitizeUser =
-  (user) => {
-
-    if (!user) {
-      return null;
-    }
-
-    delete user.password;
-
-    return user;
-
-  };
+const config = require("../config/auth.config");
+const { sanitizeUser: runSanitizer } = require("../utils/sanitizers/user.sanitizer");
 
 /* ======================================
- * VALIDATE PASSWORD
+ * UTILIDADES DE CONTRASEÑA
  * ==================================== */
+const hashPassword = async (password) => {
+    return bcrypt.hash(password, config.SALT_ROUNDS);
+};
 
-exports.validatePassword =
-  async (
-    password,
-    hashedPassword
-  ) => {
-
-    return await bcrypt.compare(
-      password,
-      hashedPassword
-    );
-
-  };
+const validatePassword = async (password, hashedPassword) => {
+    return bcrypt.compare(password, hashedPassword);
+};
 
 /* ======================================
- * HASH PASSWORD
+ * CREAR USUARIO
  * ==================================== */
-
-exports.hashPassword =
-  async (password) => {
-
-    return await bcrypt.hash(
-      password,
-      SALT_ROUNDS
-    );
-
-  };
+const createUser = async (data) => {
+    return userRepository.createUser({
+        name: data.name.trim(),
+        email: data.email.trim().toLowerCase(),
+        password: data.password,
+        role: data.role,
+        phone: data.phone,
+        companyId: data.companyId,
+        branchId: data.branchId,
+        isActive: true,
+        isDeleted: false,
+        loginAttempts: 0,
+        twoFactorEnabled: false,
+    });
+};
 
 /* ======================================
- * CREATE USER
+ * BUSQUEDAS
  * ==================================== */
+const findUserById = async (id) => {
+    return userRepository.findUserById(id);
+};
 
-exports.createUser =
-  async (data) => {
+const findUserByEmail = async (email) => {
+    return userRepository.findUserByEmail(email);
+};
 
-    return await repository.createUser(
-      data
-    );
+/* ======================================
+ * ACTUALIZACIONES
+ * ==================================== */
+const updateUser = async (id, data) => {
+    return userRepository.updateUser(id, data);
+};
 
-  };
+const updatePassword = async (id, password) => {
+    // Generamos el hash de forma segura con la función utilitaria local
+    const hashedPassword = await hashPassword(password);
+
+    // Apuntamos al repositorio especializado en seguridad/autenticación de usuario
+    return userAuthRepository.updatePassword(id, hashedPassword);
+};
+
+/* ======================================
+ * SANITIZACIÓN
+ * ==================================== */
+const sanitizeUser = (user) => {
+    return runSanitizer(user);
+};
+
+// EXPORTACIÓN UNIFICADA: Garantiza estabilidad total al desestructurar en controladores
+module.exports = {
+    hashPassword,
+    validatePassword,
+    createUser,
+    findUserById,
+    findUserByEmail,
+    updateUser,
+    updatePassword,
+    sanitizeUser
+};

@@ -1,28 +1,30 @@
-const alertService =
-    require("../services/alert.service");
+// ============================================================================
+// controllers/alert.controller.js
+// ============================================================================
+const alertService = require("../services/alert.service");
+const { dashboardFilter } = require("../filters/dashboard.filter");
 
-exports.getAlerts =
-    async (req, res, next) => {
+exports.getAlerts = async (req, res, next) => {
+    try {
+        // Extracción segura del tenant (companyId) y el rol asignado
+        const { companyId, role } = req.user;
 
-        try {
+        // Procesamos el filtro de fechas (que por defecto usará 'TODAY')
+        const dateFilter = dashboardFilter(req.query);
 
-            const companyId =
-                req.user.companyId;
+        // Solicitamos las alertas pasando el rol y las fechas para segmentar correctamente
+        const alerts = await alertService.getAlerts(
+            companyId,
+            dateFilter,
+            role
+        );
 
-            const alerts =
-                await alertService
-                    .getAlerts(
-                        companyId
-                    );
+        return res.status(200).json({
+            success: true,
+            data: alerts
+        });
 
-            return res.status(200)
-                .json({
-                    success: true,
-                    data: alerts
-                });
-
-        } catch (error) {
-            next(error);
-        }
-
-    };
+    } catch (error) {
+        next(error);
+    }
+};

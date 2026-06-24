@@ -2,84 +2,98 @@
 // guards/RequireAuth.jsx
 // ========================================
 
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { Navigate, Outlet, useParams } from "react-router-dom";
 
 import useAuth from "../hooks/useAuth";
 
-import { getToken, getSession, saveSession } from "../services/session.service";
+import { getSession, getToken, saveSession } from "../services/session.service";
+
+import { loginSuccess } from "../store/authSlice";
 
 export default function RequireAuth() {
+  const dispatch = useDispatch();
+
   const { isAuthenticated, loading, user } = useAuth();
 
   const { companySlug } = useParams();
 
-  // ======================================
-  // SESSION
-  // ======================================
+  const [initialized, setInitialized] = useState(false);
+
+  /* ======================================
+   * RESTORE SESSION
+   * ==================================== */
+  useEffect(() => {
+    const token = getToken();
+
+    const session = getSession();
+
+    if (!isAuthenticated && token && session?.user) {
+      dispatch(
+        loginSuccess({
+          user: session.user,
+        }),
+      );
+    }
+
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setInitialized(true);
+  }, [dispatch, isAuthenticated]);
 
   const token = getToken();
 
   const session = getSession();
 
-  // ======================================
-  // SAFE COMPANY SLUG
-  // ======================================
+  const sessionCompanySlug =
+    session?.user?.company?.slug || session?.company?.slug || "";
 
-  const sessionCompanySlug = session?.company?.slug || "";
+  /* ======================================
+   * SYNC USER DATA
+   * ==================================== */
+  useEffect(() => {
+    if (user && session?.user) {
+      saveSession({
+        ...session,
 
-  // ======================================
-  // SYNC USER DATA
-  // ======================================
-
-  if (user && session?.user) {
-    const updatedSession = {
-      ...session,
-
-      user: {
-        ...session.user,
-
-        ...user,
-
-        avatar: user.avatar || session.user?.avatar || null,
-      },
-    };
-
-    // Guardar sesión actualizada
-    saveSession(updatedSession);
-  }
-
-  // ======================================
-  // LOADING
-  // ======================================
-
-  if (loading) {
-    // Permitir render mientras verifica
-    if (token) {
-      return <Outlet />;
+        user: {
+          ...session.user,
+          ...user,
+        },
+      });
     }
+  }, [user]);
 
-    return null;
+  /* ======================================
+   * LOADING
+   * ==================================== */
+  if (loading || !initialized) {
+    return (
+      <div className="flex h-screen w-screen items-center justify-center">
+        <div className="h-10 w-10 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+      </div>
+    );
   }
 
-  // ======================================
-  // NOT AUTHENTICATED
-  // ======================================
-
-  if (!isAuthenticated && !token) {
+  /* ======================================
+   * NO SESSION
+   * ==================================== */
+  if (!token) {
+    // IMPORTANTE:
+    // Cambia "/" por la ruta pública real
+    // donde muestras tu modal de login.
     return <Navigate to="/" replace />;
   }
 
-  // ======================================
-  // INVALID COMPANY
-  // ======================================
-
-  if (companySlug && sessionCompanySlug && sessionCompanySlug !== companySlug) {
+  /* ======================================
+   * MULTI-TENANT PROTECTION
+   * ==================================== */
+  if (companySlug && sessionCompanySlug && companySlug !== sessionCompanySlug) {
     return <Navigate to={`/${sessionCompanySlug}/dashboard`} replace />;
   }
 
-  // ======================================
-  // AUTHORIZED
-  // ======================================
-
+  /* ======================================
+   * AUTHORIZED
+   * ==================================== */
   return <Outlet />;
 }

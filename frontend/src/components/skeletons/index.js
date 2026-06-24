@@ -1,3 +1,6 @@
+export { default as AsideHeaderSkeleton } from "./AsideHeaderSkeleton";
+export { default as AsideNavigationSkeleton } from "./AsideNavigationSkeleton";
+export { default as LoadingSpinner } from "./LoadingSpinner";
 export { default as SkeletonCard } from "./SkeletonCard";
 export { default as SkeletonChart } from "./SkeletonChart";
 export { default as SkeletonForm } from "./SkeletonForm";
@@ -6,3 +9,5 @@ export { default as SkeletonModal } from "./SkeletonModal";
 export { default as SkeletonSearch } from "./SkeletonSearch";
 export { default as SkeletonStats } from "./SkeletonStats";
 export { default as SkeletonTable } from "./SkeletonTable";
+export { default as UserAvatarSkeleton } from "./UserAvatarSkeleton";
+

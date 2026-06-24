@@ -1,3 +1,7 @@
+// ========================================
+// App.jsx
+// ========================================
+
 import { useCallback, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { BrowserRouter, useRoutes } from "react-router-dom";
@@ -5,7 +9,12 @@ import { BrowserRouter, useRoutes } from "react-router-dom";
 import { routes } from "./routes/routes";
 
 import { meService } from "./features/auth/services/auth.service";
-import { loginSuccess, logoutAction } from "./features/auth/store/authActions";
+
+import {
+  loginSuccess,
+  logout,
+  setLoading,
+} from "./features/auth/store/authSlice";
 
 import {
   clearSession,
@@ -19,15 +28,26 @@ export default function App() {
     try {
       const response = await meService();
 
-      if (response?.user) {
-        dispatch(loginSuccess(response.user));
+      if (response?.success && response?.id) {
+        dispatch(loginSuccess(response));
       } else {
+        console.warn("⚠️ Sesión inválida");
+
         clearSession();
-        dispatch(logoutAction());
+
+        dispatch(logout());
       }
     } catch (error) {
+      console.error(
+        "❌ Error verificando sesión:",
+        error?.response?.data || error.message,
+      );
+
       clearSession();
-      dispatch(logoutAction());
+
+      dispatch(logout());
+    } finally {
+      dispatch(setLoading(false));
     }
   }, [dispatch]);
 
@@ -35,8 +55,10 @@ export default function App() {
     const token = getToken();
 
     if (!token) {
-      clearSession();
-      dispatch(logoutAction());
+      dispatch(logout());
+
+      dispatch(setLoading(false));
+
       return;
     }
 

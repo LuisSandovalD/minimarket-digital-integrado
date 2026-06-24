@@ -1,58 +1,22 @@
 const express = require("express");
-
-const {
-  getConfiguration,
-  updateConfiguration,
-} = require(
-  "../controllers/configuration.controller"
-);
-
-const validate = require(
-  "../middlewares/validate"
-);
-
-// ==========================================
-// MIDDLEWARE DE AUTENTICACIÓN
-// Se encarga de verificar el JWT y crear req.user
-// ==========================================
-
-const authMiddleware = require(
-  "../../auth/middlewares/auth.middleware"
-);
-
-const {
-  updateConfigurationSchema,
-} = require(
-  "../validators/configuration.validation"
-);
-
 const router = express.Router();
 
-// ==========================================
-// GET CONFIGURATION
-// Obtiene la configuración de la empresa
-// del usuario autenticado
-// ==========================================
+// 1. Controladores
+const { getConfiguration, updateConfiguration } = require("../controllers/configuration.controller");
 
-router.get(
-  "/",
-  authMiddleware,
-  getConfiguration
-);
+// 2. Middlewares
+const validate = require("../middlewares/validate");
 
-// ==========================================
-// UPDATE CONFIGURATION
-// Actualiza la configuración de la empresa
-// del usuario autenticado
-// ==========================================
+// 🔑 IMPORTACIÓN SEGURA EN DOS PASOS:
+// Primero importamos el objeto completo del módulo de auth
+const authModule = require("../../auth/middlewares/auth.middleware");
+// Segundo, extraemos la función callback (mira cómo se llama en tu archivo: verifyToken, protect, o auth)
+const verifyToken = authModule.verifyToken || authModule.protect || authModule;
 
-router.put(
-  "/",
-  authMiddleware,
-  validate(
-    updateConfigurationSchema
-  ),
-  updateConfiguration
-);
+const { updateConfigurationSchema } = require("../validators/configuration.validation");
+
+// Rutas protegidas pasando la función callback real
+router.get("/", verifyToken, getConfiguration);
+router.put("/", verifyToken, validate(updateConfigurationSchema), updateConfiguration);
 
 module.exports = router;

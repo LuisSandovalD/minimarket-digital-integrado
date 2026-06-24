@@ -12,6 +12,7 @@ import BranchHeader from "../components/BranchHeader";
 
 import BranchEmpty from "../components/BranchEmpty";
 
+import BranchLoading from "../components/BranchLoading";
 import BranchModal from "../components/BranchModal";
 
 export default function BranchesPage() {
@@ -72,26 +73,7 @@ export default function BranchesPage() {
    * ====================================== */
 
   if (loading) {
-    return (
-      <div
-        className="
-          flex
-          min-h-[300px]
-          items-center
-          justify-center
-        "
-      >
-        <p
-          className="
-            text-sm
-            text-slate-500
-            dark:text-slate-400
-          "
-        >
-          Cargando sucursales...
-        </p>
-      </div>
-    );
+    return <BranchLoading />;
   }
 
   /* ========================================

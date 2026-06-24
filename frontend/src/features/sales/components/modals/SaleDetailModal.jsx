@@ -1,397 +1,306 @@
 // ========================================
-// features/sales/components/modals/SaleDetailModal.jsx
+// features/sales/components/SaleDetailModal.jsx
 // ========================================
-
 import {
   Banknote,
-  CheckCircle,
-  Clock,
-  CreditCard,
+  Calendar,
   FileText,
-  Landmark,
   Package,
   Receipt,
-  Smartphone,
   User,
-  XCircle,
 } from "lucide-react";
 
 import { ModernButton } from "@/components/buttons";
-import { FooterModal, HeaderModal, Modal } from "@/components/overlays";
+import { FooterModal, HeaderModal, Modal } from "@/components/overlays/";
 
-// ─── helpers ─────────────────────────────────────────────────────────────────
-
-const formatPrice = (value) =>
+// Formateadores de ayuda locales
+const fPrice = (v) =>
   new Intl.NumberFormat("es-PE", { style: "currency", currency: "PEN" }).format(
-    Number(value || 0),
+    Number(v || 0),
   );
 
-const formatDate = (dateString) => {
-  if (!dateString) return "-";
-  return new Date(dateString).toLocaleDateString("es-PE", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-};
+const fDate = (d) =>
+  d
+    ? new Date(d).toLocaleDateString("es-PE", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      })
+    : "—";
 
-// ─── estado de la venta ───────────────────────────────────────────────────────
-
-const STATUS_CONFIG = {
+const STATUS_MAP = {
   COMPLETED: {
     label: "Completada",
-    icon: CheckCircle,
-    className:
-      "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/30 dark:text-emerald-400 dark:border-emerald-900/50",
+    dot: "bg-emerald-500",
+    style:
+      "text-emerald-700 bg-emerald-50 border-emerald-200 dark:text-emerald-400 dark:bg-emerald-950/30 dark:border-emerald-900/50",
   },
   PENDING: {
     label: "Pendiente",
-    icon: Clock,
-    className:
-      "bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/30 dark:text-amber-400 dark:border-amber-900/50",
+    dot: "bg-blue-500",
+    style:
+      "text-blue-700 bg-blue-50 border-blue-200 dark:text-blue-400 dark:bg-blue-950/30 dark:border-blue-900/50",
   },
-  CANCELLED: {
-    label: "Cancelada",
-    icon: XCircle,
-    className:
-      "bg-red-50 text-red-700 border-red-200 dark:bg-red-950/30 dark:text-red-400 dark:border-red-900/50",
+  CREDIT_PENDING: {
+    label: "Crédito Pendiente",
+    dot: "bg-amber-500",
+    style:
+      "text-amber-700 bg-amber-50 border-amber-200 dark:text-amber-400 dark:bg-amber-950/30 dark:border-amber-900/50",
+  },
+  CANCELED: {
+    label: "Anulada",
+    dot: "bg-rose-500",
+    style:
+      "text-rose-600 bg-rose-50 border-rose-200 dark:text-rose-400 dark:bg-rose-950/30 dark:border-rose-900/50",
+  },
+  RETURNED: {
+    label: "Devuelta",
+    dot: "bg-indigo-500",
+    style:
+      "text-indigo-600 bg-indigo-50 border-indigo-200 dark:text-indigo-400 dark:bg-indigo-950/30 dark:border-indigo-900/50",
+  },
+  ARCHIVED: {
+    label: "Archivada",
+    dot: "bg-zinc-400",
+    style:
+      "text-zinc-600 bg-zinc-50 border-zinc-200 dark:text-zinc-400 dark:bg-zinc-950/30 dark:border-zinc-900/50",
+  },
+  DRAFT: {
+    label: "Borrador",
+    dot: "bg-slate-400",
+    style:
+      "text-slate-600 bg-slate-50 border-slate-200 dark:text-slate-400 dark:bg-slate-950/30 dark:border-zinc-900/50",
   },
 };
-
-// ─── método de pago ───────────────────────────────────────────────────────────
-
-const PAYMENT_METHOD_CONFIG = {
-  CASH: { label: "Efectivo", icon: Banknote },
-  CARD: { label: "Tarjeta", icon: CreditCard },
-  WALLET: { label: "Billetera digital", icon: Smartphone },
-  TRANSFER: { label: "Transferencia", icon: Landmark },
-};
-
-// ─── tipo de venta ────────────────────────────────────────────────────────────
-
-const SALE_TYPE_CONFIG = {
-  CASH_SALE: {
-    label: "Venta al contado",
-    badge: "bg-blue-50 text-blue-700 dark:bg-blue-950/30 dark:text-blue-400",
-  },
-  CREDIT_SALE: {
-    label: "Venta a crédito",
-    badge:
-      "bg-purple-50 text-purple-700 dark:bg-purple-950/30 dark:text-purple-400",
-  },
-};
-
-// ─── componente ──────────────────────────────────────────────────────────────
 
 export default function SaleDetailModal({ open, onClose, sale }) {
   if (!open || !sale) return null;
 
-  const statusCfg = STATUS_CONFIG[sale.status] ?? {
-    label: sale.status ?? "-",
-    icon: Clock,
-    className:
-      "bg-slate-50 text-slate-600 border-slate-200 dark:bg-slate-900 dark:text-slate-400",
+  const currentStatus = STATUS_MAP[sale.status] || {
+    label: sale.status,
+    dot: "bg-slate-400",
+    style: "text-slate-600 bg-slate-50 border-slate-200",
   };
-  const StatusIcon = statusCfg.icon;
 
-  const saleTypeCfg = SALE_TYPE_CONFIG[sale.saleType] ?? null;
-  const payments = sale.payments ?? [];
+  const items = sale.details || [];
+  const payments = sale.payments || [];
+
+  // Cálculos de Caja Reales para lectura
+  const totalPagado = payments.reduce(
+    (sum, p) => sum + Number(p.amount || 0),
+    0,
+  );
+  const totalVenta = Number(sale.total || 0);
+  const saldoPendiente = totalVenta - totalPagado;
+
+  const isCredit = sale.status === "CREDIT_PENDING" || saldoPendiente > 0;
+  const paymentWithDueDate = payments.find((p) => p.dueDate);
+  const creditDueDate = paymentWithDueDate ? paymentWithDueDate.dueDate : null;
 
   return (
     <Modal open={open} onClose={onClose} size="full">
       <HeaderModal
-        title={
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600 dark:bg-blue-950/50 dark:text-blue-400">
-              <Receipt size={20} />
-            </div>
-            <div>
-              <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-                Detalle de Venta
-              </h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                Código único:{" "}
-                <span className="font-mono font-semibold text-slate-700 dark:text-slate-300">
-                  {sale.saleNumber}
-                </span>
-              </p>
-            </div>
-          </div>
-        }
         onClose={onClose}
-        subtitle=""
-        customHeader
+        title={`Venta N° ${sale.saleNumber}`}
+        subtitle="Consulta de Control Interno"
+        icon={Receipt}
       />
 
-      <div className="p-6 space-y-6 overflow-y-auto max-h-[75vh]">
-        {/* ── ESTADO + TIPO DE VENTA ─────────────────────────────────────── */}
-        <div className="flex flex-wrap items-center gap-3">
-          {/* Estado */}
-          <div
-            className={`inline-flex items-center gap-2 rounded-xl border px-3 py-1.5 text-sm font-semibold ${statusCfg.className}`}
+      <div className="p-4 space-y-4 max-h-[70vh] overflow-y-auto text-xs text-slate-600 dark:text-slate-300">
+        {/* Barra de Estados Informativos */}
+        <div className="flex flex-wrap items-center gap-3 border-b pb-3 dark:border-slate-800">
+          <span
+            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md font-semibold text-[11px] border shadow-sm tracking-wide ${currentStatus.style}`}
           >
-            <StatusIcon size={15} />
-            {statusCfg.label}
-          </div>
+            <span className={`w-1.5 h-1.5 rounded-full ${currentStatus.dot}`} />
+            {currentStatus.label.toUpperCase()}
+          </span>
 
-          {/* Tipo de venta */}
-          {saleTypeCfg && (
-            <span
-              className={`inline-flex items-center rounded-xl px-3 py-1.5 text-sm font-semibold ${saleTypeCfg.badge}`}
-            >
-              {saleTypeCfg.label}
-            </span>
-          )}
+          <span className="text-slate-300 dark:text-slate-700 font-light">
+            |
+          </span>
 
-          {/* Fecha de vencimiento crédito */}
-          {sale.saleType === "CREDIT_SALE" && sale.creditDueDate && (
-            <span className="text-xs text-slate-500">
-              Vence:{" "}
-              <span className="font-medium text-slate-700 dark:text-slate-300">
-                {formatDate(sale.creditDueDate)}
-              </span>
+          <span
+            className={`inline-flex items-center px-2.5 py-1 rounded-md font-bold text-[11px] border shadow-sm ${
+              isCredit
+                ? "bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/20 dark:text-amber-400 dark:border-amber-900/50"
+                : "bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/20 dark:text-blue-400 dark:border-blue-900/50"
+            }`}
+          >
+            {isCredit ? "CRÉDITO" : "CONTADO"}
+          </span>
+
+          {isCredit && creditDueDate && (
+            <span className="text-slate-400 dark:text-slate-500 flex items-center gap-1 font-medium text-[11px]">
+              <Calendar size={13} /> Vence: {fDate(creditDueDate)}
             </span>
           )}
         </div>
 
-        {/* ── METADATA GENERAL Y CLIENTE ────────────────────────────────── */}
+        {/* Panel de Datos Generales */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Información General */}
-          <div className="rounded-xl border border-slate-100 bg-slate-50/50 p-4 dark:border-slate-900 dark:bg-slate-900/30">
-            <h4 className="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-400">
-              <FileText size={14} /> Información General
-            </h4>
-            <div className="space-y-2.5 text-sm">
-              <div className="flex justify-between">
-                <span className="text-slate-500">Fecha de emisión:</span>
-                <span className="font-medium text-slate-800 dark:text-slate-200">
-                  {formatDate(sale.createdAt)}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-slate-500">Sucursal:</span>
-                <span className="font-medium text-slate-800 dark:text-slate-200">
-                  {sale.branch?.name || "-"}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-slate-500">Vendedor:</span>
-                <span className="font-medium text-slate-800 dark:text-slate-200">
-                  {sale.seller?.name || "Sistema"}
-                </span>
-              </div>
+          <div className="space-y-1.5 bg-slate-50/50 dark:bg-slate-900/30 p-3 rounded-xl border dark:border-slate-800">
+            <div className="flex justify-between border-b pb-1 dark:border-slate-800 font-semibold text-slate-400 uppercase text-[10px]">
+              <span>Información General</span>
+              <FileText size={12} />
+            </div>
+            <div className="flex justify-between">
+              <span>Emisión:</span>
+              <span className="font-medium text-slate-800 dark:text-slate-200">
+                {fDate(sale.createdAt)}
+              </span>
+            </div>
+            <div className="flex justify-between">
+              <span>Sucursal:</span>
+              <span className="font-medium text-slate-800 dark:text-slate-200">
+                {sale.branch?.name || `ID: ${sale.branchId}`}
+              </span>
+            </div>
+            <div className="flex justify-between">
+              <span>Atendido por:</span>
+              <span className="font-medium text-slate-800 dark:text-slate-200">
+                {sale.seller?.name || `ID: ${sale.sellerId}`}
+              </span>
             </div>
           </div>
 
-          {/* Cliente */}
-          <div className="rounded-xl border border-slate-100 bg-slate-50/50 p-4 dark:border-slate-900 dark:bg-slate-900/30">
-            <h4 className="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-400">
-              <User size={14} /> Cliente
-            </h4>
-            <div className="space-y-2.5 text-sm">
-              <div>
-                <span className="text-xs text-slate-400 block">
-                  Nombre o Razón Social
-                </span>
-                <span className="font-semibold text-slate-800 dark:text-slate-200">
-                  {sale.customer?.name || "Cliente General"}
+          <div className="space-y-1.5 bg-slate-50/50 dark:bg-slate-900/30 p-3 rounded-xl border dark:border-slate-800">
+            <div className="flex justify-between border-b pb-1 dark:border-slate-800 font-semibold text-slate-400 uppercase text-[10px]">
+              <span>Cliente</span>
+              <User size={12} />
+            </div>
+            <p className="font-bold text-slate-800 dark:text-slate-100">
+              {sale.customer?.name || "Cliente General (Venta Directa)"}
+            </p>
+            {sale.customer?.documentNumber && (
+              <p className="font-mono text-slate-400 text-[11px]">
+                {sale.customer.documentType || "DOC"}:{" "}
+                {sale.customer.documentNumber}
+              </p>
+            )}
+            {Number(sale.customer?.currentDebt || 0) > 0 && (
+              <div className="flex justify-between pt-1 text-rose-500 font-semibold border-t border-dashed dark:border-slate-800 mt-1">
+                <span>Deuda en Cuenta Corriente:</span>
+                <span>{fPrice(sale.customer.currentDebt)}</span>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Listado de Artículos Vendidos */}
+        <div className="border dark:border-slate-800 rounded-xl overflow-hidden shadow-sm">
+          <div className="p-2.5 bg-slate-50 dark:bg-slate-900/60 border-b dark:border-slate-800 flex items-center gap-1.5 font-bold uppercase tracking-wider text-[10px] text-slate-400">
+            <Package size={12} /> Artículos registrados
+          </div>
+          <div className="divide-y dark:divide-slate-800 px-3 bg-white dark:bg-slate-900/20">
+            {items.length === 0 ? (
+              <p className="py-4 text-center text-slate-400 italic">
+                Sin productos en el desglose de venta.
+              </p>
+            ) : (
+              items.map((item, idx) => (
+                <div
+                  key={item.id || idx}
+                  className="py-2.5 flex justify-between items-center gap-4"
+                >
+                  <div className="min-w-0 flex-1">
+                    <p className="font-semibold truncate text-slate-800 dark:text-slate-200">
+                      {item.product?.name || "Producto desconocido"}
+                    </p>
+                    {item.product?.sku && (
+                      <span className="font-mono text-[10px] text-slate-400">
+                        {item.product.sku}
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-5 text-right shrink-0">
+                    <span className="font-mono text-slate-400 bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded text-[11px]">
+                      x{item.quantity}
+                    </span>
+                    <span className="font-mono w-24 text-slate-800 dark:text-slate-200 font-bold text-xs">
+                      {fPrice(item.subtotal)}
+                    </span>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+
+        {/* Flujo Financiero e Historial de Caja */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-1">
+          <div className="md:col-span-2 border dark:border-slate-800 rounded-xl p-3 space-y-2 bg-white dark:bg-slate-900/10">
+            <div className="flex items-center gap-1.5 font-bold uppercase text-[10px] text-slate-400 mb-1">
+              <Banknote size={12} /> Historial de Amortizaciones
+            </div>
+            {payments.length === 0 ? (
+              <p className="text-slate-400 italic py-2 text-center border border-dashed rounded-lg dark:border-slate-800">
+                Operación sin amortizaciones monetarias realizadas.
+              </p>
+            ) : (
+              <div className="space-y-1 font-mono text-[11px] max-h-[80px] overflow-y-auto">
+                {payments.map((p, i) => (
+                  <div
+                    key={p.id || i}
+                    className="flex justify-between text-slate-500 py-1 border-b border-dashed dark:border-slate-800 last:border-0"
+                  >
+                    <span className="font-medium text-slate-600 dark:text-slate-300">
+                      Método: {p.paymentMethod}{" "}
+                      {p.reference && `(${p.reference})`}
+                    </span>
+                    <span className="text-slate-400">
+                      {fDate(p.paidAt || p.createdAt)}
+                    </span>
+                    <span className="font-bold text-slate-700 dark:text-slate-200">
+                      {fPrice(p.amount)}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Bloque de Totales Numéricos */}
+          <div className="bg-slate-900 text-white dark:bg-slate-950 p-4 rounded-xl flex flex-col justify-between space-y-3 shadow-md">
+            <div className="space-y-1.5 text-[11px] text-slate-400 font-mono">
+              <div className="flex justify-between">
+                <span>Subtotal:</span>
+                <span className="text-white font-medium">
+                  {fPrice(sale.subtotal)}
                 </span>
               </div>
-              {sale.customer?.documentNumber && (
-                <div className="flex justify-between border-t border-slate-100/70 pt-2 dark:border-slate-800/60">
-                  <span className="text-slate-500">
-                    {sale.customer.documentType || "Documento"}:
-                  </span>
-                  <span className="font-mono font-medium text-slate-800 dark:text-slate-200">
-                    {sale.customer.documentNumber}
-                  </span>
+              <div className="flex justify-between">
+                <span>Impuesto (18%):</span>
+                <span className="text-white font-medium">
+                  {fPrice(sale.tax)}
+                </span>
+              </div>
+              {Number(sale.discount) > 0 && (
+                <div className="flex justify-between text-rose-400 font-medium">
+                  <span>Descuento aplicado:</span>
+                  <span>-{fPrice(sale.discount)}</span>
+                </div>
+              )}
+              {saldoPendiente > 0 && (
+                <div className="flex justify-between text-amber-400 font-bold border-t border-slate-800/80 pt-1.5 mt-1.5">
+                  <span>Saldo Pendiente:</span>
+                  <span>{fPrice(saldoPendiente)}</span>
                 </div>
               )}
             </div>
-          </div>
-        </div>
-
-        {/* ── PAGOS REGISTRADOS ─────────────────────────────────────────── */}
-        <div className="rounded-xl border border-slate-200/60 dark:border-slate-800 overflow-hidden">
-          <div className="px-4 py-2.5 bg-slate-50 dark:bg-slate-900/50 border-b border-slate-200/60 dark:border-slate-800">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
-              <Banknote size={14} /> Pagos registrados
-            </h4>
-          </div>
-
-          {payments.length === 0 ? (
-            <p className="px-4 py-3 text-sm text-slate-400 italic">
-              {sale.saleType === "CREDIT_SALE"
-                ? "Sin abono inicial registrado."
-                : "Sin pagos registrados."}
-            </p>
-          ) : (
-            <table className="w-full text-sm">
-              <thead className="text-xs font-semibold uppercase text-slate-400 bg-slate-50/50 dark:bg-slate-900/30">
-                <tr>
-                  <th className="px-4 py-2.5 text-left">Método</th>
-                  <th className="px-4 py-2.5 text-right">Monto</th>
-                  {payments.some((p) => p.reference) && (
-                    <th className="px-4 py-2.5 text-right">Referencia</th>
-                  )}
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-900">
-                {payments.map((payment, i) => {
-                  const cfg = PAYMENT_METHOD_CONFIG[payment.paymentMethod] ?? {
-                    label: payment.paymentMethod,
-                    icon: Banknote,
-                  };
-                  const PIcon = cfg.icon;
-                  return (
-                    <tr key={payment.id ?? i}>
-                      <td className="px-4 py-3 flex items-center gap-2">
-                        <PIcon size={14} className="text-slate-400 shrink-0" />
-                        <span className="font-medium text-slate-700 dark:text-slate-300">
-                          {cfg.label}
-                        </span>
-                      </td>
-                      <td className="px-4 py-3 text-right font-mono font-semibold text-slate-800 dark:text-slate-200">
-                        {formatPrice(payment.amount)}
-                      </td>
-                      {payments.some((p) => p.reference) && (
-                        <td className="px-4 py-3 text-right font-mono text-xs text-slate-400">
-                          {payment.reference || "-"}
-                        </td>
-                      )}
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          )}
-
-          {/* saldo pendiente si es crédito */}
-          {sale.saleType === "CREDIT_SALE" && (
-            <div className="px-4 py-3 border-t border-slate-100 dark:border-slate-900 flex justify-between items-center bg-amber-50/60 dark:bg-amber-950/20">
-              <span className="text-xs font-semibold uppercase tracking-wide text-amber-600 dark:text-amber-400">
-                Saldo pendiente
-              </span>
-              <span className="font-mono font-bold text-amber-700 dark:text-amber-300">
-                {formatPrice(
-                  Math.max(
-                    Number(sale.total || 0) -
-                      payments.reduce((s, p) => s + Number(p.amount || 0), 0),
-                    0,
-                  ),
-                )}
-              </span>
-            </div>
-          )}
-        </div>
-
-        {/* ── PRODUCTOS ─────────────────────────────────────────────────── */}
-        <div className="space-y-3">
-          <h4 className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-400">
-            <Package size={14} /> Productos Incluidos
-          </h4>
-          <div className="overflow-hidden rounded-xl border border-slate-200/60 dark:border-slate-800">
-            <table className="w-full text-left text-sm">
-              <thead className="bg-slate-50 text-xs font-semibold uppercase text-slate-500 dark:bg-slate-900/50 dark:text-slate-400">
-                <tr>
-                  <th className="px-4 py-3">Item / SKU</th>
-                  <th className="px-4 py-3 text-center">Cant.</th>
-                  <th className="px-4 py-3 text-right">P. Unit</th>
-                  <th className="px-4 py-3 text-right">Desc.</th>
-                  <th className="px-4 py-3 text-right">Total</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-900">
-                {sale.details?.map((item, index) => (
-                  <tr
-                    key={item.id || index}
-                    className="hover:bg-slate-50/40 dark:hover:bg-slate-900/10"
-                  >
-                    <td className="px-4 py-3.5">
-                      <div className="font-medium text-slate-800 dark:text-slate-200">
-                        {item.product?.name}
-                      </div>
-                      <div className="mt-0.5 flex flex-wrap items-center gap-2 text-xs font-mono text-slate-400">
-                        <span>{item.product?.sku || "Sin SKU"}</span>
-                        {item.batch && (
-                          <span className="inline-flex items-center rounded bg-amber-50 px-1.5 py-0.5 font-sans font-medium text-amber-700 dark:bg-amber-950/40 dark:text-amber-400">
-                            Lote: {item.batch.batchNumber}
-                          </span>
-                        )}
-                      </div>
-                    </td>
-                    <td className="px-4 py-3.5 text-center font-medium text-slate-700 dark:text-slate-300">
-                      {item.quantity}{" "}
-                      <span className="text-xs text-slate-400 font-normal">
-                        {item.product?.unit?.abbreviation || "Und"}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3.5 text-right font-mono text-slate-600 dark:text-slate-400">
-                      {formatPrice(item.price)}
-                    </td>
-                    <td className="px-4 py-3.5 text-right font-mono text-red-500">
-                      {Number(item.discount) > 0
-                        ? `-${formatPrice(item.discount)}`
-                        : "-"}
-                    </td>
-                    <td className="px-4 py-3.5 text-right font-mono font-semibold text-slate-800 dark:text-slate-200">
-                      {formatPrice(item.subtotal)}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        {/* ── NOTAS ─────────────────────────────────────────────────────── */}
-        {sale.notes && (
-          <div className="rounded-xl border border-dashed border-slate-200 p-4 dark:border-slate-800">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-1">
-              Notas Internas / Observaciones
-            </span>
-            <p className="text-sm text-slate-600 dark:text-slate-400 italic">
-              "{sale.notes}"
-            </p>
-          </div>
-        )}
-
-        {/* ── TOTALES ───────────────────────────────────────────────────── */}
-        <div className="flex justify-end pt-2">
-          <div className="w-full max-w-xs space-y-2 text-sm border-t border-slate-100 pt-4 dark:border-slate-900">
-            <div className="flex justify-between text-slate-500">
-              <span>Subtotal:</span>
-              <span className="font-mono text-slate-800 dark:text-slate-200">
-                {formatPrice(sale.subtotal)}
-              </span>
-            </div>
-            <div className="flex justify-between text-slate-500">
-              <span>Impuestos (IGV):</span>
-              <span className="font-mono text-slate-800 dark:text-slate-200">
-                {formatPrice(sale.tax)}
-              </span>
-            </div>
-            <div className="flex justify-between text-slate-500">
-              <span>Descuento Global:</span>
-              <span className="font-mono text-red-500">
-                -{formatPrice(sale.discount)}
-              </span>
-            </div>
-            <div className="flex justify-between border-t border-slate-200 pt-2 text-base font-bold dark:border-slate-800">
-              <span className="text-slate-900 dark:text-white">
-                Total Neto:
-              </span>
-              <span className="font-mono text-blue-600 dark:text-blue-400">
-                {formatPrice(sale.total)}
-              </span>
+            <div className="border-t border-slate-800/60 pt-2">
+              <p className="text-[9px] uppercase tracking-wider text-slate-500 font-bold">
+                Importe Total Venta
+              </p>
+              <p className="text-2xl font-black font-mono tracking-tight text-emerald-400">
+                {fPrice(totalVenta)}
+              </p>
             </div>
           </div>
         </div>
       </div>
 
-      <FooterModal className="border-t border-slate-200 dark:border-slate-800">
+      <FooterModal>
         <div className="flex justify-end">
           <ModernButton text="Cerrar Ventana" onClick={onClose} />
         </div>

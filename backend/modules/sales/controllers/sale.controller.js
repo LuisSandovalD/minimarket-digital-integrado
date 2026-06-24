@@ -4,33 +4,19 @@
 
 module.exports = {
 
-  // ========================================
-  // CREATE
-  // ========================================
-
   ...require("./create-sale.controller"),
-
-  // ========================================
-  // GET
-  // ========================================
 
   ...require("./get-sales.controller"),
 
-  // ========================================
-  // UPDATE
-  // ========================================
-
   ...require("./update-sale.controller"),
-
-  // ========================================
-  // CANCEL
-  // ========================================
 
   ...require("./cancel-sale.controller"),
 
-  // ========================================
-  // REPORTS
-  // ========================================
+  ...require("./register-payment.controller"),
+
+  // 🔥 NUEVOS: Conectamos los archivos que acabamos de crear
+  ...require("./get-sale-payments.controller"),
+  ...require("./return-sale.controller"),
 
   ...require("./report-sale.controller"),
 

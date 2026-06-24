@@ -40,4 +40,10 @@ module.exports = {
 
   ...require("./sale-cancel.repository"),
 
+  // ========================================
+  // INVOICING (Añadido y unificado aquí)
+  // ========================================
+
+  ...require("./sale-invoice.repository"),
+
 };

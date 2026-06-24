@@ -20,8 +20,7 @@ import { useState } from "react";
 import { SummaryRow } from "../SummaryRow";
 import SaleCancelModal from "../modals/SaleCancelModal";
 
-// ─── helpers ─────────────────────────────────────────────────────────────────
-
+// ─── HELPERS ─────────────────────────────────────────────────────────────────
 const fmt = (value) =>
   new Intl.NumberFormat("es-PE", { style: "currency", currency: "PEN" }).format(
     Number(value || 0),
@@ -35,43 +34,55 @@ const METHOD_META = {
   TRANSFER: { label: "Transferencia", icon: Landmark },
 };
 
-// ─── componente principal ─────────────────────────────────────────────────────
-
 export default function SummaryStep({
   form,
-  subtotal = 0,
-  tax = 0,
-  total = 0,
   setForm,
   setStep,
   initialFormState,
   onClose,
+  onSubmit,
+  loading = false,
 }) {
   const [cancelModalOpen, setCancelModalOpen] = useState(false);
 
   const details = Array.isArray(form?.details) ? form.details : [];
   const payments = Array.isArray(form?.payments) ? form.payments : [];
 
+  // ── MATEMÁTICA INTEGRAL: IGV ADICIONADO (PRECIOS BASE SIN IGV) ──
+  // 1. El subtotal es la suma directa del valor neto de los productos escogidos
+  const subtotal = details.reduce(
+    (acc, item) =>
+      acc +
+      Number(item.quantity || 0) * Number(item.price || item.unitPrice || 0),
+    0,
+  );
+  // 2. El impuesto se calcula incrementando el 18% a la base imponible
+  const tax = subtotal * 0.18;
+  // 3. El total final es la combinación del subtotal más su respectivo impuesto
+  const total = subtotal + tax;
+
   const totalPaid = payments.reduce((acc, p) => acc + Number(p.amount || 0), 0);
   const pending = Math.max(total - totalPaid, 0);
-  const change =
+
+  const rawChange =
     form.saleType === "CASH_SALE" ? Math.max(totalPaid - total, 0) : 0;
+  const change = Math.floor(rawChange * 10) / 10;
 
   const isCreditSale = form.saleType === "CREDIT_SALE";
 
   const handleCancelSale = () => {
     if (typeof setForm === "function" && initialFormState)
       setForm(initialFormState);
-    if (typeof setStep === "function") setStep(0);
+    if (typeof setStep === "function") setStep(1);
     setCancelModalOpen(false);
     if (typeof onClose === "function") onClose();
   };
 
   return (
-    <div className="flex-1 overflow-y-auto p-6">
-      <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-4">
+    <div className="flex-1 overflow-y-auto p-4">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
         {/* ── IZQUIERDA ──────────────────────────────────────────────────── */}
-        <div className="lg:col-span-8 space-y-4">
+        <div className="lg:col-span-8 space-y-3">
           {/* CLIENTE */}
           <Card icon={User} title="Cliente">
             <div className="space-y-0.5">
@@ -88,14 +99,14 @@ export default function SummaryStep({
             </div>
           </Card>
 
-          {/* PRODUCTOS + PAGO en fila */}
+          {/* PRODUCTOS + PAGO */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* PRODUCTOS */}
             <Card icon={Package} title="Productos">
               {details.length === 0 ? (
-                <p className="text-sm text-slate-500">No hay productos.</p>
+                <p className="text-sm text-slate-500 py-1">No hay productos.</p>
               ) : (
-                <div className="space-y-3">
+                <div className="space-y-2">
                   <InfoRow label="Líneas" value={details.length} />
                   <InfoRow
                     label="Unidades totales"
@@ -104,16 +115,11 @@ export default function SummaryStep({
                       0,
                     )}
                   />
+                  <hr className="border-slate-100 dark:border-slate-800/40 my-1" />
                   <InfoRow
-                    label="Importe"
-                    value={fmt(
-                      details.reduce(
-                        (acc, i) =>
-                          acc +
-                          Number(i.quantity || 0) * Number(i.unitPrice || 0),
-                        0,
-                      ),
-                    )}
+                    label="Importe (Total con IGV)"
+                    className="font-semibold"
+                    value={fmt(total)}
                   />
                 </div>
               )}
@@ -121,27 +127,18 @@ export default function SummaryStep({
 
             {/* PAGO */}
             <Card icon={CreditCard} title="Pago">
-              <div className="space-y-3">
-                {/* tipo de venta */}
+              <div className="space-y-2">
                 <InfoRow
                   label="Tipo"
                   value={
                     <span
-                      className={`
-                        text-xs font-semibold px-2 py-0.5 rounded-lg
-                        ${
-                          isCreditSale
-                            ? "bg-amber-100 text-amber-700 dark:bg-amber-950/40 dark:text-amber-400"
-                            : "bg-emerald-100 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400"
-                        }
-                      `}
+                      className={`text-xs font-semibold px-2 py-0.5 rounded-lg ${isCreditSale ? "bg-amber-100 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400" : "bg-emerald-100 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400"}`}
                     >
                       {isCreditSale ? "Crédito" : "Contado"}
                     </span>
                   }
                 />
 
-                {/* desglose de pagos */}
                 {payments
                   .filter((p) => Number(p.amount) > 0)
                   .map((p) => {
@@ -155,7 +152,7 @@ export default function SummaryStep({
                         key={p.id}
                         className="flex items-center justify-between gap-4"
                       >
-                        <span className="flex items-center gap-1.5 text-sm text-slate-500">
+                        <span className="flex items-center gap-1.5 text-sm text-slate-500 dark:text-slate-400">
                           <Icon size={13} />
                           {meta.label}
                           {p.reference && (
@@ -164,14 +161,13 @@ export default function SummaryStep({
                             </span>
                           )}
                         </span>
-                        <span className="text-sm font-medium">
+                        <span className="text-sm font-medium text-slate-900 dark:text-white">
                           {fmt(p.amount)}
                         </span>
                       </div>
                     );
                   })}
 
-                {/* fecha de vencimiento si es crédito */}
                 {isCreditSale && form.creditDueDate && (
                   <InfoRow
                     label={
@@ -184,9 +180,8 @@ export default function SummaryStep({
                   />
                 )}
 
-                {/* saldo pendiente / vuelto */}
                 {pending > 0 && (
-                  <div className="pt-1 border-t border-slate-200/50 dark:border-slate-800/50">
+                  <div className="pt-1 border-t border-slate-200/40 dark:border-slate-800/40">
                     <InfoRow
                       label={
                         <span className="flex items-center gap-1 text-amber-600 dark:text-amber-400">
@@ -204,8 +199,8 @@ export default function SummaryStep({
                 )}
 
                 {change > 0 && (
-                  <div className="pt-1 border-t border-slate-200/50 dark:border-slate-800/50">
-                    <InfoRow label="Vuelto" value={fmt(change)} />
+                  <div className="pt-1 border-t border-slate-200/40 dark:border-slate-800/40">
+                    <InfoRow label="Vuelto entregado" value={fmt(change)} />
                   </div>
                 )}
               </div>
@@ -213,64 +208,63 @@ export default function SummaryStep({
           </div>
         </div>
 
-        {/* ── DERECHA ────────────────────────────────────────────────────── */}
-        <div className="lg:col-span-4 flex flex-col gap-4">
-          {/* RESUMEN FINAL */}
-          <div
-            className="
-              rounded-3xl
-              bg-white/80 dark:bg-white/[0.03]
-              border border-black/[0.06] dark:border-white/[0.05]
-              backdrop-blur-md
-              overflow-hidden
-            "
-          >
-            <div className="px-5 py-4 border-b border-slate-200/80 dark:border-slate-800 flex items-center gap-3">
-              <Receipt size={18} />
-              <h3 className="font-semibold">Resumen final</h3>
+        {/* ── DERECHA: RESUMEN LATERAL TRANS LÚCIDO ──────────────────────── */}
+        <div className="lg:col-span-4">
+          <div className="sticky top-0 rounded-2xl bg-white/80 dark:bg-white/[0.03] border border-black/[0.06] dark:border-white/[0.05] overflow-hidden">
+            <div className="px-4 py-2.5 border-b border-slate-200/50 dark:border-slate-800/50 flex items-center gap-2">
+              <Receipt size={14} />
+              <p className="text-sm font-medium">Resumen final</p>
             </div>
 
-            <div className="p-5 space-y-3">
-              <SummaryRow label="Productos" value={details.length} />
-              <SummaryRow label="Subtotal" value={fmt(subtotal)} />
-              <SummaryRow label="IGV" value={fmt(tax)} />
+            <div className="p-4 space-y-3">
+              <table className="w-full text-sm border-collapse">
+                <tbody>
+                  <SummaryRow label="Productos" value={details.length} />
+                  <SummaryRow label="Subtotal" value={fmt(subtotal)} />
+                  <SummaryRow label="IGV (18%)" value={fmt(tax)} />
 
-              <div className="border-t border-slate-200/50 dark:border-slate-800/50 pt-3">
-                <SummaryRow label="TOTAL" value={fmt(total)} bold />
-              </div>
+                  <tr className="border-t border-slate-200/50 dark:border-slate-800/50">
+                    <td className="pt-2 font-semibold text-slate-900 dark:text-white">
+                      TOTAL
+                    </td>
+                    <td className="pt-2 text-right font-bold text-base text-slate-900 dark:text-white">
+                      {fmt(total)}
+                    </td>
+                  </tr>
 
-              {totalPaid > 0 && (
-                <div className="border-t border-slate-200/50 dark:border-slate-800/50 pt-3 space-y-2">
-                  <SummaryRow label="Pagado" value={fmt(totalPaid)} />
-                  {pending > 0 && (
-                    <SummaryRow label="Pendiente" value={fmt(pending)} />
+                  {totalPaid > 0 && (
+                    <>
+                      <tr className="border-t border-slate-200/50 dark:border-slate-800/50">
+                        <td className="pt-1" colSpan="2" />
+                      </tr>
+                      <SummaryRow label="Pagado" value={fmt(totalPaid)} />
+                      {pending > 0 && (
+                        <SummaryRow label="Pendiente" value={fmt(pending)} />
+                      )}
+                      {change > 0 && (
+                        <SummaryRow label="Vuelto" value={fmt(change)} />
+                      )}
+                    </>
                   )}
-                  {change > 0 && (
-                    <SummaryRow label="Vuelto" value={fmt(change)} />
-                  )}
-                </div>
-              )}
+                </tbody>
+              </table>
 
-              {/* estado del pago */}
               <div className="pt-1">
                 {isCreditSale || pending > 0 ? (
-                  <div className="rounded-2xl bg-amber-50 dark:bg-amber-950/20 border border-amber-200/50 dark:border-amber-900/40 p-3 flex items-start gap-2">
+                  <div className="rounded-xl bg-amber-50/60 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/40 p-2.5 flex items-start gap-2">
                     <TriangleAlert
-                      size={15}
+                      size={14}
                       className="text-amber-500 shrink-0 mt-0.5"
                     />
                     <p className="text-xs text-amber-700 dark:text-amber-400">
-                      Quedará un saldo de{" "}
-                      <strong>
-                        {fmt(isCreditSale && totalPaid === 0 ? total : pending)}
-                      </strong>{" "}
+                      Quedará un saldo de <strong>{fmt(pending)}</strong>{" "}
                       pendiente de cobro.
                     </p>
                   </div>
                 ) : (
-                  <div className="rounded-2xl bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200/50 dark:border-emerald-900/40 p-3 flex items-center gap-2">
+                  <div className="rounded-xl bg-emerald-50/60 dark:bg-emerald-950/20 border border-emerald-200/60 dark:border-emerald-900/40 p-2.5 flex items-center gap-2">
                     <CheckCircle
-                      size={15}
+                      size={14}
                       className="text-emerald-600 dark:text-emerald-400 shrink-0"
                     />
                     <p className="text-xs text-emerald-700 dark:text-emerald-400 font-medium">
@@ -280,14 +274,20 @@ export default function SummaryStep({
                 )}
               </div>
 
-              {/* aviso final */}
-              <div className="w-full">
-                {/* CANCELAR */}
+              <div className="space-y-2 pt-1">
                 <ModernButton
-                  variant="danger"
+                  variant="primary"
                   className="!w-full"
+                  text={loading ? "Procesando..." : "Emitir Comprobante"}
+                  onClick={onSubmit}
+                  disabled={loading}
+                />
+                <ModernButton
+                  variant="ghost"
+                  className="!w-full !text-slate-400 hover:!text-rose-500 transition-colors"
                   text="Cancelar venta"
                   onClick={() => setCancelModalOpen(true)}
+                  disabled={loading}
                 />
               </div>
             </div>
@@ -304,33 +304,29 @@ export default function SummaryStep({
   );
 }
 
-// ─── subcomponentes ───────────────────────────────────────────────────────────
-
 function Card({ icon: Icon, title, children }) {
   return (
-    <div
-      className="
-        rounded-3xl
-        bg-white/80 dark:bg-white/[0.03]
-        border border-black/[0.06] dark:border-white/[0.05]
-        backdrop-blur-md
-        overflow-hidden
-      "
-    >
-      <div className="px-5 py-4 border-b border-slate-200/80 dark:border-slate-800 flex items-center gap-3">
-        <Icon size={18} />
-        <h3 className="font-semibold">{title}</h3>
+    <div className="rounded-2xl bg-white/80 dark:bg-white/[0.03] border border-black/[0.06] dark:border-white/[0.05] overflow-hidden">
+      <div className="px-3 py-2 border-b border-slate-200/40 dark:border-slate-800/40 flex items-center gap-2">
+        <Icon size={14} className="text-slate-400" />
+        <h4 className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+          {title}
+        </h4>
       </div>
-      <div className="p-5">{children}</div>
+      <div className="p-3">{children}</div>
     </div>
   );
 }
 
-function InfoRow({ label, value }) {
+function InfoRow({ label, value, className = "" }) {
   return (
-    <div className="flex items-center justify-between gap-4">
-      <span className="text-sm text-slate-500">{label}</span>
-      <span className="text-sm font-medium text-right">{value}</span>
+    <div
+      className={`flex items-center justify-between gap-4 text-sm ${className}`}
+    >
+      <span className="text-slate-500 dark:text-slate-400">{label}</span>
+      <span className="font-medium text-right text-slate-900 dark:text-white">
+        {value}
+      </span>
     </div>
   );
 }

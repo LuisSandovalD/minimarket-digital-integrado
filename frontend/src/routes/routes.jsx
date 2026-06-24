@@ -38,17 +38,21 @@ import ProductsPage from "../features/product/pages/ProductsPage";
 
 import SalesPage from "../features/sales/pages/SalesPage";
 
+import AnalyticsPage from "../features/analytics/pages/AnalyticsPage";
 import BarcodePages from "../features/barcode/pages/BarcodePages";
 import CustomerPage from "../features/customer/pages/CustomerPage";
 import DataBasePage from "../features/database/pages/DataBasePage";
 import EmployeesPage from "../features/employee/pages/EmployeesPage";
+import GeminiPage from "../features/google_gemini/pages/GeminiPage";
 import InventoryPage from "../features/inventory/pages/InventoryPage";
 import MovementsPage from "../features/movements/pages/MovementsPage";
+import NotificationsPages from "../features/notifications/pages/NotificationsPages";
 import PaymentsPage from "../features/payments/pages/PaymentsPage";
 import PurchasePage from "../features/purchase/page/PurchasePage";
 import ReportsPage from "../features/reports/pages/ReportsPage";
 import SaleDetailPage from "../features/sale-detail/pages/SaleDetailsPage";
-import ConfigurationPage from "../features/settings/pages/Settings";
+import ConfigurationPage from "../features/settings/pages/ConfigurationPage";
+import StatisticsPage from "../features/statistics/pages/StatisticsPage";
 import SupplierPage from "../features/supplier/pages/SupplierPage";
 import SupportPage from "../features/support/pages/SupportPage";
 
@@ -138,6 +142,11 @@ export const routes = [
           },
 
           {
+            path: "statistics",
+            element: <StatisticsPage />,
+          },
+
+          {
             path: "categories",
             element: <CategoriesPage />,
           },
@@ -145,6 +154,10 @@ export const routes = [
           {
             path: "database",
             element: <DataBasePage />,
+          },
+          {
+            path: "notifications",
+            element: <NotificationsPages />,
           },
 
           {
@@ -204,6 +217,16 @@ export const routes = [
           {
             path: "payments",
             element: <PaymentsPage />,
+          },
+
+          {
+            path: "analytics",
+            element: <AnalyticsPage />,
+          },
+
+          {
+            path: "automation",
+            element: <GeminiPage />,
           },
         ],
       },

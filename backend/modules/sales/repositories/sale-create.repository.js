@@ -2,159 +2,121 @@
 // repositories/sale-create.repository.js
 // ========================================
 
-const prisma =
-  require("../../../prisma/client");
-
-const {
-  saleInclude,
-} = require("../includes/sale.include");
+const prisma = require("../../../prisma/client");
+const { saleInclude } = require("../includes/sale.include");
 
 module.exports = {
 
   // ========================================
-  // CREATE SALE
+  // 1. CREATE SALE (Soporta Cliente Genérico o Registrado)
   // ========================================
+  createSale: async (data, tx = prisma) => {
+    // Limpiamos el customerId por si viene como string vacío, undefined o texto "null"
+    const parsedCustomerId = data.customerId && data.customerId !== "null"
+      ? Number(data.customerId)
+      : null;
 
-  createSale:
-    async (
-      data,
-      tx = prisma
-    ) => {
+    return tx.sale.create({
+      data: {
+        saleNumber: data.saleNumber,
+        subtotal: Number(data.subtotal),
+        tax: Number(data.tax),
+        total: Number(data.total),
+        discount: Number(data.discount || 0),
+        notes: data.notes || null,
+        status: data.status || "COMPLETED", // 🔥 COMPLETED (contado) o CREDIT_PENDING (crédito)
 
-      return tx.sale.create({
+        // Relaciones obligatorias de la auditoría de caja
+        company: { connect: { id: Number(data.companyId) } },
+        branch: { connect: { id: Number(data.branchId) } },
+        seller: { connect: { id: Number(data.userId) } },
 
-        data: {
-
-          // ========================================
-          // GENERAL
-          // ========================================
-
-          saleNumber:
-            data.saleNumber,
-
-          subtotal:
-            data.subtotal,
-
-          tax:
-            data.tax,
-
-          total:
-            data.total,
-
-          discount:
-            data.discount || 0,
-
-          notes:
-            data.notes || null,
-
-          status:
-            data.status || "COMPLETED",
-
-          // ========================================
-          // RELATIONS
-          // ========================================
-
-          company: {
-            connect: {
-              id:
-                data.companyId,
-            },
-          },
-
-          branch: {
-            connect: {
-              id:
-                data.branchId,
-            },
-          },
-
-          // IMPORTANTE:
-          // En tu schema Prisma
-          // la relación se llama "seller"
-          // no "user"
-          seller: {
-            connect: {
-              id:
-                data.userId,
-            },
-          },
-
-          // ========================================
-          // CUSTOMER OPTIONAL
-          // ========================================
-
-          ...(data.customerId && {
-
-            customer: {
-              connect: {
-                id:
-                  data.customerId,
-              },
-            },
-
-          }),
-
-        },
-
-        include:
-          saleInclude,
-
-      });
-
-    },
+        // Relación Opcional: Si es una persona X con plata, no se conecta ningún cliente
+        ...(parsedCustomerId && {
+          customer: { connect: { id: parsedCustomerId } },
+        }),
+      },
+      include: saleInclude,
+    });
+  },
 
   // ========================================
-  // UPDATE SALE
+  // 2. CREATE MANY DETAILS (Optimizado para alto volumen)
   // ========================================
+  createManyDetails: async (detailsArray, tx = prisma) => {
+    // Mapeamos el arreglo asegurando que todos los tipos de datos numéricos sean estrictos
+    const formattedDetails = detailsArray.map(detail => ({
+      saleId: Number(detail.saleId),
+      productId: Number(detail.productId),
+      quantity: Number(detail.quantity),
+      price: Number(detail.price),
+      subtotal: Number(detail.subtotal),
+      discount: Number(detail.discount || 0),
+      tax: Number(detail.tax || 0),
+      batchId: detail.batchId ? Number(detail.batchId) : null,
+    }));
 
-  updateSale:
-    async (
-      id,
-      data,
-      tx = prisma
-    ) => {
+    return tx.saleDetail.createMany({
+      data: formattedDetails
+    });
+  },
 
-      return tx.sale.update({
+  // ========================================
+  // 3. CREATE MANY PAYMENTS (Soporta Cuotas, Iniciales y Contado)
+  // ========================================
+  createManyPayments: async (saleId, paymentsArray, tx = prisma) => {
+    const formattedPayments = paymentsArray.map(payment => {
+      const isCreditInstallment = payment.status === "PENDING";
 
-        where: {
-          id,
-        },
+      return {
+        saleId: Number(saleId),
+        amount: Number(payment.amount),
+        remainingAmount: isCreditInstallment ? Number(payment.amount) : 0, // 🔥 Saldo pendiente inicial si es crédito
+        status: payment.status || "COMPLETED",
+        paymentMethod: Number(payment.paymentMethodId), // Convertido a entero para tu relación o enum int
+        reference: payment.reference || null,
+        notes: payment.notes || null,
+        dueDate: payment.dueDate ? new Date(payment.dueDate) : null,
+        paidAt: isCreditInstallment ? null : new Date(),
+      };
+    });
 
-        data: {
+    return tx.payment.createMany({
+      data: formattedPayments
+    });
+  },
 
-          // ========================================
-          // GENERAL
-          // ========================================
+  // ========================================
+  // 4. UPDATE CUSTOMER DEBT (Afecta Línea de Crédito)
+  // ========================================
+  updateCustomerDebt: async (customerId, amount, tx = prisma) => {
+    if (!customerId) return null;
 
-          subtotal:
-            data.subtotal,
+    return tx.customer.update({
+      where: { id: Number(customerId) },
+      data: { currentDebt: { increment: Number(amount) } }, // Incremeto seguro en la BD
+    });
+  },
 
-          tax:
-            data.tax,
+  // ========================================
+  // 5. UPDATE SALE
+  // ========================================
+  updateSale: async (id, data, tx = prisma) => {
+    const parsedCustomerId = data.customerId && data.customerId !== "null"
+      ? Number(data.customerId)
+      : null;
 
-          total:
-            data.total,
-
-          discount:
-            data.discount || 0,
-
-          notes:
-            data.notes || null,
-
-          // ========================================
-          // CUSTOMER OPTIONAL
-          // ========================================
-
-          customerId:
-            data.customerId || null,
-
-        },
-
-        include:
-          saleInclude,
-
-      });
-
-    },
-
+    return tx.sale.update({
+      where: { id: Number(id) },
+      data: {
+        subtotal: Number(data.subtotal),
+        tax: Number(data.tax),
+        total: Number(data.total),
+        discount: Number(data.discount || 0),
+        notes: data.notes || null,
+        customerId: parsedCustomerId, // Permite desvincular o cambiar el cliente en una edición
+      },
+      include: saleInclude,
+    });
+  },
 };

@@ -11,154 +11,124 @@ datasource db {
 
 model Company {
   id                  Int                @id @default(autoincrement())
-
   name                String             @unique @db.VarChar(255)
   slug                String             @unique @db.VarChar(100)
-
   ruc                 String?            @unique @db.VarChar(20)
-  taxId               String?            @unique @db.VarChar(50)
-
   address             String?            @db.VarChar(500)
   phone               String?            @db.VarChar(20)
   email               String?            @db.VarChar(255)
-
   logo                String?
   website             String?            @db.VarChar(255)
-
+  taxId               String?            @unique @db.VarChar(50)
   legalRepresentative String?            @db.VarChar(255)
-
-  subscriptionTier    String             @default("FREE") @db.VarChar(50)
-
   isActive            Boolean            @default(true)
   isDeleted           Boolean            @default(false)
-
+  subscriptionTier    String             @default("FREE") @db.VarChar(50)
   createdAt           DateTime           @default(now())
   updatedAt           DateTime           @updatedAt
   deletedAt           DateTime?
-
+  auditLogs           AuditLog[]
   branches            Branch[]
-  users               User[]             @relation("CompanyUsers")
-
-  products            Product[]
   categories          Category[]
-  units               Unit[]
-
+  configuration       Configuration?
+  customers           Customer[]
   inventory           Inventory[]
   inventoryHistory    InventoryHistory[]
-
-  sales               Sale[]
-  purchases           Purchase[]
-
-  customers           Customer[]
-  suppliers           Supplier[]
-
-  paymentMethods      PaymentMethod_DB[]
-
   notifications       Notification[]
-  auditLogs           AuditLog[]
-
-  supportTickets      SupportTicket[]
-
-  configuration       Configuration?
-
+  paymentMethods      PaymentMethod_DB[]
+  products            Product[]
   batches             ProductBatch[]
+  purchases           Purchase[]
+  sales               Sale[]
+  suppliers           Supplier[]
+  supportTickets      SupportTicket[]
+  units               Unit[]
+  users               User[]             @relation("CompanyUsers")
 
   @@index([isActive])
   @@index([isDeleted])
-
   @@index([name])
   @@index([slug])
 }
 
 model Branch {
   id               Int                @id @default(autoincrement())
-
   name             String             @db.VarChar(255)
   code             String?            @db.VarChar(20)
-
   logo             String?
   description      String?
-
   address          String             @db.VarChar(500)
   phone            String?            @db.VarChar(20)
   email            String?            @db.VarChar(255)
-
   city             String?            @db.VarChar(100)
   state            String?            @db.VarChar(100)
   country          String?            @db.VarChar(100)
   postalCode       String?            @db.VarChar(20)
-
   isActive         Boolean            @default(true)
   isDeleted        Boolean            @default(false)
-
   createdAt        DateTime           @default(now())
   updatedAt        DateTime           @updatedAt
   deletedAt        DateTime?
-
   companyId        Int
-
+  auditLogs        AuditLog[]
   company          Company            @relation(fields: [companyId], references: [id], onDelete: Cascade)
-
-  users            User[]             @relation("BranchUsers")
-
   inventory        Inventory[]
   inventoryHistory InventoryHistory[]
-
+  batches          ProductBatch[]
   purchases        Purchase[]
   sales            Sale[]
-
-  auditLogs        AuditLog[]
-
-  batches          ProductBatch[]
+  users            User[]             @relation("BranchUsers")
 
   @@unique([name, companyId])
   @@unique([code, companyId])
-
   @@index([companyId])
-
   @@index([isActive])
   @@index([isDeleted])
-
   @@index([city])
   @@index([country])
 }
+
 model User {
-  id               Int              @id @default(autoincrement())
-  name             String           @db.VarChar(255)
-  email            String           @db.VarChar(255)
-  password         String           @db.VarChar(255)
-  role             Role             @default(EMPLOYEE)
-  phone            String?          @db.VarChar(20)
-  avatar           String?
-  isActive         Boolean          @default(true)
-  isDeleted        Boolean          @default(false)
-  isOnline         Boolean          @default(false)
-  lastLogin        DateTime?
-  lastLogout       DateTime?
-  loginAttempts    Int              @default(0)
-  lockedUntil      DateTime?
-  twoFactorEnabled Boolean          @default(false)
-  twoFactorSecret  String?          @db.VarChar(255)
-  backupCodes      String?
-  managerId        Int?
-  createdAt        DateTime         @default(now())
-  updatedAt        DateTime         @updatedAt
-  deletedAt        DateTime?
-  companyId        Int
-  branchId         Int?
-  auditLogs        AuditLog[]       @relation("UserAudits")
-  employeeProfile  EmployeeProfile?
-  notifications    Notification[]
-  purchases        Purchase[]       @relation("UserPurchases")
-  sales            Sale[]           @relation("UserSales")
-  assignedTickets  SupportTicket[]  @relation("AssignedTickets")
-  supportTickets   SupportTicket[]  @relation("UserTickets")
-  ticketComments   TicketComment[]
-  branch           Branch?          @relation("BranchUsers", fields: [branchId], references: [id])
-  company          Company          @relation("CompanyUsers", fields: [companyId], references: [id], onDelete: Cascade)
-  manager          User?            @relation("UserHierarchy", fields: [managerId], references: [id])
-  subordinates     User[]           @relation("UserHierarchy")
-  sessions         UserSession[]
+  id                    Int              @id @default(autoincrement())
+  name                  String           @db.VarChar(255)
+  email                 String           @db.VarChar(255)
+  password              String           @db.VarChar(255)
+  role                  Role             @default(EMPLOYEE)
+  phone                 String?          @db.VarChar(20)
+  avatar                String?
+  isActive              Boolean          @default(true)
+  isDeleted             Boolean          @default(false)
+  isOnline              Boolean          @default(false)
+  lastLogin             DateTime?
+  resetPasswordCode     String?
+  resetPasswordExpires  DateTime?
+  lastLogout            DateTime?
+  loginAttempts         Int              @default(0)
+  lockedUntil           DateTime?
+  twoFactorEnabled      Boolean          @default(false)
+  twoFactorSecret       String?          @db.VarChar(255)
+  twoFactorEmailCode    String?
+  twoFactorEmailExpires DateTime?
+  backupCodes           String?
+  managerId             Int?
+  createdAt             DateTime         @default(now())
+  updatedAt             DateTime         @updatedAt
+  deletedAt             DateTime?
+  companyId             Int
+  branchId              Int?
+  auditLogs             AuditLog[]       @relation("UserAudits")
+  employeeProfile       EmployeeProfile?
+  notifications         Notification[]
+  purchases             Purchase[]       @relation("UserPurchases")
+  sales                 Sale[]           @relation("UserSales")
+  assignedTickets       SupportTicket[]  @relation("AssignedTickets")
+  supportTickets        SupportTicket[]  @relation("UserTickets")
+  ticketComments        TicketComment[]
+  branch                Branch?          @relation("BranchUsers", fields: [branchId], references: [id])
+  company               Company          @relation("CompanyUsers", fields: [companyId], references: [id], onDelete: Cascade)
+  manager               User?            @relation("UserHierarchy", fields: [managerId], references: [id])
+  subordinates          User[]           @relation("UserHierarchy")
+  sessions              UserSession[]
 
   @@unique([email, companyId])
   @@index([companyId])
@@ -230,66 +200,49 @@ model Category {
 
   @@unique([name, companyId])
 }
+
 model Product {
   id                 Int                @id @default(autoincrement())
-
   name               String             @db.VarChar(255)
   description        String?
-
   sku                String?            @db.VarChar(50)
   barcode            String?            @db.VarChar(50)
-
   purchasePrice      Decimal            @db.Decimal(10, 2)
   salePrice          Decimal            @db.Decimal(10, 2)
   costPrice          Decimal            @db.Decimal(10, 2)
-
-  profitAmount       Decimal            @default(0) @db.Decimal(10, 2)
-  profitMargin       Decimal            @default(0) @db.Decimal(10, 2)
-
   minStock           Int                @default(5)
   maxStock           Int?
-
   requiresExpiration Boolean            @default(false)
-  trackBatches       Boolean            @default(false)
-
   isActive           Boolean            @default(true)
   isDeleted          Boolean            @default(false)
   isFeatured         Boolean            @default(false)
-
   createdAt          DateTime           @default(now())
   updatedAt          DateTime           @updatedAt
   deletedAt          DateTime?
-
   companyId          Int
   categoryId         Int
   unitId             Int
-
+  profitAmount       Decimal            @default(0) @db.Decimal(10, 2)
+  profitMargin       Decimal            @default(0) @db.Decimal(10, 2)
+  trackBatches       Boolean            @default(false)
+  inventory          Inventory[]
+  inventoryHistory   InventoryHistory[]
+  notifications      Notification[]
   category           Category           @relation(fields: [categoryId], references: [id])
   company            Company            @relation(fields: [companyId], references: [id], onDelete: Cascade)
   unit               Unit               @relation(fields: [unitId], references: [id])
-
-  inventory          Inventory[]
-  inventoryHistory   InventoryHistory[]
-
-  notifications      Notification[]
-
+  batches            ProductBatch[]
   purchaseDetails    PurchaseDetail[]
   saleDetails        SaleDetail[]
 
-  batches            ProductBatch[]
-
   @@unique([sku, companyId])
-
   @@index([companyId])
   @@index([categoryId])
   @@index([unitId])
-
   @@index([isActive])
   @@index([isDeleted])
-
   @@index([name])
   @@index([barcode])
-
   @@index([companyId, name])
   @@index([companyId, sku])
 }
@@ -344,27 +297,21 @@ model Supplier {
 }
 
 model Inventory {
-  id            Int      @id @default(autoincrement())
-
-  stock         Int      @default(0)
-  reservedStock Int      @default(0)
-  damagedStock  Int      @default(0)
-
+  id            Int                @id @default(autoincrement())
+  stock         Int                @default(0)
+  reservedStock Int                @default(0)
+  damagedStock  Int                @default(0)
   productId     Int
   branchId      Int
   companyId     Int
-
-  createdAt     DateTime @default(now())
-  lastUpdated   DateTime @updatedAt
-
-  product       Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
-  branch        Branch   @relation(fields: [branchId], references: [id], onDelete: Cascade)
-  company       Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
-
+  lastUpdated   DateTime           @updatedAt
+  createdAt     DateTime           @default(now())
+  branch        Branch             @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  company       Company            @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  product       Product            @relation(fields: [productId], references: [id], onDelete: Cascade)
   movements     InventoryHistory[]
 
   @@unique([productId, branchId])
-
   @@index([productId])
   @@index([branchId])
   @@index([companyId])
@@ -434,20 +381,18 @@ model Sale {
 }
 
 model SaleDetail {
-  id        Int     @id @default(autoincrement())
+  id        Int           @id @default(autoincrement())
   quantity  Int
-  price     Decimal @db.Decimal(10, 2)
-  subtotal  Decimal @db.Decimal(10, 2)
-  discount  Decimal @default(0) @db.Decimal(10, 2)
-  tax       Decimal @default(0) @db.Decimal(10, 2)
-
+  price     Decimal       @db.Decimal(10, 2)
+  subtotal  Decimal       @db.Decimal(10, 2)
+  discount  Decimal       @default(0) @db.Decimal(10, 2)
+  tax       Decimal       @default(0) @db.Decimal(10, 2)
   saleId    Int
   productId Int
   batchId   Int?
-
+  batch     ProductBatch? @relation(fields: [batchId], references: [id])
   product   Product       @relation(fields: [productId], references: [id])
   sale      Sale          @relation(fields: [saleId], references: [id], onDelete: Cascade)
-  batch     ProductBatch? @relation(fields: [batchId], references: [id])
 
   @@index([saleId])
   @@index([productId])
@@ -484,23 +429,18 @@ model Purchase {
 }
 
 model PurchaseDetail {
-  id         Int      @id @default(autoincrement())
-
-  quantity   Int
-  price      Decimal  @db.Decimal(10, 2)
-  subtotal   Decimal  @db.Decimal(10, 2)
-  tax        Decimal  @default(0) @db.Decimal(10, 2)
-
-  batchNumber    String?   @db.VarChar(100)
+  id             Int            @id @default(autoincrement())
+  quantity       Int
+  price          Decimal        @db.Decimal(10, 2)
+  subtotal       Decimal        @db.Decimal(10, 2)
+  tax            Decimal        @default(0) @db.Decimal(10, 2)
+  purchaseId     Int
+  productId      Int
+  batchNumber    String?        @db.VarChar(100)
   expirationDate DateTime?
-
-  purchaseId Int
-  productId  Int
-
-  product  Product  @relation(fields: [productId], references: [id])
-  purchase Purchase @relation(fields: [purchaseId], references: [id], onDelete: Cascade)
-
-  batches ProductBatch[]
+  batches        ProductBatch[]
+  product        Product        @relation(fields: [productId], references: [id])
+  purchase       Purchase       @relation(fields: [purchaseId], references: [id], onDelete: Cascade)
 
   @@index([purchaseId])
   @@index([productId])
@@ -662,6 +602,35 @@ model Configuration {
   company               Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
 }
 
+model ProductBatch {
+  id               Int            @id @default(autoincrement())
+  batchNumber      String         @db.VarChar(100)
+  expirationDate   DateTime?
+  initialQuantity  Int
+  currentQuantity  Int
+  purchasePrice    Decimal?       @db.Decimal(10, 2)
+  isActive         Boolean        @default(true)
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  depletedAt       DateTime?
+  productId        Int
+  purchaseDetailId Int
+  branchId         Int
+  companyId        Int
+  branch           Branch         @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  company          Company        @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  product          Product        @relation(fields: [productId], references: [id], onDelete: Cascade)
+  purchaseDetail   PurchaseDetail @relation(fields: [purchaseDetailId], references: [id], onDelete: Cascade)
+  saleDetails      SaleDetail[]
+
+  @@unique([batchNumber, productId, branchId])
+  @@index([productId])
+  @@index([expirationDate])
+  @@index([productId, expirationDate])
+  @@index([branchId])
+  @@index([companyId])
+}
+
 enum TicketStatus {
   OPEN
   IN_PROGRESS
@@ -719,6 +688,7 @@ enum SaleStatus {
   CANCELLED
   RETURNED
   ARCHIVED
+  CREDIT_PENDING
 }
 
 enum PurchaseStatus {
@@ -747,6 +717,10 @@ enum AuditAction {
   SOFT_DELETE
   LOGIN
   LOGOUT
+  FAILED_LOGIN
+  PASSWORD_RESET
+  PASSWORD_CHANGE
+  ACCOUNT_LOCKED
   EXPORT
   IMPORT
   RESTORE
@@ -765,43 +739,4 @@ enum UnitType {
   DOZEN
   METER
   SQUARE_METER
-}
-
-model ProductBatch {
-  id               Int       @id @default(autoincrement())
-
-  batchNumber      String    @db.VarChar(100)
-  expirationDate   DateTime?
-
-  initialQuantity  Int
-  currentQuantity  Int
-
-  purchasePrice    Decimal?  @db.Decimal(10, 2)
-
-  isActive         Boolean   @default(true)
-
-  createdAt        DateTime  @default(now())
-  updatedAt        DateTime  @updatedAt
-
-  depletedAt       DateTime?
-
-  productId        Int
-  purchaseDetailId Int
-  branchId         Int
-  companyId        Int
-
-  product          Product         @relation(fields: [productId], references: [id], onDelete: Cascade)
-  purchaseDetail   PurchaseDetail  @relation(fields: [purchaseDetailId], references: [id], onDelete: Cascade)
-  branch           Branch          @relation(fields: [branchId], references: [id], onDelete: Cascade)
-  company          Company         @relation(fields: [companyId], references: [id], onDelete: Cascade)
-
-  saleDetails      SaleDetail[]
-
-  @@index([productId])
-  @@index([expirationDate])
-  @@index([productId, expirationDate])
-  @@index([branchId])
-  @@index([companyId])
-
-  @@unique([batchNumber, productId, branchId])
 }

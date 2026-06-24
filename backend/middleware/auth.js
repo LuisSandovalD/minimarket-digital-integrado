@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const prisma = require("../prisma/client");
+const { auditStorage } = require("../config/auditContext");
 
 module.exports = async (req, res, next) => {
   try {
@@ -46,7 +47,7 @@ module.exports = async (req, res, next) => {
       },
     });
 
-    if (!user || user.isActive === false || user.isDeleted === true) {
+    if (!user || !user.isActive || user.isDeleted) {
       return res.status(401).json({
         success: false,
         message: "Usuario inválido",
@@ -56,7 +57,18 @@ module.exports = async (req, res, next) => {
     req.user = user;
     req.companyId = user.companyId;
 
-    next();
+    const contextData = {
+      userId: user.id,
+      companyId: user.companyId,
+      branchId: user.branchId || null,
+      ipAddress: req.ip || req.headers["x-forwarded-for"] || "127.0.0.1",
+      userAgent: req.headers["user-agent"] || "Unknown",
+    };
+
+    auditStorage.run(contextData, () => {
+      next();
+    });
+
   } catch (error) {
     console.error("AUTH ERROR:", error);
 

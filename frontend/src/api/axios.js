@@ -1,11 +1,17 @@
+// ========================================
+// api/axios.js
+// ========================================
+
 import axios from "axios";
 
-import { getToken } from "../features/auth/services/session.service";
+import {
+  clearSession,
+  getToken,
+} from "../features/auth/services/session.service";
 
-// ========================================
-// AXIOS INSTANCE
-// ========================================
-
+/* ======================================
+ * AXIOS INSTANCE
+ * ==================================== */
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000/api",
 
@@ -18,10 +24,9 @@ const api = axios.create({
   },
 });
 
-// ========================================
-// REQUEST INTERCEPTOR
-// ========================================
-
+/* ======================================
+ * REQUEST INTERCEPTOR
+ * ==================================== */
 api.interceptors.request.use(
   (config) => {
     const token = getToken();
@@ -36,22 +41,41 @@ api.interceptors.request.use(
   (error) => Promise.reject(error),
 );
 
-// ========================================
-// RESPONSE INTERCEPTOR
-// ========================================
-
+/* ======================================
+ * RESPONSE INTERCEPTOR
+ * ==================================== */
 api.interceptors.response.use(
   (response) => response,
 
   (error) => {
-    // TOKEN EXPIRED
+    const { response, config } = error;
 
-    if (error.response?.status === 401) {
-      localStorage.removeItem("token");
+    if (response?.status === 401) {
+      const ignoredRoutes = [
+        "/auth/login",
+        "/auth/register",
+        "/auth/forgot-password",
+        "/auth/verify-reset-code",
+        "/auth/reset-password",
+      ];
 
-      localStorage.removeItem("user");
+      const shouldIgnore = ignoredRoutes.some((route) =>
+        config?.url?.includes(route),
+      );
 
-      window.location.href = "/login";
+      if (shouldIgnore) {
+        return Promise.reject(error);
+      }
+
+      console.warn("⚠️ Sesión expirada o token inválido");
+
+      clearSession();
+
+      // Como tu login es modal y NO existe /login
+      // enviamos a la página principal.
+      if (window.location.pathname !== "/") {
+        window.location.href = "/";
+      }
     }
 
     return Promise.reject(error);

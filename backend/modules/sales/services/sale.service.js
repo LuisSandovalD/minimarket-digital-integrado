@@ -29,6 +29,12 @@ module.exports = {
   ...require("./sale-cancel.service"),
 
   // ========================================
+  // PAYMENTS (🔥 Añadido para procesar cobros de caja)
+  // ========================================
+
+  ...require("./sale-payment.service"),
+
+  // ========================================
   // REPORTS
   // ========================================
 

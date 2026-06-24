@@ -54,9 +54,6 @@ export default function RegisterModal({ open, onClose }) {
             alt="Oficina empresarial"
             className="absolute inset-0 h-full w-full object-cover"
           />
-          <div className="absolute inset-0bg-gradient-to-brfrom-white/20via-white/5to-blue-500/10dark:from-slate-950/85dark:via-slate-900/60dark:to-blue-950/40" />
-
-          <div className="absolute inset-0bg-[radial-gradient(circle_at_center,transparent_45%,rgba(255,255,255,0.12)_100%)]dark:bg-[radial-gradient(circle_at_center,transparent_35%,rgba(2,6,23,0.65)_100%)]" />
           <div className="relative flex h-full flex-col justify-between p-10">
             <motion.div
               initial={{ opacity: 0, y: -16 }}

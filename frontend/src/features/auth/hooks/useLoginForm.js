@@ -1,87 +1,71 @@
 import { useState } from "react";
-
 import { useDispatch } from "react-redux";
-
 import { useNavigate } from "react-router-dom";
 
 import { loginService } from "../services/auth.service";
-
-import { loginSuccess } from "../store/authActions";
-
 import { saveSession } from "../services/session.service";
+import { loginSuccess } from "../store/authSlice";
 
 export default function useLoginForm(onClose) {
   const dispatch = useDispatch();
-
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
-
   const [error, setError] = useState("");
+
+  const [showTwoFactor, setShowTwoFactor] = useState(false);
+  const [pendingUserId, setPendingUserId] = useState(null);
 
   const [form, setForm] = useState({
     email: "",
-
     password: "",
-
     remember: false,
   });
 
-  // ======================================
-  // CHANGE
-  // ======================================
-
   const handleChange = (e) => {
-    const {
-      name,
-
-      value,
-
-      type,
-
-      checked,
-    } = e.target;
+    const { name, value, type, checked } = e.target;
 
     setForm((prev) => ({
       ...prev,
-
       [name]: type === "checkbox" ? checked : value,
     }));
   };
 
-  // ======================================
-  // SUBMIT
-  // ======================================
+  const completeLogin = (response) => {
+    saveSession({
+      accessToken: response.accessToken,
+      refreshToken: response.refreshToken,
+      user: response.user,
+    });
+
+    dispatch(loginSuccess(response.user));
+
+    onClose?.();
+
+    navigate(`/${response.user.company.slug}/dashboard`);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       setLoading(true);
-
       setError("");
 
       const response = await loginService({
         email: form.email,
-
         password: form.password,
       });
 
-      saveSession({
-        token: response.token,
+      if (response.requires2FA) {
+        setPendingUserId(response.userId);
+        setShowTwoFactor(true);
+        return;
+      }
 
-        user: response.user,
-
-        company: response.company,
-      });
-
-      dispatch(loginSuccess(response.user));
-
-      onClose?.();
-
-      navigate(`/${response.company.slug}/dashboard`);
-    } catch (error) {
-      setError(error.response?.data?.message || "Error al iniciar sesión");
+      completeLogin(response);
+    } catch (err) {
+      setError(err?.response?.data?.message || "Error al iniciar sesión");
     } finally {
       setLoading(false);
     }
@@ -89,13 +73,18 @@ export default function useLoginForm(onClose) {
 
   return {
     form,
-
     loading,
-
     error,
 
-    handleChange,
+    showTwoFactor,
+    setShowTwoFactor,
 
+    pendingUserId,
+    email: form.email, // 🚀 RETORNO CLAVE: Pasamos el email del formulario hacia la vista del Login
+
+    completeLogin,
+
+    handleChange,
     handleSubmit,
   };
 }

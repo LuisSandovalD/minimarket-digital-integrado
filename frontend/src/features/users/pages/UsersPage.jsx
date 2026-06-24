@@ -12,6 +12,7 @@ import UsersModal from "../components/UsersModal";
 
 import UsersTableEmpty from "../components/UsersTableEmpty";
 
+import UsersLoading from "../components/UsersLoading";
 import useUsers from "../hooks/useUsers";
 
 // ========================================
@@ -101,31 +102,7 @@ export default function UsersPage() {
   // ========================================
 
   if (loading) {
-    return (
-      <div
-        className="
-          flex
-          min-h-[400px]
-          items-center
-          justify-center
-        "
-      >
-        <div
-          className="
-            h-10
-            w-10
-            animate-spin
-            rounded-full
-            border-2
-            border-slate-300
-            border-t-slate-900
-
-            dark:border-slate-700
-            dark:border-t-slate-100
-          "
-        />
-      </div>
-    );
+    return <UsersLoading />;
   }
 
   // ========================================

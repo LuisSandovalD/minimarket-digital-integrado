@@ -1,30 +1,33 @@
+// ========================================
+// features/sales/components/SummaryRow.jsx
+// ========================================
+
 export function SummaryRow({ label, value, bold = false }) {
   return (
-    <div className="flex items-center justify-between gap-4">
-      <span
+    <tr className="align-middle">
+      {/* Label en la celda izquierda */}
+      <td
         className={`
-          text-xs
-          tracking-wide
-
+          py-1 text-left text-xs tracking-wide
           ${
             bold
-              ? "text-slate-600 dark:text-slate-300 font-medium"
-              : "text-slate-500 dark:text-slate-500"
+              ? "text-slate-600 dark:text-slate-300 font-semibold"
+              : "text-slate-500 dark:text-slate-500 font-normal"
           }
         `}
       >
         {label}
-      </span>
+      </td>
 
-      <span
+      {/* Valor en la celda derecha */}
+      <td
         className={`
-          tabular-nums
-
+          py-1 text-right tabular-nums
           ${bold ? "text-base font-semibold" : "text-sm font-medium"}
         `}
       >
         {value}
-      </span>
-    </div>
+      </td>
+    </tr>
   );
 }

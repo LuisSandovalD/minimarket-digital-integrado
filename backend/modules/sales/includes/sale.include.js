@@ -7,7 +7,7 @@ const saleInclude = {
     select: {
       id: true,
       name: true,
-      ruc: true, // Si tu modelo Company no tiene ruc, quita esta línea
+      ruc: true,
     }
   },
   branch: {
@@ -17,7 +17,6 @@ const saleInclude = {
       address: true,
     }
   },
-  // 🟢 CORREGIDO: "seller" coincide exactamente con tu schema.prisma
   seller: {
     select: {
       id: true,
@@ -25,7 +24,6 @@ const saleInclude = {
       email: true,
     }
   },
-  // 🟢 CORREGIDO: "customer" acepta nulos en tu esquema, Prisma lo manejará bien
   customer: {
     select: {
       id: true,
@@ -36,7 +34,6 @@ const saleInclude = {
       email: true
     }
   },
-  // 🟢 CORREGIDO: "details" mapea con tu modelo SaleDetail y su relación "product"
   details: {
     include: {
       product: {
@@ -53,7 +50,6 @@ const saleInclude = {
       id: "asc"
     }
   },
-  // 🟢 CORREGIDO: Trae el historial de pagos asociados a la venta
   payments: {
     include: {
       method: {
@@ -66,6 +62,14 @@ const saleInclude = {
     },
     orderBy: {
       createdAt: "desc"
+    }
+  },
+
+  // 🎯 AGREGA ESTA LÍNEA AQUÍ:
+  // Le dice a Prisma que calcule la cantidad de elementos en la relación "details"
+  _count: {
+    select: {
+      details: true
     }
   }
 };

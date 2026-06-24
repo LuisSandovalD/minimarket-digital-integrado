@@ -1,335 +1,141 @@
-// ========================================
+// ============================================================================
 // features/purchase/components/steps/SupplierStep.jsx
-// ========================================
+// MODERNO Y TRANSPARENTE: Selección de proveedor con tarjetas de información sutiles
+// ============================================================================
 
-import { Building2 } from "lucide-react";
-
-import { InputList } from "@/components/forms";
+import { Select } from "@/components/forms/"; // Importación requerida para que el componente funcione
+import { Building2, FileText, Mail, Phone, User } from "lucide-react";
+import { useMemo } from "react";
 
 export default function SupplierStep({ suppliers = [], form, setForm }) {
-  const handleSelectSupplier = (supplier) => {
+  const handleSelectSupplier = (e) => {
+    const supplierId = e.target.value;
+    const selected = suppliers.find((s) => String(s.id) === String(supplierId));
+
     setForm((prev) => ({
       ...prev,
-
-      supplierId: supplier.id,
-
-      supplier,
+      supplierId: supplierId,
+      supplier: selected || null,
     }));
   };
 
-  const s = form?.supplier;
+  // Memorizamos las opciones para evitar cálculos innecesarios en renders secundarios
+  const supplierOptions = useMemo(() => {
+    return (Array.isArray(suppliers) ? suppliers : []).map((supplier) => {
+      const nameDisplay =
+        supplier?.companyName ||
+        supplier?.name ||
+        supplier?.razonSocial ||
+        "Proveedor sin nombre";
+      const rucDisplay = supplier?.ruc || supplier?.documentId || "";
 
-  const initials = s?.name
-    ? s.name
-        .split(" ")
-        .slice(0, 2)
-        .map((w) => w[0])
-        .join("")
-        .toUpperCase()
-    : null;
+      return {
+        value: supplier.id,
+        label: `${nameDisplay} ${rucDisplay ? `(RUC: ${rucDisplay})` : ""}`,
+      };
+    });
+  }, [suppliers]);
 
-  const fields = [
-    {
-      label: "RUC",
-      value: s?.ruc,
-    },
-    {
-      label: "Correo",
-      value: s?.email,
-    },
-    {
-      label: "Teléfono",
-      value: s?.phone,
-    },
-    {
-      label: "Dirección",
-      value: s?.address,
-    },
-  ];
+  const currentSupplier = suppliers.find(
+    (s) => String(s.id) === String(form?.supplierId),
+  );
 
   return (
-    <div className="flex-1 overflow-y-auto p-6">
-      <div className="space-y-6 p-5">
-        {/* HEADER */}
-
-        <div>
-          <h2
-            className="
-              text-[17px]
-              font-medium
-              tracking-tight
-              text-slate-900
-              dark:text-slate-100
-            "
-          >
-            Seleccionar proveedor
-          </h2>
-
-          <p
-            className="
-              mt-1
-              text-sm
-              text-slate-400
-              dark:text-slate-500
-            "
-          >
-            Busca y selecciona el proveedor para esta compra.
-          </p>
-        </div>
-
-        {/* SEARCH */}
-
-        <InputList
+    <div className="flex-1 overflow-y-auto bg-transparent custom-scrollbar mt-5">
+      <div className="space-y-6">
+        {/* SELECTOR PRINCIPAL */}
+        <Select
+          label="Seleccionar Proveedor o Distribuidor"
+          name="supplierId"
+          value={form?.supplierId || ""}
+          onChange={handleSelectSupplier}
+          options={supplierOptions}
+          placeholder="-- Elige un proveedor de la lista --"
           icon={Building2}
-          placeholder="Nombre, RUC o correo..."
-          data={suppliers}
-          getLabel={(supplier) =>
-            `${supplier.name || ""}${supplier.ruc ? ` · ${supplier.ruc}` : ""}`
-          }
-          onSelect={handleSelectSupplier}
+          required
         />
 
-        {/* SUPPLIER */}
+        {/* DETALLES DINÁMICOS DEL PROVEEDOR */}
+        {currentSupplier ? (
+          <div className="border border-slate-200/60 dark:border-slate-800/60 rounded-2xl p-5 bg-white/60 dark:bg-slate-950/40 backdrop-blur-sm shadow-sm space-y-4 animate-in fade-in slide-in-from-top-3 duration-300">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 border-b border-slate-100 dark:border-slate-900/60 pb-2.5 flex items-center gap-2">
+              <FileText size={14} />
+              Ficha Informativa Comercial
+            </h3>
 
-        {s ? (
-          <div>
-            {/* AVATAR */}
-
-            <div
-              className="
-                flex
-                items-center
-                gap-3.5
-                mb-5
-              "
-            >
-              <div
-                className="
-                  w-11
-                  h-11
-                  rounded-full
-                  shrink-0
-
-                  flex
-                  items-center
-                  justify-center
-
-                  text-[13px]
-                  font-semibold
-                  tracking-wide
-
-                  bg-blue-50
-                  text-blue-600
-
-                  dark:bg-blue-500/10
-                  dark:text-blue-400
-                "
-              >
-                {initials ?? <Building2 size={17} />}
-              </div>
-
-              <div>
-                <p
-                  className="
-                    text-[14px]
-                    font-medium
-                    text-slate-900
-                    dark:text-slate-100
-                  "
-                >
-                  {s.name}
-                </p>
-
-                <span
-                  className="
-                    inline-flex
-                    items-center
-                    gap-1
-                    mt-1
-
-                    text-[11px]
-                    font-medium
-
-                    px-2
-                    py-0.5
-                    rounded-full
-
-                    bg-emerald-50
-                    text-emerald-600
-
-                    dark:bg-emerald-500/10
-                    dark:text-emerald-400
-                  "
-                >
-                  <span className="text-[9px]">✓</span>
-                  Seleccionado
-                </span>
-              </div>
-            </div>
-
-            {/* DIVIDER */}
-
-            <div
-              className="
-                border-t
-                border-black/[0.05]
-                dark:border-white/[0.05]
-                mb-1
-              "
-            />
-
-            {/* INFO */}
-
-            <div
-              className="
-                divide-y
-                divide-black/[0.04]
-                dark:divide-white/[0.04]
-              "
-            >
-              {fields.map(({ label, value }) => (
-                <div
-                  key={label}
-                  className="
-                      flex
-                      items-baseline
-                      justify-between
-                      py-2.5
-                    "
-                >
-                  <span
-                    className="
-                        text-[12px]
-                        text-slate-400
-                        dark:text-slate-500
-                      "
-                  >
-                    {label}
-                  </span>
-
-                  <span
-                    className={`
-                        text-[13px]
-                        text-right
-                        max-w-[65%]
-                        break-words
-
-                        ${
-                          value
-                            ? `
-                              font-medium
-                              text-slate-800
-                              dark:text-slate-200
-                            `
-                            : `
-                              italic
-                              text-slate-300
-                              dark:text-slate-700
-                            `
-                        }
-                      `}
-                  >
-                    {value || "No registrado"}
-                  </span>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 text-sm">
+              {/* CONTACTO LEGAL */}
+              <div className="flex items-start gap-3 p-2 rounded-xl hover:bg-slate-100/40 dark:hover:bg-slate-900/30 transition-colors duration-200">
+                <User size={16} className="mt-0.5 text-slate-400 shrink-0" />
+                <div className="min-w-0">
+                  <p className="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider">
+                    Contacto Legal
+                  </p>
+                  <p className="font-semibold text-slate-800 dark:text-slate-200 truncate">
+                    {currentSupplier?.contactName ||
+                      currentSupplier?.contact ||
+                      "No especificado"}
+                  </p>
                 </div>
-              ))}
-            </div>
+              </div>
 
-            {/* NOTES */}
+              {/* IDENTIFICACIÓN */}
+              <div className="flex items-start gap-3 p-2 rounded-xl hover:bg-slate-100/40 dark:hover:bg-slate-900/30 transition-colors duration-200">
+                <Building2
+                  size={16}
+                  className="mt-0.5 text-slate-400 shrink-0"
+                />
+                <div className="min-w-0">
+                  <p className="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider">
+                    Identificación (RUC/DNI)
+                  </p>
+                  <p className="font-semibold text-slate-700 dark:text-slate-300 truncate font-mono">
+                    {currentSupplier?.ruc ||
+                      currentSupplier?.documentId ||
+                      "Sin documento"}
+                  </p>
+                </div>
+              </div>
 
-            <div className="mt-6">
-              <label
-                className="
-                  block
-                  mb-2
-                  text-sm
-                  font-medium
-                  text-slate-700
-                  dark:text-slate-300
-                "
-              >
-                Observaciones
-              </label>
+              {/* TELÉFONO */}
+              <div className="flex items-start gap-3 p-2 rounded-xl hover:bg-slate-100/40 dark:hover:bg-slate-900/30 transition-colors duration-200">
+                <Phone size={16} className="mt-0.5 text-slate-400 shrink-0" />
+                <div className="min-w-0">
+                  <p className="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider">
+                    Teléfono / Celular
+                  </p>
+                  <p className="font-semibold text-slate-800 dark:text-slate-200 truncate">
+                    {currentSupplier?.phone ||
+                      currentSupplier?.telephone ||
+                      "Sin teléfono"}
+                  </p>
+                </div>
+              </div>
 
-              <textarea
-                rows={4}
-                value={form.notes || ""}
-                onChange={(e) =>
-                  setForm((prev) => ({
-                    ...prev,
-                    notes: e.target.value,
-                  }))
-                }
-                placeholder="Observaciones de la compra (opcional)..."
-                className="
-                  w-full
-                  rounded-xl
-                  border
-
-                  border-slate-200
-                  dark:border-slate-800
-
-                  bg-white
-                  dark:bg-slate-950
-
-                  px-4
-                  py-3
-
-                  text-sm
-
-                  resize-none
-
-                  outline-none
-
-                  focus:ring-2
-                  focus:ring-blue-500/20
-                "
-              />
+              {/* CORREO ELECTRÓNICO */}
+              <div className="flex items-start gap-3 p-2 rounded-xl hover:bg-slate-100/40 dark:hover:bg-slate-900/30 transition-colors duration-200">
+                <Mail size={16} className="mt-0.5 text-slate-400 shrink-0" />
+                <div className="min-w-0 w-full">
+                  <p className="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider">
+                    Correo Electrónico
+                  </p>
+                  <p className="font-semibold text-slate-800 dark:text-slate-200 truncate block">
+                    {currentSupplier?.email || "Sin correo corporativo"}
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         ) : (
-          <div
-            className="
-              flex
-              flex-col
-              items-center
-              gap-1.5
-
-              py-14
-
-              text-center
-            "
-          >
+          /* ESTADO VACÍO (PLACEHOLDER) */
+          <div className="p-20 text-center border border-dashed border-slate-200/80 dark:border-slate-800/80 rounded-2xl bg-white/30 dark:bg-slate-950/10 backdrop-blur-xs animate-in fade-in duration-300">
             <Building2
-              size={26}
-              className="
-                text-slate-200
-                dark:text-slate-800
-                mb-2
-              "
+              size={28}
+              className="mx-auto text-slate-300 dark:text-slate-700 mb-3 animate-pulse"
             />
-
-            <p
-              className="
-                text-[14px]
-                font-medium
-
-                text-slate-400
-                dark:text-slate-600
-              "
-            >
-              Ningún proveedor seleccionado
-            </p>
-
-            <p
-              className="
-                text-[13px]
-
-                text-slate-300
-                dark:text-slate-700
-              "
-            >
-              Busca un proveedor para continuar.
+            <p className="text-xs font-medium text-slate-400 dark:text-slate-500 max-w-sm mx-auto leading-relaxed">
+              Por favor, selecciona un proveedor válido para cargar la Ficha
+              Comercial y poder continuar con la orden.
             </p>
           </div>
         )}

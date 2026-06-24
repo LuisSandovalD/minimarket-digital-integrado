@@ -19,7 +19,7 @@ export default function SaleFormModal({
   products = [],
   loading = false,
 
-  // Props provenientes del custom hook
+  // Props provenientes del custom hook de control de flujo
   step,
   form,
   setForm,
@@ -51,7 +51,7 @@ export default function SaleFormModal({
       </div>
 
       {/* ========================================
-       * CONTENT
+       * CONTENT (Renderizado condicional optimizado)
        * ====================================== */}
       <div className="flex-1 overflow-hidden">
         {step === 1 && (
@@ -87,25 +87,29 @@ export default function SaleFormModal({
       </div>
 
       {/* ========================================
-       * FOOTER
+       * FOOTER (Estrategia de navegación reactiva)
        * ====================================== */}
       <FooterModal>
         <div className="flex items-center justify-between w-full">
-          {/* LEFT */}
+          {/* LEFT: Botón de escape */}
           <ModernButton
             type="button"
+            variant="secondary"
             text="Cerrar"
             icon={X}
+            disabled={loading}
             onClick={onClose}
           />
 
-          {/* RIGHT */}
+          {/* RIGHT: Botones de transición de estado */}
           <div className="flex gap-3">
             {step > 1 && (
               <ModernButton
                 type="button"
+                variant="secondary"
                 text="Anterior"
                 icon={ChevronLeft}
+                disabled={loading}
                 onClick={handlePrevious}
               />
             )}
@@ -113,16 +117,22 @@ export default function SaleFormModal({
             {step < 4 ? (
               <ModernButton
                 type="button"
+                variant="primary"
                 text="Siguiente"
                 icon={ChevronRight}
                 onClick={handleNext}
               />
             ) : (
               <SubmitButton
+                variant="primary"
                 text={loading ? "Guardando..." : "Registrar Venta"}
                 icon={Save}
                 loading={loading}
-                onClick={handleSubmit}
+                disabled={loading}
+                onClick={(e) => {
+                  if (loading) return;
+                  handleSubmit(e);
+                }}
               />
             )}
           </div>

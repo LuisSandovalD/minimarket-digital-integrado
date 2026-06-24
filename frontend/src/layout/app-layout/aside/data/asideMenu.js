@@ -1,61 +1,46 @@
 // ========================================
 // config/menuByRole.js
-// ERP / POS MULTIEMPRESA
+// ERP / POS MULTIEMPRESA (MINIMALISTA)
 // ========================================
 
 import {
   Activity,
   Archive,
   BarChart3,
-  // SYSTEM
   Bell,
-  // BUSINESS
   Building2,
   ClipboardList,
   Cpu,
   CreditCard,
   Database,
   FileBarChart,
-  // EXTRA
   FileText,
   History,
-  // GENERAL
   LayoutDashboard,
   LifeBuoy,
-  // INVENTORY
   Package,
   PackageSearch,
   PieChart,
-  Receipt,
   ScanLine,
   Settings,
   ShieldCheck,
-  // SALES
   ShoppingCart,
   Store,
-  TrendingUp,
   Truck,
   User,
   UserCog,
-  // USERS
   Users,
   Wallet,
-  Warehouse,
+  Warehouse
 } from "lucide-react";
-
-// ========================================
-// MENU
-// ========================================
 
 export const menuByRole = {
   // =====================================================
   // ADMIN
   // =====================================================
-
   ADMIN: [
     {
       section: "GENERAL",
-
       items: [
         {
           id: "dashboard",
@@ -63,33 +48,28 @@ export const menuByRole = {
           icon: LayoutDashboard,
           href: "dashboard",
         },
-
         {
           id: "analytics",
           label: "Analítica",
           icon: BarChart3,
           href: "analytics",
         },
-
         {
           id: "reports",
           label: "Reportes",
           icon: FileBarChart,
           href: "reports",
         },
-
         {
           id: "activity",
-          label: "Actividad",
+          label: "Monitoreo",
           icon: Activity,
           href: "activity",
         },
       ],
     },
-
     {
-      section: "EMPRESAS",
-
+      section: "ESTRUCTURA",
       items: [
         {
           id: "companies",
@@ -97,128 +77,89 @@ export const menuByRole = {
           icon: Building2,
           href: "companies",
         },
-
-        {
-          id: "branches",
-          label: "Sucursales",
-          icon: Store,
-          href: "branches",
-        },
+        { id: "branches", label: "Sucursales", icon: Store, href: "branches" },
       ],
     },
-
     {
-      section: "USUARIOS",
-
+      section: "ACCESOS",
       items: [
-        {
-          id: "users",
-          label: "Usuarios",
-          icon: Users,
-          href: "users",
-        },
-
+        { id: "users", label: "Usuarios", icon: Users, href: "users" },
         {
           id: "employees",
           label: "Empleados",
           icon: UserCog,
           href: "employees",
         },
-
-        {
-          id: "customers",
-          label: "Clientes",
-          icon: User,
-          href: "customers",
-        },
-
-        {
-          id: "roles",
-          label: "Roles",
-          icon: ShieldCheck,
-          href: "roles",
-        },
-
-        {
-          id: "audit",
-          label: "Auditoría",
-          icon: History,
-          href: "audit",
-        },
+        { id: "customers", label: "Clientes", icon: User, href: "customers" },
+        { id: "roles", label: "Roles", icon: ShieldCheck, href: "roles" },
       ],
     },
-
     {
       section: "OPERACIONES",
-
       items: [
-        {
-          id: "purchases",
-          label: "Compras",
-          icon: Truck,
-          href: "purchases",
-        },
-
+        { id: "purchases", label: "Compras", icon: Truck, href: "purchases" },
         {
           id: "inventory",
           label: "Inventario",
           icon: Warehouse,
           href: "inventory",
         },
-
         {
           id: "inventory-history",
           label: "Movimientos",
           icon: Archive,
           href: "inventory-history",
         },
-
-        {
-          id: "payments",
-          label: "Pagos",
-          icon: CreditCard,
-          href: "payments",
-        },
+        { id: "payments", label: "Pagos", icon: CreditCard, href: "payments" },
       ],
     },
-
     {
       section: "SISTEMA",
-
       items: [
         {
           id: "notifications",
-          label: "Notificaciones",
+          label: "Alertas",
           icon: Bell,
           href: "notifications",
         },
-
-        {
-          id: "support",
-          label: "Soporte",
-          icon: LifeBuoy,
-          href: "support",
-        },
-
+        { id: "support", label: "Tickets", icon: LifeBuoy, href: "support" },
         {
           id: "database",
-          label: "Base de datos",
+          label: "Base de Datos",
           icon: Database,
           href: "database",
         },
+        { id: "automation", label: "IA", icon: Cpu, href: "automation" },
+        { id: "audit", label: "Auditoría", icon: History, href: "audit" },
+        { id: "settings", label: "Ajustes", icon: Settings, href: "settings" },
+      ],
+    },
+  ],
 
+  // =====================================================
+  // SUPPORT
+  // =====================================================
+  SUPPORT: [
+    {
+      section: "GENERAL",
+      items: [
         {
-          id: "automation",
-          label: "IA",
-          icon: Cpu,
-          href: "automation",
+          id: "dashboard",
+          label: "Dashboard",
+          icon: LayoutDashboard,
+          href: "dashboard",
         },
-
+      ],
+    },
+    {
+      section: "MESA DE AYUDA",
+      items: [
+        { id: "support", label: "Tickets", icon: LifeBuoy, href: "support" },
         {
-          id: "settings",
-          label: "Configuración",
-          icon: Settings,
-          href: "settings",
+          id: "ticket-logs",
+          label: "Historial",
+          icon: ClipboardList,
+          href: "support-history",
         },
       ],
     },
@@ -227,11 +168,9 @@ export const menuByRole = {
   // =====================================================
   // MANAGER
   // =====================================================
-
   MANAGER: [
     {
       section: "GENERAL",
-
       items: [
         {
           id: "dashboard",
@@ -239,21 +178,18 @@ export const menuByRole = {
           icon: LayoutDashboard,
           href: "dashboard",
         },
-
         {
           id: "analytics",
           label: "Analítica",
           icon: BarChart3,
           href: "analytics",
         },
-
         {
           id: "reports",
           label: "Reportes",
           icon: FileBarChart,
           href: "reports",
         },
-
         {
           id: "statistics",
           label: "Estadísticas",
@@ -262,105 +198,56 @@ export const menuByRole = {
         },
       ],
     },
-
     {
       section: "VENTAS",
-
       items: [
-        {
-          id: "sales",
-          label: "Ventas",
-          icon: ShoppingCart,
-          href: "sales",
-        },
-
+        { id: "sales", label: "Ventas", icon: ShoppingCart, href: "sales" },
         {
           id: "sale-details",
-          label: "Detalle ventas",
+          label: "Detalles",
           icon: ClipboardList,
           href: "sale-details",
         },
-
-        {
-          id: "payments",
-          label: "Pagos",
-          icon: CreditCard,
-          href: "payments",
-        },
-
-        {
-          id: "cashbox",
-          label: "Caja",
-          icon: Wallet,
-          href: "cashbox",
-        },
-
-        {
-          id: "finance",
-          label: "Finanzas",
-          icon: TrendingUp,
-          href: "finance",
-        },
-
-        {
-          id: "invoices",
-          label: "Facturación",
-          icon: Receipt,
-          href: "invoices",
-        },
       ],
     },
-
     {
-      section: "INVENTARIO",
-
+      section: "STOCK",
       items: [
-        {
-          id: "products",
-          label: "Productos",
-          icon: Package,
-          href: "products",
-        },
-
+        { id: "products", label: "Productos", icon: Package, href: "products" },
         {
           id: "inventory",
           label: "Inventario",
           icon: Warehouse,
           href: "inventory",
         },
-
         {
           id: "inventory-history",
           label: "Movimientos",
           icon: Archive,
           href: "inventory-history",
         },
-
-        {
-          id: "barcode",
-          label: "Código barras",
-          icon: ScanLine,
-          href: "barcode",
-        },
+        { id: "barcode", label: "Códigos", icon: ScanLine, href: "barcode" },
       ],
     },
-
     {
       section: "COMPRAS",
-
       items: [
         {
-          id: "purchases",
-          label: "Compras",
+          id: "suppliers",
+          label: "Proveedores",
           icon: Truck,
+          href: "suppliers",
+        },
+        {
+          id: "purchases",
+          label: "Órdenes",
+          icon: ClipboardList,
           href: "purchases",
         },
       ],
     },
-
     {
       section: "CATÁLOGOS",
-
       items: [
         {
           id: "categories",
@@ -368,37 +255,17 @@ export const menuByRole = {
           icon: FileText,
           href: "categories",
         },
-
-        {
-          id: "units",
-          label: "Unidades",
-          icon: PackageSearch,
-          href: "units",
-        },
+        { id: "units", label: "Unidades", icon: PackageSearch, href: "units" },
       ],
     },
-
     {
       section: "PERSONAL",
-
       items: [
-        {
-          id: "employees",
-          label: "Empleados",
-          icon: Users,
-          href: "employees",
-        },
-
-        {
-          id: "customers",
-          label: "Clientes",
-          icon: User,
-          href: "customers",
-        },
-
+        { id: "employees", label: "Empleados", icon: Users, href: "employees" },
+        { id: "customers", label: "Clientes", icon: User, href: "customers" },
         {
           id: "notifications",
-          label: "Notificaciones",
+          label: "Alertas",
           icon: Bell,
           href: "notifications",
         },
@@ -409,11 +276,9 @@ export const menuByRole = {
   // =====================================================
   // SUPERVISOR
   // =====================================================
-
   SUPERVISOR: [
     {
       section: "OPERACIONES",
-
       items: [
         {
           id: "dashboard",
@@ -421,42 +286,21 @@ export const menuByRole = {
           icon: LayoutDashboard,
           href: "dashboard",
         },
-
-        {
-          id: "sales",
-          label: "Ventas",
-          icon: ShoppingCart,
-          href: "sales",
-        },
-
+        { id: "sales", label: "Ventas", icon: ShoppingCart, href: "sales" },
         {
           id: "inventory",
           label: "Inventario",
           icon: Warehouse,
           href: "inventory",
         },
-
         {
           id: "inventory-history",
           label: "Movimientos",
           icon: Archive,
           href: "inventory-history",
         },
-
-        {
-          id: "employees",
-          label: "Personal",
-          icon: Users,
-          href: "employees",
-        },
-
-        {
-          id: "customers",
-          label: "Clientes",
-          icon: User,
-          href: "customers",
-        },
-
+        { id: "employees", label: "Personal", icon: Users, href: "employees" },
+        { id: "customers", label: "Clientes", icon: User, href: "customers" },
         {
           id: "reports",
           label: "Reportes",
@@ -470,67 +314,23 @@ export const menuByRole = {
   // =====================================================
   // EMPLOYEE
   // =====================================================
-
   EMPLOYEE: [
     {
       section: "PUNTO DE VENTA",
-
       items: [
         {
           id: "dashboard",
-          label: "Dashboard",
+          label: "Inicio",
           icon: LayoutDashboard,
           href: "dashboard",
         },
-
-        {
-          id: "sales",
-          label: "Ventas",
-          icon: ShoppingCart,
-          href: "sales",
-        },
-
-        {
-          id: "customers",
-          label: "Clientes",
-          icon: User,
-          href: "customers",
-        },
-
-        {
-          id: "payments",
-          label: "Pagos",
-          icon: CreditCard,
-          href: "payments",
-        },
-
-        {
-          id: "cashbox",
-          label: "Caja",
-          icon: Wallet,
-          href: "cashbox",
-        },
-
-        {
-          id: "products",
-          label: "Productos",
-          icon: Package,
-          href: "products",
-        },
-
-        {
-          id: "inventory",
-          label: "Consultar stock",
-          icon: Warehouse,
-          href: "inventory",
-        },
-
-        {
-          id: "barcode",
-          label: "Escáner",
-          icon: ScanLine,
-          href: "barcode",
-        },
+        { id: "sales", label: "Venta POS", icon: ShoppingCart, href: "sales" },
+        { id: "customers", label: "Clientes", icon: User, href: "customers" },
+        { id: "payments", label: "Pagos", icon: CreditCard, href: "payments" },
+        { id: "cashbox", label: "Caja", icon: Wallet, href: "cashbox" },
+        { id: "products", label: "Productos", icon: Package, href: "products" },
+        { id: "inventory", label: "Stock", icon: Warehouse, href: "inventory" },
+        { id: "barcode", label: "Escáner", icon: ScanLine, href: "barcode" },
       ],
     },
   ],
@@ -538,11 +338,9 @@ export const menuByRole = {
   // =====================================================
   // VIEWER
   // =====================================================
-
   VIEWER: [
     {
       section: "CONSULTAS",
-
       items: [
         {
           id: "dashboard",
@@ -550,34 +348,25 @@ export const menuByRole = {
           icon: LayoutDashboard,
           href: "dashboard",
         },
-
         {
           id: "analytics",
           label: "Analítica",
           icon: BarChart3,
           href: "analytics",
         },
-
         {
           id: "reports",
           label: "Reportes",
           icon: FileBarChart,
           href: "reports",
         },
-
         {
           id: "inventory",
           label: "Inventario",
           icon: Warehouse,
           href: "inventory",
         },
-
-        {
-          id: "sales",
-          label: "Ventas",
-          icon: ShoppingCart,
-          href: "sales",
-        },
+        { id: "sales", label: "Ventas", icon: ShoppingCart, href: "sales" },
       ],
     },
   ],

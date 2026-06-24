@@ -1,4 +1,12 @@
-import { useState } from "react";
+// ========================================
+// features/sales/hooks/useSaleForm.js
+// ========================================
+import { useMemo, useState } from "react";
+
+const getTodayDateString = () => {
+  const today = new Date();
+  return today.toISOString().split("T")[0];
+};
 
 export function useSaleForm({ onSubmit, onClose }) {
   const [step, setStep] = useState(1);
@@ -8,9 +16,21 @@ export function useSaleForm({ onSubmit, onClose }) {
     customer: null,
     details: [],
     saleType: "CASH_SALE",
-    payments: [{ id: "pay-1", method: "CASH", amount: "", reference: "" }],
+    invoiceType: "BOLETA",
+    payments: [
+      {
+        id: "initial-cash-pay",
+        method: "CASH",
+        amount: "",
+        reference: "EFECTIVO-CAJA-01",
+      },
+    ],
     creditDueDate: "",
     notes: "",
+    discount: 0,
+    subtotal: 0,
+    tax: 0,
+    total: 0,
   };
 
   const [form, setForm] = useState(initialFormState);
@@ -21,7 +41,7 @@ export function useSaleForm({ onSubmit, onClose }) {
       return;
     }
     if (step === 2 && form.details.length === 0) {
-      alert("Agregue al menos un producto");
+      alert("Agregue al menos un producto al carrito");
       return;
     }
     setStep((prev) => Math.min(prev + 1, 4));
@@ -31,12 +51,32 @@ export function useSaleForm({ onSubmit, onClose }) {
     setStep((prev) => Math.max(prev - 1, 1));
   };
 
-  const subtotal = form.details.reduce(
-    (acc, item) => acc + Number(item.subtotal || 0),
-    0,
-  );
-  const tax = subtotal * 0.18;
-  const total = subtotal + tax;
+  // 📊 Cómputo matemático dinámico en tiempo real para las vistas del formulario POS
+  const { subtotal, tax, total } = useMemo(() => {
+    const details = form.details || [];
+    const rawSubtotal = details.reduce(
+      (acc, item) =>
+        acc +
+        Number(item.quantity || 0) * Number(item.price || item.salePrice || 0),
+      0,
+    );
+    const subtotalRedondeado = Math.round(rawSubtotal * 100) / 100;
+    const descuentoRedondeado = Number(form.discount || 0);
+
+    const netoConDescuento = Math.max(
+      0,
+      subtotalRedondeado - descuentoRedondeado,
+    );
+    const impuestoCalculado = Math.round(netoConDescuento * 0.18 * 100) / 100;
+    const totalCalculado =
+      Math.round((netoConDescuento + impuestoCalculado) * 100) / 100;
+
+    return {
+      subtotal: subtotalRedondeado,
+      tax: impuestoCalculado,
+      total: totalCalculado,
+    };
+  }, [form.details, form.discount]);
 
   const handleSubmit = async () => {
     const paymentMethodMap = {
@@ -46,22 +86,42 @@ export function useSaleForm({ onSubmit, onClose }) {
       PLIN: 4,
       TRANSFER: 5,
     };
+    let finalPayments = [];
+
+    if (form.saleType === "CREDIT_SALE") {
+      finalPayments = [
+        {
+          paymentMethodId: 1,
+          amount: Number(total.toFixed(2)),
+          status: "PENDING",
+          dueDate: form.creditDueDate || getTodayDateString(),
+          reference: "CRÉDITO-DIRECTO",
+        },
+      ];
+    } else {
+      finalPayments = (form.payments || [])
+        .filter((p) => p.amount && Number(p.amount) > 0)
+        .map((p) => ({
+          amount: Number(Number(p.amount).toFixed(2)),
+          status: "COMPLETED",
+          paymentMethodId: paymentMethodMap[p.method] || 1,
+          reference: p.reference?.trim() || "EFECTIVO-CAJA-01",
+        }));
+    }
 
     const payload = {
-      customerId: Number(form.customerId),
-      notes: form.notes || "",
+      customerId: form.customerId ? Number(form.customerId) : 1,
+      invoiceType: form.invoiceType || "BOLETA",
+      discount: Number(form.discount || 0),
+      notes:
+        form.notes?.trim() || "Venta presencial en tienda - Pago en efectivo",
+      status: form.saleType === "CREDIT_SALE" ? "CREDIT_PENDING" : "COMPLETED",
       details: form.details.map((item) => ({
         productId: Number(item.productId),
         quantity: Number(item.quantity),
-        price: Number(item.unitPrice),
+        price: Number(item.price || item.salePrice || 0),
       })),
-      payments: form.payments
-        .filter((p) => Number(p.amount) > 0)
-        .map((p) => ({
-          paymentMethodId: paymentMethodMap[p.method],
-          amount: Number(p.amount),
-          reference: p.reference || null,
-        })),
+      payments: finalPayments,
     };
 
     try {
@@ -70,7 +130,10 @@ export function useSaleForm({ onSubmit, onClose }) {
       setForm(initialFormState);
       onClose();
     } catch (error) {
-      console.error("SALE ERROR =>", error?.response?.data || error);
+      console.error(
+        "❌ Error al procesar el envío del formulario de ventas:",
+        error,
+      );
     }
   };
 

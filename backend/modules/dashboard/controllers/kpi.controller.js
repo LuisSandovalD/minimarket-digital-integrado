@@ -1,37 +1,30 @@
-const kpiService =
-    require("../services/kpi.service");
+// ============================================================================
+// controllers/kpi.controller.js
+// ============================================================================
+const kpiService = require("../services/kpi.service");
+const { dashboardFilter } = require("../filters/dashboard.filter");
 
-const {
-    dashboardFilter
-} = require("../filters/dashboard.filter");
+exports.getKPIs = async (req, res, next) => {
+    try {
+        // Extracción limpia del contexto multi-tenant y el rol del usuario
+        const { companyId, role } = req.user;
 
-exports.getKPIs =
-    async (req, res, next) => {
+        // Procesamos el filtro de fechas (con fallback automático a 'TODAY')
+        const dateFilter = dashboardFilter(req.query);
 
-        try {
+        // Solicitamos los KPIs al servicio inyectando el rol para su debida restricción
+        const data = await kpiService.getKPIs(
+            companyId,
+            dateFilter,
+            role
+        );
 
-            const companyId =
-                req.user.companyId;
+        return res.status(200).json({
+            success: true,
+            data
+        });
 
-            const dateFilter =
-                dashboardFilter(
-                    req.query
-                );
-
-            const data =
-                await kpiService.getKPIs(
-                    companyId,
-                    dateFilter
-                );
-
-            return res.status(200)
-                .json({
-                    success: true,
-                    data
-                });
-
-        } catch (error) {
-            next(error);
-        }
-
-    };
+    } catch (error) {
+        next(error);
+    }
+};

@@ -1,10 +1,14 @@
 // ========================================
+// controllers/sale.controller.js
+// ========================================
+
+// ========================================
 // SERVICES
 // ========================================
 
 const {
   createSaleService,
-} = require("../services/sale.service");
+} = require("../services/sale-create.service");
 
 // ========================================
 // CREATE SALE

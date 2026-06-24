@@ -2,146 +2,45 @@
 // features/sale-detail/components/SaleDetailTable.jsx
 // ========================================
 
-import {
-  Activity,
-  BadgeDollarSign,
-  DollarSign,
-  Eye,
-  Package,
-  Percent,
-  Receipt,
-  Settings2,
-  ShoppingCart,
-} from "lucide-react";
-
 import { ModernButton } from "@/components/buttons";
-import { Table, THead } from "@/components/data-display";
+import { Table, TFooter, THead } from "@/components/data-display";
+import { Eye, FileSearch, Package, Receipt } from "lucide-react";
 
-export default function SaleDetailTable({ details = [], onView }) {
-  // ========================================
-  // COLUMNS
-  // ========================================
+// Configuración de columnas nativas (Asegúrate de remover Descuento, Impuesto y Estado aquí)
+import { saleDetailColumns } from "../constants/saleDetail.columns";
 
-  const columns = [
-    {
-      key: "sale",
-      label: (
-        <div className="flex items-center gap-2">
-          <Receipt size={14} />
-          Venta
-        </div>
-      ),
-    },
-    {
-      key: "product",
-      label: (
-        <div className="flex items-center gap-2">
-          <Package size={14} />
-          Producto
-        </div>
-      ),
-    },
-    {
-      key: "quantity",
-      label: (
-        <div className="flex items-center gap-2">
-          <ShoppingCart size={14} />
-          Cantidad
-        </div>
-      ),
-    },
-    {
-      key: "price",
-      label: (
-        <div className="flex items-center gap-2">
-          <DollarSign size={14} />
-          Precio U.
-        </div>
-      ),
-    },
-    {
-      key: "subtotal",
-      label: (
-        <div className="flex items-center gap-2">
-          <DollarSign size={14} />
-          Subtotal
-        </div>
-      ),
-    },
-    {
-      key: "discount",
-      label: (
-        <div className="flex items-center gap-2">
-          <BadgeDollarSign size={14} />
-          Descuento
-        </div>
-      ),
-    },
-    {
-      key: "tax",
-      label: (
-        <div className="flex items-center gap-2">
-          <Percent size={14} />
-          {/* ✅ FIX: el IGV pertenece a la venta completa, no a la línea */}
-          IGV (venta)
-        </div>
-      ),
-    },
-    {
-      key: "total",
-      label: (
-        <div className="flex items-center gap-2">
-          <DollarSign size={14} />
-          Total venta
-        </div>
-      ),
-    },
-    {
-      key: "status",
-      label: (
-        <div className="flex items-center gap-2">
-          <Activity size={14} />
-          Estado
-        </div>
-      ),
-    },
-    {
-      key: "actions",
-      label: (
-        <div className="flex items-center gap-2">
-          <Settings2 size={14} />
-          Acciones
-        </div>
-      ),
-    },
-  ];
+export default function SaleDetailTable({
+  details = [],
+  onView,
+  onTrackInvoice,
+  page = 1,
+  totalPages = 1,
+  onPrevPage,
+  onNextPage,
+}) {
+  const safeDetails = Array.isArray(details) ? details : [];
 
   // ========================================
-  // FORMAT MONEY
+  // MAPEO DINÁMICO DE COLUMNAS
   // ========================================
+  const columns = saleDetailColumns.map((col) => ({
+    key: col.key,
+    label: (
+      <div className="flex items-center gap-2">
+        {col.Icon && <col.Icon size={14} />}
+        {col.text}
+      </div>
+    ),
+  }));
 
+  // ========================================
+  // FORMATEADOR DE MONEDA NACIONAL (PEN)
+  // ========================================
   const formatMoney = (value) =>
     new Intl.NumberFormat("es-PE", {
       style: "currency",
       currency: "PEN",
     }).format(Number(value || 0));
-
-  // ========================================
-  // STATUS COLOR
-  // ========================================
-
-  const getStatusStyles = (status) => {
-    switch (status) {
-      case "COMPLETED":
-        return "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400";
-      case "PENDING":
-        return "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400";
-      case "CANCELLED":
-        return "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400";
-      default:
-        return "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300";
-    }
-  };
 
   return (
     <div className="space-y-5">
@@ -149,8 +48,9 @@ export default function SaleDetailTable({ details = [], onView }) {
         <h2 className="text-xl font-semibold tracking-tight text-slate-900 dark:text-white">
           Detalles de Ventas
         </h2>
-        <p className="mt-1 text-sm text-slate-500">
-          Historial de productos vendidos.
+        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+          Audita el historial físico de productos vendidos y montos aplicados
+          por línea de transacción.
         </p>
       </div>
 
@@ -158,87 +58,154 @@ export default function SaleDetailTable({ details = [], onView }) {
         <THead columns={columns} />
 
         <tbody>
-          {details.length > 0 ? (
-            details.map((detail) => (
-              <tr
-                key={detail.id}
-                className="border-b border-slate-200/50 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-900/40"
-              >
-                {/* SALE */}
-                <td className="px-6 py-5">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-100 dark:bg-slate-800">
-                      <Receipt size={18} className="text-slate-500" />
+          {safeDetails.length > 0 ? (
+            safeDetails.map((detail, index) => {
+              if (!detail) return null;
+
+              const rowKey = detail.id || `detail-${index}`;
+
+              // Tolerancia relacional (Sequelize minúsculas/mayúsculas)
+              const currentSale = detail.sale || detail.Sale || {};
+              const currentProduct = detail.product || detail.Product || {};
+
+              // Parseo seguro de métricas nativas de la partida
+              const priceUnit = Number(detail.price || 0);
+              const qty = Number(detail.quantity || 0);
+              const discountAmount = Number(detail.discount || 0);
+
+              // ==========================================================
+              // RECONCILIACIÓN MATEMÁTICA CON IGV
+              // ==========================================================
+              const baseBruta = priceUnit * qty - discountAmount;
+
+              let subtotalAmount, lineTotal;
+
+              if (detail.subtotal !== undefined) {
+                subtotalAmount = Number(detail.subtotal || 0);
+                const taxAmount =
+                  detail.tax !== undefined
+                    ? Number(detail.tax || 0)
+                    : subtotalAmount * 0.18;
+                lineTotal = subtotalAmount + taxAmount;
+              } else {
+                lineTotal = baseBruta;
+                subtotalAmount = lineTotal / 1.18;
+              }
+
+              return (
+                <tr
+                  key={rowKey}
+                  className="border-b border-slate-200/50 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-900/40 transition-colors"
+                >
+                  {/* 1. NÚMERO DE COMPROBANTE */}
+                  <td className="px-6 py-4">
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-500">
+                        <Receipt size={16} />
+                      </div>
+                      <span className="text-sm font-semibold text-slate-800 dark:text-white">
+                        {currentSale.saleNumber ||
+                          currentSale.invoiceNumber ||
+                          `TRX-${detail.saleId || currentSale.id || ""}`}
+                      </span>
                     </div>
-                    <span className="text-sm font-semibold">
-                      {detail.sale?.saleNumber}
+                  </td>
+
+                  {/* 2. DESCRIPCIÓN DEL PRODUCTO */}
+                  <td className="px-6 py-4">
+                    <p
+                      className="text-sm font-medium text-slate-900 dark:text-white max-w-[240px] truncate"
+                      title={currentProduct.name || detail.productName}
+                    >
+                      {currentProduct.name ||
+                        detail.productName ||
+                        "Artículo Descontinuado"}
+                    </p>
+                    {(currentProduct.sku || detail.productSku) && (
+                      <span className="text-[10px] font-mono text-slate-400 dark:text-slate-500 block mt-0.5">
+                        SKU: {currentProduct.sku || detail.productSku}
+                      </span>
+                    )}
+                  </td>
+
+                  {/* 3. CANTIDAD VENDIDA */}
+                  <td className="px-6 py-4 text-sm font-medium text-slate-700 dark:text-slate-300">
+                    {qty} u.
+                  </td>
+
+                  {/* 4. PRECIO UNITARIO */}
+                  <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">
+                    {formatMoney(priceUnit)}
+                  </td>
+
+                  {/* 5. SUBTOTAL DE LÍNEA (SIN IMPUESTO) */}
+                  <td className="px-6 py-4">
+                    <span className="text-sm font-medium text-slate-900 dark:text-slate-100">
+                      {formatMoney(subtotalAmount)}
                     </span>
-                  </div>
-                </td>
+                  </td>
 
-                {/* PRODUCT */}
-                <td className="px-6 py-5">{detail.product?.name}</td>
+                  {/* 6. TOTAL DE LA PARTIDA (CON IMPUESTO) */}
+                  <td className="px-6 py-4">
+                    <span className="text-sm font-bold text-slate-900 dark:text-white bg-slate-100 dark:bg-slate-800/60 px-2.5 py-1 rounded-lg border border-slate-200/60 dark:border-slate-700/50">
+                      {formatMoney(lineTotal)}
+                    </span>
+                  </td>
 
-                {/* QUANTITY */}
-                <td className="px-6 py-5">{detail.quantity}</td>
-
-                {/* PRICE UNITARIO — dato del detalle */}
-                <td className="px-6 py-5">{formatMoney(detail.price)}</td>
-
-                {/* SUBTOTAL LÍNEA — dato del detalle */}
-                <td className="px-6 py-5 font-semibold">
-                  {formatMoney(detail.subtotal)}
-                </td>
-
-                {/* DESCUENTO LÍNEA — dato del detalle */}
-                <td className="px-6 py-5">{formatMoney(detail.discount)}</td>
-
-                {/* ✅ FIX: IGV de la venta completa, etiquetado correctamente */}
-                <td className="px-6 py-5 text-slate-500">
-                  {formatMoney(detail.sale?.tax || 0)}
-                </td>
-
-                {/* ✅ FIX: Total de la venta completa, antes no existía en la tabla */}
-                <td className="px-6 py-5 font-semibold">
-                  {formatMoney(detail.sale?.total || 0)}
-                </td>
-
-                {/* STATUS */}
-                <td className="px-6 py-5">
-                  <span
-                    className={`inline-flex rounded-xl px-3 py-1 text-xs font-semibold ${getStatusStyles(detail.sale?.status)}`}
-                  >
-                    {detail.sale?.status}
-                  </span>
-                </td>
-
-                {/* ACTIONS */}
-                <td className="px-6 py-5">
-                  <ModernButton
-                    text="Ver"
-                    icon={Eye}
-                    variant="secondary"
-                    onClick={() => onView?.(detail)}
-                  />
-                </td>
-              </tr>
-            ))
+                  {/* 7. PANEL DE ACCIONES */}
+                  <td className="px-6 py-4">
+                    <div className="flex items-center gap-2">
+                      <ModernButton
+                        type="button"
+                        icon={Eye}
+                        variant="secondary"
+                        text="Ver"
+                        onClick={() => onView?.(detail)}
+                      />
+                      {onTrackInvoice && (
+                        <ModernButton
+                          type="button"
+                          icon={FileSearch}
+                          variant="outline"
+                          onClick={() => onTrackInvoice(detail)}
+                          className="p-2 h-9 w-9 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"
+                          title="Rastrear Comprobante"
+                        />
+                      )}
+                    </div>
+                  </td>
+                </tr>
+              );
+            })
           ) : (
             <tr>
-              <td colSpan={10} className="px-6 py-16 text-center">
+              <td colSpan={7} className="px-6 py-16 text-center">
                 <div className="flex flex-col items-center">
-                  <Receipt size={40} className="mb-4 text-slate-400" />
-                  <h3 className="text-sm font-semibold">
-                    No hay detalles de venta
+                  <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-100 dark:bg-slate-800">
+                    <Package className="h-6 w-6 text-slate-400" />
+                  </div>
+                  <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200">
+                    No hay detalles de venta registrados
                   </h3>
-                  <p className="mt-1 text-sm text-slate-500">
-                    No existen registros disponibles.
+                  <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
+                    Las partidas de las transacciones aparecerán reflejadas en
+                    esta lista.
                   </p>
                 </div>
               </td>
             </tr>
           )}
         </tbody>
+
+        {/* PIE DE PÁGINA CON PAGINACIÓN */}
+        {safeDetails.length > 0 && (
+          <TFooter
+            page={page}
+            totalPages={totalPages}
+            onPrev={onPrevPage}
+            onNext={onNextPage}
+          />
+        )}
       </Table>
     </div>
   );

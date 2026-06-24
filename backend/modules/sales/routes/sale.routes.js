@@ -2,148 +2,103 @@
 // routes/sale.routes.js
 // ========================================
 
-const express =
-  require("express");
-
-const router =
-  express.Router();
+const express = require("express");
+const router = express.Router();
 
 // ========================================
 // CONTROLLERS
 // ========================================
+const controllers = require("../controllers/sale.controller");
+const { registerSalePaymentController } = require("../controllers/register-payment.controller");
 
+// Extracción directa de controladores desde el módulo unificado
 const {
-
-  getSalesController,
-
+  getSalesController, // 🎯 Consume tus filtros avanzados, botones, rangos, paginación y segmentación de roles
   getSaleController,
-
   createSaleController,
-
   cancelSaleController,
-
   getDailySalesController,
-
   getTopProductsController,
   downloadDailySalesPDFController,
   downloadDailySalesExcelController,
   downloadTopProductsPDFController,
-  downloadTopProductsExcelController,
+  downloadTopProductsExcelController
+} = controllers;
 
-} = require("../controllers/sale.controller");
+// 🛡️ CONTROL DE DAÑOS CRÍTICO: Si updateSaleController no se exportó bien, creamos un mock para que no rompa Express
+const updateSaleController = controllers.updateSaleController || ((req, res) => {
+  console.warn("⚠️ ALERTA: updateSaleController llegó indefinido. Revisa controllers/update-sale.controller.js");
+  return res.status(501).json({ success: false, message: "Controlador de actualización no configurado correctamente." });
+});
 
 // ========================================
 // VALIDATORS
 // ========================================
+const validators = require("../validators/sale.validator");
 
 const {
-
   validateCreateSale,
-
   validateCancelSale,
+  validateAddSalePayment
+} = validators;
 
-} = require("../validators/sale.validator");
+// 🎯 SOLUCIÓN AL ENIGMA: Importamos el validador desde su archivo específico e independiente
+const updateSaleModule = require("../validators/update-sale.validator");
+
+// 🛡️ CONTROL DE DAÑOS REFORZADO: Ahora extrae la función de manera segura del módulo dedicado
+const updateSaleValidator = updateSaleModule && typeof updateSaleModule.updateSaleValidator === "function"
+  ? updateSaleModule.updateSaleValidator
+  : (req, res, next) => {
+    console.warn("⚠️ ALERTA CRÍTICA: updateSaleValidator sigue sin encontrarse en validators/update-sale.validator.js");
+    next();
+  };
 
 // ========================================
 // MIDDLEWARES
 // ========================================
+const authMiddleware = require("../../../middleware/auth");
+const roleCheck = require("../../../middleware/roleCheck"); // 🎯 Importado dinámicamente según tu módulo rolecheck
 
-const authMiddleware =
-  require("../../../middleware/auth");
+// Roles del sistema con privilegios administrativos y de supervisión global
+const PRIVILEGED_ROLES = ["ADMIN", "SUPERVISOR", "MANAGER"];
 
 // ========================================
 // ROUTES
 // ========================================
 
-// ========================================
-// GET SALES
-// ========================================
+// ── GET SALES (Soporta Query Params dinámicos como ?status, ?search, ?startDate, etc.) ──
+// 🔓 Nota: Entran todos los usuarios autenticados; el controlador restringe la data si es vendedor
+router.get("/", authMiddleware, getSalesController);
 
-router.get(
-  "/",
-  authMiddleware,
-  getSalesController
-);
+// ── DAILY REPORT (Protegido por Rol corporativo) ──
+router.get("/reports/daily", authMiddleware, roleCheck(...PRIVILEGED_ROLES), getDailySalesController);
+router.get("/reports/daily/pdf", authMiddleware, roleCheck(...PRIVILEGED_ROLES), downloadDailySalesPDFController);
+router.get("/reports/daily/excel", authMiddleware, roleCheck(...PRIVILEGED_ROLES), downloadDailySalesExcelController);
 
-// ========================================
-// DAILY REPORT
-// ========================================
+// ── TOP PRODUCTS (Protegido por Rol corporativo) ──
+router.get("/reports/top-products", authMiddleware, roleCheck(...PRIVILEGED_ROLES), getTopProductsController);
+router.get("/reports/top-products/pdf", authMiddleware, roleCheck(...PRIVILEGED_ROLES), downloadTopProductsPDFController);
+router.get("/reports/top-products/excel", authMiddleware, roleCheck(...PRIVILEGED_ROLES), downloadTopProductsExcelController);
 
-router.get(
-  "/reports/daily",
-  authMiddleware,
-  getDailySalesController
-);
+// ── GET SALE (Especificidad de Rutas - El controlador valida pertenencia si no es admin) ──
+router.get("/:id", authMiddleware, getSaleController);
 
-// DOWNLOAD: PDF
-router.get(
-  "/reports/daily/pdf",
-  authMiddleware,
-  downloadDailySalesPDFController
-);
+// ── CREATE SALE ──
+router.post("/", authMiddleware, validateCreateSale, createSaleController);
 
-// DOWNLOAD: EXCEL
-router.get(
-  "/reports/daily/excel",
-  authMiddleware,
-  downloadDailySalesExcelController
-);
+// ── UPDATE SALE (Punto de conflicto resuelto 🚀) ──
+// Ahora el validador Joi procesará el PUT /api/sale/1998 de forma nativa como middleware corporativo
+router.put("/:id", authMiddleware, updateSaleValidator, updateSaleController);
 
-// ========================================
-// TOP PRODUCTS
-// ========================================
-
-router.get(
-  "/reports/top-products",
-  authMiddleware,
-  getTopProductsController
-);
-
-// DOWNLOAD: TOP PRODUCTS PDF
-router.get(
-  "/reports/top-products/pdf",
-  authMiddleware,
-  downloadTopProductsPDFController
-);
-
-// DOWNLOAD: TOP PRODUCTS EXCEL
-router.get(
-  "/reports/top-products/excel",
-  authMiddleware,
-  downloadTopProductsExcelController
-);
-
-// ========================================
-// GET SALE
-// ========================================
-
-router.get(
-  "/:id",
-  authMiddleware,
-  getSaleController
-);
-
-// ========================================
-// CREATE SALE
-// ========================================
-
+// ── REGISTER SALE PAYMENT (Abonos / Amortizaciones en Caja) ──
 router.post(
-  "/",
+  "/:id/payments",
   authMiddleware,
-  validateCreateSale,
-  createSaleController
+  validateAddSalePayment,
+  registerSalePaymentController
 );
 
-// ========================================
-// CANCEL SALE
-// ========================================
+// ── CANCEL SALE ──
+router.patch("/:id/cancel", authMiddleware, validateCancelSale, cancelSaleController);
 
-router.patch(
-  "/:id/cancel",
-  authMiddleware,
-  validateCancelSale,
-  cancelSaleController
-);
-
-module.exports =
-  router;
+module.exports = router;

@@ -1,62 +1,63 @@
-import api from "@/api/axios";
+// ========================================
+// services/account.service.js
+// ========================================
+import api from "@/api/axios"; // Tu instancia de Axios configurada
 
-/**
- * GET ACCOUNT PROFILE
- */
-export async function getMyAccount() {
-  const response = await api.get("/account/profile");
-  return response.data.user;
-}
+/* ======================================
+ * 👤 MI PERFIL
+ * ==================================== */
+export const getMyAccount = async () => {
+  const response = await api.get("/auth/me");
+  return response.data.data || response.data.user || response.data;
+};
 
-/**
- * UPDATE PROFILE
- */
-export async function updateMyAccount(data) {
-  const response = await api.put("/account/profile", data);
+export const updateMyAccount = async (data) => {
+  const response = await api.put("/auth/profile", data);
   return response.data;
-}
+};
 
-/**
- * CHANGE PASSWORD
- */
-export async function changePassword(data) {
-  const response = await api.put("/account/password", data);
+export const changePassword = async (data) => {
+  const response = await api.put("/auth/change-password", data);
   return response.data;
-}
+};
 
-/**
- * TOGGLE 2FA (FIX REAL)
- */
-export async function toggleTwoFactor(data) {
-  const response = await api.put("/account/2fa", data);
+/* ======================================
+ * 🔐 CONFIGURAR SEGUNDO FACTOR (2FA)
+ * ==================================== */
+export const setupTwoFactor = async () => {
+  const response = await api.post("/auth/2fa/setup");
+  return response.data; // { success: true, secret: '...', qrCode: 'data:image...' }
+};
+
+// 🚀 SOLUCIÓN: Ahora recibe el objeto completo { token, password } y lo envía en el body del POST
+export const enableTwoFactor = async ({ token, password }) => {
+  const response = await api.post("/auth/2fa/enable", { token, password });
   return response.data;
-}
+};
 
-/**
- * GET ACTIVE SESSIONS
- */
-export async function getSessions() {
-  const response = await api.get("/account/sessions");
-  return response.data.sessions;
-}
-
-/**
- * CLOSE SESSION
- */
-export async function closeSession(sessionId) {
-  const response = await api.delete(`/account/sessions/${sessionId}`);
+export const disableTwoFactor = async (password) => {
+  const response = await api.post("/auth/2fa/disable", { password });
   return response.data;
-}
+};
 
-/**
- * DELETE ACCOUNT
- */
-export async function deleteMyAccount(data) {
-  const response = await api.delete("/account/delete", {
-    data: {
-      password: data.password,
-    },
-  });
+/* ======================================
+ * 💻 DISPOSITIVOS Y SESIONES ACTIVAS
+ * ==================================== */
+export const getSessions = async () => {
+  const response = await api.get("/auth/sessions");
+  return response.data.sessions || response.data.data || response.data;
+};
 
+export const closeSession = async (sessionId) => {
+  // Envía el ID numérico limpio directo a la URL estandarizada del backend
+  const response = await api.delete(`/auth/sessions/${sessionId}`);
   return response.data;
-}
+};
+
+/* ======================================
+ * 🛑 BAJA DE CUENTA
+ * ==================================== */
+export const deleteMyAccount = async (data) => {
+  const response = await api.delete("/auth/profile", { data }); // Envía { password } seguro en el body
+  return response.data;
+};

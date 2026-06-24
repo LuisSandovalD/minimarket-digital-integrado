@@ -1,12 +1,8 @@
 // ========================================
-// FEATURES / SALES / MODALS HOOK
+// FEATURES / SALES / HOOKS / useSaleModals.js
 // ========================================
 
 import { useState } from "react";
-
-// ========================================
-// USE SALE MODALS
-// ========================================
 
 export const useSaleModals = () => {
   const [createOpen, setCreateOpen] = useState(false);
@@ -18,7 +14,7 @@ export const useSaleModals = () => {
   const [selectedSale, setSelectedSale] = useState(null);
 
   // ======================================
-  // OPEN DETAIL
+  // OPEN ACTIONS
   // ======================================
 
   const openDetail = (sale) => {
@@ -26,27 +22,15 @@ export const useSaleModals = () => {
     setDetailOpen(true);
   };
 
-  // ======================================
-  // OPEN PAYMENT
-  // ======================================
-
   const openPayment = (sale) => {
     setSelectedSale(sale);
     setPaymentOpen(true);
   };
 
-  // ======================================
-  // OPEN CANCEL
-  // ======================================
-
   const openCancel = (sale) => {
     setSelectedSale(sale);
     setCancelOpen(true);
   };
-
-  // ======================================
-  // OPEN RETURN
-  // ======================================
 
   const openReturn = (sale) => {
     setSelectedSale(sale);
@@ -54,7 +38,7 @@ export const useSaleModals = () => {
   };
 
   // ======================================
-  // CLOSE ALL (UTILIDAD POS)
+  // CLOSE ALL (Utilidad para limpiar el POS)
   // ======================================
 
   const closeAll = () => {
@@ -67,25 +51,21 @@ export const useSaleModals = () => {
   };
 
   return {
-    // states
+    // States
     createOpen,
     setCreateOpen,
-
     detailOpen,
     setDetailOpen,
-
     paymentOpen,
     setPaymentOpen,
-
     cancelOpen,
     setCancelOpen,
-
     returnOpen,
     setReturnOpen,
-
     selectedSale,
+    setSelectedSale,
 
-    // actions
+    // Actions
     openDetail,
     openPayment,
     openCancel,

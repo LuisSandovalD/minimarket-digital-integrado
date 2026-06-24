@@ -1,8 +1,13 @@
+// ========================================
+// hooks/useRegisterSubmit.js
+// ========================================
+
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import { registerService } from "../services/register.services";
-import { loginSuccess } from "../store/authActions";
+import { registerService } from "../services/auth.service";
+import { loginSuccess } from "../store/authSlice";
+import { saveSession } from "../utils/authStorage";
 
 export default function useRegisterSubmit({
   form,
@@ -12,39 +17,28 @@ export default function useRegisterSubmit({
   onClose,
 }) {
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
 
   const handleSubmit = async (event) => {
     event?.preventDefault();
 
     setError(null);
-
     setLoading(true);
 
     try {
       const payload = {
         name: form.name,
-
         email: form.email,
-
         password: form.password,
-
         role: form.role,
-
-        phone: form.phone,
-
+        phone: form.phone || null,
         plan: form.plan,
 
         company: {
           name: form.companyName,
-
           email: form.companyEmail || null,
-
           phone: form.companyPhone || null,
-
           address: form.companyAddress || null,
-
           ruc: form.companyRuc || null,
         },
       };
@@ -52,22 +46,24 @@ export default function useRegisterSubmit({
       if (form.branchName?.trim()) {
         payload.branch = {
           name: form.branchName,
-
-          code: form.branchCode,
-
-          address: form.branchAddress,
-
-          phone: form.branchPhone,
-
-          city: form.branchCity,
-
-          state: form.branchState,
-
-          country: form.branchCountry,
+          code: form.branchCode || null,
+          address: form.branchAddress || null,
+          phone: form.branchPhone || null,
+          city: form.branchCity || null,
+          state: form.branchState || null,
+          country: form.branchCountry || null,
         };
       }
 
       const response = await registerService(payload);
+
+      saveSession({
+        accessToken: response.accessToken,
+
+        refreshToken: response.refreshToken,
+
+        user: response.user,
+      });
 
       dispatch(loginSuccess(response.user));
 
@@ -75,7 +71,7 @@ export default function useRegisterSubmit({
 
       onClose?.();
 
-      navigate(`/${response.company.slug}/dashboard`);
+      navigate(`/${response.user.company.slug}/dashboard`);
 
       return response;
     } catch (error) {

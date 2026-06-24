@@ -1,11 +1,11 @@
 // ========================================
-// PAGES / SALE DETAILS PAGE
+// features/sale-detail/pages/SaleDetailsPage.jsx
 // ========================================
-
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 import { useSaleDetails } from "../hooks/useSaleDetails";
 
+import SaleDetailFilters from "../components/SaleDetailFilters";
 import SaleDetailHeader from "../components/SaleDetailHeader";
 import SaleDetailLoading from "../components/SaleDetailLoading";
 import SaleDetailModal from "../components/SaleDetailModal";
@@ -16,47 +16,60 @@ import SaleDetailsTable from "../components/SaleDetailsTable";
 // ========================================
 
 export default function SaleDetailsPage() {
-  const { saleDetails, loading } = useSaleDetails();
+  const {
+    saleDetails = [], // Mapeado directo a data.results de tu API
+    loading = false,
+    pagination = {}, // Contiene { page, totalPages } extraídos de data.info
+    metrics = {}, // Contiene { totalItems } extraído de data.info.total
+    actions = {}, // Contiene las funciones de cambio de página y filtros
+  } = useSaleDetails();
 
   const [selectedDetail, setSelectedDetail] = useState(null);
-
   const [modalOpen, setModalOpen] = useState(false);
 
   // ========================================
-  // STATS
+  // STATS (Cómputo optimizado con useMemo)
   // ========================================
 
-  const total = saleDetails?.length || 0;
+  // Total global de registros en la base de datos (Ej: 2081 ítems)
+  const total = Number(metrics?.totalItems || 0);
 
-  const totalQuantity =
-    saleDetails?.reduce((acc, item) => acc + Number(item.quantity || 0), 0) ||
-    0;
-
-  const totalRevenue =
-    saleDetails?.reduce((acc, item) => acc + Number(item.subtotal || 0), 0) ||
-    0;
+  // Memorizado defensivo para evitar recalcular reducers en re-renders innecesarios
+  const { totalQuantity, totalRevenue } = useMemo(() => {
+    return saleDetails.reduce(
+      (acc, item) => {
+        if (!item) return acc;
+        acc.totalQuantity += Number(item.quantity || 0);
+        acc.totalRevenue += Number(item.subtotal || 0);
+        return acc;
+      },
+      { totalQuantity: 0, totalRevenue: 0 },
+    );
+  }, [saleDetails]);
 
   // ========================================
-  // MODAL
+  // CONTROL DE MODALES (useCallback)
   // ========================================
 
-  const handleView = (detail) => {
+  const handleView = useCallback((detail) => {
+    if (!detail) return;
     setSelectedDetail(detail);
-
     setModalOpen(true);
-  };
+  }, []);
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     setModalOpen(false);
-
-    setSelectedDetail(null);
-  };
+    // Retraso técnico opcional para evitar parpadeos visuales en la animación de salida
+    setTimeout(() => {
+      setSelectedDetail(null);
+    }, 200);
+  }, []);
 
   // ========================================
-  // LOADING
+  // LOADING (Estrategia No Bloqueante en Background Fetch)
   // ========================================
 
-  if (loading) {
+  if (loading && saleDetails.length === 0) {
     return <SaleDetailLoading />;
   }
 
@@ -66,20 +79,31 @@ export default function SaleDetailsPage() {
 
   return (
     <div className="space-y-6">
-      {/* HEADER */}
-
+      {/* HEADER: Muestra estadísticas de la página actual e indicadores globales */}
       <SaleDetailHeader
         total={total}
         totalQuantity={totalQuantity}
         totalRevenue={totalRevenue}
       />
 
-      {/* TABLE */}
+      {/* PANEL DE FILTROS ORIENTADO A BACKEND */}
+      <SaleDetailFilters
+        onSearch={actions?.handleApplyFilters}
+        onClear={actions?.handleClearFilters}
+        loading={loading}
+      />
 
-      <SaleDetailsTable details={saleDetails} onView={handleView} />
+      {/* TABLE: Renderiza las filas actuales de la API y controla los botones de TFooter */}
+      <SaleDetailsTable
+        details={saleDetails}
+        onView={handleView}
+        page={pagination?.page || 1}
+        totalPages={pagination?.totalPages || 1}
+        onPrevPage={actions?.handlePrevPage || (() => {})}
+        onNextPage={actions?.handleNextPage || (() => {})}
+      />
 
-      {/* MODAL */}
-
+      {/* MODAL DEL DETALLE DE PARTIDA / ÍTEM */}
       <SaleDetailModal
         open={modalOpen}
         detail={selectedDetail}

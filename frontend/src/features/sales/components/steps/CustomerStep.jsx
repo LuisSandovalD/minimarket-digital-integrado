@@ -7,7 +7,29 @@ import { User } from "lucide-react";
 
 export default function CustomerStep({ customers = [], form, setForm }) {
   const handleSelectCustomer = (customer) => {
-    setForm((prev) => ({ ...prev, customerId: customer.id, customer }));
+    // ========================================
+    // AUTO-DETECCIÓN FISCAL PARA EL BACKEND
+    // ========================================
+    const documentNumber = customer?.documentNumber || "";
+
+    // Regla común: Si tiene 11 dígitos (RUC en Perú) suele ser FACTURA.
+    // De lo contrario, BOLETA.
+    const suggestedInvoiceType =
+      documentNumber.length === 11 ? "FACTURA" : "BOLETA";
+
+    setForm((prev) => ({
+      ...prev,
+      // 1. Forzamos que sea un entero numérico tal como funcionó en tu Postman ("customerId": 1)
+      customerId: Number(customer.id),
+
+      // 2. Conservamos el objeto completo para renderizar la UI local del frontend
+      customer,
+
+      // 3. Pasamos el tipo exacto que pide el JSON de tu backend
+      invoiceType: prev.invoiceType || suggestedInvoiceType,
+
+      // NOTA: Eliminamos 'clientDocument' si tu backend no lo mapea en el JSON de Postman
+    }));
   };
 
   const c = form?.customer;
@@ -79,7 +101,8 @@ export default function CustomerStep({ customers = [], form, setForm }) {
                   dark:bg-emerald-500/10 dark:text-emerald-400
                 "
                 >
-                  <span className="text-[9px]">✓</span> Seleccionado
+                  <span className="text-[9px]">✓</span> Seleccionado (
+                  {form.invoiceType})
                 </span>
               </div>
             </div>

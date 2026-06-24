@@ -1,131 +1,81 @@
-import { ShieldCheck, Sparkles } from "lucide-react";
+import { AsideHeaderSkeleton } from "@/components/skeletons";
+import { ShieldCheck } from "lucide-react";
 
-export default function AsideHeader({ isCollapsed }) {
+export default function AsideHeader({
+  isCollapsed,
+  company,
+  isLoading = false,
+}) {
+  const companyName = company?.name || "Empresa";
+  const companyEmail = company?.email || "contacto@empresa.com";
+  const tagLabel = company?.tag || "Sede Central";
+
+  const companyInitials =
+    companyName
+      ?.trim()
+      ?.split(" ")
+      ?.map((w) => w[0])
+      ?.slice(0, 2)
+      ?.join("")
+      ?.toUpperCase() || "EM";
+
+  const logoSize = isCollapsed
+    ? "w-11 h-11 rounded-xl text-sm"
+    : "w-12 h-12 rounded-xl text-base";
+  const statusSize = isCollapsed ? "w-3 h-3" : "w-3.5 h-3.5";
+
+  // ==========================================
+  // RENDER DE SKELETON (Pasando prop de estado)
+  // ==========================================
+  if (isLoading) {
+    return <AsideHeaderSkeleton isCollapsed={isCollapsed} />;
+  }
+
+  // ==========================================
+  // RENDER COMPONENTE COMPLETO (CON DATOS)
+  // ==========================================
   return (
-    <div
-      className="
-        relative
-        border-b
-        border-slate-200
-        dark:border-slate-800
-
-        bg-gradient-to-br
-        from-slate-50
-        to-white
-
-        dark:from-slate-900
-        dark:to-slate-950
-
-        overflow-hidden
-      "
-    >
+    <div className="relative border-b border-slate-200 dark:border-slate-800 overflow-hidden">
       {/* Glow decorativo */}
-      <div
-        className="
-          absolute
-          -top-10
-          -right-10
-          w-28
-          h-28
-          bg-indigo-500/10
-          blur-3xl
-          rounded-full
-        "
-      />
+      <div className="absolute -top-10 -right-10 w-28 h-28 bg-indigo-500/10 blur-3xl rounded-full" />
 
       <div
-        className={`
-          relative
-          flex
-          items-center
-          gap-4
-          transition-all
-          duration-300
-
-          ${isCollapsed ? "justify-center px-2 py-5" : "px-5 py-6"}
-        `}
+        className={`relative flex items-center justify-start text-left gap-2.5 transition-all duration-300 ${isCollapsed ? "justify-center px-2 py-5" : "px-5 py-6"}`}
       >
-        {/* Logo */}
-        <div
-          className="
-            relative
-            flex
-            items-center
-            justify-center
-
-            w-12
-            h-12
-
-            rounded-2xl
-
-            bg-gradient-to-br
-            from-indigo-500
-            via-violet-500
-            to-purple-600
-
-            shadow-lg
-            shadow-indigo-500/20
-
-            flex-shrink-0
-          "
-        >
-          <ShieldCheck className="w-6 h-6 text-white" />
-
+        {/* LOGO DE LA EMPRESA */}
+        <div className="relative flex-shrink-0">
           <div
-            className="
-              absolute
-              -top-1
-              -right-1
-
-              w-5
-              h-5
-
-              rounded-full
-
-              bg-white
-              dark:bg-slate-900
-
-              flex
-              items-center
-              justify-center
-
-              shadow-md
-            "
+            className={`flex items-center justify-center font-semibold text-white bg-gradient-to-br from-slate-900 to-slate-700 dark:from-slate-700 dark:to-slate-900 transition-all duration-300 ${logoSize}`}
           >
-            <Sparkles className="w-3 h-3 text-amber-500" />
+            {companyInitials}
           </div>
+
+          {/* Indicador de Estado */}
+          <span
+            className={`absolute -bottom-0.5 -right-0.5 rounded-full border border-white dark:border-slate-950 bg-emerald-500 transition-all duration-300 ${statusSize}`}
+          />
         </div>
 
-        {/* Información */}
+        {/* INFORMACIÓN DINÁMICA */}
         {!isCollapsed && (
           <div className="min-w-0 flex-1">
-            <h1
-              className="
-                text-base
-                font-bold
-                tracking-tight
-
-                text-slate-900
-                dark:text-white
-
-                truncate
-              "
-            >
-              DevCore ERP
+            <h1 className="text-left truncate text-sm font-medium text-slate-900 dark:text-slate-100">
+              {companyName}
             </h1>
-
-            <p
-              className="
-                text-xs
-                text-slate-500
-                dark:text-slate-400
-
-                mt-1
-                truncate
-              "
-            >
-              Enterprise Management System
+            <p className="text-left truncate text-xs text-slate-500 dark:text-slate-400 leading-tight">
+              {companyEmail}
             </p>
+
+            {/* Etiqueta formal */}
+            <div className="mt-1.5 flex items-center justify-start gap-1">
+              <ShieldCheck
+                size={13}
+                className="flex-shrink-0 text-violet-600 dark:text-violet-400"
+              />
+              <span className="text-xs font-medium text-violet-600 dark:text-violet-400">
+                {tagLabel}
+              </span>
+            </div>
           </div>
         )}
       </div>

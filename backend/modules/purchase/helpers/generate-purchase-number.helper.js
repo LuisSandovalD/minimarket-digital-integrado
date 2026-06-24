@@ -1,29 +1,22 @@
-const prisma =
-  require("../../../prisma/client");
+// ========================================
+// helpers/generate-purchase-number.helper.js
+// ========================================
 
 async function generatePurchaseNumber() {
 
-  const count =
-    await prisma.purchase.count();
+  const now = new Date();
 
-  const correlativo =
-    String(count + 1).padStart(5, "0");
+  const year = now.getFullYear();
 
-  const date =
-    new Date();
+  const month = String(
+    now.getMonth() + 1
+  ).padStart(2, "0");
 
-  const year =
-    date.getFullYear();
+  const day = String(
+    now.getDate()
+  ).padStart(2, "0");
 
-  const month =
-    String(date.getMonth() + 1)
-      .padStart(2, "0");
-
-  const day =
-    String(date.getDate())
-      .padStart(2, "0");
-
-  return `PUR-${year}${month}${day}-${correlativo}`;
+  return `PUR-${year}${month}${day}-${Date.now()}`;
 
 }
 

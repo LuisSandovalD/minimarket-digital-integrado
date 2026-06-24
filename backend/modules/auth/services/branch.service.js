@@ -2,45 +2,41 @@
 // services/branch.service.js
 // ========================================
 
-const repository =
-  require("../repositories/auth.repository");
+// Cambiamos el concentrador auth por su propio repositorio especializado
+const branchRepository = require("../repositories/branch.repository");
 
 /* ======================================
  * CREATE BRANCH
  * ==================================== */
+const createBranch = async (branch, companyId) => {
+  if (!branch) {
+    return null;
+  }
 
-exports.createBranch =
-  async (
-    branch,
-    companyId
-  ) => {
+  if (!branch.name) {
+    throw new Error("El nombre de la sucursal es obligatorio");
+  }
 
-    if (!branch?.name) {
-      return null;
-    }
+  // Ahora llamamos directamente al repositorio de sucursales
+  return branchRepository.createBranch({
+    name: branch.name.trim(),
+    code: branch.code?.trim() || null,
+    logo: branch.logo || null,
+    description: branch.description || null,
+    address: branch.address?.trim() || "",
+    phone: branch.phone?.trim() || null,
+    email: branch.email?.trim() || null,
+    city: branch.city?.trim() || null,
+    state: branch.state?.trim() || null,
+    country: branch.country?.trim() || null,
+    postalCode: branch.postalCode?.trim() || null,
+    companyId,
+    isActive: true,
+    isDeleted: false,
+  });
+};
 
-    return await repository.createBranch({
-
-      name:
-        branch.name,
-
-      address:
-        branch.address || "",
-
-      phone:
-        branch.phone || null,
-
-      city:
-        branch.city || null,
-
-      state:
-        branch.state || null,
-
-      country:
-        branch.country || null,
-
-      companyId,
-
-    });
-
-  };
+// EXPORTACIÓN UNIFICADA: Todo empaquetado bajo la misma firma arquitectónica de la app
+module.exports = {
+  createBranch
+};

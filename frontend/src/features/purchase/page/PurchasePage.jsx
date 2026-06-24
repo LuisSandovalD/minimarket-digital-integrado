@@ -4,10 +4,9 @@
 
 import { useMemo, useState } from "react";
 
-import usePurchase from "../hooks/usePurchase";
-
 import useProducts from "@/features/product/hooks/useProducts";
 import useSuppliers from "@/features/supplier/hooks/useSuppliers";
+import usePurchase from "../hooks/usePurchase";
 
 import PurchaseFormModal from "../components/PurchaseFormModal";
 import PurchaseHeader from "../components/PurchaseHeader";
@@ -17,6 +16,8 @@ import PurchaseTable from "../components/PurchaseTable";
 import { mapPurchaseToForm } from "../utils/purchase-form.mapper";
 import { initialPurchaseForm } from "../utils/purchase-form.util";
 import { getPurchaseStats } from "../utils/purchase-stats.util";
+
+// Hook interno del stepper (paso actual, next, previous)
 
 export default function PurchasePage() {
   // ========================================
@@ -33,7 +34,6 @@ export default function PurchasePage() {
   } = usePurchase();
 
   const { suppliers, loading: loadingSuppliers } = useSuppliers();
-
   const { products, loading: loadingProducts } = useProducts();
 
   // ========================================
@@ -41,18 +41,17 @@ export default function PurchasePage() {
   // ========================================
 
   const [editingId, setEditingId] = useState(null);
-
   const [openModal, setOpenModal] = useState(false);
-
   const [form, setForm] = useState(initialPurchaseForm);
+
+  // Control del stepper (paso 1, 2, 3)
+  const [step, setStep] = useState(1);
 
   // ========================================
   // MEMOS
   // ========================================
 
-  const stats = useMemo(() => {
-    return getPurchaseStats(purchases);
-  }, [purchases]);
+  const stats = useMemo(() => getPurchaseStats(purchases), [purchases]);
 
   // ========================================
   // PAGE LOADING
@@ -61,16 +60,15 @@ export default function PurchasePage() {
   const pageLoading = loading || loadingSuppliers || loadingProducts;
 
   // ========================================
-  // HANDLE CHANGE
+  // STEPPER HANDLERS
   // ========================================
 
-  function handleChange(e) {
-    const { name, value } = e.target;
+  function handleNext() {
+    setStep((prev) => Math.min(prev + 1, 3));
+  }
 
-    setForm((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+  function handlePrevious() {
+    setStep((prev) => Math.max(prev - 1, 1));
   }
 
   // ========================================
@@ -79,9 +77,8 @@ export default function PurchasePage() {
 
   function resetForm() {
     setEditingId(null);
-
     setForm(initialPurchaseForm);
-
+    setStep(1);
     setOpenModal(false);
   }
 
@@ -91,34 +88,30 @@ export default function PurchasePage() {
 
   function handleCreate() {
     setEditingId(null);
-
-    setForm({
-      ...initialPurchaseForm,
-      branchId: 1,
-    });
-
+    setForm({ ...initialPurchaseForm, branchId: 1 });
+    setStep(1);
     setOpenModal(true);
   }
 
   // ========================================
   // SUBMIT
+  // FIX: incluye batchNumber y expirationDate del carrito
   // ========================================
 
-  async function handleSubmit(payload) {
+  async function handleSubmit(e) {
+    e.preventDefault();
+
     try {
       const finalPayload = {
-        supplierId: Number(payload.supplierId),
-
-        branchId: Number(payload.branchId),
-
-        notes: payload.notes || "",
-
-        details: payload.details.map((item) => ({
+        supplierId: Number(form.supplierId),
+        branchId: Number(form.branchId),
+        notes: form.notes || "",
+        details: form.details.map((item) => ({
           productId: Number(item.productId),
-
           quantity: Number(item.quantity),
-
           costPrice: Number(item.costPrice),
+          batchNumber: item.batchNumber || null,
+          expirationDate: item.expirationDate || null,
         })),
       };
 
@@ -132,12 +125,9 @@ export default function PurchasePage() {
         success = await createPurchase(finalPayload);
       }
 
-      if (success) {
-        resetForm();
-      }
+      if (success) resetForm();
     } catch (error) {
       console.error("SUBMIT PURCHASE ERROR:", error);
-
       alert("Error guardando compra");
     }
   }
@@ -148,9 +138,8 @@ export default function PurchasePage() {
 
   function handleEdit(purchase) {
     setEditingId(purchase.id);
-
     setForm(mapPurchaseToForm(purchase));
-
+    setStep(1);
     setOpenModal(true);
   }
 
@@ -160,14 +149,12 @@ export default function PurchasePage() {
 
   async function handleDelete(purchase) {
     const confirmDelete = window.confirm("¿Eliminar compra?");
-
     if (!confirmDelete) return;
 
     try {
       await deletePurchase(purchase.id);
     } catch (error) {
       console.error("DELETE PURCHASE ERROR:", error);
-
       alert("Error eliminando compra");
     }
   }
@@ -176,9 +163,7 @@ export default function PurchasePage() {
   // LOADING SCREEN
   // ========================================
 
-  if (pageLoading) {
-    return <PurchaseLoading />;
-  }
+  if (pageLoading) return <PurchaseLoading />;
 
   // ========================================
   // RENDER
@@ -200,17 +185,21 @@ export default function PurchasePage() {
         onDelete={handleDelete}
       />
 
+      {/* FIX: props alineados con lo que PurchaseFormModal espera */}
       <PurchaseFormModal
         open={openModal}
         onClose={resetForm}
-        onSubmit={handleSubmit}
-        form={form}
-        setForm={setForm}
-        onChange={handleChange}
         suppliers={suppliers}
         products={products}
         loading={actionLoading}
-        isEdit={!!editingId}
+        initialFormState={editingId ? form : null}
+        form={form}
+        setForm={setForm}
+        step={step}
+        setStep={setStep}
+        handleNext={handleNext}
+        handlePrevious={handlePrevious}
+        handleSubmit={handleSubmit}
       />
     </div>
   );

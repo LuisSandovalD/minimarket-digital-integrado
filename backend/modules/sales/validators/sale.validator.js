@@ -10,4 +10,6 @@ module.exports = {
 
   ...require("./cancel-sale.validator"),
 
+  ...require("./add-sale-payment.validator"), // 🔥 Agregado: El validador para tus abonos mixtos
+
 };

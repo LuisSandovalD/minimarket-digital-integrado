@@ -1,618 +1,247 @@
-import { BarChart3, Pencil, Shield, User2, X } from "lucide-react";
-
-import { useState } from "react";
-
-import { FooterModal, HeaderModal, Modal } from "@/components/overlays";
+// ========================================
+// features/account/components/AccountModal.jsx
+// ========================================
+import { BarChart3, Pencil, Shield, User2 } from "lucide-react";
+import { useEffect, useState } from "react";
 
 import { ModernButton } from "@/components/buttons";
+import { HeaderModal, Modal } from "@/components/overlays";
+import { ROLE_LABELS } from "../constants/account.constants";
 
-import useAccount from "../hooks/useAccount";
-
-import useDeleteAccount from "../hooks/useDeleteAccount";
-
-import useChangePassword from "../hooks/useChangePassword";
-
+// Submodales encapsulados
 import ChangePasswordModal from "./ChangePasswordModal";
-
+import DeleteAccountModal from "./DeleteAccountModal";
 import EditProfileModal from "./EditProfileModal";
-
+import SessionsModal from "./SessionsModal";
 import TwoFactorModal from "./TwoFactorModal";
 
-import SessionsModal from "./SessionsModal";
+// Hooks de estado central
+import useAccountProfile from "../hooks/useAccountProfile";
+import useTwoFactor from "../hooks/useTwoFactor";
 
-import DeleteAccountModal from "./DeleteAccountModal";
+export default function AccountModal({ open, onClose }) {
+  const { user, fetchAccount } = useAccountProfile();
+  const { enabled: twoFactorEnabled } = useTwoFactor();
 
-export default function AccountModal({ open, onClose, company, branch }) {
-  const { user, updateProfile } = useAccount();
-
-  const { removeAccount } = useDeleteAccount();
-
-  const { updatePassword } = useChangePassword();
-
+  // Estados de control de submodales
   const [openPasswordModal, setOpenPasswordModal] = useState(false);
-
   const [openEditProfileModal, setOpenEditProfileModal] = useState(false);
-
   const [openTwoFactorModal, setOpenTwoFactorModal] = useState(false);
-
   const [openSessionsModal, setOpenSessionsModal] = useState(false);
-
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
-  async function handleUpdateProfile(form) {
-    await updateProfile({
-      name: form.name,
-      email: form.email,
-      phone: form.phone,
-      avatar: form.avatar,
-      twoFactorEnabled: form.twoFactorEnabled,
-      isActive: form.isActive,
-    });
+  useEffect(() => {
+    if (open) fetchAccount();
+  }, [open, fetchAccount]);
 
-    setOpenEditProfileModal(false);
-  }
+  useEffect(() => {
+    if (!open) {
+      setOpenPasswordModal(false);
+      setOpenEditProfileModal(false);
+      setOpenTwoFactorModal(false);
+      setOpenSessionsModal(false);
+      setOpenDeleteModal(false);
+    }
+  }, [open]);
 
-  async function handleChangePassword(form) {
-    await updatePassword({
-      currentPassword: form.currentPassword,
-      newPassword: form.newPassword,
-      confirmPassword: form.confirmPassword,
-    });
-
-    setOpenPasswordModal(false);
-  }
+  const companyName =
+    typeof user?.company === "object" ? user?.company?.name : user?.company;
+  const branchName =
+    typeof user?.branch === "object" ? user?.branch?.name : user?.branch;
 
   return (
     <>
       <Modal open={open} onClose={onClose} size="full">
-        {/* HEADER */}
-
         <HeaderModal
           title="Mi Cuenta"
-          subtitle="
-            Gestiona tu perfil,
-            seguridad y preferencias
-          "
+          subtitle="Gestiona tu perfil corporativo, seguridad de acceso y sesiones activas"
           onClose={onClose}
+          icon={User2}
         />
 
-        {/* BODY */}
-
-        <div
-          className="
-            max-h-[78vh]
-            overflow-y-auto
-
-            px-8
-            py-8
-
-            bg-gradient-to-b
-            from-white/40
-            to-slate-100/30
-
-            dark:from-slate-950/40
-            dark:to-slate-900/30
-          "
-        >
-          <div
-            className="
-              grid
-              gap-12
-
-              lg:grid-cols-[350px_1fr]
-            "
-          >
-            {/* ========================================
-             * LEFT SIDE
-             * ====================================== */}
-
-            <div
-              className="
-                sticky
-                top-0
-
-                rounded-3xl
-                border
-                border-slate-200
-                dark:border-slate-800
-
-                bg-white/70
-                dark:bg-slate-900/50
-
-                backdrop-blur-xl
-
-                shadow-sm
-
-                px-5
-                py-10
-
-                h-full
-              "
-            >
-              {/* AVATAR */}
-
-              <div className="flex justify-center mb-5">
-                <div
-                  className="
-                    flex
-                    h-24
-                    w-24
-                    items-center
-                    justify-center
-
-                    overflow-hidden
-
-                    rounded-3xl
-
-                    bg-slate-100
-                    dark:bg-slate-800
-                  "
-                >
+        <div className="max-h-[78vh] overflow-y-auto px-8 py-8 bg-slate-50/50 dark:bg-slate-950/20">
+          <div className="grid gap-8 lg:grid-cols-[320px_1fr]">
+            {/* PANELA IZQUIERDO: DETALLES DE IDENTIDAD */}
+            <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-sm h-fit text-center">
+              <div className="flex justify-center mb-4">
+                <div className="relative flex h-24 w-24 items-center justify-center overflow-hidden rounded-2xl bg-slate-100 dark:bg-slate-800 border shadow-inner">
                   {user?.avatar ? (
                     <img
                       src={user.avatar}
                       alt={user.name}
-                      className="
-                        h-full
-                        w-full
-                        object-cover
-                      "
+                      className="h-full w-full object-cover"
                     />
                   ) : (
-                    <User2 size={40} className="text-slate-400" />
+                    <User2
+                      size={36}
+                      className="text-slate-400 dark:text-slate-500"
+                    />
                   )}
                 </div>
               </div>
 
-              {/* NAME */}
-
-              <div className="text-center mb-8">
-                <h2
-                  className="
-                    text-lg
-                    font-bold
-
-                    text-slate-900
-                    dark:text-white
-
-                    truncate
-                  "
-                >
-                  {user?.name || "-"}
+              <div className="mb-4 min-w-0">
+                <h2 className="text-base font-bold text-slate-900 dark:text-white truncate">
+                  {user?.name || "Usuario del Sistema"}
                 </h2>
-
-                <p
-                  className="
-                    mt-1
-
-                    text-sm
-                    text-slate-500
-
-                    truncate
-                  "
-                >
-                  {user?.email || "-"}
+                <p className="text-xs text-slate-500 dark:text-slate-400 truncate mt-0.5">
+                  {user?.email || "sin-correo@empresa.com"}
                 </p>
               </div>
 
-              {/* META */}
-
-              <div className="space-y-4 mb-8">
-                <InfoItem label="Rol" value={user?.role} />
-
-                <InfoItem label="Empresa" value={company?.name} />
-
-                <InfoItem label="Sucursal" value={branch?.name} />
-
+              <div className="space-y-3 border-t border-b border-slate-100 dark:border-slate-800/80 py-4 mb-4 text-left">
+                <InfoItem
+                  label="Rol"
+                  value={ROLE_LABELS[user?.role] || user?.role}
+                />
+                <InfoItem label="Empresa" value={companyName} />
+                <InfoItem label="Sucursal" value={branchName} />
                 <InfoItem
                   label="Estado"
                   value={user?.isActive ? "Activo" : "Inactivo"}
+                  isBadge
                 />
               </div>
-
-              {/* BUTTON */}
 
               <ModernButton
                 text="Editar Perfil"
                 size="sm"
                 icon={Pencil}
                 onClick={() => setOpenEditProfileModal(true)}
-                className="w-full"
+                className="w-full justify-center"
               />
             </div>
 
-            {/* ========================================
-             * RIGHT SIDE
-             * ====================================== */}
-
-            <div className="space-y-5">
-              {/* ========================================
-               * ACTIVITY
-               * ====================================== */}
-
-              <section
-                className="
-                  rounded-3xl
-                  border
-                  border-slate-200
-                  dark:border-slate-800
-
-                  bg-white/70
-                  dark:bg-slate-900/40
-
-                  backdrop-blur-xl
-
-                  p-6
-
-                  shadow-sm
-                "
-              >
-                <div
-                  className="
-                    mb-5
-                    flex
-                    items-center
-                    gap-3
-                  "
-                >
-                  <div
-                    className="
-                      flex
-                      h-10
-                      w-10
-                      items-center
-                      justify-center
-
-                      rounded-2xl
-
-                      bg-slate-100
-                      dark:bg-slate-800
-                    "
-                  >
-                    <BarChart3
-                      size={18}
-                      className="
-                        text-slate-600
-                        dark:text-slate-300
-                      "
-                    />
-                  </div>
-
-                  <div>
-                    <h3
-                      className="
-                        text-sm
-                        font-semibold
-
-                        text-slate-900
-                        dark:text-white
-                      "
-                    >
-                      Actividad
-                    </h3>
-
-                    <p
-                      className="
-                        mt-1
-                        text-xs
-                        text-slate-500
-                      "
-                    >
-                      Estadísticas recientes
-                    </p>
-                  </div>
+            {/* PANEL DERECHO UNIFICADO (TODO JUNTO SIN CARDS ANIDADOS) */}
+            <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm overflow-hidden divide-y divide-slate-100 dark:divide-slate-800/80">
+              {/* BLOQUE 1: MÉTRICAS Y ACTIVIDAD */}
+              <div className="p-6">
+                <div className="mb-4 flex items-center gap-3">
+                  <BarChart3
+                    size={18}
+                    className="text-slate-400 dark:text-slate-500"
+                  />
+                  <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+                    Resumen de Actividad
+                  </h3>
                 </div>
 
-                <div
-                  className="
-                    grid
-                    grid-cols-2
-                    gap-4
-                  "
-                >
-                  <div
-                    className="
-                      rounded-2xl
-                      border
-                      border-slate-200
-                      dark:border-slate-800
-
-                      bg-white/70
-                      dark:bg-slate-900/40
-
-                      backdrop-blur-xl
-
-                      p-5
-
-                      shadow-sm
-                    "
-                  >
-                    <p
-                      className="
-                        text-xs
-                        text-slate-500
-                        dark:text-slate-400
-                      "
-                    >
-                      Accesos
-                    </p>
-
-                    <p
-                      className="
-                        mt-2
-                        text-2xl
-                        font-bold
-
-                        text-slate-900
-                        dark:text-white
-                      "
-                    >
-                      {user?.loginAttempts || 0}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 bg-slate-50/50 dark:bg-slate-950/30 p-4 rounded-xl border dark:border-slate-800/60">
+                  <div>
+                    <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
+                      Ventas concretadas
+                    </span>
+                    <p className="text-2xl font-black text-slate-900 dark:text-white mt-0.5">
+                      {user?.stats?.sales || 0}
                     </p>
                   </div>
-
-                  <div
-                    className="
-                      rounded-2xl
-                      border
-                      border-slate-200
-                      dark:border-slate-800
-
-                      bg-white/70
-                      dark:bg-slate-900/40
-
-                      backdrop-blur-xl
-
-                      p-5
-
-                      shadow-sm
-                    "
-                  >
-                    <p
-                      className="
-                        text-xs
-                        text-slate-500
-                        dark:text-slate-400
-                      "
-                    >
-                      Último acceso
-                    </p>
-
-                    <p
-                      className="
-                        mt-2
-                        text-lg
-                        font-semibold
-
-                        text-slate-900
-                        dark:text-white
-                      "
-                    >
+                  <div>
+                    <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
+                      Último acceso al sistema
+                    </span>
+                    <p className="text-sm font-bold text-slate-800 dark:text-slate-200 mt-1.5">
                       {user?.lastLogin
-                        ? new Date(user.lastLogin).toLocaleDateString("es-ES")
+                        ? new Date(user.lastLogin).toLocaleDateString("es-PE", {
+                            dateStyle: "long",
+                          })
                         : "—"}
                     </p>
                   </div>
                 </div>
-              </section>
+              </div>
 
-              {/* ========================================
-               * SECURITY
-               * ====================================== */}
-
-              <section
-                className="
-                  flex
-                  gap-4
-
-                  rounded-3xl
-                  border
-                  border-slate-200
-                  dark:border-slate-800
-
-                  bg-white/70
-                  dark:bg-slate-900/40
-
-                  backdrop-blur-xl
-
-                  p-6
-
-                  shadow-sm
-                "
-              >
-                {/* SECURITY */}
-
-                <div className="flex-1">
-                  <div
-                    className="
-                      mb-5
-                      flex
-                      items-center
-                      gap-3
-                    "
-                  >
-                    <div
-                      className="
-                        flex
-                        h-10
-                        w-10
-                        items-center
-                        justify-center
-
-                        rounded-2xl
-
-                        bg-slate-100
-                        dark:bg-slate-800
-                      "
-                    >
-                      <Shield
-                        size={18}
-                        className="
-                          text-slate-600
-                          dark:text-slate-300
-                        "
-                      />
-                    </div>
-
-                    <div>
-                      <h3
-                        className="
-                          text-sm
-                          font-semibold
-
-                          text-slate-900
-                          dark:text-white
-                        "
-                      >
-                        Seguridad
-                      </h3>
-
-                      <p
-                        className="
-                          mt-1
-                          text-xs
-                          text-slate-500
-                        "
-                      >
-                        Configuración y protección
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-3">
-                    <ModernButton
-                      onClick={() => setOpenPasswordModal(true)}
-                      variant="secondary"
-                      text="Cambiar contraseña"
-                    />
-
-                    <ModernButton
-                      onClick={() => setOpenTwoFactorModal(true)}
-                      variant="secondary"
-                    >
-                      <div
-                        className="
-                          flex
-                          items-center
-                          justify-between
-                        "
-                      >
-                        <span>Autenticación 2FA</span>
-
-                        <span
-                          className={`
-                            text-xs
-                            px-2
-                            py-1
-                            rounded-full
-
-                            ${
-                              user?.twoFactorEnabled
-                                ? `
-                                  bg-emerald-100
-                                  dark:bg-emerald-900/30
-
-                                  text-emerald-700
-                                  dark:text-emerald-400
-                                `
-                                : `
-                                  bg-slate-200
-                                  dark:bg-slate-700
-
-                                  text-slate-600
-                                  dark:text-slate-300
-                                `
-                            }
-                          `}
-                        >
-                          {user?.twoFactorEnabled ? "Activado" : "Desactivado"}
-                        </span>
-                      </div>
-                    </ModernButton>
-
-                    <ModernButton
-                      onClick={() => setOpenSessionsModal(true)}
-                      variant="secondary"
-                      text="Sesiones activas"
-                    />
-                  </div>
+              {/* BLOQUE 2: SEGURIDAD Y HERRAMIENTAS */}
+              <div className="p-6">
+                <div className="mb-4 flex items-center gap-3">
+                  <Shield
+                    size={18}
+                    className="text-slate-400 dark:text-slate-500"
+                  />
+                  <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+                    Seguridad y Accesos
+                  </h3>
                 </div>
-              </section>
 
-              <section className="grid grid-cols-1 gap-3">
-                {/* DANGER */}
-                <h3
-                  className="
-                      text-sm
-                      font-semibold
-                      text-red-600
-                      dark:text-red-400
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <ModernButton
+                    onClick={() => setOpenPasswordModal(true)}
+                    variant="secondary"
+                    text="Cambiar contraseña"
+                    className="justify-center text-xs h-10"
+                  />
 
-                    "
-                >
-                  Zona de riesgo
-                </h3>
+                  <ModernButton
+                    onClick={() => setOpenTwoFactorModal(true)}
+                    variant="secondary"
+                    className="justify-center text-xs h-10"
+                  >
+                    <div className="flex items-center justify-between w-full gap-2">
+                      <span>MFA Autenticador</span>
+                      <span
+                        className={`text-[10px] px-2 py-0.5 rounded font-bold uppercase border ${
+                          twoFactorEnabled
+                            ? "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/30 dark:text-emerald-400 dark:border-emerald-900/20"
+                            : "bg-slate-100 text-slate-600 border-slate-200 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-700/60"
+                        }`}
+                      >
+                        {twoFactorEnabled ? "Activo" : "Off"}
+                      </span>
+                    </div>
+                  </ModernButton>
 
-                <ModernButton
-                  onClick={() => setOpenDeleteModal(true)}
-                  text="Eliminar cuenta"
-                  variant="danger"
-                />
-              </section>
+                  <ModernButton
+                    onClick={() => setOpenSessionsModal(true)}
+                    variant="secondary"
+                    text="Sesiones activas"
+                    className="justify-center text-xs h-10"
+                  />
+                </div>
+              </div>
+
+              {/* BLOQUE 3: ACCIONES DE PELIGRO */}
+              <div className="p-6 bg-red-50/10 dark:bg-red-950/5">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div>
+                    <h4 className="text-xs font-bold text-red-600 dark:text-red-400 uppercase tracking-wide">
+                      Zona de riesgo
+                    </h4>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-xl leading-relaxed">
+                      Al eliminar tu cuenta, perderás de forma inmediata el
+                      acceso histórico a inventarios, auditorías y registros
+                      comerciales del minimarket.
+                    </p>
+                  </div>
+                  <ModernButton
+                    onClick={() => setOpenDeleteModal(true)}
+                    text="Eliminar Cuenta"
+                    variant="danger"
+                    size="sm"
+                    className="w-full sm:w-auto font-bold shrink-0"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
-
-        {/* FOOTER */}
-
-        <FooterModal>
-          <div className="w-full flex justify-end">
-            <ModernButton
-              text="Cerrar"
-              variant="outline"
-              icon={X}
-              onClick={onClose}
-            />
-          </div>
-        </FooterModal>
       </Modal>
 
-      {/* PASSWORD */}
-
+      {/* RENDERIZADO DE SUBMODALES CONTROLADOS */}
       <ChangePasswordModal
         open={openPasswordModal}
         onClose={() => setOpenPasswordModal(false)}
-        onSubmit={handleChangePassword}
       />
-
-      {/* EDIT */}
-
       <EditProfileModal
         open={openEditProfileModal}
         onClose={() => setOpenEditProfileModal(false)}
-        user={user}
-        company={company}
-        branch={branch}
-        onSubmit={handleUpdateProfile}
       />
-
-      {/* 2FA */}
-
       <TwoFactorModal
         open={openTwoFactorModal}
         onClose={() => setOpenTwoFactorModal(false)}
-        isEnabled={user?.twoFactorEnabled || false}
       />
-
-      {/* SESSIONS */}
-
       <SessionsModal
         open={openSessionsModal}
         onClose={() => setOpenSessionsModal(false)}
       />
-
-      {/* DELETE */}
-
       <DeleteAccountModal
         open={openDeleteModal}
         onClose={() => setOpenDeleteModal(false)}
@@ -621,36 +250,21 @@ export default function AccountModal({ open, onClose, company, branch }) {
   );
 }
 
-function InfoItem({ label, value }) {
+function InfoItem({ label, value, isBadge = false }) {
   return (
-    <div
-      className="
-        flex
-        items-center
-        justify-between
-        gap-4
-      "
-    >
-      <span
-        className="
-          text-sm
-          text-slate-500
-        "
-      >
+    <div className="flex items-center justify-between gap-4 py-0.5">
+      <span className="text-xs font-medium text-slate-400 dark:text-slate-500">
         {label}
       </span>
-
-      <span
-        className="
-          text-sm
-          font-medium
-
-          text-slate-900
-          dark:text-white
-        "
-      >
-        {value || "—"}
-      </span>
+      {isBadge ? (
+        <span className="text-[11px] font-bold px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-900/20">
+          {value || "—"}
+        </span>
+      ) : (
+        <span className="text-xs font-semibold text-slate-700 dark:text-slate-300 truncate max-w-[170px]">
+          {value || "—"}
+        </span>
+      )}
     </div>
   );
 }

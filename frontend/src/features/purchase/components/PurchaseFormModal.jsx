@@ -1,239 +1,125 @@
-// ========================================
+// ============================================================================
 // features/purchase/components/PurchaseFormModal.jsx
-// ========================================
-
-import { useEffect, useState } from "react";
-
-import { FooterModal, HeaderModal, Modal } from "@/components/overlays";
+// MODERNO Y TRANSPARENTE: Modal estructurada con scroll interno independiente
+// ============================================================================
 
 import { ModernButton, SubmitButton } from "@/components/buttons";
-
+import { FooterModal, HeaderModal, Modal } from "@/components/overlays";
+import { ChevronLeft, ChevronRight, Save, X } from "lucide-react";
 import PurchaseStepper from "./PurchaseStepper";
 
-import PurchaseProductsStep from "./steps/ProductStep";
+import ProductsStep from "./steps/ProductStep";
 import SummaryStep from "./steps/SummaryStep";
 import SupplierStep from "./steps/SupplierStep";
 
 export default function PurchaseFormModal({
   open,
   onClose,
-
-  loading = false,
-
   suppliers = [],
   products = [],
-
-  initialData = null,
-
-  onSubmit,
+  loading = false,
+  step,
+  form,
+  setForm,
+  setStep,
+  initialFormState,
+  subtotal,
+  tax,
+  total,
+  handleNext,
+  handlePrevious,
+  handleSubmit,
 }) {
-  const [step, setStep] = useState(1);
-
-  const [form, setForm] = useState({
-    supplierId: "",
-    supplier: null,
-
-    notes: "",
-
-    details: [],
-  });
-
-  // ========================================
-  // INITIALIZE
-  // ========================================
-
-  useEffect(() => {
-    if (!open) return;
-
-    if (initialData) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setForm(initialData);
-    } else {
-      setForm({
-        supplierId: "",
-        supplier: null,
-
-        notes: "",
-
-        details: [],
-      });
-    }
-
-    setStep(1);
-  }, [open, initialData]);
-
-  // ========================================
-  // VALIDATIONS
-  // ========================================
-
-  const nextStep = () => {
-    // STEP 1
-    if (step === 1) {
-      if (!form.supplierId) {
-        return alert("Seleccione un proveedor");
-      }
-    }
-
-    // STEP 2
-    if (step === 2) {
-      if (!Array.isArray(form.details) || form.details.length === 0) {
-        return alert("Agregue al menos un producto");
-      }
-    }
-
-    if (step < 4) {
-      setStep((prev) => prev + 1);
-    }
-  };
-
-  const prevStep = () => {
-    if (step > 1) {
-      setStep((prev) => prev - 1);
-    }
-  };
-
-  // ========================================
-  // SUBMIT
-  // ========================================
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    if (!form.supplierId) {
-      return alert("Seleccione un proveedor");
-    }
-
-    if (!Array.isArray(form.details) || form.details.length === 0) {
-      return alert("Agregue al menos un producto");
-    }
-
-    const payload = {
-      supplierId: Number(form.supplierId),
-
-      notes: form.notes || "",
-
-      details: form.details.map((item) => ({
-        productId: Number(item.productId),
-
-        quantity: Number(item.quantity),
-
-        // cambiar a costPrice
-        // si tu backend lo requiere
-        price: Number(item.costPrice),
-      })),
-    };
-
-    onSubmit(payload);
-  };
-
-  // ========================================
-  // RENDER STEP
-  // ========================================
-
-  const renderStep = () => {
-    switch (step) {
-      case 1:
-        return (
-          <SupplierStep suppliers={suppliers} form={form} setForm={setForm} />
-        );
-
-      case 2:
-        return (
-          <PurchaseProductsStep
-            products={products}
-            form={form}
-            setForm={setForm}
-          />
-        );
-
-      case 3:
-        return <SummaryStep form={form} suppliers={suppliers} />;
-
-      case 4:
-        return <SummaryStep form={form} suppliers={suppliers} confirmation />;
-
-      default:
-        return null;
-    }
-  };
+  const TOTAL_STEPS = 3;
 
   return (
-    <Modal open={open} onClose={onClose} size="xl">
+    <Modal open={open} onClose={onClose} size="full">
+      <HeaderModal
+        title={
+          initialFormState ? "Editar Orden de Compra" : "Nueva Orden de Compra"
+        }
+        subtitle="Proceso guiado para el reabastecimiento y recepción de inventario"
+        onClose={onClose}
+      />
       <form
+        id="purchase-form-bridge"
         onSubmit={handleSubmit}
-        className="
-          flex
-          flex-col
-          h-full
-        "
+        className="flex-1 flex flex-col min-h-0 bg-transparent overflow-hidden px-10 py-5"
       >
-        {/* ========================================
-         * HEADER
-         * ====================================== */}
-
-        <HeaderModal
-          title="Nueva Compra"
-          subtitle="Registrar compra de productos"
-          onClose={onClose}
-        />
-
-        {/* ========================================
-         * STEPPER
-         * ====================================== */}
-
         <PurchaseStepper currentStep={step} />
 
-        {/* ========================================
-         * CONTENT
-         * ====================================== */}
+        <div className="w-full flex-1 flex flex-col">
+          {step === 1 && (
+            <SupplierStep suppliers={suppliers} form={form} setForm={setForm} />
+          )}
 
-        <div
-          className="
-            flex-1
-            overflow-hidden
-          "
-        >
-          {renderStep()}
+          {step === 2 && (
+            <ProductsStep products={products} form={form} setForm={setForm} />
+          )}
+
+          {step === 3 && (
+            <SummaryStep
+              form={form}
+              suppliers={suppliers}
+              subtotal={subtotal}
+              tax={tax}
+              total={total}
+              setForm={setForm}
+              setStep={setStep}
+              initialFormState={initialFormState}
+              onClose={onClose}
+            />
+          )}
         </div>
-
-        {/* ========================================
-         * FOOTER
-         * ====================================== */}
-
-        <FooterModal>
-          <div
-            className="
-              flex
-              items-center
-              justify-between
-              w-full
-            "
-          >
-            <div>
-              {step > 1 && (
-                <ModernButton type="button" text="Atrás" onClick={prevStep} />
-              )}
-            </div>
-
-            <div className="flex gap-3">
-              <ModernButton type="button" text="Cancelar" onClick={onClose} />
-
-              {step < 4 ? (
-                <ModernButton
-                  type="button"
-                  text="Siguiente"
-                  onClick={nextStep}
-                />
-              ) : (
-                <SubmitButton
-                  text={loading ? "Guardando..." : "Confirmar Compra"}
-                  loading={loading}
-                />
-              )}
-            </div>
-          </div>
-        </FooterModal>
       </form>
+      <FooterModal>
+        <div className="flex items-center justify-between w-full">
+          {/* ACCIÓN IZQUIERDA */}
+          <ModernButton
+            type="button"
+            variant="secondary"
+            text="Cerrar"
+            icon={X}
+            onClick={onClose}
+            className="hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors"
+          />
+
+          {/* ACCIONES DERECHAS */}
+          <div className="flex gap-3">
+            {step > 1 && (
+              <ModernButton
+                type="button"
+                variant="secondary"
+                text="Anterior"
+                icon={ChevronLeft}
+                onClick={handlePrevious}
+                className="hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors"
+              />
+            )}
+
+            {step < TOTAL_STEPS ? (
+              <ModernButton
+                type="button"
+                variant="primary"
+                text="Siguiente"
+                icon={ChevronRight}
+                onClick={handleNext}
+                className="shadow-sm hover:shadow transition-all"
+              />
+            ) : (
+              <SubmitButton
+                type="submit"
+                form="purchase-form-bridge"
+                variant="primary"
+                text={loading ? "Guardando..." : "Confirmar Compra"}
+                icon={Save}
+                loading={loading}
+                className="shadow-md bg-blue-600 hover:bg-blue-700 text-white transition-all"
+              />
+            )}
+          </div>
+        </div>
+      </FooterModal>
     </Modal>
   );
 }

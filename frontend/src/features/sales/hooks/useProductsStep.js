@@ -5,7 +5,7 @@
 import { useMemo, useState } from "react";
 import { useCart } from "./useCart";
 
-export function useProductsStep({ products, form, setForm }) {
+export function useProductsStep({ products = [], form, setForm }) {
   const [search, setSearch] = useState("");
   const [cartOpen, setCartOpen] = useState(false);
 
@@ -20,15 +20,20 @@ export function useProductsStep({ products, form, setForm }) {
     totalAmount,
   } = useCart(form, setForm);
 
-  // Filtrado reactivo en tiempo real por Nombre o SKU
+  // Filtrado reactivo en tiempo real por Nombre, SKU o Código de Barras (Escáner)
   const filteredProducts = useMemo(() => {
-    if (!search.trim()) return products;
+    const safeProducts = Array.isArray(products) ? products : [];
+    if (!search.trim()) return safeProducts;
 
-    const q = search.toLowerCase();
+    const q = search.toLowerCase().trim();
 
-    return products.filter((p) =>
-      `${p.name || ""} ${p.sku || ""}`.toLowerCase().includes(q),
-    );
+    return safeProducts.filter((p) => {
+      const name = p.name ? String(p.name).toLowerCase() : "";
+      const sku = p.sku ? String(p.sku).toLowerCase() : "";
+      const barcode = p.barcode ? String(p.barcode).toLowerCase() : "";
+
+      return name.includes(q) || sku.includes(q) || barcode.includes(q);
+    });
   }, [products, search]);
 
   // Formateador de moneda local para Perú (Soles)
@@ -45,7 +50,7 @@ export function useProductsStep({ products, form, setForm }) {
     setCartOpen,
     filteredProducts,
     fmt,
-    // Propiedades y métodos del carrito expuestos ordenadamente
+    // Propiedades y métodos del carrito expuestos ordenadamente hacia la UI
     cart: {
       details,
       getQty,

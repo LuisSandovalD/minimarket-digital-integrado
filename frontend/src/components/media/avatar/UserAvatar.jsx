@@ -1,4 +1,5 @@
-import { ShieldCheck, UserCog, Layers3, User, Eye } from "lucide-react";
+import { UserAvatarSkeleton } from "@/components/skeletons";
+import { Eye, Layers3, ShieldCheck, User, UserCog } from "lucide-react";
 
 export default function UserAvatar({
   user,
@@ -6,6 +7,7 @@ export default function UserAvatar({
   showStatus = true,
   showInfo = true,
   showEmail = true,
+  isLoading = false,
   className = "",
   onClick,
 }) {
@@ -26,12 +28,12 @@ export default function UserAvatar({
   const roleConfig = {
     ADMIN: {
       icon: ShieldCheck,
-      label: "Admin",
+      label: "Administrador",
       color: "text-violet-600 dark:text-violet-400",
     },
     MANAGER: {
       icon: UserCog,
-      label: "Manager",
+      label: "Gerente",
       color: "text-blue-600 dark:text-blue-400",
     },
     SUPERVISOR: {
@@ -41,12 +43,12 @@ export default function UserAvatar({
     },
     EMPLOYEE: {
       icon: User,
-      label: "Employee",
+      label: "Colaborador",
       color: "text-emerald-600 dark:text-emerald-400",
     },
     VIEWER: {
       icon: Eye,
-      label: "Viewer",
+      label: "Espectador",
       color: "text-slate-600 dark:text-slate-400",
     },
   };
@@ -62,16 +64,29 @@ export default function UserAvatar({
 
   const currentSize = sizes[size] || sizes.md;
 
+  // ==========================================
+  // RENDER DE SKELETON (Pasando props dinámicas)
+  // ==========================================
+  if (isLoading) {
+    return (
+      <UserAvatarSkeleton
+        size={size}
+        showStatus={showStatus}
+        showInfo={showInfo}
+        showEmail={showEmail}
+        className={className}
+      />
+    );
+  }
+
+  // ==========================================
+  // RENDER COMPONENTE COMPLETO
+  // ==========================================
   return (
     <button
       type="button"
       onClick={onClick}
-      className={`
-        flex items-center gap-2.5
-        transition-opacity duration-200
-        hover:opacity-75 active:scale-95
-        ${className}
-      `}
+      className={`flex items-center justify-start text-left gap-2.5 transition-opacity duration-200 hover:opacity-75 active:scale-95 ${className}`}
     >
       {/* AVATAR */}
       <div className="relative flex-shrink-0">
@@ -83,12 +98,7 @@ export default function UserAvatar({
           />
         ) : (
           <div
-            className={`
-              flex items-center justify-center
-              font-semibold text-white
-              bg-gradient-to-br from-slate-900 to-slate-700 dark:from-slate-700 dark:to-slate-900
-              ${currentSize.avatar}
-            `}
+            className={`flex items-center justify-center font-semibold text-white bg-gradient-to-br from-slate-900 to-slate-700 dark:from-slate-700 dark:to-slate-900 ${currentSize.avatar}`}
           >
             {initials}
           </div>
@@ -96,12 +106,7 @@ export default function UserAvatar({
 
         {showStatus && (
           <span
-            className={`
-              absolute -bottom-0.5 -right-0.5
-              rounded-full border border-white dark:border-slate-950
-              ${isActive ? "bg-emerald-500" : "bg-slate-300"}
-              ${currentSize.status}
-            `}
+            className={`absolute -bottom-0.5 -right-0.5 rounded-full border border-white dark:border-slate-950 ${isActive ? "bg-emerald-500" : "bg-slate-300"} ${currentSize.status}`}
           />
         )}
       </div>
@@ -114,12 +119,12 @@ export default function UserAvatar({
           </p>
 
           {showEmail && (
-            <p className="truncate text-xs text-slate-500 dark:text-slate-400 leading-tight">
+            <p className="text-left truncate text-xs text-slate-500 dark:text-slate-400 leading-tight">
               {email}
             </p>
           )}
 
-          <div className="mt-1.5 flex items-center gap-1">
+          <div className="mt-1.5 flex items-center justify-start gap-1">
             <RoleIcon
               size={13}
               className={`flex-shrink-0 ${currentRole.color}`}

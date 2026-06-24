@@ -48,7 +48,18 @@ const createPurchaseSchema = Joi.object({
           costPrice:
             Joi.number()
               .positive()
-              .required()
+              .required(),
+
+          batchNumber:
+            Joi.string()
+              .max(100)
+              .optional()
+              .allow("", null),
+
+          expirationDate:
+            Joi.date()
+              .optional()
+              .allow(null)
 
         })
 

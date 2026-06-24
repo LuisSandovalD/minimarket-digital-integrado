@@ -1,4 +1,5 @@
-import { Minus, Plus, Trash2 } from "lucide-react";
+import { ModerButton } from "@/component/buttons";
+import { Layers, Minus, Plus, Trash2 } from "lucide-react";
 
 export default function SaleCartItem({
   item,
@@ -15,171 +16,130 @@ export default function SaleCartItem({
   return (
     <div
       className="
+        group
+        relative
         rounded-2xl
-
         border
-        border-slate-200/80
-        dark:border-slate-800
-
-        bg-white/80
-        dark:bg-slate-950/60
-
-        backdrop-blur-xl
-
+        border-slate-200/70
+        dark:border-slate-800/80
+        bg-white
+        dark:bg-slate-900/40
         p-4
-
+        shadow-sm
+        hover:shadow-md
+        hover:border-slate-300
+        dark:hover:border-slate-700
         transition-all
         duration-200
       "
     >
-      {/* HEADER */}
-
+      {/* SECCIÓN SUPERIOR: INFO DEL PRODUCTO Y ELIMINAR */}
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0 flex-1">
           <h4
             className="
               text-sm
-              font-semibold
-
-              text-slate-900
-              dark:text-slate-100
-
+              font-bold
+              text-slate-800
+              dark:text-slate-200
               truncate
+              group-hover:text-blue-600
+              dark:group-hover:text-blue-400
+              transition-colors
             "
           >
             {item.productName}
           </h4>
 
-          <p
-            className="
-              mt-1
-
-              text-xs
-
-              text-slate-500
-              dark:text-slate-400
-            "
-          >
-            {fmt(item.unitPrice)} c/u
-          </p>
+          {/* Fila de Meta-datos (Precio Unitario + Stock Restante) */}
+          <div className="mt-1 flex flex-wrap items-center gap-2">
+            <span className="font-mono text-xs font-medium text-slate-500 dark:text-slate-400">
+              {fmt(item.unitPrice)} c/u
+            </span>
+            <span className="inline-flex items-center gap-1 rounded-md bg-slate-50 dark:bg-slate-800 px-1.5 py-0.5 text-[10px] font-medium text-slate-500 dark:text-slate-400 border border-slate-100 dark:border-slate-700/50">
+              <Layers size={10} />
+              Stock: {item.stock}
+            </span>
+          </div>
         </div>
 
-        <button
+        {/* 1. BOTÓN ELIMINAR REFACTORIZADO A MODERBUTTON */}
+        <ModerButton
           type="button"
+          text=""
+          variant="danger"
+          icon={Trash2}
           onClick={() => onRemove(item.productId)}
-          className="
-            h-9
-            w-9
-
-            rounded-xl
-
-            flex
-            items-center
-            justify-center
-
-            text-red-500
-
-            hover:bg-red-50
-            dark:hover:bg-red-950/30
-
-            transition-colors
-          "
-        >
-          <Trash2 size={15} />
-        </button>
+          title="Eliminar del carrito"
+          className="shrink-0"
+        />
       </div>
 
-      {/* FOOTER */}
+      {/* DIVIDER SUTIL */}
+      <div className="my-3 border-t border-dashed border-slate-100 dark:border-slate-800" />
 
-      <div className="flex items-center justify-between mt-4">
+      {/* SECCIÓN INFERIOR: CONTROLES DE CANTIDAD Y SUBTOTAL */}
+      <div className="flex items-center justify-between">
+        {/* Controles de Cantidad */}
         <div
           className="
             flex
             items-center
-
-            gap-2
+            gap-1
+            bg-slate-50
+            dark:bg-slate-950/50
+            p-1
+            rounded-xl
+            border
+            border-slate-100
+            dark:border-slate-800/60
           "
         >
-          <button
+          {/* 2. BOTÓN DISMINUIR REFACTORIZADO A MODERBUTTON */}
+          <ModerButton
             type="button"
+            text=""
+            variant="ghost"
+            icon={Minus}
             onClick={() => onDecrease(item.productId)}
-            className="
-              h-8
-              w-8
-
-              rounded-xl
-
-              border
-              border-slate-200
-              dark:border-slate-700
-
-              flex
-              items-center
-              justify-center
-
-              hover:bg-slate-50
-              dark:hover:bg-slate-900
-
-              transition-colors
-            "
-          >
-            <Minus size={14} />
-          </button>
+            disabled={item.quantity <= 1}
+          />
 
           <span
             className="
               min-w-[32px]
-
               text-center
-
+              font-mono
               text-sm
-              font-semibold
-
-              text-slate-900
-              dark:text-slate-100
+              font-bold
+              text-slate-800
+              dark:text-slate-200
             "
           >
             {item.quantity}
           </span>
 
-          <button
+          {/* 3. BOTÓN INCREMENTAR (MANTENIDO) */}
+          <ModerButton
             type="button"
+            text=""
+            variant="primary"
+            icon={Plus}
             onClick={() => onIncrease(item.productId)}
             disabled={item.quantity >= item.stock}
-            className="
-              h-8
-              w-8
-
-              rounded-xl
-
-              border
-              border-slate-200
-              dark:border-slate-700
-
-              flex
-              items-center
-              justify-center
-
-              hover:bg-slate-50
-              dark:hover:bg-slate-900
-
-              disabled:opacity-30
-              disabled:pointer-events-none
-
-              transition-colors
-            "
-          >
-            <Plus size={14} />
-          </button>
+          />
         </div>
 
+        {/* Contenedor del Subtotal */}
         <div className="text-right">
           <p
             className="
-              text-xs
-
-              text-slate-500
-              dark:text-slate-400
+              text-[10px]
+              font-bold
+              uppercase
+              tracking-wider
+              text-slate-400
+              dark:text-slate-500
             "
           >
             Subtotal
@@ -187,11 +147,11 @@ export default function SaleCartItem({
 
           <p
             className="
-              text-sm
+              font-mono
+              text-base
               font-bold
-
-              text-slate-900
-              dark:text-slate-100
+              text-blue-600
+              dark:text-blue-400
             "
           >
             {fmt(item.subtotal)}
