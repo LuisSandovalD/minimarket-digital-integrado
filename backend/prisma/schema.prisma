@@ -23,10 +23,16 @@ model Company {
   legalRepresentative String?            @db.VarChar(255)
   isActive            Boolean            @default(true)
   isDeleted           Boolean            @default(false)
-  subscriptionTier    String             @default("FREE") @db.VarChar(50)
+  subscriptionTier    SubscriptionTier   @default(FREE)
   createdAt           DateTime           @default(now())
   updatedAt           DateTime           @updatedAt
   deletedAt           DateTime?
+
+  // Nuevas relaciones para el control del SaaS (Suscripciones)
+  subscription        Subscription?      // Relación 1:1 con los detalles de vigencia y pasarela
+  billingHistories    BillingHistory[]   // Relación 1:N con los recibos de pago del software
+
+  // Relaciones operativas originales del negocio
   auditLogs           AuditLog[]
   branches            Branch[]
   categories          Category[]
@@ -629,6 +635,64 @@ model ProductBatch {
   @@index([productId, expirationDate])
   @@index([branchId])
   @@index([companyId])
+}
+
+// ============================================
+// MODELOS DE SUSCRIPCIÓN / SaaS (únicos modificados)
+// ============================================
+
+model Subscription {
+  id                   Int                @id @default(autoincrement())
+  companyId            Int                @unique
+  status               SubscriptionStatus @default(ACTIVE)
+
+  // Fechas clave de control
+  startDate            DateTime           @default(now())
+  currentPeriodStart   DateTime           @default(now())
+  currentPeriodEnd     DateTime           // <-- ¡Crucial para saber cuándo expira el acceso!
+  cancelAtPeriodEnd    Boolean            @default(false)
+  canceledAt           DateTime?
+
+  // Control de periodo de prueba (NUEVO)
+  trialEndsAt          DateTime?          // Fecha en que termina el trial; null si no aplica
+
+  // Para pasarelas de pago (Stripe, etc.)
+  stripeSubscriptionId String?            @unique // ID de suscripción en Stripe
+  stripePriceId        String?            // ID del precio/plan en Stripe
+
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+
+  company              Company            @relation(fields: [companyId], references: [id], onDelete: Cascade)
+}
+
+model BillingHistory {
+  id               Int           @id @default(autoincrement())
+  companyId        Int
+  amount           Decimal       @db.Decimal(10, 2)
+  currency         String        @default("PEN") // O "USD" según configures
+  status           PaymentStatus @default(COMPLETED)
+  receiptUrl       String?       // Enlace al PDF de la factura (ej. generado por Stripe)
+  stripeInvoiceId  String?       @unique
+  createdAt        DateTime      @default(now())
+
+  company          Company       @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@index([companyId])
+}
+
+enum SubscriptionTier {
+  FREE
+  BASIC
+  PREMIUM
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  PAST_DUE
+  CANCELED
+  UNPAID
+  TRIALING
 }
 
 enum TicketStatus {

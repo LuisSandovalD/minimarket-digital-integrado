@@ -5,101 +5,114 @@
 const nodemailer = require("nodemailer");
 
 /* ======================================
- * VALIDACIÓN DE VARIABLES
+ * VALIDAR VARIABLES SMTP
  * ==================================== */
-if (!process.env.SMTP_HOST) {
-    throw new Error("SMTP_HOST no configurado");
-}
+function validateSMTP() {
+    const required = [
+        "SMTP_HOST",
+        "SMTP_PORT",
+        "SMTP_USER",
+        "SMTP_PASS",
+    ];
 
-if (!process.env.SMTP_PORT) {
-    throw new Error("SMTP_PORT no configurado");
-}
+    const missing = required.filter(
+        (key) => !process.env[key]
+    );
 
-if (!process.env.SMTP_USER) {
-    throw new Error("SMTP_USER no configurado");
-}
+    if (missing.length > 0) {
+        console.error("=================================");
+        console.error("SMTP CONFIGURATION ERROR");
+        console.error("=================================");
+        console.error("Faltan variables:", missing.join(", "));
+        console.error("=================================");
 
-if (!process.env.SMTP_PASS) {
-    throw new Error("SMTP_PASS no configurado");
+        return false;
+    }
+
+    return true;
 }
 
 /* ======================================
- * CONFIGURACIÓN SMTP
+ * MOSTRAR CONFIGURACIÓN
  * ==================================== */
-const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: Number(process.env.SMTP_PORT),
-    secure: true,
-
-    auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS
-    },
-
-    tls: {
-        rejectUnauthorized: false
-    }
-});
+console.log("=================================");
+console.log("SMTP CONFIGURATION");
+console.log("=================================");
+console.log("HOST:", process.env.SMTP_HOST || "NO CONFIGURADO");
+console.log("PORT:", process.env.SMTP_PORT || "NO CONFIGURADO");
+console.log("USER:", process.env.SMTP_USER || "NO CONFIGURADO");
+console.log(
+    "PASSWORD:",
+    process.env.SMTP_PASS ? "CONFIGURADA" : "NO CONFIGURADA"
+);
+console.log("=================================");
 
 /* ======================================
- * VERIFICACIÓN SMTP AL INICIAR
+ * CREAR TRANSPORTER
  * ==================================== */
-(async () => {
-    try {
 
-        console.log("=================================");
-        console.log("SMTP CONFIGURATION");
-        console.log("=================================");
-        console.log("HOST:", process.env.SMTP_HOST);
-        console.log("PORT:", process.env.SMTP_PORT);
-        console.log("USER:", process.env.SMTP_USER);
-        console.log(
-            "PASSWORD:",
-            process.env.SMTP_PASS
-                ? "CONFIGURADA"
-                : "NO CONFIGURADA"
-        );
+let transporter = null;
 
-        await transporter.verify();
+if (validateSMTP()) {
 
-        console.log("=================================");
-        console.log("SMTP READY");
-        console.log("Conexión con Gmail exitosa");
-        console.log("=================================");
+    transporter = nodemailer.createTransport({
+        host: process.env.SMTP_HOST,
+        port: Number(process.env.SMTP_PORT),
+        secure: Number(process.env.SMTP_PORT) === 465,
 
-    } catch (error) {
+        auth: {
+            user: process.env.SMTP_USER,
+            pass: process.env.SMTP_PASS,
+        },
 
-        console.error("=================================");
-        console.error("SMTP ERROR");
-        console.error("=================================");
-        console.error(error);
-        console.error("=================================");
+        tls: {
+            rejectUnauthorized: false,
+        },
+    });
 
-    }
-})();
+    transporter
+        .verify()
+        .then(() => {
+            console.log("=================================");
+            console.log("SMTP READY");
+            console.log("Conexión con Gmail exitosa");
+            console.log("=================================");
+        })
+        .catch((error) => {
+            console.error("=================================");
+            console.error("SMTP ERROR");
+            console.error(error.message);
+            console.error("=================================");
+        });
+
+}
 
 /* ======================================
  * ENVIAR CORREO
  * ==================================== */
+
 const sendEmail = async ({
     to,
     subject,
     html,
-    text = null
+    text = null,
 }) => {
 
-    const info =
-        await transporter.sendMail({
-            from: `"ERP POS System" <${process.env.SMTP_USER}>`,
-            to,
-            subject,
-            text,
-            html
-        });
+    if (!transporter) {
+        throw new Error(
+            "Servicio SMTP no disponible. Verifique las variables de entorno."
+        );
+    }
 
-    console.log(
-        `Correo enviado correctamente: ${info.messageId}`
-    );
+    const info = await transporter.sendMail({
+        from: `"ERP POS System" <${process.env.SMTP_USER}>`,
+        to,
+        subject,
+        text,
+        html,
+    });
+
+    console.log("Correo enviado:", info.messageId);
 
     return info;
 };
@@ -107,62 +120,45 @@ const sendEmail = async ({
 /* ======================================
  * RECUPERACIÓN DE CONTRASEÑA
  * ==================================== */
+
 const sendPasswordResetCode = async ({
     email,
-    code
+    code,
 }) => {
 
     return sendEmail({
         to: email,
         subject: "Recuperación de contraseña",
         html: `
-            <div style="font-family: Arial, sans-serif; padding:20px;">
-                
+            <div style="font-family:Arial;padding:20px">
                 <h2>Recuperación de contraseña</h2>
 
-                <p>
-                    Hemos recibido una solicitud para restablecer tu contraseña.
-                </p>
+                <p>Utiliza el siguiente código:</p>
 
-                <p>
-                    Utiliza el siguiente código:
-                </p>
-
-                <div
-                    style="
-                        font-size:32px;
-                        font-weight:bold;
-                        letter-spacing:6px;
-                        color:#2563eb;
-                        margin:20px 0;
-                    "
-                >
+                <h1 style="
+                    color:#2563eb;
+                    letter-spacing:8px;
+                ">
                     ${code}
-                </div>
+                </h1>
 
                 <p>
-                    Este código expirará en 15 minutos.
-                </p>
-
-                <p>
-                    Si no realizaste esta solicitud,
-                    simplemente ignora este mensaje.
+                    El código expirará en 15 minutos.
                 </p>
 
                 <hr>
 
-                <small>
-                    ERP POS System
-                </small>
-
+                <small>ERP POS System</small>
             </div>
-        `
+        `,
     });
+
 };
 
 /* ======================================
- * CÓDIGO DE VERIFICACIÓN EN DOS PASOS
+ * CÓDIGO 2FA
  * ==================================== */
+
 const sendTwoFactorCode = async (
     email,
     code
@@ -170,51 +166,37 @@ const sendTwoFactorCode = async (
 
     return sendEmail({
         to: email,
-        subject: "Tu código de verificación",
+        subject: "Código de verificación",
         html: `
-            <div style="font-family: Arial, sans-serif; padding:20px;">
+            <div style="font-family:Arial;padding:20px">
 
                 <h2>Verificación en dos pasos</h2>
 
-                <p>
-                    Detectamos un inicio de sesión en tu cuenta.
-                    Utiliza el siguiente código para completarlo:
-                </p>
+                <p>Tu código es:</p>
 
-                <div
-                    style="
-                        font-size:32px;
-                        font-weight:bold;
-                        letter-spacing:6px;
-                        color:#2563eb;
-                        margin:20px 0;
-                    "
-                >
+                <h1 style="
+                    color:#2563eb;
+                    letter-spacing:8px;
+                ">
                     ${code}
-                </div>
+                </h1>
 
                 <p>
-                    Este código expirará en 10 minutos.
-                </p>
-
-                <p>
-                    Si no fuiste tú quien intentó iniciar sesión,
-                    cambia tu contraseña de inmediato.
+                    Expira en 10 minutos.
                 </p>
 
                 <hr>
 
-                <small>
-                    ERP POS System
-                </small>
+                <small>ERP POS System</small>
 
             </div>
-        `
+        `,
     });
+
 };
 
 module.exports = {
     sendEmail,
     sendPasswordResetCode,
-    sendTwoFactorCode
+    sendTwoFactorCode,
 };

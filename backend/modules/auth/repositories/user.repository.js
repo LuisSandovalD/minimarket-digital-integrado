@@ -11,7 +11,7 @@ const findUserByEmail = async (email, tx = null) => {
     const client = tx || prisma;
     return client.user.findFirst({
         where: {
-            email,
+            email: email.trim().toLowerCase(),
             isDeleted: false
         },
         include: {
@@ -38,7 +38,7 @@ const findUserById = async (id, tx = null) => {
 };
 
 /* ======================================
- * FIND USER WITH RELATIONS AND STATS (NUEVO)
+ * FIND USER WITH RELATIONS AND STATS
  * ==================================== */
 const findUserWithRelationsAndStats = async (id, tx = null) => {
     const client = tx || prisma;
@@ -68,9 +68,7 @@ const findUserWithRelationsAndStats = async (id, tx = null) => {
     });
 };
 
-
-// Al final de tu archivo user.repository.js:
-
+// Manejo de estado de login exitoso
 const handleSuccessfulLoginState = async (id, tx = null) => {
     const client = tx || prisma;
     return client.user.update({
@@ -84,9 +82,8 @@ const handleSuccessfulLoginState = async (id, tx = null) => {
     });
 };
 
-
 /* ======================================
- * CREATE USER
+ * CREATE USER (Limpio y compatible con tu esquema actual)
  * ==================================== */
 const createUser = async (data, tx = null) => {
     const client = tx || prisma;
@@ -110,10 +107,11 @@ const updateUser = async (id, data, tx = null) => {
     });
 };
 
+// NOTA: "findUserBySlug" ha sido removido completamente de aquí
 module.exports = {
     findUserByEmail,
     findUserById,
-    findUserWithRelationsAndStats, // Exportado correctamente para profile.service.js
+    findUserWithRelationsAndStats,
     createUser,
     updateUser,
     handleSuccessfulLoginState

@@ -11,22 +11,28 @@ const auth =
 const roleCheck =
   require("../../../middleware/roleCheck");
 
+// 🔥 IMPORTAMOS TU MIDDLEWARE DE SUSCRIPCIÓN SAAS
+const checkSubscription =
+  require("../../../middleware/subscription.middleware");
+
 const controller =
   require("../controllers/category.controller");
 
 // ========================================
-// GET
+// GET (PROTEGIDO POR SUSCRIPCIÓN)
 // ========================================
 
 router.get(
   "/",
   auth,
+  checkSubscription, // Bloquea si no está al día
   controller.getCategories
 );
 
 router.get(
   "/:id",
   auth,
+  checkSubscription,
   controller.getCategoryById
 );
 
@@ -37,6 +43,7 @@ router.get(
 router.post(
   "/",
   auth,
+  checkSubscription,
   roleCheck(
     "ADMIN",
     "MANAGER"
@@ -51,6 +58,7 @@ router.post(
 router.put(
   "/:id",
   auth,
+  checkSubscription,
   roleCheck(
     "ADMIN",
     "MANAGER"
@@ -65,6 +73,7 @@ router.put(
 router.delete(
   "/:id",
   auth,
+  checkSubscription,
   roleCheck("ADMIN"),
   controller.deleteCategory
 );

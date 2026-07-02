@@ -1,7 +1,3 @@
-// ========================================
-// components/auth/LoginModal.jsx
-// ========================================
-
 import { Modal } from "@/components/overlays/";
 import { motion } from "framer-motion";
 import LoginBadge from "./LoginBadge";
@@ -15,7 +11,7 @@ const OFFICE_IMAGE =
  * Modal principal de Autenticación Corporativa.
  * Estructura asimétrica de doble panel con animaciones fluidas basadas en framer-motion.
  */
-export default function LoginModal({ open, onClose }) {
+export default function LoginModal({ open, onClose, onSwitchToRegister }) {
   if (!open) return null;
 
   return (
@@ -68,12 +64,25 @@ export default function LoginModal({ open, onClose }) {
             </div>
 
             {/* Contenedor central inyector del Login Form */}
-            <div className="flex flex-1 flex-col justify-center max-w-md mx-auto w-full">
+            <div className="flex flex-1 flex-col justify-center max-w-md mx-auto w-full px-6">
               <LoginBadge />
+
               <div className="mt-8">
                 {/* Renderiza el formulario con la inyección automática de LoginOptions */}
                 <LoginForm onClose={onClose} />
               </div>
+
+              {/* ENLACE HACIA EL REGISTRO */}
+              <p className="mt-6 text-center text-sm text-slate-600 dark:text-slate-400">
+                ¿Aún no tienes una cuenta?{" "}
+                <button
+                  type="button"
+                  onClick={onSwitchToRegister}
+                  className="font-semibold text-[#274c77] hover:underline dark:text-[#a3cef1]"
+                >
+                  Regístrate gratis
+                </button>
+              </p>
             </div>
           </motion.div>
         </div>

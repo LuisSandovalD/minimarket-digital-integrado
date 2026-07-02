@@ -17,7 +17,7 @@ export default function RegisterForm({
     3: BranchStep,
   };
 
-  // 2. Diccionario de encabezados (Títulos y Subtítulos dinámicos)
+  // 2. Diccionario de encabezados (Títulos y Subtítulos dinámicos estilizados)
   const StepHeaders = {
     1: {
       title: "Información Personal",
@@ -40,54 +40,56 @@ export default function RegisterForm({
     <form
       id="register-form"
       onSubmit={handleSubmit}
-      className="flex flex-col gap-6"
+      className="w-full max-w-2xl mx-auto flex flex-col gap-6"
     >
-      {/* ERROR */}
-      <AnimatePresence>
+      {/* SECCIÓN DE ERROR CON ANIMACIÓN FLUIDA DE ALTURA */}
+      <AnimatePresence mode="wait">
         {error && (
           <motion.div
-            initial={{ opacity: 0, y: -12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -12 }}
+            initial={{ opacity: 0, height: 0, y: -8 }}
+            animate={{ opacity: 1, height: "auto", y: 0 }}
+            exit={{ opacity: 0, height: 0, y: -8 }}
             transition={{ duration: 0.2 }}
             role="alert"
             aria-live="assertive"
-            className="flex items-start gap-3 rounded-2xl border border-red-200 bg-red-50 p-4 dark:border-red-500/20 dark:bg-red-500/10"
+            className="overflow-hidden"
           >
-            <AlertCircle size={18} className="mt-0.5 shrink-0 text-red-500" />
-            <span className="text-sm font-medium text-red-600 dark:text-red-400">
-              {error}
-            </span>
+            <div className="flex items-start gap-3 rounded-2xl border border-red-200 bg-red-50 p-4 dark:border-red-500/20 dark:bg-red-500/10">
+              <AlertCircle size={18} className="mt-0.5 shrink-0 text-red-500" />
+              <span className="text-sm font-medium text-red-600 dark:text-red-400">
+                {error}
+              </span>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* CONTENIDO DEL PASO */}
-      <div className="rounded-3xl border border-[#e2e8f0] bg-white/70 p-6 shadow-sm backdrop-blur-xl dark:border-white/10 dark:bg-white/[0.03]">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={step}
-            initial={{ opacity: 0, x: 24 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -24 }}
-            transition={{ duration: 0.25, ease: "easeInOut" }}
-            className="space-y-6" // Añade separación interna entre el Header y los Inputs
-          >
-            {/* ENCABEZADO DINÁMICO */}
-            <div className="border-b border-slate-100 pb-4 dark:border-white/5">
-              <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">
-                {currentHeader.title}
-              </h2>
-              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                {currentHeader.description}
-              </p>
-            </div>
+      {/* CONTENIDO INTEGRADO NATIVAMENTE (SIN CARD) */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={step}
+          initial={{ opacity: 0, x: 16 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -16 }}
+          transition={{ duration: 0.25, ease: "easeInOut" }}
+          className="flex flex-col gap-6"
+        >
+          {/* ENCABEZADO MINIMALISTA SIN BORDES INNECESARIOS */}
+          <div className="space-y-1">
+            <h2 className="text-2xl font-bold tracking-tight text-slate-950 dark:text-slate-50">
+              {currentHeader.title}
+            </h2>
+            <p className="text-sm text-slate-500 dark:text-slate-400">
+              {currentHeader.description}
+            </p>
+          </div>
 
-            {/* Renderizado dinámico del paso actual */}
+          {/* RENDERIZADO DINÁMICO DEL PASO ACTUAL */}
+          <div className="w-full">
             <CurrentStep form={form} handleChange={handleChange} />
-          </motion.div>
-        </AnimatePresence>
-      </div>
+          </div>
+        </motion.div>
+      </AnimatePresence>
     </form>
   );
 }

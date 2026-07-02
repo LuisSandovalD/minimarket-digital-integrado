@@ -4,13 +4,13 @@
 
 const bcrypt = require("bcryptjs");
 
-// Importamos de manera explícita los repositorios especializados necesarios
 const userRepository = require("../repositories/user.repository");
 const companyRepository = require("../repositories/company.repository");
 const { registerTenant } = require("../repositories/register.repository");
 
 /**
- * REGISTRO DE UN NUEVO TENANT (EMPRESA, SUCURSAL Y USUARIO ADMINISTRADOR)
+ * REGISTRO DE UN NUEVO TENANT (EMPRESA, SUCURSAL, USUARIO ADMINISTRADOR Y SUSCRIPCIÓN SaaS)
+ * Flujo Freemium / Trial de 30 días sin requerir tarjeta al inicio.
  */
 const register = async ({ body }) => {
 
@@ -20,54 +20,88 @@ const register = async ({ body }) => {
         password,
         role,
         phone,
+        subscriptionTier,
         company,
         branch
     } = body;
 
-    // 1. Validar unicidad del usuario mediante el repositorio de usuarios
-    const existingUser = await userRepository.findUserByEmail(
-        email.trim().toLowerCase()
-    );
+    // ======================================
+    // 1. Validar unicidad del usuario por Correo
+    // ======================================
+    const cleanedEmail = email.trim().toLowerCase();
+    const existingUserByEmail = await userRepository.findUserByEmail(cleanedEmail);
 
-    if (existingUser) {
+    if (existingUserByEmail) {
         throw new Error(
             "El correo electrónico ya se encuentra registrado"
         );
     }
 
-    // 2. Validar unicidad de la empresa mediante el repositorio de empresas
-    const existingCompany = await companyRepository.findCompanyByRuc(
-        company.ruc
-    );
+    // ======================================
+    // 2. Validar unicidad de la empresa mediante el RUC (Solo si viene informado)
+    // ======================================
+    if (company?.ruc && company.ruc.trim() !== "") {
+        const cleanedRuc = company.ruc.trim();
+        const existingCompany = await companyRepository.findCompanyByRuc(cleanedRuc);
 
-    if (existingCompany) {
-        throw new Error(
-            "El RUC ya se encuentra registrado"
-        );
+        if (existingCompany) {
+            throw new Error(
+                "El RUC ingresado ya se encuentra registrado en el sistema"
+            );
+        }
     }
 
+    // ======================================
     // 3. Hashear la contraseña de forma segura
+    // ======================================
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // 4. Ejecutar la transacción Multi-Tenant en el repositorio dedicado
+    // ======================================
+    // 4. Determinar y normalizar el Tier del SaaS (FREE, BASIC, PREMIUM)
+    // ======================================
+    const tier = subscriptionTier ? subscriptionTier.toUpperCase() : "FREE";
+
+    // ======================================
+    // 5. Ejecutar la transacción Multi-Tenant incluyendo la suscripción inicial
+    // ======================================
     const result = await registerTenant({
         user: {
-            name,
-            email,
+            name: name.trim(),
+            email: cleanedEmail,
             password: hashedPassword,
-            role,
-            phone
+            role: role || "ADMIN",
+            phone: phone ? phone.trim() : null
         },
-        company,
-        branch
+        company: {
+            name: company.name.trim(),
+            email: company.email ? company.email.trim().toLowerCase() : null,
+            phone: company.phone ? company.phone.trim() : null,
+            address: company.address ? company.address.trim() : null,
+            ruc: company.ruc ? company.ruc.trim() : null
+        },
+        branch: {
+            name: branch?.name ? branch.name.trim() : "Sucursal Principal",
+            code: branch?.code ? branch.code.trim().toUpperCase() : "MAIN",
+            address: branch?.address ? branch.address.trim() : (company.address ? company.address.trim() : "Dirección Fiscal"),
+            phone: branch?.phone ? branch.phone.trim() : null,
+            email: branch?.email ? branch.email.trim().toLowerCase() : null,
+            city: branch?.city ? branch.city.trim() : null,
+            state: branch?.state ? branch.state.trim() : null,
+            country: branch?.country ? branch.country.trim() : null
+        },
+        subscriptionTier: tier
     });
 
+    // ======================================
+    // 6. Retorno estructurado con las nuevas entidades del SaaS incluidas
+    // ======================================
     return {
         success: true,
-        message: "Empresa creada exitosamente",
+        message: "Empresa y suscripción inicial creadas exitosamente",
         company: result.company,
         branch: result.branch,
-        user: result.user
+        user: result.user,
+        subscription: result.subscription
     };
 };
 

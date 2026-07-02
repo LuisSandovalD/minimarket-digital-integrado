@@ -6,12 +6,17 @@ const prisma = require("../client");
 const bcrypt = require("bcryptjs");
 
 async function adminSeed() {
-  // Encriptar contraseña maestra una sola vez para optimizar rendimiento
-  const password = await bcrypt.hash("admin123", 10);
+  const password = await bcrypt.hash(
+    process.env.SEED_PASSWORD || "admin123",
+    10
+  );
+
+  console.log("🚀 Iniciando carga de datos principales...");
 
   // ========================================
-  // 1. EMPRESA
+  // EMPRESA
   // ========================================
+
   const company = await prisma.company.create({
     data: {
       name: "Minimarket Don Luchito SAC",
@@ -22,14 +27,85 @@ async function adminSeed() {
       phone: "014567890",
       address: "Av. Los Próceres 123, SJL",
       website: "https://donluchito.pe",
-      legalRepresentative: "Luis Enrique Sandoval Carbonel"
+      legalRepresentative: "Luis Enrique Sandoval Carbonel",
+      subscriptionTier: "PREMIUM"
     }
   });
-  console.log("✅ Empresa 'Minimarket Don Luchito SAC' creada");
+
+  console.log("✅ Empresa creada");
 
   // ========================================
-  // 2. SUCURSAL
+  // SUSCRIPCIÓN (NUEVO — control de acceso al SaaS)
   // ========================================
+
+  const now = new Date();
+  const periodStart = now;
+  const periodEnd = new Date(now);
+  periodEnd.setMonth(periodEnd.getMonth() + 1); // ciclo mensual
+
+  const subscription = await prisma.subscription.create({
+    data: {
+      companyId: company.id,
+      status: "ACTIVE",
+      startDate: now,
+      currentPeriodStart: periodStart,
+      currentPeriodEnd: periodEnd,
+      // En producción esto lo llena el webhook de Stripe al crear la suscripción real
+      stripeSubscriptionId: "sub_mock_donluchito001",
+      stripePriceId: "price_premium_mensual"
+    }
+  });
+
+  console.log("✅ Suscripción creada (PREMIUM, vence:", periodEnd.toLocaleDateString(), ")");
+
+  // ========================================
+  // HISTORIAL DE FACTURACIÓN (NUEVO — recibos del SaaS)
+  // ========================================
+
+  const lastMonth = new Date(now);
+  lastMonth.setMonth(lastMonth.getMonth() - 1);
+
+  await prisma.billingHistory.createMany({
+    data: [
+      {
+        companyId: company.id,
+        amount: 49.90,
+        currency: "PEN",
+        status: "COMPLETED",
+        receiptUrl: "https://dashboard.stripe.com/receipts/mock-001",
+        stripeInvoiceId: "in_mock_donluchito001",
+        createdAt: lastMonth
+      },
+      {
+        companyId: company.id,
+        amount: 49.90,
+        currency: "PEN",
+        status: "COMPLETED",
+        receiptUrl: "https://dashboard.stripe.com/receipts/mock-002",
+        stripeInvoiceId: "in_mock_donluchito002",
+        createdAt: now
+      }
+    ]
+  });
+
+  console.log("✅ Historial de facturación creado (2 recibos)");
+
+  // ========================================
+  // CONFIGURACIÓN
+  // ========================================
+
+  await prisma.configuration.create({
+    data: {
+      companyId: company.id
+    }
+  });
+
+  console.log("✅ Configuración creada");
+
+  // ========================================
+  // SUCURSAL
+  // ========================================
+
   const branch = await prisma.branch.create({
     data: {
       name: "Sucursal Principal",
@@ -43,15 +119,17 @@ async function adminSeed() {
       companyId: company.id
     }
   });
-  console.log("✅ Sucursal Principal enlazada y creada");
+
+  console.log("✅ Sucursal creada");
 
   // ========================================
-  // 3. ADMINISTRADOR PRINCIPAL
+  // ADMIN
   // ========================================
+
   const admin = await prisma.user.create({
     data: {
       name: "Luis Enrique Sandoval Carbonel",
-      email: "admin@donluchito.pe",
+      email: "luissandovalcarbonel@gmail.com",
       password,
       role: "ADMIN",
       phone: "934049272",
@@ -59,11 +137,13 @@ async function adminSeed() {
       branchId: branch.id
     }
   });
-  console.log("✅ Usuario Administrador creado");
+
+  console.log("✅ Usuario ADMIN creado");
 
   // ========================================
-  // 4. GERENTE / MANAGER
+  // MANAGER
   // ========================================
+
   const manager = await prisma.user.create({
     data: {
       name: "Jimmy Sandoval Vega",
@@ -75,28 +155,39 @@ async function adminSeed() {
       branchId: branch.id
     }
   });
-  console.log("✅ Usuario Manager creado");
+
+  console.log("✅ Usuario MANAGER creado");
 
   // ========================================
-  // 5. PERSONAL OPERATIVO (BATCH DE USUARIOS)
+  // SUPERVISOR
   // ========================================
+
+  await prisma.user.create({
+    data: {
+      name: "María Fernanda López",
+      email: "maria@donluchito.pe",
+      password,
+      role: "SUPERVISOR",
+      phone: "945678123",
+      managerId: manager.id,
+      companyId: company.id,
+      branchId: branch.id
+    }
+  });
+
+  // ========================================
+  // EMPLEADOS
+  // ========================================
+
   await prisma.user.createMany({
     data: [
-      {
-        name: "María Fernanda López",
-        email: "maria@donluchito.pe",
-        password,
-        role: "SUPERVISOR",
-        phone: "945678123",
-        companyId: company.id,
-        branchId: branch.id
-      },
       {
         name: "José Antonio Torres",
         email: "jose@donluchito.pe",
         password,
         role: "EMPLOYEE",
         phone: "923456789",
+        managerId: manager.id,
         companyId: company.id,
         branchId: branch.id
       },
@@ -106,6 +197,7 @@ async function adminSeed() {
         password,
         role: "EMPLOYEE",
         phone: "912345678",
+        managerId: manager.id,
         companyId: company.id,
         branchId: branch.id
       },
@@ -115,6 +207,7 @@ async function adminSeed() {
         password,
         role: "EMPLOYEE",
         phone: "956123478",
+        managerId: manager.id,
         companyId: company.id,
         branchId: branch.id
       },
@@ -124,6 +217,7 @@ async function adminSeed() {
         password,
         role: "VIEWER",
         phone: "944556677",
+        managerId: manager.id,
         companyId: company.id,
         branchId: branch.id
       },
@@ -133,21 +227,23 @@ async function adminSeed() {
         password,
         role: "SUPPORT",
         phone: "933445566",
+        managerId: manager.id,
         companyId: company.id,
         branchId: branch.id
       }
-    ],
-    skipDuplicates: true
+    ]
   });
 
-  console.log("✅ Personal operativo e invitados inyectados");
-  console.log("\n===============================================");
-  console.log("🔐 CREDENCIALES DE ACCESO:");
-  console.log(`🔗 URL: ${company.website}`);
-  console.log(`📧 Admin Email: ${admin.email}`);
-  console.log(`📧 Manager Email: ${manager.email}`);
-  console.log("🔑 Contraseña Común: admin123");
-  console.log("===============================================\n");
+  console.log("✅ Personal operativo creado");
+
+  console.log("\n====================================");
+  console.log("🏢 EMPRESA:", company.name);
+  console.log("⭐ PLAN:", company.subscriptionTier);
+  console.log("💳 SUSCRIPCIÓN:", subscription.status, "- vence:", subscription.currentPeriodEnd.toLocaleDateString());
+  console.log("📧 ADMIN:", admin.email);
+  console.log("📧 MANAGER:", manager.email);
+  console.log("🔑 PASSWORD:", process.env.SEED_PASSWORD || "admin123");
+  console.log("====================================\n");
 }
 
 module.exports = {

@@ -1,3 +1,7 @@
+// ========================================
+// hooks/useRegisterForm.js (COMPLETO)
+// ========================================
+
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -7,7 +11,7 @@ import { saveSession } from "../services/session.service";
 import { loginSuccess } from "../store/authSlice";
 import { validateRegisterStep } from "../validations/register.schema";
 
-export default function useRegisterForm() {
+export default function useRegisterForm(onClose = null) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -16,20 +20,34 @@ export default function useRegisterForm() {
   const [error, setError] = useState(null);
 
   const [form, setForm] = useState({
+    // ======================================
+    // USUARIO
+    // ======================================
     name: "",
+    slug: "",
     email: "",
     password: "",
     role: "ADMIN",
     phone: "",
 
+    // ======================================
+    // EMPRESA
+    // ======================================
     companyName: "",
     companyEmail: "",
     companyPhone: "",
     companyAddress: "",
     companyRuc: "",
+    companyWebsite: "",
 
-    plan: "FREE",
+    // ======================================
+    // SUSCRIPCIÓN
+    // ======================================
+    subscriptionTier: "FREE",
 
+    // ======================================
+    // SUCURSAL
+    // ======================================
     branchName: "",
     branchCode: "",
     branchAddress: "",
@@ -55,7 +73,6 @@ export default function useRegisterForm() {
 
     if (Object.keys(errors).length > 0) {
       setError(Object.values(errors)[0]);
-
       return;
     }
 
@@ -64,7 +81,6 @@ export default function useRegisterForm() {
 
   const prevStep = () => {
     setError(null);
-
     setStep((prev) => Math.max(prev - 1, 1));
   };
 
@@ -75,7 +91,6 @@ export default function useRegisterForm() {
 
     if (Object.keys(errors).length > 0) {
       setError(Object.values(errors)[0]);
-
       return;
     }
 
@@ -84,59 +99,82 @@ export default function useRegisterForm() {
       setError(null);
 
       const payload = {
+        // ======================================
+        // USUARIO
+        // ======================================
         name: form.name,
-        email: form.email,
+        email: form.email?.trim().toLowerCase(),
         password: form.password,
         role: form.role,
         phone: form.phone || null,
 
-        plan: form.plan,
+        // ======================================
+        // PLAN / SUSCRIPCIÓN
+        // ======================================
+        subscriptionTier: form.subscriptionTier,
 
+        // ======================================
+        // EMPRESA
+        // ======================================
         company: {
           name: form.companyName,
-
           email: form.companyEmail || form.email,
-
-          phone: form.companyPhone || null,
-
+          phone: form.companyPhone || form.phone || null,
           address: form.companyAddress || "",
-
           ruc: form.companyRuc || null,
+          website: form.companyWebsite || null,
         },
 
+        // ======================================
+        // SUCURSAL
+        // ======================================
         branch: {
-          name: form.branchName || "Casa Matriz",
-
-          code: form.branchCode || "MAIN",
-
-          address: form.branchAddress || "",
-
-          phone: form.branchPhone || null,
-
+          name: form.branchName?.trim() || "Casa Matriz",
+          code: form.branchCode?.trim() || "MAIN",
+          address: form.branchAddress?.trim() || form.companyAddress || "",
+          phone: form.branchPhone || form.phone || null,
           city: form.branchCity || null,
-
           state: form.branchState || null,
-
-          country: form.branchCountry || null,
+          country: form.branchCountry || "Perú",
         },
       };
 
       const response = await registerService(payload);
 
-      saveSession({
-        accessToken: response.accessToken,
+      // =================================================================
+      // 🌟 AUTO-LOGIN PARA TODOS LOS PLANES (FREE, BASIC, PREMIUM)
+      // =================================================================
 
-        refreshToken: response.refreshToken,
+      // Verificamos si el token existe directamente o dentro de un nodo data/result
+      const accessToken = response.accessToken || response.data?.accessToken;
+      const refreshToken = response.refreshToken || response.data?.refreshToken;
+      const userData = response.user || response.data?.user;
 
-        user: response.user,
-      });
+      if (accessToken) {
+        saveSession({
+          accessToken,
+          refreshToken,
+          user: userData,
+        });
 
-      dispatch(loginSuccess(response.user));
+        dispatch(loginSuccess(userData));
+        resetForm();
+        onClose?.();
 
-      navigate(`/${response.user.company.slug}/dashboard`);
+        // Obtenemos el slug de la empresa desde la respuesta estructurada de la base de datos
+        const companySlug = userData?.company?.slug || "dashboard";
+        navigate(`/${companySlug}/dashboard`);
+      } else {
+        // Si el backend guardó con éxito pero no devolvió tokens de sesión inmediata
+        resetForm();
+        onClose?.();
+        navigate("/login");
+      }
     } catch (err) {
       setError(
-        err.response?.data?.message || "Ocurrió un error durante el registro.",
+        err.response?.data?.message ||
+        err.message ||
+        "Ocurrió un error inesperado durante el registro.",
       );
     } finally {
       setLoading(false);
@@ -149,19 +187,18 @@ export default function useRegisterForm() {
 
     setForm({
       name: "",
+      slug: "",
       email: "",
       password: "",
       role: "ADMIN",
       phone: "",
-
       companyName: "",
       companyEmail: "",
       companyPhone: "",
       companyAddress: "",
       companyRuc: "",
-
-      plan: "FREE",
-
+      companyWebsite: "",
+      subscriptionTier: "FREE",
       branchName: "",
       branchCode: "",
       branchAddress: "",

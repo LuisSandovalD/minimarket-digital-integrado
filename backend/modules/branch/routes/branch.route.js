@@ -1,3 +1,7 @@
+// ========================================
+// routes/branch.route.js
+// ========================================
+
 const express =
   require("express");
 
@@ -10,12 +14,23 @@ const controller =
 const authMiddleware =
   require("../../../middleware/auth");
 
+// 🔥 IMPORTAMOS TU MIDDLEWARE DE SUSCRIPCIÓN SAAS
+const checkSubscription =
+  require("../../../middleware/subscription.middleware");
+
 /* ======================================
- * MIDDLEWARE
+ * MIDDLEWARES GLOBALES DEL ENTRANTE
  * ==================================== */
 
+// 1. Primero verifica que el usuario haya iniciado sesión
 router.use(
   authMiddleware
+);
+
+// 2. ⚡ SEGUNDO: ¡El interruptor de pago! 
+// Si no está al día, nadie pasa a las rutas de abajo.
+router.use(
+  checkSubscription
 );
 
 /* ======================================

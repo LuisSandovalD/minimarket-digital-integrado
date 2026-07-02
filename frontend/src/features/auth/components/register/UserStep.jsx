@@ -3,14 +3,10 @@ import { AtSign, LockKeyhole, Mail, Phone, User } from "lucide-react";
 
 export default function UserStep({ form, handleChange }) {
   return (
-    // 1. Convertimos a <fieldset> para mejorar la accesibilidad en formularios por pasos
-    <div className="grid grid-cols-1 gap-5 animate-fadeIn">
-      {/* Leyenda oculta visualmente pero accesible para lectores de pantalla */}
+    // Cambiado de grid-cols-1 a soportar md:grid-cols-2 de forma equilibrada
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-5 animate-fadeIn">
       <legend className="sr-only">Información de la cuenta de usuario</legend>
 
-      {/* ======================================
-          BLOQUE: IDENTIDAD (Fila 1 en Desktop)
-      ====================================== */}
       <Input
         label="Nombre completo"
         name="name"
@@ -31,9 +27,6 @@ export default function UserStep({ form, handleChange }) {
         required
       />
 
-      {/* ======================================
-          BLOQUE: CONTACTO (Fila 2 en Desktop)
-      ====================================== */}
       <Input
         label="Correo electrónico"
         name="email"
@@ -46,7 +39,7 @@ export default function UserStep({ form, handleChange }) {
       />
 
       <Input
-        label="Teléfono"
+        label="Teléfono personal"
         name="phone"
         placeholder="999 999 999"
         value={form.phone || ""}
@@ -54,13 +47,9 @@ export default function UserStep({ form, handleChange }) {
         icon={Phone}
       />
 
-      {/* ======================================
-          BLOQUE: SEGURIDAD (Fila 3 - Ancho Completo)
-      ====================================== */}
-      {/* Usamos md:col-span-2 para que la contraseña abarque todo el ancho de forma limpia */}
       <div className="md:col-span-2">
         <PasswordInput
-          label="Contraseña"
+          label="Contraseña de acceso"
           name="password"
           placeholder="••••••••"
           value={form.password || ""}

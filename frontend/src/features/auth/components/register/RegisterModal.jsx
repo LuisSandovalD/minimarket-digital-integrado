@@ -6,40 +6,31 @@ import RegisterForm from "./RegisterForm";
 import RegisterHeader from "./RegisterHeader";
 import RegisterStepper from "./RegisterStepper";
 
+// Importamos únicamente nuestro Custom Hook unificado y optimizado
 import useRegisterForm from "../../hooks/useRegisterForm";
-import useRegisterSubmit from "../../hooks/useRegisterSubmit";
 
 const OFFICE_IMAGE =
   "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2069&auto=format&fit=crop";
 
-export default function RegisterModal({ open, onClose }) {
+export default function RegisterModal({ open, onClose, onSwitchToLogin }) {
+  // Extraemos todo el control del formulario del hook centralizado
   const {
     step,
     form,
     loading,
-    setLoading,
     error,
-    setError,
     handleChange,
     nextStep,
     prevStep,
-    resetForm,
-  } = useRegisterForm();
-
-  const { handleSubmit } = useRegisterSubmit({
-    form,
-    setLoading,
-    setError,
-    resetForm,
-    onClose,
-  });
+    handleRegisterSubmit, // <-- Nuestra función unificada definitiva
+  } = useRegisterForm(onClose); // Le pasamos el callback para cerrar el modal tras el éxito
 
   if (!open) return null;
 
   return (
     <Modal open={open} onClose={onClose} size="full">
       <div className="flex h-[850px] max-h-[95vh] overflow-hidden rounded-[36px] border border-black/10 dark:border-white/10">
-        {/* Left panel — imagen */}
+        {/* Panel Izquierdo — Imagen de Fondo */}
         <motion.div
           initial={{ opacity: 0, x: -40 }}
           animate={{ opacity: 1, x: 0 }}
@@ -61,7 +52,7 @@ export default function RegisterModal({ open, onClose }) {
               transition={{ delay: 0.2, duration: 0.6 }}
             >
               <div className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/15 px-4 py-2 backdrop-blur-xl">
-                <div className="h-2 w-2 rounded-full bg-[#a3cef1]" />
+                <div className="h-2 w-2 rounded-full bg-slate-400 dark:bg-slate-500" />
                 <span className="text-sm font-semibold text-white">
                   ERP Empresarial
                 </span>
@@ -70,12 +61,12 @@ export default function RegisterModal({ open, onClose }) {
           </div>
         </motion.div>
 
-        {/* Right panel */}
+        {/* Panel Derecho — Flujo del Formulario */}
         <motion.div
           initial={{ opacity: 0, x: 40 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="relative flex flex-1 flex-col overflow-hidden border-l border-black/10 bg-white dark:border-white/10 dark:bg-[#0f172a]"
+          className="relative flex flex-1 flex-col overflow-hidden"
         >
           {/* Header */}
           <div className="flex-none border-b border-black/10 dark:border-white/10">
@@ -87,15 +78,29 @@ export default function RegisterModal({ open, onClose }) {
             <RegisterStepper step={step} />
           </div>
 
-          {/* Form — único con scroll */}
+          {/* Form — Contenido integrado directo con scroll independiente */}
           <div className="flex-1 overflow-y-auto p-8">
             <RegisterForm
               step={step}
               form={form}
               error={error}
               handleChange={handleChange}
-              handleSubmit={handleSubmit}
+              handleSubmit={handleRegisterSubmit}
             />
+
+            {/* ENLACE HACIA EL LOGIN (Aparece en el primer paso para no estorbar el flujo final) */}
+            {step === 1 && (
+              <p className="mt-6 text-center text-sm text-slate-600 dark:text-slate-400">
+                ¿Ya tienes una cuenta?{" "}
+                <button
+                  type="button"
+                  onClick={onSwitchToLogin}
+                  className="font-semibold text-[#274c77] hover:underline dark:text-[#a3cef1]"
+                >
+                  Inicia sesión
+                </button>
+              </p>
+            )}
           </div>
 
           {/* Footer */}
@@ -105,7 +110,7 @@ export default function RegisterModal({ open, onClose }) {
               loading={loading}
               nextStep={nextStep}
               prevStep={prevStep}
-              handleSubmit={handleSubmit}
+              handleSubmit={handleRegisterSubmit}
             />
           </div>
         </motion.div>

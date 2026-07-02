@@ -4,13 +4,7 @@ import NavbarBrand from "./NavbarBrand";
 
 export default function MobileMenuHeader({ onClose }) {
   return (
-    <div
-      className="
-        flex items-center justify-between
-        border-b border-[#e7ecef] dark:border-[#365d86]/20
-        px-6 py-4
-      "
-    >
+    <div className="flex items-center justify-between border-b border-[#e7ecef] dark:border-[#365d86]/20 px-6 py-4">
       {/* BRAND */}
       <NavbarBrand />
 
