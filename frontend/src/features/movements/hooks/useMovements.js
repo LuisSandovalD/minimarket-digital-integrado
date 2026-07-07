@@ -1,96 +1,83 @@
-// ========================================
-// features/movements/hooks/useMovements.js
-// ========================================
-
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { getMovementsService } from "../../inventory/services/inventory.service";
 
-export default function useMovements() {
-  // ========================================
-  // STATES
-  // ========================================
-
+export default function useMovements(initialFilters = {}) {
   const [movements, setMovements] = useState([]);
-
+  const [pagination, setPagination] = useState({});
   const [loading, setLoading] = useState(true);
 
-  const [search, setSearch] = useState("");
+  const [filters, setFilters] = useState({
+    page: 1,
+    limit: 10,
 
-  // ========================================
-  // FETCH
-  // ========================================
+    search: "",
+    branchId: "",
+    productId: "",
+    type: "",
+
+    ...initialFilters,
+  });
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/immutability
     fetchMovements();
-  }, []);
-
-  // ========================================
-  // FETCH MOVEMENTS
-  // ========================================
+  }, [filters]);
 
   const fetchMovements = async () => {
     try {
       setLoading(true);
 
-      const response = await getMovementsService();
+      const response = await getMovementsService(filters);
 
-      const movementsData = Array.isArray(response)
-        ? response
-        : Array.isArray(response?.data)
-          ? response.data
-          : Array.isArray(response?.data?.data)
-            ? response.data.data
-            : [];
-
-      setMovements(movementsData);
+      setMovements(response?.data || []);
+      setPagination(response?.pagination || {});
     } catch (error) {
       console.error(error);
 
       setMovements([]);
+      setPagination({});
     } finally {
       setLoading(false);
     }
   };
 
-  // ========================================
-  // FILTERED
-  // ========================================
+  const updateFilters = (values) => {
+    setFilters((prev) => ({
+      ...prev,
+      ...values,
+      page: 1,
+    }));
+  };
 
-  const filteredMovements = useMemo(() => {
-    if (!Array.isArray(movements)) {
-      return [];
-    }
+  const nextPage = () => {
+    if (!pagination?.hasNext) return;
 
-    return movements.filter((movement) => {
-      const product = movement?.product?.name?.toLowerCase() || "";
+    setFilters((prev) => ({
+      ...prev,
+      page: prev.page + 1,
+    }));
+  };
 
-      const sku = movement?.product?.sku?.toLowerCase() || "";
+  const prevPage = () => {
+    if (!pagination?.hasPrev) return;
 
-      const type = movement?.type?.toLowerCase() || "";
-
-      const branch = movement?.branch?.name?.toLowerCase() || "";
-
-      const searchValue = search.toLowerCase();
-
-      return (
-        product.includes(searchValue) ||
-        sku.includes(searchValue) ||
-        type.includes(searchValue) ||
-        branch.includes(searchValue)
-      );
-    });
-  }, [movements, search]);
+    setFilters((prev) => ({
+      ...prev,
+      page: prev.page - 1,
+    }));
+  };
 
   return {
-    movements: filteredMovements,
-
+    movements,
+    pagination,
     loading,
 
-    search,
+    filters,
+    setFilters,
+    updateFilters,
 
-    setSearch,
+    nextPage,
+    prevPage,
 
     refetch: fetchMovements,
   };

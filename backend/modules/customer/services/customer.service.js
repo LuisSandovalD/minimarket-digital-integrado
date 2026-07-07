@@ -1,8 +1,7 @@
-const repository =
-  require('../repositories/customer.repository');
+const read = require("./customer.service.read");
+const write = require("./customer.service.write");
 
-exports.getAll = async () => {
-
-  return repository.getAll();
-
+module.exports = {
+  ...read,
+  ...write,
 };

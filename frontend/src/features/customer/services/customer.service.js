@@ -13,10 +13,11 @@ const customerService = {
   // GET ALL
   // ========================================
 
-  getAll: () => {
-    return api.get("/customer");
+  getAll: (params = {}) => {
+    return api.get("/customer", {
+      params,
+    });
   },
-
   // ========================================
   // GET ONE
   // ========================================

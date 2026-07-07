@@ -1,7 +1,7 @@
 // ========================================
 // features/account/components/ChangePasswordModal.jsx
 // ========================================
-import { AlertCircle, Check, ShieldCheck, X } from "lucide-react";
+import { AlertCircle, Check, LockKeyhole, ShieldCheck, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
 import { ModernButton } from "@/components/buttons";
@@ -118,6 +118,7 @@ export default function ChangePasswordModal({ open, onClose }) {
         title="Cambiar Contraseña"
         subtitle="Elige una combinación robusta para mantener blindada tu cuenta corporativa"
         onClose={onClose}
+        icon={LockKeyhole}
       />
 
       <div className="px-6 py-6 space-y-5">

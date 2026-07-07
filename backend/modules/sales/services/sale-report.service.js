@@ -31,16 +31,15 @@ module.exports = {
   // ========================================
   // TOP PRODUCTS
   // ========================================
+  // ========================================
+  // TOP PRODUCTS - SERVICIO CORREGIDO
+  // ========================================
 
-  getTopProductsService:
-    async (
-      companyId
-    ) => {
+  getTopProductsService: async (companyId) => {
+    // Aseguramos que el valor que viaja al repositorio sea purificado
+    const cleanCompanyId = companyId ? Number(companyId) : null;
 
-      return getTopProducts(
-        companyId
-      );
-
-    },
+    return getTopProducts(cleanCompanyId);
+  },
 
 };

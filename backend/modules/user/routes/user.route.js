@@ -1,69 +1,30 @@
-// ========================================
-// routes/user.route.js
-// ========================================
+const router = require("express").Router();
 
-const router =
-  require("express").Router();
+const auth = require("../../../middleware/auth");
+const roleCheck = require("../../../middleware/roleCheck");
 
-const auth =
-  require("../../../middleware/auth");
-
-const roleCheck =
-  require("../../../middleware/roleCheck");
-
-const controller =
-  require("../controllers/user.controller");
-
-// ========================================
-// GET HIERARCHY
-// IMPORTANT:
-// ALWAYS PLACE BEFORE "/:id"
-// ========================================
+const controller = require("../controllers/user.controller");
 
 router.get(
   "/hierarchy",
   auth,
-  roleCheck(
-    "ADMIN",
-    "MANAGER"
-  ),
+  roleCheck("ADMIN", "MANAGER"),
   controller.getHierarchy
 );
-
-// ========================================
-// GET ALL USERS
-// ========================================
 
 router.get(
   "/",
   auth,
-  roleCheck(
-    "ADMIN",
-    "MANAGER"
-  ),
+  roleCheck("ADMIN", "MANAGER"),
   controller.getUsers
 );
-
-// ========================================
-// GET USER BY ID
-// IMPORTANT:
-// MUST GO AFTER "/hierarchy"
-// ========================================
 
 router.get(
   "/:id",
   auth,
-  roleCheck(
-    "ADMIN",
-    "MANAGER",
-    "SUPERVISOR"
-  ),
+  roleCheck("ADMIN", "MANAGER", "SUPERVISOR"),
   controller.getUserById
 );
-
-// ========================================
-// CREATE USER
-// ========================================
 
 router.post(
   "/",
@@ -72,20 +33,12 @@ router.post(
   controller.createUser
 );
 
-// ========================================
-// UPDATE USER
-// ========================================
-
 router.put(
   "/:id",
   auth,
   roleCheck("ADMIN"),
   controller.updateUser
 );
-
-// ========================================
-// TOGGLE STATUS
-// ========================================
 
 router.patch(
   "/:id/status",
@@ -94,20 +47,12 @@ router.patch(
   controller.toggleUserStatus
 );
 
-// ========================================
-// RESTORE USER
-// ========================================
-
 router.patch(
-  "/restore/:id",
+  "/:id/restore",
   auth,
   roleCheck("ADMIN"),
   controller.restoreUser
 );
-
-// ========================================
-// DELETE USER
-// ========================================
 
 router.delete(
   "/:id",

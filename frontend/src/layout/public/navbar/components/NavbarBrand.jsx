@@ -8,7 +8,6 @@ export default function NavbarBrand() {
       aria-label="Ir al inicio"
       className="flex items-center transition-opacity hover:opacity-90"
     >
-      {" "}
       <img
         src={logo}
         alt="Minimarket Digital Integrado"

@@ -24,87 +24,137 @@ exports.createMovement =
 // GET MOVEMENTS
 // ========================================
 
-exports.getMovements =
-  async ({
-    companyId,
-    branchId,
-    productId,
-    type,
-    page = 1,
-    limit = 20,
-  }) => {
+// ========================================
+// GET MOVEMENTS
+// ========================================
 
-    const skip =
-      (page - 1) * limit;
+exports.getMovements = async ({
+  companyId,
+  branchId,
+  productId,
+  type,
+  search,
+  page = 1,
+  limit = 20,
+}) => {
+  page = Number(page);
+  limit = Number(limit);
 
-    const where = {
-      companyId,
-    };
+  const skip = (page - 1) * limit;
 
-    if (branchId) {
-      where.branchId =
-        Number(branchId);
-    }
-
-    if (productId) {
-      where.productId =
-        Number(productId);
-    }
-
-    if (type) {
-      where.type = type;
-    }
-
-    const [data, total] =
-      await Promise.all([
-
-        prisma.inventoryHistory.findMany({
-
-          where,
-
-          include: {
-
-            product: true,
-
-            inventory: true,
-
-            branch: true,
-          },
-
-          skip,
-
-          take: Number(limit),
-
-          orderBy: {
-            createdAt: "desc",
-          },
-        }),
-
-        prisma.inventoryHistory.count({
-          where,
-        }),
-
-      ]);
-
-    return {
-
-      data,
-
-      pagination: {
-
-        total,
-
-        page: Number(page),
-
-        limit: Number(limit),
-
-        totalPages:
-          Math.ceil(total / limit),
-      },
-    };
-
+  const where = {
+    companyId: Number(companyId),
   };
 
+  // ========================================
+  // SUCURSAL
+  // ========================================
+
+  if (branchId) {
+    where.branchId = Number(branchId);
+  }
+
+  // ========================================
+  // PRODUCTO
+  // ========================================
+
+  if (productId) {
+    where.productId = Number(productId);
+  }
+
+  // ========================================
+  // TIPO
+  // ========================================
+
+  if (type) {
+    where.type = type;
+  }
+
+  // ========================================
+  // BUSCADOR
+  // ========================================
+
+  if (search) {
+    where.OR = [
+      {
+        reason: {
+          contains: search,
+          mode: "insensitive",
+        },
+      },
+      {
+        reference: {
+          contains: search,
+          mode: "insensitive",
+        },
+      },
+      {
+        product: {
+          name: {
+            contains: search,
+            mode: "insensitive",
+          },
+        },
+      },
+      {
+        product: {
+          sku: {
+            contains: search,
+            mode: "insensitive",
+          },
+        },
+      },
+      {
+        branch: {
+          name: {
+            contains: search,
+            mode: "insensitive",
+          },
+        },
+      },
+    ];
+  }
+
+  // ========================================
+  // CONSULTAS
+  // ========================================
+
+  const [data, total] = await Promise.all([
+    prisma.inventoryHistory.findMany({
+      where,
+
+      include: {
+        product: true,
+        inventory: true,
+        branch: true,
+      },
+
+      skip,
+      take: limit,
+
+      orderBy: {
+        createdAt: "desc",
+      },
+    }),
+
+    prisma.inventoryHistory.count({
+      where,
+    }),
+  ]);
+
+  return {
+    data,
+
+    pagination: {
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+      hasNext: page < Math.ceil(total / limit),
+      hasPrev: page > 1,
+    },
+  };
+};
 // ========================================
 // GET PRODUCT MOVEMENTS
 // ========================================

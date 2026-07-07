@@ -1,6 +1,9 @@
+const read = require("./supplier.read.service");
+const write = require("./supplier.write.service");
+const remove = require("./supplier.delete.service");
+
 module.exports = {
-  ...require('./supplier-create.service'),
-  ...require('./supplier-update.service'),
-  ...require('./supplier-delete.service'),
-  ...require('./supplier-query.service')
-}
+  ...read,
+  ...write,
+  ...remove,
+};

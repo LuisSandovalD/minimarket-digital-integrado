@@ -2,13 +2,13 @@
 // features/dashboard/analytics/components/AnalyticsHeader.jsx
 // ========================================
 import {
-    Calendar,
-    DollarSign,
-    LineChart,
-    RefreshCw,
-    Scale,
-    ShoppingCart,
-    TrendingUp,
+  Calendar,
+  DollarSign,
+  LineChart,
+  RefreshCw,
+  Scale,
+  ShoppingCart,
+  TrendingUp,
 } from "lucide-react";
 
 import { ModernButton } from "@/components/buttons";

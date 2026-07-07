@@ -6,19 +6,19 @@ import api from "@/api/axios";
  * @param {Array} chatHistory - Lista de mensajes previos [{ role: 'user'|'model', text: '...' }]
  */
 export const sendChatMessage = async (
-    currentMessage = "",
-    chatHistory = [],
+  currentMessage = "",
+  chatHistory = [],
 ) => {
-    try {
-        const { data } = await api.post("/gemini/chat", {
-            currentMessage,
-            chatHistory,
-        });
-        return data; // Retorna { success: true, reply: "..." }
-    } catch (error) {
-        console.error("Error en sendChatMessage:", error);
-        throw error?.response?.data || { message: "Error al conectar con Mateo" };
-    }
+  try {
+    const { data } = await api.post("/gemini/chat", {
+      currentMessage,
+      chatHistory,
+    });
+    return data; // Retorna { success: true, reply: "..." }
+  } catch (error) {
+    console.error("Error en sendChatMessage:", error);
+    throw error?.response?.data || { message: "Error al conectar con Mateo" };
+  }
 };
 
 /**
@@ -28,18 +28,18 @@ export const sendChatMessage = async (
  * @param {string} userPrompt - Parámetro opcional de personalización
  */
 export const analyzeExcelMigration = async (excelData, userPrompt = "") => {
-    try {
-        const { data } = await api.post("/gemini/migrate", {
-            excelData,
-            userPrompt,
-        });
-        return data; // Retorna { success: true, migrationBlueprint: {...} }
-    } catch (error) {
-        console.error("Error en analyzeExcelMigration:", error);
-        throw (
-            error?.response?.data || {
-                message: "Error al procesar la migración del archivo",
-            }
-        );
-    }
+  try {
+    const { data } = await api.post("/gemini/migrate", {
+      excelData,
+      userPrompt,
+    });
+    return data; // Retorna { success: true, migrationBlueprint: {...} }
+  } catch (error) {
+    console.error("Error en analyzeExcelMigration:", error);
+    throw (
+      error?.response?.data || {
+        message: "Error al procesar la migración del archivo",
+      }
+    );
+  }
 };

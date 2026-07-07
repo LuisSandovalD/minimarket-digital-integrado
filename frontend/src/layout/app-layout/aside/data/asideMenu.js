@@ -11,6 +11,7 @@ import {
   FileText,
   LayoutDashboard,
   LifeBuoy,
+  MessageSquare,
   Package,
   PackageSearch,
   PieChart,
@@ -81,12 +82,7 @@ export const menuByRole = {
       section: "ACCESOS",
       items: [
         { id: "users", label: "Usuarios Sistema", icon: Users, href: "users" },
-        {
-          id: "employees",
-          label: "Personal / Cajeros",
-          icon: Users,
-          href: "employees",
-        },
+
         { id: "customers", label: "Clientes", icon: User, href: "customers" },
       ],
     },
@@ -193,6 +189,17 @@ export const menuByRole = {
           label: "Ajustes Generales",
           icon: Settings,
           href: "settings",
+        },
+      ],
+    },
+    {
+      section: "Comentarios y Reseñas",
+      items: [
+        {
+          id: "reviews",
+          label: "Comentarios y Reseñas",
+          icon: MessageSquare, // o Star
+          href: "reviews",
         },
       ],
     },

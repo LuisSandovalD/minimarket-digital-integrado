@@ -2,31 +2,26 @@
 // features/product/pages/ProductsPage.jsx
 // ========================================
 
-import { useState, useEffect } from "react";
-
+import { useEffect, useState } from "react";
+import ProductFilters from "../components/ProductFilters";
+import ProductFormModal from "../components/ProductFormModal";
 import ProductHeader from "../components/ProductHeader";
-
 import ProductsTable from "../components/ProductsTable";
 
-import ProductFormModal from "../components/ProductFormModal";
-
-import ProductFilters from "../components/ProductFilters";
-
-import useProducts from "../hooks/useProducts";
-
 import useProductForm from "../hooks/useProductForm";
-
-import useProductFilters from "../hooks/useProductFilters";
-
+import useProducts from "../hooks/useProducts";
 import useProductStats from "../hooks/useProductStats";
 
 import { getCategories } from "@/features/categories/services/category.service";
-
 import { getUnits } from "@/features/units/services/unit.service";
 
 export default function ProductsPage() {
+  // Extraemos toda la lógica del servidor, paginación y filtros desde el hook unificado
   const {
     products,
+    pagination,
+    filters,
+    setFilters,
     createProduct,
     updateProduct,
     deleteProduct,
@@ -34,29 +29,20 @@ export default function ProductsPage() {
   } = useProducts();
 
   const { form, handleChange, setFormValues, resetForm } = useProductForm();
-
-  const { search, setSearch, filteredProducts } = useProductFilters(products);
-
   const stats = useProductStats(products);
 
   const [openModal, setOpenModal] = useState(false);
-
   const [openNotifications, setOpenNotifications] = useState(false);
-
   const [editing, setEditing] = useState(null);
 
   const [categories, setCategories] = useState([]);
-
   const [units, setUnits] = useState([]);
-
   const [loadingData, setLoadingData] = useState(false);
-
   const [error, setError] = useState(null);
 
   // ========================================
   // LOAD CATEGORIES AND UNITS
   // ========================================
-
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -77,7 +63,7 @@ export default function ProductsPage() {
         setUnits(Array.isArray(unitsData) ? unitsData : unitsData?.data || []);
       } catch (err) {
         console.error("Error loading data:", err);
-        setError(err.message || "Error al cargar datos");
+        setError(err.message || "Error al cargar datos maestro");
         setCategories([]);
         setUnits([]);
       } finally {
@@ -89,9 +75,46 @@ export default function ProductsPage() {
   }, []);
 
   // ========================================
-  // HANDLERS
+  // HANDLERS (SEARCH & FILTERS)
   // ========================================
+  const handleSearch = (newFilters) => {
+    setFilters((prev) => ({
+      ...prev,
+      ...newFilters,
+      page: 1, // Resetea siempre a la primera página al realizar una nueva búsqueda
+    }));
+  };
 
+  const handleClear = () => {
+    setFilters({
+      page: 1,
+      limit: 10,
+      search: undefined,
+      categoryId: undefined,
+      isActive: undefined,
+      sortBy: "createdAt",
+      sortOrder: "desc",
+    });
+  };
+
+  // ========================================
+  // HANDLERS (PAGINATION)
+  // ========================================
+  const handlePrevPage = () => {
+    if (pagination.hasPrevPage) {
+      setFilters((prev) => ({ ...prev, page: prev.page - 1 }));
+    }
+  };
+
+  const handleNextPage = () => {
+    if (pagination.hasNextPage) {
+      setFilters((prev) => ({ ...prev, page: prev.page + 1 }));
+    }
+  };
+
+  // ========================================
+  // HANDLERS (CRUD)
+  // ========================================
   const handleCreate = () => {
     setEditing(null);
     resetForm();
@@ -111,11 +134,10 @@ export default function ProductsPage() {
       } else {
         await createProduct(form);
       }
-
       setOpenModal(false);
       resetForm();
-    } catch (error) {
-      console.error("Error submitting form:", error);
+    } catch (err) {
+      console.error("Error submitting form:", err);
     }
   };
 
@@ -128,8 +150,8 @@ export default function ProductsPage() {
 
     try {
       await deleteProduct(product.id);
-    } catch (error) {
-      console.error("Error deleting product:", error);
+    } catch (err) {
+      console.error("Error deleting product:", err);
     }
   };
 
@@ -139,15 +161,9 @@ export default function ProductsPage() {
     setEditing(null);
   };
 
-  // ========================================
-  // RENDER
-  // ========================================
-
   return (
     <div className="space-y-6">
-      {/* ========================================
-       * HEADER
-       * ====================================== */}
+      {/* HEADER */}
       <ProductHeader
         total={stats.totalProducts}
         lowStock={stats.lowStockProducts}
@@ -155,24 +171,27 @@ export default function ProductsPage() {
         onNotifications={() => setOpenNotifications(true)}
       />
 
-      {/* ========================================
-       * FILTERS
-       * ====================================== */}
-      <ProductFilters search={search} setSearch={setSearch} />
-
-      {/* ========================================
-       * TABLE
-       * ====================================== */}
-      <ProductsTable
-        products={filteredProducts}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
+      {/* FILTERS */}
+      <ProductFilters
+        onSearch={handleSearch}
+        onClear={handleClear}
+        categories={categories}
         loading={productsLoading}
       />
 
-      {/* ========================================
-       * MODAL - PRODUCT FORM
-       * ====================================== */}
+      {/* TABLE */}
+      <ProductsTable
+        products={products}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+        loading={productsLoading}
+        page={pagination.currentPage}
+        totalPages={pagination.totalPages}
+        onPrevPage={handlePrevPage}
+        onNextPage={handleNextPage}
+      />
+
+      {/* MODAL - PRODUCT FORM */}
       <ProductFormModal
         open={openModal}
         onClose={handleCloseModal}
@@ -185,32 +204,9 @@ export default function ProductsPage() {
         isEdit={Boolean(editing)}
       />
 
-      {/* ========================================
-       * ERROR ALERT
-       * ====================================== */}
+      {/* ERROR ALERT */}
       {error && (
-        <div
-          className="
-            fixed
-            bottom-4
-            right-4
-
-            rounded-lg
-            border
-            border-red-200
-            dark:border-red-800
-
-            bg-red-50
-            dark:bg-red-900/20
-
-            px-4
-            py-3
-
-            text-sm
-            text-red-700
-            dark:text-red-400
-          "
-        >
+        <div className="fixed bottom-4 right-4 rounded-lg border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20 px-4 py-3 text-sm text-red-700 dark:text-red-400 z-50 animate-fade-in">
           {error}
         </div>
       )}

@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 import {
   Activity,
   BadgeDollarSign,
@@ -12,9 +10,10 @@ import {
   Receipt,
   Settings2,
 } from "lucide-react";
+import { useState } from "react";
 
 import { ModernButton } from "@/components/buttons";
-import { Table, THead } from "@/components/data-display";
+import { Table, TFooter, THead } from "@/components/data-display";
 
 import PurchaseActions from "./PurchaseActions";
 import PurchaseProductsModal from "./PurchaseProductsModal";
@@ -24,9 +23,12 @@ export default function PurchaseTable({
   onEdit,
   onDelete,
   readOnly = false,
+  page = 1,
+  totalPages = 1,
+  onPrevPage,
+  onNextPage,
 }) {
   const [selectedPurchase, setSelectedPurchase] = useState(null);
-
   const [openProducts, setOpenProducts] = useState(false);
 
   const columns = [
@@ -39,7 +41,6 @@ export default function PurchaseTable({
         </div>
       ),
     },
-
     {
       key: "subtotal",
       label: (
@@ -49,7 +50,6 @@ export default function PurchaseTable({
         </div>
       ),
     },
-
     {
       key: "tax",
       label: (
@@ -59,7 +59,6 @@ export default function PurchaseTable({
         </div>
       ),
     },
-
     {
       key: "discount",
       label: (
@@ -69,7 +68,6 @@ export default function PurchaseTable({
         </div>
       ),
     },
-
     {
       key: "total",
       label: (
@@ -79,7 +77,6 @@ export default function PurchaseTable({
         </div>
       ),
     },
-
     {
       key: "products",
       label: (
@@ -89,7 +86,6 @@ export default function PurchaseTable({
         </div>
       ),
     },
-
     {
       key: "status",
       label: (
@@ -99,7 +95,6 @@ export default function PurchaseTable({
         </div>
       ),
     },
-
     {
       key: "notes",
       label: (
@@ -109,7 +104,6 @@ export default function PurchaseTable({
         </div>
       ),
     },
-
     ...(!readOnly
       ? [
           {
@@ -134,36 +128,13 @@ export default function PurchaseTable({
   const getStatusStyles = (status) => {
     switch (status) {
       case "COMPLETED":
-        return `
-          bg-green-100
-          text-green-700
-          dark:bg-green-900/30
-          dark:text-green-400
-        `;
-
+        return "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400";
       case "PENDING":
-        return `
-          bg-yellow-100
-          text-yellow-700
-          dark:bg-yellow-900/30
-          dark:text-yellow-400
-        `;
-
+        return "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400";
       case "CANCELLED":
-        return `
-          bg-red-100
-          text-red-700
-          dark:bg-red-900/30
-          dark:text-red-400
-        `;
-
+        return "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400";
       default:
-        return `
-          bg-slate-100
-          text-slate-700
-          dark:bg-slate-800
-          dark:text-slate-300
-        `;
+        return "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300";
     }
   };
 
@@ -182,25 +153,10 @@ export default function PurchaseTable({
 
       <div className="space-y-5">
         <div>
-          <h2
-            className="
-              text-xl
-              font-semibold
-              tracking-tight
-              text-slate-900
-              dark:text-white
-            "
-          >
+          <h2 className="text-xl font-semibold tracking-tight text-slate-900 dark:text-white">
             Compras
           </h2>
-
-          <p
-            className="
-              mt-1
-              text-sm
-              text-slate-500
-            "
-          >
+          <p className="mt-1 text-sm text-slate-500">
             Gestiona órdenes, pagos y registros de compras.
           </p>
         </div>
@@ -213,40 +169,15 @@ export default function PurchaseTable({
               purchases.map((purchase) => (
                 <tr
                   key={purchase.id}
-                  className="
-                    border-b
-                    border-slate-200/50
-                    dark:border-slate-800
-                    hover:bg-slate-50
-                    dark:hover:bg-slate-900/40
-                  "
+                  className="border-b border-slate-200/50 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-900/40"
                 >
                   <td className="px-6 py-5">
                     <div className="flex items-center gap-3">
-                      <div
-                        className="
-                          flex
-                          h-10
-                          w-10
-                          items-center
-                          justify-center
-                          rounded-xl
-                          bg-slate-100
-                          dark:bg-slate-800
-                        "
-                      >
+                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-100 dark:bg-slate-800">
                         <ClipboardList size={18} className="text-slate-500" />
                       </div>
-
                       <div>
-                        <h3
-                          className="
-                            text-sm
-                            font-semibold
-                            text-slate-800
-                            dark:text-white
-                          "
-                        >
+                        <h3 className="text-sm font-semibold text-slate-800 dark:text-white">
                           {purchase.purchaseNumber}
                         </h3>
                       </div>
@@ -266,14 +197,7 @@ export default function PurchaseTable({
                   </td>
 
                   <td className="px-6 py-5">
-                    <p
-                      className="
-                        text-sm
-                        font-bold
-                        text-slate-900
-                        dark:text-white
-                      "
-                    >
+                    <p className="text-sm font-bold text-slate-900 dark:text-white">
                       {formatPrice(purchase.total)}
                     </p>
                   </td>
@@ -290,30 +214,13 @@ export default function PurchaseTable({
 
                   <td className="px-6 py-5">
                     <span
-                      className={`
-                        inline-flex
-                        items-center
-                        rounded-xl
-                        px-3
-                        py-1
-                        text-xs
-                        font-semibold
-                        ${getStatusStyles(purchase.status)}
-                      `}
+                      className={`inline-flex items-center rounded-xl px-3 py-1 text-xs font-semibold ${getStatusStyles(purchase.status)}`}
                     >
                       {purchase.status}
                     </span>
                   </td>
 
-                  <td
-                    className="
-                      px-6
-                      py-5
-                      text-sm
-                      text-slate-500
-                      max-w-[250px]
-                    "
-                  >
+                  <td className="px-6 py-5 text-sm text-slate-500 max-w-[250px]">
                     <p className="line-clamp-2">
                       {purchase.notes || "Sin notas"}
                     </p>
@@ -334,60 +241,16 @@ export default function PurchaseTable({
               <tr>
                 <td
                   colSpan={readOnly ? 8 : 9}
-                  className="
-                    px-6
-                    py-16
-                    text-center
-                  "
+                  className="px-6 py-16 text-center"
                 >
-                  <div
-                    className="
-                      flex
-                      flex-col
-                      items-center
-                      justify-center
-                    "
-                  >
-                    <div
-                      className="
-                        mb-4
-                        flex
-                        h-16
-                        w-16
-                        items-center
-                        justify-center
-                        rounded-2xl
-                        bg-slate-100
-                        dark:bg-slate-800
-                      "
-                    >
-                      <Receipt
-                        className="
-                          h-8
-                          w-8
-                          text-slate-400
-                        "
-                      />
+                  <div className="flex flex-col items-center justify-center">
+                    <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-100 dark:bg-slate-800">
+                      <Receipt className="h-8 w-8 text-slate-400" />
                     </div>
-
-                    <h3
-                      className="
-                        text-sm
-                        font-semibold
-                        text-slate-700
-                        dark:text-slate-200
-                      "
-                    >
+                    <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200">
                       No hay compras
                     </h3>
-
-                    <p
-                      className="
-                        mt-1
-                        text-sm
-                        text-slate-500
-                      "
-                    >
+                    <p className="mt-1 text-sm text-slate-500">
                       Empieza registrando tu primera compra.
                     </p>
                   </div>
@@ -395,6 +258,16 @@ export default function PurchaseTable({
               </tr>
             )}
           </tbody>
+
+          {/* CONTROLES DE PAGINACIÓN (Correctamente ubicados dentro de la tabla) */}
+          {purchases.length > 0 && (
+            <TFooter
+              page={page}
+              totalPages={totalPages}
+              onPrev={onPrevPage}
+              onNext={onNextPage}
+            />
+          )}
         </Table>
       </div>
     </>

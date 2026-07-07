@@ -1,3 +1,11 @@
+// ========================================
+// features/units/components/UnitDeleteModal.jsx
+// ========================================
+
+import { ModernButton } from "@/components/buttons";
+import { AlertModal } from "@/components/overlays/";
+import { Trash2 } from "lucide-react";
+import { useState } from "react";
 import { deleteUnit } from "../services/unit.service";
 
 export default function UnitDeleteModal({
@@ -6,37 +14,52 @@ export default function UnitDeleteModal({
   reload,
   selectedUnit,
 }) {
+  const [isDeleting, setIsDeleting] = useState(false);
+
   if (!open || !selectedUnit) {
     return null;
   }
 
   const handleDelete = async () => {
+    setIsDeleting(true);
     try {
       await deleteUnit(selectedUnit.id);
-
       reload();
-
       onClose();
     } catch (error) {
-      console.error(error);
+      console.error("Error al eliminar la unidad:", error);
+    } finally {
+      setIsDeleting(false);
     }
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/50">
-      <div className="bg-white p-6 rounded-lg w-[400px]">
-        <h2 className="text-xl font-bold mb-4">Eliminar Unidad</h2>
+    <AlertModal
+      open={open}
+      onClose={() => !isDeleting && onClose()}
+      type="error"
+      title="Eliminar Unidad de Medida"
+      message={`¿Estás seguro de que deseas eliminar la unidad "${selectedUnit.name}"? Esta acción no se puede deshacer.`}
+    >
+      {/* Botonera elegante inyectada directamente como children */}
+      <div className="flex items-center justify-end gap-2.5 border-t border-slate-100 dark:border-slate-800/60 pt-4 mt-2">
+        <ModernButton
+          type="button"
+          variant="outline"
+          text="Cancelar"
+          disabled={isDeleting}
+          onClick={onClose}
+        />
 
-        <p className="mb-4">
-          ¿Deseas eliminar la unidad <strong>{selectedUnit.name}</strong>?
-        </p>
-
-        <div className="flex justify-end gap-2">
-          <button onClick={onClose}>Cancelar</button>
-
-          <button onClick={handleDelete}>Eliminar</button>
-        </div>
+        <ModernButton
+          type="button"
+          variant="danger"
+          icon={Trash2}
+          text={isDeleting ? "Eliminando..." : "Eliminar permanentemente"}
+          disabled={isDeleting}
+          onClick={handleDelete}
+        />
       </div>
-    </div>
+    </AlertModal>
   );
 }

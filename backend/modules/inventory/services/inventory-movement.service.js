@@ -9,17 +9,9 @@ const repository =
 // GET MOVEMENTS
 // ========================================
 
-exports.getMovements =
-  async (
-    filters
-  ) => {
-
-    return repository.getMovements(
-      filters
-    );
-
-  };
-
+exports.getMovements = async (filters) => {
+  return repository.getMovements(filters);
+};
 // ========================================
 // GET PRODUCT MOVEMENTS
 // ========================================

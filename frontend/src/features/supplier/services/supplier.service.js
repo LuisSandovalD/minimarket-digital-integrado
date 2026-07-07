@@ -1,9 +1,9 @@
 import api from "../../../api/axios";
 
-export const getSuppliers = async () => {
-  const response = await api.get("/supplier");
+export const getSuppliers = async (params = {}) => {
+  const { data } = await api.get("/supplier", { params });
 
-  return response.data;
+  return data;
 };
 
 export const createSupplier = async (payload) => {

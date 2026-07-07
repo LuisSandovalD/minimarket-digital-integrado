@@ -48,11 +48,11 @@ export function useCart(form, setForm) {
 
     const price = Number(
       product.salePrice ||
-      product.price ||
-      product.unitPrice ||
-      product.precio ||
-      product.item?.price ||
-      0,
+        product.price ||
+        product.unitPrice ||
+        product.precio ||
+        product.item?.price ||
+        0,
     );
 
     const exists = details.find((item) => item.productId === currentId);
@@ -65,12 +65,12 @@ export function useCart(form, setForm) {
           item.productId !== currentId
             ? item
             : {
-              ...item,
-              quantity: item.quantity + 1,
-              price: price,
-              unitPrice: price,
-              subtotal: Math.round((item.quantity + 1) * price * 100) / 100,
-            },
+                ...item,
+                quantity: item.quantity + 1,
+                price: price,
+                unitPrice: price,
+                subtotal: Math.round((item.quantity + 1) * price * 100) / 100,
+              },
         );
 
         return actualizarTotalesGlobales(prev, nextDetails);

@@ -4,8 +4,8 @@
 
 import api from "../../../api/axios";
 
-export async function getBranches() {
-  const response = await api.get("/branch");
+export async function getBranches(params = {}) {
+  const response = await api.get("/branch", { params });
 
   return response.data.data;
 }

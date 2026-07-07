@@ -8,8 +8,8 @@ import api from "../../../api/axios";
 // GET INVENTORIES
 // ========================================
 
-export const getInventoriesService = async () => {
-  const response = await api.get("/inventory");
+export const getInventoriesService = async (params = {}) => {
+  const response = await api.get("/inventory", { params });
 
   return response.data;
 };
@@ -48,8 +48,10 @@ export const getDamagedStockService = async () => {
 // GET MOVEMENTS
 // ========================================
 
-export const getMovementsService = async () => {
-  const response = await api.get("/inventory/movements/all");
+export const getMovementsService = async (params = {}) => {
+  const response = await api.get("/inventory/movements/all", {
+    params,
+  });
 
   return response.data;
 };

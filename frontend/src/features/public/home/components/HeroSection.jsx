@@ -1,203 +1,168 @@
 import herosection from "@/assets/imagenes/home/hero/hero-section.svg";
 import heroBanner from "@/assets/imagenes/home/hero/hero_banner.svg";
 import { ModernButton } from "@/components/buttons";
-import {
-  defaultViewport,
-  fadeScale,
-  fadeUp,
-  hoverLift,
-  hoverScale,
-  smoothTransition,
-  springTransition,
-  staggerContainer,
-} from "@/components/effects/";
+import { defaultViewport } from "@/components/effects";
 import { motion } from "framer-motion";
-import { ArrowRight, Play, ShieldCheck } from "lucide-react";
+import { ArrowRight, Play } from "lucide-react";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { useOutletContext } from "react-router-dom";
-import { heroFeatures } from "../constants/heroFeatures";
+
 import VideoDemoModal from "./VideoDemoModal";
 
-// IMPORTAMOS EL SERVICIO DE SESIÓN
-import { isAuthenticated } from "@/features/auth/services/session.service"; // Ajusta la ruta exacta si es necesario
+// Variantes estáticas optimizadas para aceleración de hardware sin re-renders costosos
+const fastFadeUp = {
+  hidden: { opacity: 0, y: 15 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      type: "spring",
+      stiffness: 400,
+      damping: 30,
+    },
+  },
+};
+
+const fastStagger = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.05,
+    },
+  },
+};
 
 export default function HeroSection() {
-  const [demoOpen, setDemoOpen] = useState(false);
+  const [promoOpen, setPromoOpen] = useState(false);
 
-  /* Consumimos las funciones del Layout */
   const { setOpenLogin, setOpenRegister } = useOutletContext();
 
-  // Verificamos si el usuario está autenticado
-  const isLogged = isAuthenticated();
+  // Estado global de autenticación
+  const { isAuthenticated } = useSelector((state) => state.auth);
 
   return (
-    <section className="relative isolate flex items-center justify-center w-full overflow-hidden px-4 py-20 sm:px-6 md:px-8 lg:h-[92vh] lg:px-10">
-      {/* BACKGROUND */}
-      <div className="absolute inset-0 -z-20">
-        {/* IMAGE */}
-        <motion.img
-          initial={{ scale: 1.1, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
+    <section className="relative z-10 flex min-h-[75vh] w-full items-center justify-center overflow-hidden bg-[#f8fbfd] px-4 py-12 dark:bg-[#0f172a] sm:px-6 md:px-8 lg:px-16">
+      {/* CAPA DE FONDO */}
+      <div className="pointer-events-none absolute inset-0 -z-20 select-none opacity-40 blur-[2px] transform-gpu dark:opacity-20">
+        <img
           src={herosection}
-          alt="ERP POS"
+          alt=""
           className="h-full w-full object-cover"
+          loading="eager"
         />
-
-        {/* LIGHT MODE OVERLAY */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#f8fbfd]/95 via-[#eef4f8]/90 to-[#dbeafe]/85 dark:from-[#0f172a]/95 dark:via-[#0f172a]/85 dark:to-[#274c77]/80" />
-
-        {/* EXTRA SHADOW */}
-        <div className="absolute inset-0 bg-white/20 dark:bg-black/30" />
       </div>
 
-      {/* LIGHT EFFECTS */}
-      <motion.div
-        animate={{ opacity: [0.4, 0.7, 0.4], scale: [1, 1.05, 1] }}
-        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute left-0 top-0 -z-10 h-96 w-96 rounded-full bg-[#6096ba]/15 blur-3xl"
-      />
+      {/* EFECTO DE LUZ */}
+      <div className="pointer-events-none absolute inset-0 -z-10 transform-gpu">
+        <div className="absolute left-1/4 top-1/4 h-96 w-96 rounded-full bg-[#6096ba]/10 blur-[120px] dark:bg-[#6096ba]/5" />
+      </div>
 
-      <motion.div
-        animate={{ opacity: [0.3, 0.6, 0.3], scale: [1, 1.08, 1] }}
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute bottom-0 right-0 -z-10 h-96 w-96 rounded-full bg-[#274c77]/10 blur-3xl dark:bg-[#274c77]/30"
-      />
-
-      <div className="w-full max-w-7xl">
-        <div className="grid items-center gap-20 lg:grid-cols-2">
-          {/* LEFT */}
+      {/* CONTENIDO */}
+      <div className="relative z-10 grid w-full max-w-7xl items-center gap-10 lg:grid-cols-12">
+        {/* TEXTO */}
+        <motion.div
+          variants={fastStagger}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ ...defaultViewport, once: true }}
+          className="relative z-20 flex flex-col items-start text-left lg:col-span-7"
+        >
+          {/* Badge */}
           <motion.div
-            variants={staggerContainer}
-            initial="hidden"
-            animate="show"
+            variants={fastFadeUp}
+            className="inline-flex items-center gap-2 rounded-full border border-[#274c77]/10 bg-[#274c77]/5 px-3 py-1 text-xs font-semibold tracking-wider text-[#274c77] dark:border-white/10 dark:bg-white/5 dark:text-[#a3cef1]"
           >
-            {/* BADGE */}
-            <motion.div
-              variants={fadeUp}
-              transition={smoothTransition}
-              className="inline-flex items-center gap-2 rounded-full border border-[#d7e0e7] bg-white/70 px-5 py-2.5 text-sm font-semibold tracking-wide text-[#274c77] shadow-lg shadow-[#274c77]/5 backdrop-blur-xl dark:border-white/10 dark:bg-white/5 dark:text-[#dbeafe]"
-            >
-              <ShieldCheck size={16} />
-              ERP • POS • Multiempresa
-            </motion.div>
+            • ERP & POS MULTIEMPRESA
+          </motion.div>
 
-            {/* TITLE */}
-            <motion.h2
-              variants={fadeUp}
-              transition={smoothTransition}
-              className="mt-8 text-5xl font-black leading-tight tracking-tight text-[#0f172a] md:text-6xl xl:text-7xl dark:text-white"
-            >
-              Gestiona tu empresa
-              <span className="mt-2 block bg-gradient-to-r from-[#274c77] via-[#365d86] to-[#6096ba] bg-clip-text text-transparent dark:from-[#a3cef1] dark:via-white dark:to-[#6096ba]">
-                desde un solo lugar
-              </span>
-            </motion.h2>
+          {/* Título */}
+          <motion.h2
+            variants={fastFadeUp}
+            className="mt-4 text-4xl font-black leading-[1.1] tracking-tight text-[#0f172a] dark:text-white sm:text-5xl xl:text-6xl"
+          >
+            Gestiona tu empresa
+            <span className="mt-1 block bg-gradient-to-r from-[#274c77] to-[#6096ba] bg-clip-text text-transparent dark:from-[#a3cef1] dark:to-[#6096ba]">
+              desde un solo lugar
+            </span>
+          </motion.h2>
 
-            {/* DESCRIPTION */}
-            <motion.p
-              variants={fadeUp}
-              transition={smoothTransition}
-              className="mt-7 max-w-2xl text-lg leading-relaxed text-[#365d86] dark:text-[#cbd5e1]"
-            >
-              Administra ventas, inventario, compras, reportes y múltiples
-              sucursales con una plataforma moderna, rápida y diseñada para
-              empresas en crecimiento.
-            </motion.p>
+          {/* Descripción */}
+          <motion.p
+            variants={fastFadeUp}
+            className="mt-4 max-w-xl text-base leading-relaxed text-[#4a5568] dark:text-[#cbd5e1] sm:text-lg"
+          >
+            Ventas, inventario, compras y reportes unificados en una interfaz de
+            velocidad nativa diseñada para el crecimiento de tu negocio.
+          </motion.p>
 
-            {/* FEATURES */}
-            <motion.div
-              variants={staggerContainer}
-              className="mt-10 grid gap-4 sm:grid-cols-3"
-            >
-              {heroFeatures.map((item) => {
-                const Icon = item.icon;
-
-                return (
-                  <motion.div
-                    key={item.title}
-                    variants={fadeScale}
-                    transition={springTransition}
-                    whileHover={hoverLift}
-                    className="rounded-3xl border border-[#d7e0e7] bg-white/60 p-4 shadow-lg shadow-[#274c77]/5 backdrop-blur-xl dark:border-white/10 dark:bg-white/5"
-                  >
-                    <motion.div whileHover={hoverScale}>
-                      <Icon
-                        className="text-[#274c77] dark:text-[#a3cef1]"
-                        size={24}
-                      />
-                    </motion.div>
-
-                    <h3 className="mt-4 font-bold text-[#0f172a] dark:text-white">
-                      {item.title}
-                    </h3>
-
-                    <p className="mt-1 text-sm text-[#365d86] dark:text-[#cbd5e1]">
-                      {item.desc}
-                    </p>
-                  </motion.div>
-                );
-              })}
-            </motion.div>
-
-            {/* ACTIONS */}
-            <motion.div
-              variants={fadeUp}
-              transition={smoothTransition}
-              className="mt-12 flex flex-wrap items-center gap-4"
-            >
-              {/* RENDERIZADO CONDICIONAL: Solo muestra el botón si NO está logueado */}
-              {!isLogged && (
-                <motion.div whileHover={hoverScale}>
-                  <ModernButton
-                    text="Comenzar Ahora"
-                    icon={ArrowRight}
-                    variant="primary"
-                    onClick={() => {
-                      setOpenLogin(false);
-                      setOpenRegister(true);
-                    }}
-                  />
-                </motion.div>
-              )}
-
-              <motion.div whileHover={hoverScale}>
+          {/* Botones */}
+          <motion.div
+            variants={fastFadeUp}
+            className="relative z-30 mt-6 flex w-full flex-wrap items-center gap-3 sm:w-auto"
+          >
+            {!isAuthenticated && (
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="transform-gpu"
+              >
                 <ModernButton
-                  text="Ver Demo"
-                  icon={Play}
-                  variant="secondary"
-                  onClick={() => setDemoOpen(true)}
+                  text="Comenzar Ahora"
+                  icon={ArrowRight}
+                  variant="primary"
+                  onClick={() => {
+                    setOpenLogin(false);
+                    setOpenRegister(true);
+                  }}
                 />
               </motion.div>
+            )}
+
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="transform-gpu"
+            >
+              <ModernButton
+                text="Ver Video Promocional"
+                icon={Play}
+                variant="secondary"
+                onClick={() => setPromoOpen(true)}
+              />
             </motion.div>
           </motion.div>
+        </motion.div>
 
-          {/* RIGHT */}
-          <motion.div
-            initial={{ opacity: 0, x: 80, scale: 0.95 }}
-            whileInView={{ opacity: 1, x: 0, scale: 1 }}
-            viewport={defaultViewport}
-            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-            className="relative"
-          >
-            {/* GLOW */}
-            <div className="absolute inset-0 bg-[#6096ba]/10 blur-3xl dark:bg-[#6096ba]/20" />
+        {/* Imagen */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.97 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ ...defaultViewport, once: true }}
+          transition={{
+            type: "spring",
+            stiffness: 320,
+            damping: 26,
+          }}
+          className="relative z-10 flex w-full justify-center lg:col-span-5 lg:justify-end"
+        >
+          <div className="pointer-events-none absolute inset-0 -z-10 bg-[#6096ba]/5 blur-3xl dark:bg-[#6096ba]/10" />
 
-            <motion.img
-              whileHover={{ scale: 1.03, rotate: 0.3 }}
-              transition={{ duration: 0.4 }}
-              src={heroBanner}
-              alt="ERP POS"
-              className="relative h-full w-full object-cover"
-            />
-          </motion.div>
-        </div>
+          <img
+            src={heroBanner}
+            alt="Dashboard Preview"
+            className="h-auto w-full max-w-md select-none object-contain drop-shadow-[0_20px_50px_rgba(39,76,119,0.15)] transform-gpu dark:drop-shadow-[0_20px_50px_rgba(0,0,0,0.4)] lg:max-w-none"
+            loading="eager"
+          />
+        </motion.div>
       </div>
 
+      {/* Modal del video */}
       <VideoDemoModal
-        open={demoOpen}
-        onClose={() => setDemoOpen(false)}
-        videoUrl="/videos/minimarket-demo.mp4"
+        open={promoOpen}
+        onClose={() => setPromoOpen(false)}
+        videoUrl="/videos/publicidad-erp.mp4"
       />
     </section>
   );

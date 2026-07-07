@@ -6,10 +6,10 @@ import { FooterModal, HeaderModal, Modal } from "@/components/overlays";
 import { BarChart3, FileSpreadsheet, FileText } from "lucide-react";
 import { useState } from "react";
 import {
-    downloadDailySalesExcel,
-    downloadDailySalesPDF,
-    downloadTopProductsExcel,
-    downloadTopProductsPDF,
+  downloadDailySalesExcel,
+  downloadDailySalesPDF,
+  downloadTopProductsExcel,
+  downloadTopProductsPDF,
 } from "../../services/sale.service";
 
 export default function SalesReportsModal({ open, onClose, companyId }) {

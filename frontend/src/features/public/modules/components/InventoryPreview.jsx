@@ -1,313 +1,119 @@
-// models/components/InventoryPreview.jsx
-
 import { motion } from "framer-motion";
-
-import { Boxes, PackageCheck } from "lucide-react";
-
-import { inventory } from "../constants/inventory";
-
-import ERPPreviewCard from "./ERPPreviewCard";
+import { BarChart3, Boxes, PackageCheck } from "lucide-react";
 
 import {
-  defaultViewport,
-  fadeScale,
   fadeUp,
-  hoverLift,
   smoothTransition,
-  springTransition,
   staggerContainer,
-} from "@/components/effects/";
+} from "@/components/effects";
+import { inventory } from "../constants/inventory";
 
 export default function InventoryPreview() {
   return (
     <section
-      className="
-        relative
-        overflow-hidden
-
-        py-20
-
-        sm:py-24
-        lg:py-28
-      "
+      id="inventory-preview"
+      className="relative isolate overflow-hidden px-4 py-20 sm:px-6 lg:py-24 z-10"
     >
-      {/* BACKGROUND GLOW */}
-      <div
-        className="
-          absolute
-          inset-0
-          -z-10
-        "
-      >
-        <motion.div
-          animate={{
-            opacity: [0.2, 0.45, 0.2],
-            scale: [1, 1.08, 1],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="
-            absolute
-            left-0
-            top-0
-
-            h-[500px]
-            w-[500px]
-
-            rounded-full
-
-            bg-[#6096ba]/10
-
-            blur-3xl
-          "
-        />
-      </div>
-
-      <div
-        className="
-          mx-auto
-          max-w-7xl
-
-          px-4
-
-          sm:px-6
-          md:px-8
-          lg:px-10
-        "
-      >
-        {/* HEADER */}
+      <div className="mx-auto max-w-7xl">
+        {/* ========================= HEADER SECTIONS ========================= */}
         <motion.div
           variants={staggerContainer}
           initial="hidden"
           whileInView="show"
-          viewport={defaultViewport}
-          className="
-            flex
-            flex-col
-            gap-8
-
-            lg:flex-row
-            lg:items-end
-            lg:justify-between
-          "
+          viewport={{ once: true, margin: "-100px" }}
+          className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between transform-gpu"
         >
-          {/* LEFT */}
-          <div className="max-w-3xl">
-            {/* BADGE */}
+          {/* LADO IZQUIERDO: TÍTULOS */}
+          <div className="max-w-3xl text-left">
             <motion.div
-              variants={fadeScale}
-              transition={springTransition}
-              className="
-                inline-flex
-                items-center
-                gap-2
-
-                rounded-full
-
-                border
-                border-[#d7e0e7]
-
-                bg-white/10
-
-                px-4
-                py-2
-
-                text-sm
-                font-semibold
-
-                text-[#274c77]
-
-                shadow-lg
-                shadow-[#274c77]/5
-
-                backdrop-blur-xl
-
-                dark:border-white/10
-                dark:bg-white/[0.03]
-                dark:text-[#a3cef1]
-              "
+              variants={fadeUp}
+              transition={smoothTransition}
+              className="inline-flex items-center gap-2 rounded-full border border-[#274c77]/10 bg-white/80 px-4 py-1.5 text-xs font-semibold text-[#274c77] shadow-sm backdrop-blur-md dark:border-white/10 dark:bg-white/5 dark:text-[#a3cef1]"
             >
-              <Boxes size={16} />
+              <Boxes size={14} />
               Inventario Inteligente
             </motion.div>
 
-            {/* TITLE */}
             <motion.h2
               variants={fadeUp}
               transition={smoothTransition}
-              className="
-                mt-7
-
-                text-4xl
-                font-black
-                leading-tight
-                tracking-tight
-
-                text-[#0f172a]
-
-                dark:text-[#e7ecef]
-
-                md:text-5xl
-              "
+              className="mt-5 text-3xl font-black leading-tight tracking-tight text-[#0f172a] sm:text-4xl md:text-5xl dark:text-white"
             >
               Control total del stock
-              <span
-                className="
-                  mt-2
-                  block
-
-                  bg-gradient-to-r
-                  from-[#274c77]
-                  via-[#6096ba]
-                  to-[#a3cef1]
-
-                  bg-clip-text
-                  text-transparent
-                "
-              >
+              <span className="mt-1 block bg-gradient-to-r from-[#274c77] via-[#6096ba] to-[#a3cef1] bg-clip-text text-transparent">
                 en tiempo real
               </span>
             </motion.h2>
 
-            {/* DESCRIPTION */}
             <motion.p
               variants={fadeUp}
               transition={smoothTransition}
-              className="
-                mt-7
-                max-w-2xl
-
-                text-base
-                leading-relaxed
-
-                text-[#5b6472]
-
-                dark:text-[#cbd5e1]
-
-                md:text-lg
-              "
+              className="mt-4 text-base leading-relaxed text-[#5b6472] dark:text-[#cbd5e1] max-w-2xl"
             >
               Supervisa productos, movimientos, almacenes, entradas, salidas y
               niveles de stock desde una sola plataforma moderna.
             </motion.p>
           </div>
 
-          {/* RIGHT INFO */}
-          <motion.div
-            variants={fadeScale}
-            transition={springTransition}
-            whileHover={hoverLift}
-            className="
-              flex
-              items-center
-              gap-4
-
-              rounded-2xl
-
-              border
-              border-[#d7e0e7]
-
-              bg-white/10
-
-              px-5
-              py-4
-
-              shadow-lg
-              shadow-[#274c77]/5
-
-              backdrop-blur-xl
-
-              dark:border-white/10
-              dark:bg-white/[0.03]
-            "
-          >
-            <motion.div
-              whileHover={{
-                scale: 1.08,
-                rotate: 4,
-              }}
-              transition={{
-                duration: 0.3,
-              }}
-              className="
-                flex
-                h-12
-                w-12
-                items-center
-                justify-center
-
-                rounded-xl
-
-                bg-[#274c77]
-                text-white
-
-                shadow-lg
-              "
-            >
-              <PackageCheck size={22} />
-            </motion.div>
+          {/* LADO DERECHO: BANNER COMPACTO DE ASISTENCIA */}
+          <div className="flex items-center gap-4 rounded-2xl border border-[#274c77]/10 bg-white/60 p-4 shadow-sm backdrop-blur-md dark:border-white/5 dark:bg-white/[0.02]">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#274c77] text-white">
+              <PackageCheck size={18} />
+            </div>
 
             <div>
-              <h4
-                className="
-                  text-sm
-                  font-bold
-
-                  text-[#0f172a]
-
-                  dark:text-white
-                "
-              >
+              <h4 className="text-sm font-bold text-[#0f172a] dark:text-white">
                 Gestión automática
               </h4>
-
-              <p
-                className="
-                  text-xs
-
-                  text-[#5b6472]
-
-                  dark:text-[#cbd5e1]
-                "
-              >
+              <p className="text-xs text-[#5b6472] dark:text-[#94a3b8]">
                 Control inteligente de inventario.
               </p>
             </div>
-          </motion.div>
+          </div>
         </motion.div>
 
-        {/* GRID */}
-        <motion.div
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="show"
-          viewport={defaultViewport}
-          className="
-            mt-16
+        {/* ========================= GRID DIRECTO DE INVENTORY ========================= */}
+        <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {inventory.map((item, index) => {
+            const Icon = item.icon;
+            return (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{
+                  duration: 0.3,
+                  delay: Math.min(index * 0.05, 0.2),
+                }}
+                className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-[#274c77]/10 bg-white/50 p-5 backdrop-blur-md shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#6096ba]/30 dark:border-white/5 dark:bg-white/[0.02]"
+              >
+                <div>
+                  <div className="flex items-center justify-between">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#274c77]/5 text-[#274c77] transition-colors group-hover:bg-[#274c77] group-hover:text-white dark:bg-white/5 dark:text-[#a3cef1] dark:group-hover:bg-[#a3cef1] dark:group-hover:text-slate-950">
+                      {Icon ? <Icon size={16} /> : <BarChart3 size={16} />}
+                    </div>
+                  </div>
 
-            grid
-            gap-8
+                  <div className="mt-4">
+                    <h3 className="text-base font-black tracking-tight text-[#0f172a] dark:text-white group-hover:text-[#274c77] dark:group-hover:text-[#a3cef1] transition-colors">
+                      {item.title}
+                    </h3>
+                    <p className="mt-2 text-xs sm:text-sm text-[#5b6472] dark:text-[#cbd5e1] leading-relaxed line-clamp-3">
+                      {item.description}
+                    </p>
+                  </div>
+                </div>
 
-            md:grid-cols-2
-            xl:grid-cols-3
-          "
-        >
-          {inventory.map((item, index) => (
-            <motion.div
-              key={index}
-              variants={fadeUp}
-              transition={{
-                ...smoothTransition,
-                delay: index * 0.08,
-              }}
-            >
-              <ERPPreviewCard {...item} />
-            </motion.div>
-          ))}
-        </motion.div>
+                <div className="mt-5 flex items-center justify-between border-t border-slate-100 dark:border-white/5 pt-3">
+                  <span className="text-[11px] font-bold text-[#274c77] dark:text-[#a3cef1]">
+                    Módulo Activo
+                  </span>
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
       </div>
     </section>
   );

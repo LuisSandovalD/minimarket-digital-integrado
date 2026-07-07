@@ -1,189 +1,174 @@
 // ========================================
-// pages/UsersPage.jsx
+// features/users/pages/UsersPage.jsx
 // ========================================
 
-import { useMemo, useState } from "react";
-
+import { useEffect, useState } from "react";
+import UserFilters from "../components/UserFilters";
 import UsersHeader from "../components/UsersHeader";
-
-import UsersTable from "../components/UsersTable";
-
+import UsersLoading from "../components/UsersLoading";
 import UsersModal from "../components/UsersModal";
-
+import UsersTable from "../components/UsersTable";
 import UsersTableEmpty from "../components/UsersTableEmpty";
 
-import UsersLoading from "../components/UsersLoading";
+import { getBranches } from "@/features/branches/services/branch.service"; // Ajusta la ruta según tu proyecto
 import useUsers from "../hooks/useUsers";
-
-// ========================================
-// COMPONENT
-// ========================================
+import { deleteUser } from "../services/users.service";
 
 export default function UsersPage() {
   // ========================================
-  // USERS
+  // USERS HOOK (TanStack Query integrado)
   // ========================================
-
   const {
     users,
-
+    pagination,
+    filters,
+    setFilters,
     loading,
-
+    expandedUsers,
+    toggleExpand,
     toggleUserStatus,
-
     fetchUsers,
   } = useUsers();
 
   // ========================================
-  // MODAL
+  // STATE
   // ========================================
-
   const [openModal, setOpenModal] = useState(false);
-
   const [selectedUser, setSelectedUser] = useState(null);
+  const [branches, setBranches] = useState([]);
+  const [loadingBranches, setLoadingBranches] = useState(false);
 
   // ========================================
-  // SEARCH
+  // LOAD MASTER DATA (BRANCHES)
   // ========================================
-
-  const [search, setSearch] = useState("");
+  useEffect(() => {
+    const loadBranches = async () => {
+      try {
+        setLoadingBranches(true);
+        const response = await getBranches();
+        setBranches(Array.isArray(response) ? response : response?.data || []);
+      } catch (error) {
+        console.error("Error al cargar las sucursales:", error);
+      } finally {
+        setLoadingBranches(false);
+      }
+    };
+    loadBranches();
+  }, []);
 
   // ========================================
-  // FILTERED USERS
+  // HANDLERS (SEARCH & FILTERS)
   // ========================================
+  const handleSearch = (newFilters) => {
+    setFilters((prev) => ({
+      ...prev,
+      ...newFilters,
+      page: 1, // Obligatorio regresar a la página 1 en cada nueva consulta
+    }));
+  };
 
-  const filteredUsers = useMemo(() => {
-    if (!search) return users;
-
-    return users.filter((user) => {
-      const text = `
-            ${user.name}
-            ${user.email}
-            ${user.role}
-            ${user.slug}
-          `.toLowerCase();
-
-      return text.includes(search.toLowerCase());
+  const handleClear = () => {
+    setFilters({
+      page: 1,
+      limit: 10,
+      search: undefined,
+      branchId: undefined,
+      isActive: undefined,
+      sortBy: "createdAt",
+      sortOrder: "desc",
     });
-  }, [users, search]);
-
-  // ========================================
-  // CREATE
-  // ========================================
-
-  const handleCreate = () => {
-    setSelectedUser(null);
-
-    setOpenModal(true);
   };
 
   // ========================================
-  // EDIT
+  // HANDLERS (PAGINATION)
   // ========================================
+  const handlePrevPage = () => {
+    if (pagination.hasPrevPage) {
+      setFilters((prev) => ({ ...prev, page: prev.page - 1 }));
+    }
+  };
+
+  const handleNextPage = () => {
+    if (pagination.hasNextPage) {
+      setFilters((prev) => ({ ...prev, page: prev.page + 1 }));
+    }
+  };
+
+  // ========================================
+  // CRUD HANDLERS
+  // ========================================
+  const handleCreate = () => {
+    setSelectedUser(null);
+    setOpenModal(true);
+  };
 
   const handleEdit = (user) => {
     setSelectedUser(user);
-
     setOpenModal(true);
   };
 
-  // ========================================
-  // SUCCESS
-  // ========================================
+  const handleDeleteUser = async (userId) => {
+    if (!window.confirm("¿Estás seguro de que deseas eliminar este usuario?")) {
+      return;
+    }
 
-  const handleSuccess = async () => {
-    await fetchUsers();
+    try {
+      await deleteUser(userId);
+      fetchUsers(); // Actualiza automáticamente la lista desde la caché del servidor
+    } catch (error) {
+      console.error("Error al eliminar el usuario:", error);
+      alert("No se pudo eliminar el usuario del sistema.");
+    }
+  };
 
+  const handleSuccess = () => {
+    fetchUsers(); // Invalida y refresca los datos con el servidor de forma segura
     setOpenModal(false);
   };
 
   // ========================================
-  // LOADING
+  // LOADING STATE
   // ========================================
-
-  if (loading) {
+  if (loading && users.length === 0) {
     return <UsersLoading />;
   }
 
   // ========================================
   // RENDER
   // ========================================
-
   return (
     <div className="space-y-6">
-      {/* ========================================
-       * HEADER
-       * ====================================== */}
-
+      {/* HEADER */}
       <UsersHeader onCreate={handleCreate} />
 
-      {/* ========================================
-       * SEARCH
-       * ====================================== */}
+      {/* FILTERS CONTROLLER */}
+      <UserFilters
+        onSearch={handleSearch}
+        onClear={handleClear}
+        branches={branches}
+        loading={loading || loadingBranches}
+      />
 
-      <div
-        className="
-          flex
-          flex-col
-          gap-4
-
-          lg:flex-row
-          lg:items-center
-          lg:justify-between
-        "
-      >
-        <div className="max-w-md w-full">
-          <input
-            type="text"
-            placeholder="
-              Buscar usuarios...
-            "
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="
-              h-12
-              w-full
-              rounded-2xl
-              border
-              border-slate-200
-              bg-white
-              px-4
-              text-sm
-              outline-none
-              transition-all
-
-              focus:border-slate-400
-              focus:ring-4
-              focus:ring-slate-200/50
-
-              dark:border-slate-800
-              dark:bg-slate-950
-              dark:text-slate-100
-              dark:focus:border-slate-600
-              dark:focus:ring-slate-800/50
-            "
-          />
-        </div>
-      </div>
-
-      {/* ========================================
-       * TABLE
-       * ====================================== */}
-
-      {filteredUsers.length > 0 ? (
+      {/* TABLE CON PAGINACIÓN INCORPORADA */}
+      {users.length > 0 ? (
         <UsersTable
-          users={filteredUsers}
+          users={users}
+          expandedUsers={expandedUsers}
+          onToggleExpand={toggleExpand}
           onEdit={handleEdit}
           onToggleStatus={toggleUserStatus}
+          onDelete={handleDeleteUser}
+          loading={loading}
+          page={pagination.currentPage}
+          totalPages={pagination.totalPages}
+          onPrevPage={handlePrevPage}
+          onNextPage={handleNextPage}
         />
       ) : (
         <UsersTableEmpty onCreate={handleCreate} />
       )}
 
-      {/* ========================================
-       * MODAL
-       * ====================================== */}
-
+      {/* MODAL CONTAINER */}
       <UsersModal
         open={openModal}
         onClose={() => setOpenModal(false)}

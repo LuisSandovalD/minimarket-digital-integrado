@@ -1,69 +1,44 @@
 // models/Models.jsx
 
-import { PageGlow } from "@/components/effects/";
+import { PageGlow } from "@/components/effects";
+
+import ModulesFeaturesSection from "./components/ModulesFeaturesSection";
+import ModulesHeroSection from "./components/ModulesHeroSection";
+
 import {
   AnalyticsPreview,
   DashboardPreview,
   DevicePreview,
   InventoryPreview,
-  ModulePreview,
   MultiCompanyPreview,
   POSPreview,
   SecurityPreview,
 } from "./components";
 
-import ModulesHeroSection from "./components/ModulesHeroSection";
-
 export default function Models() {
   return (
-    <main
-      className="
-        relative
-        overflow-hidden
-
-        bg-gradient-to-b
-        from-[#f8fbfd]
-        via-white
-        to-[#eef4f8]
-
-        text-[#0f172a]
-
-        transition-colors
-        duration-300
-
-        dark:from-[#020617]
-        dark:via-[#07111f]
-        dark:to-[#0f172a]
-
-        dark:text-[#e7ecef]
-      "
-    >
+    <main className="relative overflow-hidden bg-gradient-to-b from-[#f8fbfd] via-white to-[#eef4f8] text-[#0f172a] transition-colors duration-300 dark:from-[#020617] dark:via-[#07111f] dark:to-[#0f172a] dark:text-[#e7ecef]">
       <PageGlow />
 
-      <ModulesHeroSection />
-      {/* MÓDULOS */}
-      <ModulePreview />
+      <div className="relative z-10">
+        <ModulesHeroSection />
 
-      {/* DASHBOARD */}
-      <DashboardPreview />
+        <ModulesFeaturesSection />
 
-      {/* ANALÍTICAS */}
-      <AnalyticsPreview />
+        <DashboardPreview />
 
-      {/* INVENTARIO */}
-      <InventoryPreview />
+        <AnalyticsPreview />
 
-      {/* POS */}
-      <POSPreview />
+        <InventoryPreview />
 
-      {/* SEGURIDAD */}
-      <SecurityPreview />
+        <POSPreview />
 
-      {/* DISPOSITIVOS */}
-      <DevicePreview />
+        <SecurityPreview />
 
-      {/* MULTIEMPRESA */}
-      <MultiCompanyPreview />
+        <DevicePreview />
+
+        <MultiCompanyPreview />
+      </div>
     </main>
   );
 }

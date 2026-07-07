@@ -1,13 +1,13 @@
 // ============================================================================
 // company/components/CompanyList.jsx
-// VISTA PURA: Renderiza la tarjeta de la empresa delegando estados al padre
+// VISTA PURA: Renderiza la lista de empresas delegando animaciones a StatsGrid
 // ============================================================================
 
-import CompanyCard from "./CompanyCard";
+import { StatsGrid } from "@/components/card"; // Ajusta la ruta según tu estructura
+import CompanyCard from "./CompanyCard"; // Importamos el componente detallado que me diste
 
-// Recibe "companies" directamente por props desde la página padre
 export default function CompanyList({ companies = [], onEdit }) {
-  // Si la colección está vacía tras la carga del padre, mostramos el estado vacío limpio
+  // Si la colección está vacía, mostramos el estado vacío limpio
   if (companies.length === 0) {
     return (
       <div className="text-center py-12 text-sm text-slate-500 dark:text-slate-400 border border-dashed border-slate-200 dark:border-slate-800 rounded-2xl bg-white dark:bg-slate-950 animate-in fade-in duration-300">
@@ -17,14 +17,11 @@ export default function CompanyList({ companies = [], onEdit }) {
   }
 
   return (
-    <div className="grid grid-cols-1  gap-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
-      {companies.map((comp) => (
-        <CompanyCard
-          key={comp.id || "single-company"}
-          company={comp}
-          onEdit={onEdit}
-        />
-      ))}
-    </div>
+    <StatsGrid
+      items={companies}
+      animate={false}
+      columns={1}
+      renderItem={(comp) => <CompanyCard company={comp} onEdit={onEdit} />}
+    />
   );
 }

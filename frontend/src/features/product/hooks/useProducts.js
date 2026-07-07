@@ -1,149 +1,114 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+// ========================================
+// features/product/hooks/useProducts.js
+// ========================================
 
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 import productService from "../services/product.service";
 
-// ========================================
-// HOOK
-// ========================================
-
-export default function useProducts() {
+export default function useProducts(initialFilters = {}) {
   const queryClient = useQueryClient();
+
+  // Estado interno adaptado para recibir de forma directa los filtros estructurados
+  const [filters, setFilters] = useState({
+    page: 1,
+    limit: 10,
+    search: undefined,
+    categoryId: undefined,
+    isActive: undefined, // Cambiado de 'status' a 'isActive' para coincidir con el backend/filtros
+    sortBy: "createdAt",
+    sortOrder: "desc",
+    ...initialFilters,
+  });
 
   // ========================================
   // INVALIDATE CACHE
   // ========================================
-
   const invalidateCache = async () => {
-    await queryClient.invalidateQueries({
-      queryKey: ["products"],
-    });
-
-    await queryClient.invalidateQueries({
-      queryKey: ["notifications"],
-    });
+    await queryClient.invalidateQueries({ queryKey: ["products"] });
+    await queryClient.invalidateQueries({ queryKey: ["notifications"] });
   };
 
   // ========================================
-  // GET PRODUCTS
+  // GET PRODUCTS (TANSTACK QUERY)
   // ========================================
-
   const {
-    data: products = [],
-
+    data: queryResult = { data: [], pagination: {} },
     isLoading: loading,
-
     error,
-
     refetch: fetchProducts,
   } = useQuery({
-    queryKey: ["products"],
-
+    queryKey: ["products", filters], // Reacciona de forma automática cada vez que se ejecuta setFilters
     queryFn: async () => {
-      const response = await productService.getProducts();
+      const response = await productService.getProducts(filters);
 
-      return Array.isArray(response?.data) ? response.data : [];
+      return {
+        data: Array.isArray(response?.data) ? response.data : [],
+        pagination: {
+          currentPage: response?.pagination?.currentPage || filters.page,
+          totalPages: response?.pagination?.totalPages || 1,
+          hasPrevPage: response?.pagination?.hasPrevPage || filters.page > 1,
+          hasNextPage: response?.pagination?.hasNextPage || false,
+          ...response?.pagination,
+        },
+      };
     },
-
     refetchOnWindowFocus: false,
+    placeholderData: (previousData) => previousData, // Evita parpadeos incómodos en la interfaz (UI)
   });
 
-  // ========================================
-  // CREATE
-  // ========================================
+  const products = queryResult.data;
+  const pagination = queryResult.pagination;
 
+  // ========================================
+  // MUTATIONS (CREATE, UPDATE, DELETE)
+  // ========================================
   const createMutation = useMutation({
-    mutationFn: async (data) => {
-      return await productService.createProduct(data);
-    },
-
-    onSuccess: async () => {
-      await invalidateCache();
-    },
-
-    onError: (error) => {
-      console.error("CREATE PRODUCT ERROR:", error);
-    },
+    mutationFn: productService.createProduct,
+    onSuccess: invalidateCache,
+    onError: (err) => console.error("CREATE PRODUCT ERROR:", err),
   });
-
-  // ========================================
-  // UPDATE
-  // ========================================
 
   const updateMutation = useMutation({
-    mutationFn: async ({ id, data }) => {
-      return await productService.updateProduct(id, data);
-    },
-
-    onSuccess: async () => {
-      await invalidateCache();
-    },
-
-    onError: (error) => {
-      console.error("UPDATE PRODUCT ERROR:", error);
-    },
+    mutationFn: async ({ id, data }) => productService.updateProduct(id, data),
+    onSuccess: invalidateCache,
+    onError: (err) => console.error("UPDATE PRODUCT ERROR:", err),
   });
-
-  // ========================================
-  // DELETE
-  // ========================================
 
   const deleteMutation = useMutation({
-    mutationFn: async (id) => {
-      return await productService.deleteProduct(id);
-    },
-
-    onSuccess: async () => {
-      await invalidateCache();
-    },
-
-    onError: (error) => {
-      console.error("DELETE PRODUCT ERROR:", error);
-    },
+    mutationFn: productService.deleteProduct,
+    onSuccess: invalidateCache,
+    onError: (err) => console.error("DELETE PRODUCT ERROR:", err),
   });
 
   // ========================================
-  // METHODS
+  // METODOS ASYNCRONOS
   // ========================================
-
-  const createProduct = async (data) => {
-    return await createMutation.mutateAsync(data);
-  };
-
-  const updateProduct = async (id, data) => {
-    return await updateMutation.mutateAsync({
-      id,
-      data,
-    });
-  };
-
-  const deleteProduct = async (id) => {
-    return await deleteMutation.mutateAsync(id);
-  };
-
-  // ========================================
-  // RETURN
-  // ========================================
+  const createProduct = async (data) => createMutation.mutateAsync(data);
+  const updateProduct = async (id, data) =>
+    updateMutation.mutateAsync({ id, data });
+  const deleteProduct = async (id) => deleteMutation.mutateAsync(id);
 
   return {
-    // DATA
+    // DATA & PAGINATION
     products,
-
+    pagination,
     loading,
-
     error,
+
+    // FILTERS STATE & INJECTORS
+    filters,
+    setFilters,
 
     // METHODS
     fetchProducts,
-
     createProduct,
     updateProduct,
     deleteProduct,
 
-    // STATES
+    // LOADING STATES
     creating: createMutation.isPending,
-
     updating: updateMutation.isPending,
-
     deleting: deleteMutation.isPending,
   };
 }

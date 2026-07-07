@@ -10,9 +10,8 @@ const BASE_URL = "/category";
 // GET ALL
 // ========================================
 
-export const getCategories = async () => {
-  const response = await api.get(BASE_URL);
-
+export const getCategories = async (params = {}) => {
+  const response = await api.get(BASE_URL, { params });
   return response.data;
 };
 

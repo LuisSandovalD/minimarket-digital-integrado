@@ -2,21 +2,44 @@ const {
   getPurchasesService
 } = require("../services/get-purchases.service");
 
-async function getPurchasesController(
-  req,
-  res
-) {
+async function getPurchasesController(req, res) {
 
   try {
 
-    const purchases =
-      await getPurchasesService();
+    const {
+      page,
+      limit,
+      search,
+      status,
+      supplierId,
+      buyerId,
+      branchId,
+      startDate,
+      endDate,
+      sortBy,
+      sortOrder
+    } = req.query;
+
+    const result = await getPurchasesService({
+
+      page,
+      limit,
+      search,
+      status,
+      supplierId,
+      buyerId,
+      branchId,
+      startDate,
+      endDate,
+      sortBy,
+      sortOrder
+
+    });
 
     return res.status(200).json({
 
       ok: true,
-
-      data: purchases
+      ...result
 
     });
 
@@ -25,7 +48,6 @@ async function getPurchasesController(
     return res.status(500).json({
 
       ok: false,
-
       message: error.message
 
     });

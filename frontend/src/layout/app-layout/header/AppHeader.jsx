@@ -1,137 +1,68 @@
-import { Menu, Settings } from "lucide-react";
+import { Menu } from "lucide-react";
+import { useEffect, useState } from "react";
 
-import { ThemeToggle } from "@/components/theme/";
-
-import { ModernButton } from "@/components/buttons/";
-
-import { SearchInput } from "@/components/forms/";
+import { ModernButton } from "@/components/buttons";
+import { ThemeToggle } from "@/components/theme";
 
 export default function AppHeader({ onToggleAside }) {
+  const [headerTime, setHeaderTime] = useState({
+    greeting: "¡Hola!",
+    dateStr: "",
+  });
+
+  useEffect(() => {
+    const updateHeaderTime = () => {
+      const now = new Date();
+      const hours = now.getHours();
+
+      let greeting = "¡Buenas noches!";
+      if (hours >= 6 && hours < 12) greeting = "¡Buenos días!";
+      else if (hours >= 12 && hours < 19) greeting = "¡Buenas tardes!";
+
+      const dateStr = now.toLocaleDateString("es-ES", {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      });
+
+      setHeaderTime({ greeting, dateStr });
+    };
+
+    updateHeaderTime();
+
+    const interval = setInterval(updateHeaderTime, 60000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <header
-      className="
-        sticky
-        top-0
-        z-50
+    <header className="sticky top-0 z-30 h-20 border-b border-slate-200/60 bg-white/70 backdrop-blur-2xl dark:border-slate-800/60 dark:bg-slate-950/70">
+      <div className="flex h-full items-center justify-between px-4 md:px-6">
+        <div className="min-w-0 flex-1">
+          <h1 className="truncate text-sm font-semibold tracking-tight text-slate-900 dark:text-slate-100">
+            <span className="sm:hidden">{headerTime.greeting}</span>
+            <span className="hidden sm:inline">
+              {headerTime.greeting} Bienvenido de nuevo
+            </span>
+          </h1>
 
-        h-20
+          <p className="mt-0.5 hidden truncate text-xs font-medium capitalize text-slate-400 dark:text-slate-500 sm:block">
+            {headerTime.dateStr}
+          </p>
+        </div>
 
-        border-b
-        border-slate-200/60
-        dark:border-slate-800/60
+        <div className="flex shrink-0 items-center gap-2">
+          <ThemeToggle />
 
-        bg-white/70
-        dark:bg-slate-950/70
-
-        backdrop-blur-2xl
-
-        supports-[backdrop-filter]:bg-white/60
-        dark:supports-[backdrop-filter]:bg-slate-950/60
-      "
-    >
-      <div
-        className="
-          h-full
-          w-full
-
-          px-4
-          md:px-6
-
-          flex
-          items-center
-          justify-between
-
-          gap-3
-        "
-      >
-        {/* ========================================
-         * LEFT
-         * ====================================== */}
-        <div
-          className="
-            flex
-            items-center
-            gap-3
-          "
-        >
-          {/* MENU BUTTON */}
           <ModernButton
             icon={Menu}
             text=""
             size="icon"
             variant="ghost"
             onClick={onToggleAside}
-            className="
-              lg:hidden
-
-              border
-              border-slate-200/70
-              dark:border-slate-800/70
-
-              bg-white/70
-              dark:bg-slate-900/70
-
-              shadow-sm
-
-              hover:bg-slate-100
-              dark:hover:bg-slate-800
-            "
+            className="border border-slate-200/70 bg-white/70 shadow-sm hover:bg-slate-100 dark:border-slate-800/70 dark:bg-slate-900/70 dark:hover:bg-slate-800 lg:hidden"
           />
-
-          {/* SEARCH */}
-          <div
-            className="
-              hidden
-              lg:flex
-
-              w-full
-              max-w-sm
-            "
-          >
-            <SearchInput
-              placeholder="
-                Buscar productos, ventas...
-              "
-            />
-          </div>
-        </div>
-
-        {/* ========================================
-         * ACTIONS
-         * ====================================== */}
-        <div
-          className="
-            flex
-            items-center
-            gap-2
-          "
-        >
-          {/* SETTINGS */}
-          <ModernButton
-            icon={Settings}
-            variant="ghost"
-            text=""
-            size="icon"
-            className="
-              border
-              border-slate-200/70
-              dark:border-slate-800/70
-
-              bg-white/70
-              dark:bg-slate-900/70
-
-              shadow-sm
-
-              hover:bg-slate-100
-              dark:hover:bg-slate-800
-
-              hover:border-slate-300
-              dark:hover:border-slate-700
-            "
-          />
-
-          {/* THEME */}
-          <ThemeToggle />
         </div>
       </div>
     </header>

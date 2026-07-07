@@ -1,26 +1,29 @@
-// ========================================
-// features/supplier/pages/SupplierPage.jsx
-// ========================================
-
 import { useState } from "react";
 
-import SupplierHeader from "../components/SupplierHeader";
-
+import SupplierFilters from "../components/SupplierFilters";
 import SupplierFormModal from "../components/SupplierFormModal";
-
+import SupplierHeader from "../components/SupplierHeader";
 import SupplierTable from "../components/SupplierTable";
 
-import SupplierFilters from "../components/SupplierFilters";
+import SupplierLoading from "../components/SupplierLoading"; // o el componente de loading que uses
 
 import useSupplier from "../hooks/useSuppliers";
-
-import useSupplierFilters from "../hooks/useSupplierFilters";
 
 export default function SupplierPage() {
   const {
     suppliers,
+    meta,
     loading,
     saving,
+
+    search,
+    setSearch,
+
+    isActive,
+    setIsActive,
+
+    page,
+    setPage,
 
     form,
     editingId,
@@ -29,59 +32,27 @@ export default function SupplierPage() {
     handleSubmit,
     handleEdit,
     handleDelete,
+
+    loadSuppliers,
     resetForm,
   } = useSupplier();
 
-  // ========================================
-  // FILTERS
-  // ========================================
-
-  const {
-    search,
-    setSearch,
-
-    filteredSuppliers,
-  } = useSupplierFilters(suppliers);
-
-  // ========================================
-  // MODAL
-  // ========================================
-
   const [openModal, setOpenModal] = useState(false);
-
-  // ========================================
-  // OPEN CREATE
-  // ========================================
 
   const handleOpenCreate = () => {
     resetForm();
-
     setOpenModal(true);
   };
-
-  // ========================================
-  // OPEN EDIT
-  // ========================================
 
   const handleOpenEdit = (supplier) => {
     handleEdit(supplier);
-
     setOpenModal(true);
   };
 
-  // ========================================
-  // CLOSE MODAL
-  // ========================================
-
   const handleCloseModal = () => {
     resetForm();
-
     setOpenModal(false);
   };
-
-  // ========================================
-  // SUBMIT
-  // ========================================
 
   const handleSaveSupplier = async () => {
     const success = await handleSubmit();
@@ -91,27 +62,28 @@ export default function SupplierPage() {
     }
   };
 
-  // ========================================
-  // STATS
-  // ========================================
+  const handleSearch = (filters) => {
+    setSearch(filters.search);
+    setIsActive(filters.isActive);
+    setPage(1);
+  };
 
-  const total = suppliers.length;
+  const handleClear = () => {
+    setSearch("");
+    setIsActive(undefined);
+    setPage(1);
+  };
 
+  const total = meta.total;
   const active = suppliers.filter((supplier) => supplier.isActive).length;
-
   const inactive = suppliers.filter((supplier) => !supplier.isActive).length;
 
-  return (
-    <div
-      className="
-        space-y-6
-        p-6
-      "
-    >
-      {/* ========================================
-       * HEADER
-       * ====================================== */}
+  if (loading) {
+    return <SupplierLoading />;
+  }
 
+  return (
+    <div className="space-y-6 p-6">
       <SupplierHeader
         total={total}
         active={active}
@@ -119,26 +91,22 @@ export default function SupplierPage() {
         onCreate={handleOpenCreate}
       />
 
-      {/* ========================================
-       * FILTERS
-       * ====================================== */}
-
-      <SupplierFilters search={search} setSearch={setSearch} />
-
-      {/* ========================================
-       * TABLE
-       * ====================================== */}
+      <SupplierFilters
+        loading={loading}
+        globalFilters={{ search, isActive }}
+        onSearch={handleSearch}
+        onClear={handleClear}
+      />
 
       <SupplierTable
-        suppliers={filteredSuppliers}
-        loading={loading}
+        suppliers={suppliers}
+        page={meta.page}
+        totalPages={meta.totalPages}
+        onPrevPage={() => setPage((p) => Math.max(1, p - 1))}
+        onNextPage={() => setPage((p) => Math.min(meta.totalPages, p + 1))}
         handleEdit={handleOpenEdit}
         handleDelete={handleDelete}
       />
-
-      {/* ========================================
-       * MODAL
-       * ====================================== */}
 
       <SupplierFormModal
         open={openModal}

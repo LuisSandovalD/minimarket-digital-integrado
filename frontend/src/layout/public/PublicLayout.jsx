@@ -1,5 +1,7 @@
 import { LoginModal } from "@/features/auth/components/login/";
 import { RegisterModal } from "@/features/auth/components/register/";
+import { isAuthenticated } from "@/features/auth/services/session.service";
+
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import Footer from "./footer/Footer";
@@ -8,6 +10,7 @@ import Navbar from "./navbar/Navbar";
 export default function PublicLayout() {
   const [openLogin, setOpenLogin] = useState(false);
   const [openRegister, setOpenRegister] = useState(false);
+  const isLogged = isAuthenticated();
 
   return (
     <div className="min-h-screen bg-white text-zinc-900 dark:bg-black dark:text-white">

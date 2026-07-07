@@ -4,21 +4,16 @@
 
 module.exports = {
 
-  // QUERIES
+  // ========================================
+  // READ
+  // ========================================
 
-  ...require("./product-query.repository"),
+  ...require("./product.read.repository"),
 
-  // SEARCH
+  // ========================================
+  // WRITE
+  // ========================================
 
-  ...require("./product-search.repository"),
+  ...require("./product.write.repository"),
 
-  // MUTATIONS
-
-  ...require("./product-mutation.repository"),
-
-  // STOCK
-
-  ...require("./product-stock.repository"),
-
-  ...require("./product-barcode.repository")
 };

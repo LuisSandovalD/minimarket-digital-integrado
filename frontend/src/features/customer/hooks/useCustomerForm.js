@@ -2,22 +2,16 @@
 // features/customers/hooks/useCustomerForm.js
 // ========================================
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 import customerService from "../services/customer.service";
-
 import { initialCustomerForm } from "../utils/customerForm";
 
 export function useCustomerForm(fetchCustomers) {
   const [modalOpen, setModalOpen] = useState(false);
-
   const [saving, setSaving] = useState(false);
 
   const [form, setForm] = useState(initialCustomerForm);
-
-  // ========================================
-  // CHANGE
-  // ========================================
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -28,91 +22,59 @@ export function useCustomerForm(fetchCustomers) {
     }));
   }
 
-  // ========================================
-  // RESET
-  // ========================================
-
   function resetForm() {
     setForm(initialCustomerForm);
   }
 
-  // ========================================
-  // CREATE
-  // ========================================
-
   function openCreate() {
     resetForm();
-
     setModalOpen(true);
   }
-
-  // ========================================
-  // EDIT
-  // ========================================
 
   function openEdit(customer) {
     setForm({
       id: customer.id,
-
       name: customer.name || "",
-
       documentType: customer.documentType || "",
-
       documentNumber: customer.documentNumber || "",
-
       email: customer.email || "",
-
       phone: customer.phone || "",
-
       address: customer.address || "",
-
       city: customer.city || "",
-
       notes: customer.notes || "",
+      // Nuevos campos mapeados desde el backend
+      creditLimit: customer.creditLimit ?? "",
+      currentDebt: customer.currentDebt ?? 0,
+      isActive: customer.isActive ?? true,
     });
 
     setModalOpen(true);
   }
 
-  // ========================================
-  // CLOSE
-  // ========================================
-
   function closeModal() {
     setModalOpen(false);
-
     resetForm();
   }
 
-  // ========================================
-  // SAVE
-  // ========================================
+  const save = useCallback(async () => {
+    if (!form.name.trim()) return;
 
-  async function save() {
     try {
-      if (!form.name?.trim()) {
-        alert("El nombre es obligatorio");
-        return;
-      }
-
       setSaving(true);
 
       const payload = {
-        name: form.name,
-
+        name: form.name.trim(),
         documentType: form.documentType || null,
-
         documentNumber: form.documentNumber || null,
-
         email: form.email || null,
-
         phone: form.phone || null,
-
         address: form.address || null,
-
         city: form.city || null,
-
         notes: form.notes || null,
+        // Procesamos los valores antes de enviarlos a la base de datos
+        creditLimit: form.creditLimit !== "" ? Number(form.creditLimit) : null,
+        currentDebt: Number(form.currentDebt) || 0,
+        isActive: form.isActive === true || form.isActive === "true",
       };
 
       if (form.id) {
@@ -123,54 +85,42 @@ export function useCustomerForm(fetchCustomers) {
 
       closeModal();
 
+      // Mantiene filtros, búsqueda y página actual
       await fetchCustomers();
     } catch (error) {
-      console.error(error);
-
-      alert("Ocurrió un error al guardar");
+      console.error("Error saving customer:", error);
     } finally {
       setSaving(false);
     }
-  }
+  }, [form, fetchCustomers]);
 
-  // ========================================
-  // DELETE
-  // ========================================
+  const remove = useCallback(
+    async (id) => {
+      try {
+        await customerService.remove(id);
 
-  async function remove(id) {
-    const confirmed = confirm("¿Eliminar cliente?");
-
-    if (!confirmed) return;
-
-    try {
-      await customerService.remove(id);
-
-      await fetchCustomers();
-    } catch (error) {
-      console.error(error);
-
-      alert("No se pudo eliminar");
-    }
-  }
-
-  // ========================================
-  // RETURN
-  // ========================================
+        // Mantiene filtros, búsqueda y página actual
+        await fetchCustomers();
+      } catch (error) {
+        console.error("Error deleting customer:", error);
+      }
+    },
+    [fetchCustomers],
+  );
 
   return {
     form,
     setForm,
-
-    handleChange,
 
     saving,
 
     modalOpen,
     setModalOpen,
 
+    handleChange,
+
     openCreate,
     openEdit,
-
     closeModal,
 
     save,

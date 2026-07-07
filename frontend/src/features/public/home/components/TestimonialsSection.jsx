@@ -1,712 +1,277 @@
-import { motion } from "framer-motion";
-
-import {
-  BadgeCheck,
-  ChevronLeft,
-  ChevronRight,
-  MapPin,
-  Quote,
-  Star,
-} from "lucide-react";
-
-import { useRef } from "react";
-
-import { testimonials } from "../constants/testimonials";
-
+import { ModernButton } from "@/components/buttons";
+import { MetricCard } from "@/components/card";
 import {
   defaultViewport,
   fadeScale,
   fadeUp,
   hoverLift,
-  hoverScale,
   smoothTransition,
   springTransition,
   staggerContainer,
-} from "@/components/effects/";
+} from "@/components/effects";
+import { motion } from "framer-motion";
+import {
+  BadgeCheck,
+  ChevronLeft,
+  ChevronRight,
+  MapPin,
+  Plus,
+  Quote,
+  Star,
+} from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import {
+  getLatestTestimonials,
+  getTestimonials,
+} from "../services/testimonial.service";
+
+// Genera iniciales a partir del nombre del usuario (ej. "Claudio Rossi" -> "CR")
+const getInitials = (name = "") => {
+  const parts = name.trim().split(" ").filter(Boolean);
+  if (parts.length === 0) return "?";
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return (parts[0][0] + parts[1][0]).toUpperCase();
+};
 
 export default function TestimonialsSection() {
   const sliderRef = useRef(null);
+  const [testimonials, setTestimonials] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [isShowingAll, setIsShowingAll] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
+  useEffect(() => {
+    const fetchInitialTestimonials = async () => {
+      setLoading(true);
+      const data = await getLatestTestimonials(10);
+      setTestimonials(data || []);
+      setLoading(false);
+    };
+    fetchInitialTestimonials();
+  }, []);
+
+  // EFECTO DE AUTOPLAY (SCROLL AUTOMÁTICO CÍCLICO)
+  useEffect(() => {
+    if (loading || testimonials.length === 0 || isHovered) return;
+
+    const interval = setInterval(() => {
+      // eslint-disable-next-line react-hooks/immutability
+      scroll("right");
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [loading, testimonials, isHovered]);
+
+  // FUNCIÓN RESTAURADA Y PROTEGIDA
+  const handleLoadAll = async () => {
+    setLoadingMore(true);
+    const data = await getTestimonials();
+    setTestimonials(data || []);
+    setIsShowingAll(true);
+    setLoadingMore(false);
+  };
+
+  // LÓGICA DE SCROLL CÍCLICO INFINITO
   const scroll = (direction) => {
     if (!sliderRef.current) return;
 
-    sliderRef.current.scrollBy({
-      left: direction === "left" ? -420 : 420,
+    const el = sliderRef.current;
+    const scrollAmount = 380;
+    const maxScrollLeft = el.scrollWidth - el.clientWidth;
 
-      behavior: "smooth",
-    });
+    if (direction === "left") {
+      if (el.scrollLeft <= 10) {
+        el.scrollTo({ left: maxScrollLeft, behavior: "smooth" });
+      } else {
+        el.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+      }
+    } else {
+      if (el.scrollLeft >= maxScrollLeft - 10) {
+        el.scrollTo({ left: 0, behavior: "smooth" });
+      } else {
+        el.scrollBy({ left: scrollAmount, behavior: "smooth" });
+      }
+    }
   };
 
   return (
     <section
       id="testimonials"
-      className="
-        relative
-        overflow-hidden
-
-        px-4
-        py-20
-
-        sm:px-6
-        md:px-8
-
-        lg:px-10
-        lg:py-28
-      "
+      className="relative overflow-hidden px-4 py-16 sm:px-6 lg:py-20 z-10"
     >
-      {/* BACKGROUND GLOW */}
-      <div
-        className="
-          absolute
-          inset-0
-          -z-10
-        "
-      >
-        <motion.div
-          animate={{
-            opacity: [0.2, 0.45, 0.2],
-            scale: [1, 1.08, 1],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="
-            absolute
-            right-0
-            top-0
-
-            h-[500px]
-            w-[500px]
-
-            rounded-full
-
-            bg-[#6096ba]/10
-
-            blur-3xl
-          "
-        />
-      </div>
-
       <div className="mx-auto max-w-7xl">
-        {/* HEADER */}
+        {/* ENCABEZADO Y CONTROLES */}
         <motion.div
           variants={staggerContainer}
           initial="hidden"
           whileInView="show"
-          viewport={defaultViewport}
-          className="
-            flex
-            flex-col
-            gap-8
-
-            lg:flex-row
-            lg:items-end
-            lg:justify-between
-          "
+          viewport={{ ...defaultViewport, once: true }}
+          className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between transform-gpu"
         >
-          <div className="max-w-3xl">
-            {/* BADGE */}
+          <div className="max-w-2xl">
             <motion.div
               variants={fadeScale}
               transition={springTransition}
-              className="
-                inline-flex
-                items-center
-                gap-2
-
-                rounded-full
-
-                border
-                border-[#d7e0e7]
-
-                bg-white/60
-
-                px-5
-                py-2.5
-
-                text-sm
-                font-semibold
-
-                text-[#274c77]
-
-                shadow-lg
-                shadow-[#274c77]/5
-
-                backdrop-blur-xl
-
-                dark:border-white/10
-                dark:bg-white/5
-                dark:text-[#a3cef1]
-              "
+              className="inline-flex items-center gap-2 rounded-full border border-[#274c77]/10 bg-white/80 px-4 py-1.5 text-xs font-semibold text-[#274c77] shadow-sm backdrop-blur-md dark:border-white/10 dark:bg-white/5 dark:text-[#a3cef1]"
             >
-              <BadgeCheck size={16} />
+              <BadgeCheck size={14} />
               Clientes satisfechos
             </motion.div>
 
-            {/* TITLE */}
             <motion.h2
               variants={fadeUp}
               transition={smoothTransition}
-              className="
-                mt-7
-                text-4xl
-                font-black
-                leading-tight
-                tracking-tight
-
-                text-[#0f172a]
-
-                dark:text-white
-
-                md:text-5xl
-              "
+              className="mt-4 text-3xl font-black tracking-tight text-[#0f172a] md:text-4xl dark:text-white"
             >
-              Empresas que ya
-              <span
-                className="
-                  block
-
-                  bg-gradient-to-r
-                  from-[#274c77]
-                  via-[#6096ba]
-                  to-[#a3cef1]
-
-                  bg-clip-text
-                  text-transparent
-                "
-              >
+              Empresas que ya{" "}
+              <span className="block bg-gradient-to-r from-[#274c77] via-[#6096ba] to-[#a3cef1] bg-clip-text text-transparent">
                 optimizan su negocio
               </span>
             </motion.h2>
 
-            {/* DESCRIPTION */}
             <motion.p
               variants={fadeUp}
               transition={smoothTransition}
-              className="
-                mt-6
-                max-w-2xl
-
-                text-lg
-                leading-relaxed
-
-                text-[#5b6472]
-
-                dark:text-[#cbd5e1]
-              "
+              className="mt-3 text-base leading-relaxed text-[#5b6472] dark:text-[#cbd5e1]"
             >
-              Nuestro ERP POS multiempresa ayuda a negocios modernos a controlar
-              inventario, ventas, reportes, seguridad y múltiples sucursales
-              desde una sola plataforma.
+              Controla inventario, ventas, reportes y múltiples sucursales desde
+              una sola plataforma.
             </motion.p>
           </div>
 
-          {/* CONTROLS */}
-          <motion.div
-            variants={fadeScale}
-            transition={springTransition}
-            className="
-              flex
-              items-center
-              gap-3
-            "
-          >
-            <motion.button
-              whileHover={hoverLift}
-              whileTap={{
-                scale: 0.95,
-              }}
-              onClick={() => scroll("left")}
-              className="
-                group
-
-                flex
-                h-14
-                w-14
-                items-center
-                justify-center
-
-                rounded-2xl
-
-                border
-                border-[#d7e0e7]
-
-                bg-white/60
-
-                text-[#274c77]
-
-                shadow-lg
-                shadow-[#274c77]/5
-
-                backdrop-blur-xl
-
-                transition-all
-                duration-300
-
-                hover:bg-[#274c77]
-                hover:text-white
-
-                dark:border-white/10
-                dark:bg-white/5
-                dark:text-[#a3cef1]
-                dark:hover:bg-[#274c77]
-              "
+          {/* BOTONES DE NAVEGACIÓN */}
+          {testimonials.length > 0 && (
+            <motion.div
+              variants={fadeScale}
+              transition={springTransition}
+              className="flex items-center gap-2 shrink-0"
             >
-              <ChevronLeft
-                size={22}
-                className="
-                  transition-transform
-                  duration-300
-
-                  group-hover:-translate-x-1
-                "
+              <ModernButton
+                variant="outline"
+                size="md"
+                text=""
+                icon={ChevronLeft}
+                onClick={() => scroll("left")}
+                className="!border-[#274c77]/10 dark:!border-white/10"
               />
-            </motion.button>
-
-            <motion.button
-              whileHover={hoverLift}
-              whileTap={{
-                scale: 0.95,
-              }}
-              onClick={() => scroll("right")}
-              className="
-                group
-
-                flex
-                h-14
-                w-14
-                items-center
-                justify-center
-
-                rounded-2xl
-
-                border
-                border-[#d7e0e7]
-
-                bg-white/60
-
-                text-[#274c77]
-
-                shadow-lg
-                shadow-[#274c77]/5
-
-                backdrop-blur-xl
-
-                transition-all
-                duration-300
-
-                hover:bg-[#274c77]
-                hover:text-white
-
-                dark:border-white/10
-                dark:bg-white/5
-                dark:text-[#a3cef1]
-                dark:hover:bg-[#274c77]
-              "
-            >
-              <ChevronRight
-                size={22}
-                className="
-                  transition-transform
-                  duration-300
-
-                  group-hover:translate-x-1
-                "
+              <ModernButton
+                variant="outline"
+                size="md"
+                text=""
+                icon={ChevronRight}
+                onClick={() => scroll("right")}
+                className="!border-[#274c77]/10 dark:!border-white/10"
               />
-            </motion.button>
-          </motion.div>
+            </motion.div>
+          )}
         </motion.div>
 
-        {/* SLIDER */}
-        <motion.div
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="show"
-          viewport={defaultViewport}
-          ref={sliderRef}
-          className="
-            mt-16
-
-            flex
-            gap-8
-
-            overflow-x-auto
-            scroll-smooth
-
-            py-10
-
-            snap-x
-            snap-mandatory
-
-            [&::-webkit-scrollbar]:hidden
-          "
-        >
-          {testimonials.map((item, index) => (
-            <motion.article
-              key={index}
-              variants={fadeUp}
-              transition={{
-                ...smoothTransition,
-                delay: index * 0.08,
-              }}
-              whileHover={hoverLift}
-              className="
-                  group
-                  relative
-
-                  min-w-[320px]
-                  max-w-[320px]
-
-                  sm:min-w-[360px]
-                  sm:max-w-[360px]
-
-                  snap-center
-
-                  overflow-hidden
-                  rounded-[34px]
-
-                  border
-                  border-[#d7e0e7]
-
-                  bg-white/85
-
-                  p-8
-
-                  shadow-lg
-                  shadow-[#274c77]/5
-
-                  backdrop-blur-2xl
-
-                  dark:border-white/10
-                  dark:bg-white/5
-                  dark:shadow-black/30
-                "
-            >
-              {/* TOP GRADIENT */}
-              <div
-                className="
-                    absolute
-                    inset-x-0
-                    top-0
-
-                    h-1.5
-
-                    bg-gradient-to-r
-                    from-[#274c77]
-                    via-[#6096ba]
-                    to-[#a3cef1]
-                  "
-              />
-
-              {/* ICON */}
-              <motion.div
-                whileHover={hoverScale}
+        {/* ZONA DE CONTENIDO DINÁMICO */}
+        {loading ? (
+          <div className="mt-12 flex h-40 items-center justify-center">
+            <span className="animate-pulse text-sm font-bold text-[#274c77] dark:text-[#a3cef1]">
+              Cargando testimonios...
+            </span>
+          </div>
+        ) : testimonials.length === 0 ? (
+          <div className="mt-12 flex h-40 items-center justify-center rounded-2xl border border-dashed border-[#274c77]/10 p-6 text-center text-sm text-[#5b6472] dark:border-white/10 dark:text-[#cbd5e1]">
+            No hay testimonios disponibles en este momento.
+          </div>
+        ) : (
+          /* SLIDER HORIZONTAL */
+          <div
+            ref={sliderRef}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            className="mt-12 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth py-4 transform-gpu [&::-webkit-scrollbar]:hidden"
+          >
+            {testimonials.map((item, index) => (
+              <motion.article
+                key={item.id || index}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
                 transition={{
-                  duration: 0.3,
+                  ...smoothTransition,
+                  delay: Math.min(index * 0.04, 0.3),
                 }}
-                className="
-                    relative
-
-                    flex
-                    h-16
-                    w-16
-                    items-center
-                    justify-center
-
-                    rounded-3xl
-
-                    bg-gradient-to-br
-                    from-[#274c77]
-                    via-[#365d86]
-                    to-[#6096ba]
-
-                    text-white
-
-                    shadow-2xl
-                  "
+                whileHover={hoverLift}
+                className="min-w-[300px] max-w-[300px] snap-center sm:min-w-[340px] sm:max-w-[340px] transform-gpu will-change-transform"
               >
-                <Quote size={28} />
-              </motion.div>
-
-              {/* STARS */}
-              <div className="mt-7 flex gap-1">
-                {Array.from({
-                  length: item.rating,
-                }).map((_, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{
-                      opacity: 0,
-                      scale: 0.5,
-                    }}
-                    whileInView={{
-                      opacity: 1,
-                      scale: 1,
-                    }}
-                    transition={{
-                      delay: i * 0.05,
-                    }}
-                    viewport={{
-                      once: true,
-                    }}
-                  >
-                    <Star
-                      size={18}
-                      className="
-                          fill-yellow-400
-                          text-yellow-400
-                        "
-                    />
-                  </motion.div>
-                ))}
-              </div>
-
-              {/* MESSAGE */}
-              <p
-                className="
-                    mt-6
-                    text-[15px]
-                    leading-relaxed
-
-                    text-[#5b6472]
-
-                    dark:text-[#cbd5e1]
-                  "
-              >
-                “{item.message}”
-              </p>
-
-              {/* USER */}
-              <div
-                className="
-                    mt-8
-                    flex
-                    items-center
-                    gap-4
-                  "
-              >
-                <div className="relative">
-                  <motion.img
-                    whileHover={{
-                      scale: 1.08,
-                    }}
-                    transition={{
-                      duration: 0.3,
-                    }}
-                    src={item.avatar}
-                    alt={item.name}
-                    className="
-                        h-16
-                        w-16
-
-                        rounded-2xl
-                        object-cover
-
-                        ring-4
-                        ring-[#e7ecef]
-
-                        dark:ring-white/10
-                      "
-                  />
-
-                  {item.verified && (
-                    <motion.div
-                      initial={{
-                        scale: 0,
-                      }}
-                      whileInView={{
-                        scale: 1,
-                      }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 180,
-                      }}
-                      viewport={{
-                        once: true,
-                      }}
-                      className="
-                          absolute
-                          -bottom-1
-                          -right-1
-
-                          flex
-                          h-6
-                          w-6
-                          items-center
-                          justify-center
-
-                          rounded-full
-
-                          bg-[#274c77]
-                          text-white
-                        "
-                    >
-                      <BadgeCheck size={14} />
-                    </motion.div>
-                  )}
-                </div>
-
-                <div className="flex-1">
-                  <h4
-                    className="
-                        font-bold
-                        text-[#0f172a]
-
-                        dark:text-white
-                      "
-                  >
-                    {item.name}
-                  </h4>
-
-                  <p
-                    className="
-                        mt-1
-                        text-sm
-                        font-medium
-
-                        text-[#274c77]
-
-                        dark:text-[#a3cef1]
-                      "
-                  >
-                    {item.role}
-                  </p>
-
-                  <div
-                    className="
-                        mt-1
-
-                        flex
-                        items-center
-                        gap-1
-
-                        text-xs
-
-                        text-[#8b8c89]
-
-                        dark:text-[#94a3b8]
-                      "
-                  >
-                    <MapPin size={13} />
-
-                    {item.location}
-                  </div>
-                </div>
-              </div>
-
-              {/* COMPANY */}
-              <div
-                className="
-                    mt-7
-
-                    rounded-3xl
-
-                    border
-                    border-[#d7e0e7]
-
-                    bg-[#f8fbfd]
-
-                    p-5
-
-                    transition-all
-                    duration-300
-
-                    group-hover:border-[#6096ba]/40
-
-                    dark:border-white/10
-                    dark:bg-white/[0.03]
-                  "
-              >
-                <div
-                  className="
-                      flex
-                      items-center
-                      justify-between
-                    "
+                <MetricCard
+                  variant="transparent"
+                  icon={Quote}
+                  label={item.user?.name || "Usuario del Sistema"}
+                  className="h-full !border-[#274c77]/10 bg-white !p-5 dark:!border-white/5 dark:bg-white/[0.02] rounded-2xl transition-colors duration-200"
                 >
-                  <div>
-                    <p
-                      className="
-                          text-xs
-                          uppercase
-                          tracking-[0.2em]
+                  <div className="-mt-6">
+                    {/* ESTRELLAS */}
+                    <div className="mb-3 flex gap-0.5">
+                      {Array.from({ length: Number(item.rating) || 5 }).map(
+                        (_, i) => (
+                          <Star
+                            key={i}
+                            size={13}
+                            className="fill-yellow-400 text-yellow-400 dark:fill-yellow-400 dark:text-yellow-400"
+                          />
+                        ),
+                      )}
+                    </div>
 
-                          text-[#8b8c89]
-
-                          dark:text-[#94a3b8]
-                        "
-                    >
-                      Empresa
+                    {/* COMENTARIO */}
+                    <p className="line-clamp-4 whitespace-pre-line text-sm leading-relaxed text-[#5b6472] dark:text-[#cbd5e1]">
+                      “{item.comment}”
                     </p>
 
-                    <h5
-                      className="
-                          mt-2
-                          text-lg
-                          font-bold
+                    {/* METADATA CLIENTE */}
+                    <div className="mt-5 flex items-center gap-3 border-t border-[#274c77]/10 pt-4 dark:border-white/5">
+                      {item.user?.avatar ? (
+                        <img
+                          src={item.user.avatar}
+                          alt={item.user?.name || "Usuario"}
+                          className="h-10 w-10 rounded-xl object-cover"
+                          loading="lazy"
+                        />
+                      ) : (
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#274c77]/10 text-xs font-bold text-[#274c77] dark:bg-white/10 dark:text-[#a3cef1]">
+                          {getInitials(item.user?.name)}
+                        </div>
+                      )}
 
-                          text-[#0f172a]
-
-                          dark:text-white
-                        "
-                    >
-                      {item.company}
-                    </h5>
+                      <div className="min-w-0 flex-1">
+                        <span className="block text-xs font-bold text-[#274c77] dark:text-[#a3cef1]">
+                          {item.user?.name || "Usuario del Sistema"}
+                        </span>
+                        <div className="mt-0.5 flex items-center gap-1 text-[11px] text-[#8b8c89] dark:text-[#94a3b8]">
+                          <MapPin
+                            size={11}
+                            className="text-[#274c77] dark:text-[#a3cef1]"
+                          />
+                          <span>Verificado</span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
+                </MetricCard>
+              </motion.article>
+            ))}
 
-                  <span
-                    className="
-                        rounded-full
-
-                        bg-emerald-500/10
-
-                        px-4
-                        py-1.5
-
-                        text-xs
-                        font-semibold
-
-                        text-emerald-600
-
-                        dark:text-emerald-400
-                      "
-                  >
-                    Activo
-                  </span>
-                </div>
+            {/* BOTÓN EXTRA: VER TODOS */}
+            {!isShowingAll && testimonials.length >= 10 && (
+              <div className="min-w-[300px] max-w-[300px] snap-center sm:min-w-[340px] sm:max-w-[340px] transform-gpu">
+                <ModernButton
+                  variant="outline"
+                  loading={loadingMore}
+                  onClick={handleLoadAll}
+                  icon={Plus}
+                  text="Ver todos"
+                  className="flex h-full w-full flex-col items-center justify-center gap-2 rounded-2xl border-dashed border-[#274c77]/20 bg-[#274c77]/5 p-5 hover:border-[#274c77] hover:bg-white dark:border-white/10 dark:bg-white/[0.01] dark:hover:border-[#a3cef1]"
+                />
               </div>
-
-              {/* GLOW */}
-              <div
-                className="
-                    pointer-events-none
-
-                    absolute
-                    right-[-60px]
-                    top-[-60px]
-
-                    h-40
-                    w-40
-
-                    rounded-full
-
-                    bg-[#6096ba]/10
-
-                    blur-3xl
-
-                    opacity-0
-
-                    transition-all
-                    duration-500
-
-                    group-hover:opacity-100
-                  "
-              />
-            </motion.article>
-          ))}
-        </motion.div>
+            )}
+          </div>
+        )}
       </div>
     </section>
   );

@@ -6,366 +6,95 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 async function customerSeed() {
-    await prisma.customer.createMany({
-        data: [
-            // --- Clientes Base (Con límite de crédito asignado y deuda en 0) ---
-            {
-                name: "Carlos Mendoza Rojas",
-                documentType: "DNI",
-                documentNumber: "71234567",
-                email: "carlos.mendoza@gmail.com",
-                phone: "987654321",
-                city: "Lima",
-                address: "Av. Los Próceres 123",
-                notes: null,
-                creditLimit: 500.0,
-                currentDebt: 0.0,
-                isActive: true,
-                companyId: 1
-            },
-            {
-                name: "María Fernanda López García",
-                documentType: "DNI",
-                documentNumber: "73456789",
-                email: "maria.lopez@gmail.com",
-                phone: "945678123",
-                city: "Lima",
-                address: "Jr. Unión 456",
-                notes: "Cliente frecuente",
-                creditLimit: 500.0,
-                currentDebt: 0.0,
-                isActive: true,
-                companyId: 1
-            },
-            {
-                name: "José Antonio Torres Ramírez",
-                documentType: "DNI",
-                documentNumber: "74561234",
-                email: "jose.torres@gmail.com",
-                phone: "923456789",
-                city: "Cañete",
-                address: "Av. Mariscal Benavides 789",
-                notes: null,
-                creditLimit: 400.0,
-                currentDebt: 0.0,
-                isActive: true,
-                companyId: 1
-            },
-            {
-                name: "Ana Patricia Salazar Mendoza",
-                documentType: "DNI",
-                documentNumber: "75678912",
-                email: "ana.salazar@gmail.com",
-                phone: "956123478",
-                city: "Chincha",
-                address: "Calle Comercio 321",
-                notes: null,
-                creditLimit: 300.0,
-                currentDebt: 0.0,
-                isActive: true,
-                companyId: 1
-            },
-            {
-                name: "Luis Alberto Ramírez Soto",
-                documentType: "DNI",
-                documentNumber: "76789123",
-                email: "luis.ramirez@gmail.com",
-                phone: "912345678",
-                city: "Pisco",
-                address: "Av. Principal 654",
-                notes: null,
-                creditLimit: 350.0,
-                currentDebt: 0.0,
-                isActive: true,
-                companyId: 1
-            },
-            {
-                name: "Rosa Elena Castillo Pérez",
-                documentType: "DNI",
-                documentNumber: "77891234",
-                email: "rosa.castillo@gmail.com",
-                phone: "987111222",
-                city: "Ica",
-                address: "Av. Grau 120",
-                notes: null,
-                creditLimit: 400.0,
-                currentDebt: 0.0,
-                isActive: true,
-                companyId: 1
-            },
-            {
-                name: "Miguel Ángel Vargas Flores",
-                documentType: "DNI",
-                documentNumber: "78912345",
-                email: "miguel.vargas@gmail.com",
-                phone: "954222333",
-                city: "Lima",
-                address: "Jr. Libertad 890",
-                notes: "Llamar antes de entregar",
-                creditLimit: 1000.0,
-                currentDebt: 0.0,
-                isActive: true,
-                companyId: 1
-            },
-            {
-                name: "Carmen Lucía Mendoza Ruiz",
-                documentType: "DNI",
-                documentNumber: "79123456",
-                email: "carmen.mendoza@gmail.com",
-                phone: "965333444",
-                city: "Huancayo",
-                address: "Av. Real 456",
-                notes: null,
-                creditLimit: 600.0,
-                currentDebt: 0.0,
-                isActive: true,
-                companyId: 1
-            },
-            {
-                name: "Pedro Javier Gutiérrez Silva",
-                documentType: "DNI",
-                documentNumber: "70234567",
-                email: "pedro.gutierrez@gmail.com",
-                phone: "976444555",
-                city: "Arequipa",
-                address: "Calle Mercaderes 789",
-                notes: null,
-                creditLimit: 1500.0,
-                currentDebt: 0.0,
-                isActive: true,
-                companyId: 1
-            },
-            {
-                name: "Daniela Sofía Paredes Rojas",
-                documentType: "DNI",
-                documentNumber: "71345678",
-                email: "daniela.paredes@gmail.com",
-                phone: "987555666",
-                city: "Trujillo",
-                address: "Av. España 234",
-                notes: null,
-                creditLimit: 800.0,
-                currentDebt: 0.0,
-                isActive: true,
-                companyId: 1
-            },
-            {
-                name: "Jorge Luis Navarro Quispe",
-                documentType: "DNI",
-                documentNumber: "72456789",
-                email: "jorge.navarro@gmail.com",
-                phone: "998666777",
-                city: "Cusco",
-                address: "Av. El Sol 567",
-                notes: "Cuenta sujeta a revisión",
-                creditLimit: 400.0,
-                currentDebt: 0.0,
-                isActive: true,
-                companyId: 1
-            },
-            {
-                name: "Patricia Herrera Díaz",
-                documentType: "DNI",
-                documentNumber: "73567890",
-                email: "patricia.herrera@gmail.com",
-                phone: "911223344",
-                city: "Lima",
-                address: "Av. Canadá 450",
-                notes: null,
-                creditLimit: 500.0,
-                currentDebt: 0.0,
-                isActive: true,
-                companyId: 1
-            },
-            {
-                name: "Fernando Salinas Vega",
-                documentType: "DNI",
-                documentNumber: "74678901",
-                email: "fernando.salinas@gmail.com",
-                phone: "922334455",
-                city: "Ica",
-                address: "Jr. San Martín 222",
-                notes: null,
-                creditLimit: 400.0,
-                currentDebt: 0.0,
-                isActive: true,
-                companyId: 1
-            },
-            {
-                name: "Lucía Mendoza Castro",
-                documentType: "DNI",
-                documentNumber: "75789012",
-                email: "lucia.mendoza@gmail.com",
-                phone: "933445566",
-                city: "Chincha",
-                address: "Av. Primavera 777",
-                notes: null,
-                creditLimit: 300.0,
-                currentDebt: 0.0,
-                isActive: true,
-                companyId: 1
-            },
-            {
-                name: "Ricardo Gómez Paredes",
-                documentType: "DNI",
-                documentNumber: "76890123",
-                email: "ricardo.gomez@gmail.com",
-                phone: "944556677",
-                city: "Pisco",
-                address: "Calle Lima 150",
-                notes: null,
-                creditLimit: 350.0,
-                currentDebt: 0.0,
-                isActive: false,
-                companyId: 1
-            },
+    console.log("🚀 Iniciando carga masiva de Clientes regionalizados para las 20 empresas...");
 
-            // --- Clientes Adicionales (Con límite de crédito asignado y deuda en 0) ---
-            {
-                name: "Sonia Beatriz Villanueva Rios",
+    // 1. Listas base de datos locales (Cañete, Lima, Perú) para combinaciones dinámicas
+    const names = ["Carlos", "María", "José", "Ana", "Luis", "Rosa", "Miguel", "Carmen", "Pedro", "Daniela", "Jorge", "Patricia", "Fernando", "Lucía", "Sonia", "Julio", "Elena", "Héctor", "Verónica", "Alejandro", "Diana", "Renzo", "Gabriela", "Walter"];
+    const lastNames = ["Mendoza", "López", "Torres", "Salazar", "Ramírez", "Castillo", "Vargas", "Gutiérrez", "Paredes", "Navarro", "Herrera", "Salinas", "Gómez", "Villanueva", "Palomino", "Flores", "Benítez", "Tello", "Ortiz", "Meza", "Farfán", "Pasquel", "Miranda", "Quispe"];
+
+    // Distritos específicos solicitados de la Provincia de Cañete
+    const locations = [
+        { city: "San Vicente de Cañete", address: "Av. Mariscal Benavides" },
+        { city: "Imperial", address: "Av. Ramos" },
+        { city: "San Luis", address: "Av. Dos de Mayo" },
+        { city: "Quilmaná", address: "Av. Lima" },
+        { city: "Nuevo Imperial", address: "Av. Augusto B. Leguía" },
+        { city: "Lunahuaná", address: "Malecón Araoz" },
+        { city: "Mala", address: "Jr. Real" },
+        { city: "Cerro Azul", address: "Av. Jorge Chávez" }
+    ];
+
+    const customersData = [];
+
+    // Generación del arreglo secuencial para mapear las 20 empresas existentes (IDs del 1 al 20)
+    const companyIds = Array.from({ length: 20 }, (_, i) => i + 1);
+
+    companyIds.forEach((companyId) => {
+        // Define dinámicamente un rango aleatorio de entre 20 y 30 clientes exclusivos por cada empresa
+        const totalCustomers = Math.floor(Math.random() * 11) + 20;
+
+        for (let i = 0; i < totalCustomers; i++) {
+            // Combinaciones lineales usando residuos algebraicos para evitar colisiones de nombres o datos repetidos
+            const firstName = names[(i + companyId) % names.length];
+            const secondName = names[(i * 3) % names.length];
+            const lastName = lastNames[i % lastNames.length];
+            const secondLastName = lastNames[(i + companyId) % lastNames.length];
+            const location = locations[(i + companyId) % locations.length];
+
+            const fullName = `${firstName} ${secondName} ${lastName} ${secondLastName}`;
+
+            // Generación de DNI peruano limpio de 8 dígitos único por bloque correlativo
+            const docNumber = String(70000000 + (companyId * 30000) + (i * 157)).substring(0, 8);
+
+            // Correo electrónico personalizado por empresa
+            const email = `${firstName.toLowerCase()}.${lastName.toLowerCase()}${i}@empresa${companyId}.pe`;
+
+            // Teléfono móvil peruano de 9 dígitos iniciado en 9
+            const phone = String(900000000 + (companyId * 1100000) + (i * 543)).substring(0, 9);
+
+            // Variantes lineales de límites de crédito en Soles peruanos (PEN)
+            const creditLimit = parseFloat(([300, 400, 500, 600, 800, 1000, 1500, 2000])[i % 8]);
+
+            customersData.push({
+                name: fullName,
                 documentType: "DNI",
-                documentNumber: "40123456",
-                email: "sonia.villanueva@outlook.com",
-                phone: "955667788",
-                city: "Chimbote",
-                address: "Av. Pardo 821",
-                notes: "Contacto corporativo",
-                creditLimit: 2000.0,
+                documentNumber: docNumber,
+                email: email,
+                phone: phone,
+                city: location.city, // Distrito de Cañete
+                address: `${location.address} N° ${100 + (i * 4)}`,
+                notes: i % 6 === 0 ? "Cliente frecuente de la provincia" : null,
+                creditLimit: creditLimit,
                 currentDebt: 0.0,
-                isActive: true,
-                companyId: 1
-            },
-            {
-                name: "Julio César Palomino Rey",
-                documentType: "DNI",
-                documentNumber: "41234567",
-                email: "julio.palomino@gmail.com",
-                phone: "966778899",
-                city: "Piura",
-                address: "Calle Tacna 432",
-                notes: null,
-                creditLimit: 750.0,
-                currentDebt: 0.0,
-                isActive: true,
-                companyId: 1
-            },
-            {
-                name: "Elena Marisol Flores Rojas",
-                documentType: "DNI",
-                documentNumber: "42345678",
-                email: "elena.flores@hotmail.com",
-                phone: "977889900",
-                city: "Chiclayo",
-                address: "Av. Balta 1015",
-                notes: "Socio Premium",
-                creditLimit: 3000.0,
-                currentDebt: 0.0,
-                isActive: true,
-                companyId: 1
-            },
-            {
-                name: "Héctor Raúl Benítez Luna",
-                documentType: "DNI",
-                documentNumber: "43456789",
-                email: "hector.benitez@gmail.com",
-                phone: "988990011",
-                city: "Tacna",
-                address: "Av. Bolognesi 250",
-                notes: null,
-                creditLimit: 600.0,
-                currentDebt: 0.0,
-                isActive: true,
-                companyId: 1
-            },
-            {
-                name: "Verónica Isabel Tello Tello",
-                documentType: "DNI",
-                documentNumber: "44567890",
-                email: "veronica.tello@gmail.com",
-                phone: "999001122",
-                city: "Cajamarca",
-                address: "Jr. Dos de Mayo 612",
-                notes: null,
-                creditLimit: 800.0,
-                currentDebt: 0.0,
-                isActive: true,
-                companyId: 1
-            },
-            {
-                name: "Alejandro David Ortiz Diaz",
-                documentType: "DNI",
-                documentNumber: "45678901",
-                email: "alejandro.ortiz@outlook.com",
-                phone: "912334455",
-                city: "Pucallpa",
-                address: "Av. Centenario Km 4",
-                notes: null,
-                creditLimit: 900.0,
-                currentDebt: 0.0,
-                isActive: true,
-                companyId: 1
-            },
-            {
-                name: "Diana Carolina Meza Solís",
-                documentType: "DNI",
-                documentNumber: "46789012",
-                email: "diana.meza@gmail.com",
-                phone: "923445566",
-                city: "Huánuco",
-                address: "Jr. General Prado 345",
-                notes: null,
-                creditLimit: 500.0,
-                currentDebt: 0.0,
-                isActive: true,
-                companyId: 1
-            },
-            {
-                name: "Renzo Gabriel Farfán Guerrero",
-                documentType: "DNI",
-                documentNumber: "47890123",
-                email: "renzo.farfan@gmail.com",
-                phone: "934556677",
-                city: "Sullana",
-                address: "Av. José de Lama 910",
-                notes: null,
-                creditLimit: 700.0,
-                currentDebt: 0.0,
-                isActive: true,
-                companyId: 1
-            },
-            {
-                name: "Gabriela Inés Pasquel Vega",
-                documentType: "DNI",
-                documentNumber: "48901234",
-                email: "gabriela.pasquel@hotmail.com",
-                phone: "945667788",
-                city: "Tarapoto",
-                address: "Jr. Jiménez Pimentel 140",
-                notes: "Cuenta corporativa nueva",
-                creditLimit: 1200.0,
-                currentDebt: 0.0,
-                isActive: true,
-                companyId: 1
-            },
-            {
-                name: "Walter Javier Miranda Soto",
-                documentType: "DNI",
-                documentNumber: "49012345",
-                email: "walter.miranda@gmail.com",
-                phone: "956778899",
-                city: "Iquitos",
-                address: "Jr. Próspero 524",
-                notes: null,
-                creditLimit: 1000.0,
-                currentDebt: 0.0,
-                isActive: false,
-                companyId: 1
-            }
-        ],
+                isActive: i % 25 !== 0, // Mantiene un 96% de la cartera activa
+                companyId: companyId   // Relación foránea directa (IDs del 1 al 20)
+            });
+        }
+    });
+
+    // 2. Ejecución masiva lineal limpia optimizada para base de datos
+    await prisma.customer.createMany({
+        data: customersData,
         skipDuplicates: true
     });
 
-    console.log("✅ Clientes creados correctamente (Total: 25 con crédito y sin deudas)");
+    console.log(`\n====================================`);
+    console.log(`✅ SEED COMPLETADO: Se registraron con éxito los clientes.`);
+    console.log(`📍 Región focalizada: Cañete, Lima, Perú.`);
+    console.log(`📊 Total inyectado: ${customersData.length} clientes distribuidos en las 20 empresas.`);
+    console.log(`====================================\n`);
+}
+
+// Bloque de ejecución segura e independiente por si deseas correrlo directo en terminal: node prisma/seeds/customer.seed.js
+if (require.main === module) {
+    customerSeed()
+        .catch((e) => {
+            console.error("❌ Error detectado en el proceso de seed de clientes:", e);
+            process.exit(1);
+        })
+        .finally(async () => {
+            await prisma.$disconnect();
+        });
 }
 
 module.exports = {

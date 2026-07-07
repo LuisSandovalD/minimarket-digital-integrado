@@ -1,68 +1,24 @@
-import { motion } from "framer-motion";
-
-import {
-  BarChart3,
-  Boxes,
-  Building2,
-  Database,
-  ShieldCheck,
-} from "lucide-react";
-
-import {
-  defaultViewport,
-  fadeScale,
-  fadeUp,
-  hoverLift,
-  hoverScale,
-  smoothTransition,
-  springTransition,
-  staggerContainer,
-} from "@/components/effects";
-
 import dashboardImage from "@/assets/imagenes/modules/hero/dashboard-modules.svg";
 import heroBackground from "@/assets/imagenes/modules/hero/modules-hero-bg.svg";
-
-const modulesFeatures = [
-  {
-    icon: BarChart3,
-    title: "Analíticas",
-    desc: "KPIs y reportes en tiempo real",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Seguridad",
-    desc: "Roles, permisos y auditoría",
-  },
-  {
-    icon: Building2,
-    title: "Multiempresa",
-    desc: "Gestiona múltiples negocios",
-  },
-  {
-    icon: Database,
-    title: "Inventario",
-    desc: "Control inteligente de stock",
-  },
-];
+import {
+  fadeScale,
+  fadeUp,
+  smoothTransition,
+  staggerContainer,
+} from "@/components/effects";
+import { motion } from "framer-motion";
+import { Boxes } from "lucide-react";
+import { modulesFeatures } from "../constants/modules";
 
 export default function ModulesHeroSection() {
   return (
-    <section
-      className="
-        relative isolate
-        flex items-center justify-center
-        w-full overflow-hidden
-        px-4 py-14
-        sm:px-6 md:px-8
-        lg:h-[92vh] lg:py-0 lg:px-10
-      "
-    >
-      {/* BACKGROUND */}
-      <div className="absolute inset-0 -z-20">
+    <section className="relative isolate flex items-center justify-center w-full overflow-hidden px-4 py-14 sm:px-6 md:px-8 lg:h-[75vh] lg:py-0 lg:px-10 z-10">
+      {/* BACKGROUND OPTIMIZADO */}
+      <div className="absolute inset-0 -z-20 transform-gpu">
         <motion.img
-          initial={{ scale: 1.1, opacity: 0 }}
+          initial={{ scale: 1.05, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
           src={heroBackground}
           alt="ERP Modules"
           className="h-full w-full object-cover"
@@ -71,106 +27,95 @@ export default function ModulesHeroSection() {
         <div className="absolute inset-0 bg-white/20 dark:bg-black/30" />
       </div>
 
-      {/* GLOW EFFECTS */}
-      <motion.div
-        animate={{ opacity: [0.4, 0.7, 0.4], scale: [1, 1.05, 1] }}
-        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute left-0 top-0 -z-10 h-96 w-96 rounded-full bg-[#6096ba]/15 blur-3xl"
-      />
-      <motion.div
-        animate={{ opacity: [0.3, 0.6, 0.3], scale: [1, 1.08, 1] }}
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute bottom-0 right-0 -z-10 h-96 w-96 rounded-full bg-[#274c77]/10 blur-3xl dark:bg-[#274c77]/30"
-      />
+      {/* CAPAS DE LUZ ULTRA-SUAVE (GLOW EFFECTS) */}
+      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden transform-gpu">
+        <div className="absolute left-0 top-0 h-96 w-96 rounded-full bg-[#6096ba]/10 blur-[120px]" />
+        <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-[#274c77]/10 blur-[120px] dark:bg-[#274c77]/20" />
+      </div>
 
       <div className="w-full max-w-7xl">
-        <div className="grid items-center gap-16 lg:grid-cols-2">
-          {/* LEFT */}
+        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+          {/* LADO IZQUIERDO: CONTENIDO COMPACTO */}
           <motion.div
             variants={staggerContainer}
             initial="hidden"
             animate="show"
+            className="transform-gpu flex flex-col justify-center"
           >
-            {/* BADGE */}
+            {/* BADGE UNIFICADO */}
             <motion.div
               variants={fadeUp}
               transition={smoothTransition}
-              className="inline-flex items-center gap-2 rounded-full border border-[#d7e0e7] bg-white/70 px-5 py-2.5 text-sm font-semibold tracking-wide text-[#274c77] shadow-lg shadow-[#274c77]/5 backdrop-blur-xl dark:border-white/10 dark:bg-white/5 dark:text-[#dbeafe]"
+              className="inline-flex w-fit items-center gap-2 rounded-full border border-[#274c77]/10 bg-white/80 px-4 py-1.5 text-xs font-semibold tracking-wide text-[#274c77] shadow-sm backdrop-blur-md dark:border-white/10 dark:bg-white/5 dark:text-[#a3cef1]"
             >
-              <Boxes size={16} />
+              <Boxes size={14} />
               Módulos ERP Inteligentes
             </motion.div>
 
-            {/* TITLE */}
+            {/* TÍTULO PRINCIPAL */}
             <motion.h2
               variants={fadeUp}
               transition={smoothTransition}
-              className="mt-5 text-4xl font-black leading-tight tracking-tight text-[#0f172a] md:text-5xl xl:text-6xl dark:text-white"
+              className="mt-4 text-4xl font-black leading-tight tracking-tight text-[#0f172a] md:text-5xl xl:text-6.5xl dark:text-white"
             >
-              Explora todos los módulos
+              Explora los módulos
               <span className="mt-1 block bg-gradient-to-r from-[#274c77] via-[#365d86] to-[#6096ba] bg-clip-text text-transparent dark:from-[#a3cef1] dark:via-white dark:to-[#6096ba]">
                 que impulsan tu negocio
               </span>
             </motion.h2>
 
-            {/* DESCRIPTION */}
+            {/* DESCRIPCIÓN */}
             <motion.p
               variants={fadeUp}
               transition={smoothTransition}
-              className="mt-4 max-w-2xl text-base leading-relaxed text-[#365d86] dark:text-[#cbd5e1]"
+              className="mt-4 max-w-xl text-sm md:text-base leading-relaxed text-[#5b6472] dark:text-[#cbd5e1]"
             >
-              Descubre una colección completa de módulos diseñados para
-              administrar ventas, inventario, compras, clientes, reportes,
-              sucursales y mucho más desde una sola plataforma.
+              Descubre una colección completa de herramientas integradas para
+              administrar cada área de tu empresa desde un único ecosistema
+              nativo de alto rendimiento.
             </motion.p>
 
-            {/* FEATURES */}
-            <motion.div
-              variants={staggerContainer}
-              className="mt-6 grid gap-3 sm:grid-cols-2"
-            >
-              {modulesFeatures.map((item) => {
-                const Icon = item.icon;
-                return (
-                  <motion.div
-                    key={item.title}
-                    variants={fadeScale}
-                    transition={springTransition}
-                    whileHover={hoverLift}
-                    className="rounded-2xl border border-[#d7e0e7] bg-white/60 p-3.5 shadow-lg shadow-[#274c77]/5 backdrop-blur-xl dark:border-white/10 dark:bg-white/5"
-                  >
-                    <motion.div whileHover={hoverScale}>
+            {/* SECCIÓN COMPACTADA: Mención rápida en micro-badges */}
+            <div className="mt-6">
+              <p className="text-xs font-bold uppercase tracking-wider text-[#274c77]/70 dark:text-[#a3cef1]/70 mb-3">
+                Áreas principales incluidas:
+              </p>
+              <div className="flex flex-wrap gap-2 max-w-xl">
+                {modulesFeatures.map((item, index) => {
+                  const Icon = item.icon || Boxes;
+                  return (
+                    <motion.div
+                      key={item.title}
+                      variants={fadeScale}
+                      transition={{ duration: 0.3, delay: index * 0.02 }}
+                      className="inline-flex items-center gap-2 rounded-xl border border-[#274c77]/10 bg-white/40 px-3 py-1.5 text-xs font-medium text-[#0f172a] backdrop-blur-sm dark:border-white/5 dark:bg-white/[0.03] dark:text-slate-200"
+                    >
                       <Icon
-                        size={22}
+                        size={12}
                         className="text-[#274c77] dark:text-[#a3cef1]"
                       />
+                      <span>{item.title}</span>
                     </motion.div>
-                    <h3 className="mt-2.5 font-bold text-[#0f172a] dark:text-white">
-                      {item.title}
-                    </h3>
-                    <p className="mt-0.5 text-sm text-[#365d86] dark:text-[#cbd5e1]">
-                      {item.desc}
-                    </p>
-                  </motion.div>
-                );
-              })}
-            </motion.div>
+                  );
+                })}
+              </div>
+            </div>
           </motion.div>
 
-          {/* RIGHT */}
+          {/* LADO DERECHO: DASHBOARD PREVIEW */}
           <motion.div
-            initial={{ opacity: 0, x: 70, scale: 0.9 }}
-            whileInView={{ opacity: 1, x: 0, scale: 1 }}
-            viewport={defaultViewport}
-            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-            className="relative h-full w-full"
+            initial={{ opacity: 0, scale: 0.97 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="relative flex items-center justify-center w-full lg:h-full transform-gpu"
           >
             <motion.img
-              whileHover={{ scale: 1.03, rotate: 0.3 }}
-              transition={{ duration: 0.4 }}
+              whileHover={{ scale: 1.01 }}
+              transition={{ duration: 0.3 }}
               src={dashboardImage}
-              alt="ERP Dashboard"
-              className="absolute inset-0 h-full w-full object-contain"
+              alt="ERP Dashboard Preview"
+              className="w-full h-auto max-h-[40vh] lg:max-h-[55vh] object-contain drop-shadow-2xl"
             />
           </motion.div>
         </div>

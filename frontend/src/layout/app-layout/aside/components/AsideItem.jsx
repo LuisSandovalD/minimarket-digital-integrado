@@ -1,5 +1,4 @@
 import { Link, useParams } from "react-router-dom";
-
 import AsideBadge from "./AsideBadge";
 
 export default function AsideItem({
@@ -17,62 +16,21 @@ export default function AsideItem({
     <Link
       to={`/${companySlug}/${href}`}
       onClick={onClick}
-      className={`
-        group
-
-        flex
-        items-center
-        gap-3
-
-        px-3
-        py-3
-
-        rounded-xl
-
-        transition-all
-        duration-200
-
-        ${
-          isActive
-            ? `
-              bg-indigo-500
-              text-white
-              shadow-lg
-            `
-            : `
-              text-slate-600
-              dark:text-slate-300
-
-              hover:bg-slate-100
-              dark:hover:bg-slate-800
-            `
-        }
-
-        ${isCollapsed ? "md:justify-center" : ""}
-      `}
+      className={`relative group flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 ${
+        isActive
+          ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/20 border border-indigo-500"
+          : "text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white"
+      } ${isCollapsed ? "md:justify-center" : ""}`}
     >
-      {/* ICON */}
-      <Icon
-        className="
-          h-5
-          w-5
-          flex-shrink-0
-        "
-      />
+      {isActive && (
+        <div className="absolute left-0 top-2 bottom-2 w-1 rounded-r-full bg-white" />
+      )}
 
-      {/* CONTENT */}
+      <Icon className={`h-5 w-5 shrink-0 ${isActive ? "text-white" : ""}`} />
+
       {!isCollapsed && (
         <>
-          <span
-            className="
-              flex-1
-
-              text-sm
-              font-medium
-            "
-          >
-            {label}
-          </span>
+          <span className="flex-1 text-sm font-medium truncate">{label}</span>
 
           <AsideBadge value={badge} />
         </>

@@ -1,79 +1,20 @@
-const router =
-  require("express").Router();
+const router = require("express").Router();
+const auth = require("../../../middleware/auth");
+const roleCheck = require("../../../middleware/roleCheck");
+const controller = require("../controllers/company.controller");
 
-const auth =
-  require("../../../middleware/auth");
+router.get("/me", auth, roleCheck("ADMIN", "MANAGER", "SUPERVISOR", "EMPLOYEE", "VIEWER"), controller.getMyCompany);
 
-const controller =
-  require("../controllers/company.controller");
+router.get("/users", auth, roleCheck("ADMIN", "MANAGER", "SUPERVISOR", "SUPPORT"), controller.getCompanyUsers);
+router.get("/users/admins", auth, roleCheck("ADMIN", "MANAGER", "SUPPORT"), controller.getAdmins);
+router.get("/users/employees", auth, roleCheck("ADMIN", "MANAGER", "SUPERVISOR", "EMPLOYEE", "VIEWER", "SUPPORT"), controller.getEmployees);
 
-/* ========================================
- * MY COMPANY
- * ====================================== */
+router.get("/slug/:slug", controller.getCompanyBySlug);
+router.get("/", auth, roleCheck("ADMIN", "SUPPORT"), controller.getCompanies);
+router.get("/:id", auth, roleCheck("ADMIN", "MANAGER", "SUPERVISOR", "SUPPORT"), controller.getCompanyById);
 
-router.get(
-  "/me",
-  auth,
-  controller.getMyCompany
-);
-
-/* ========================================
- * GET ALL
- * ====================================== */
-
-router.get(
-  "/",
-  auth,
-  controller.getCompanies
-);
-
-/* ========================================
- * GET BY SLUG
- * ====================================== */
-
-router.get(
-  "/slug/:slug",
-  controller.getCompanyBySlug
-);
-
-/* ========================================
- * GET BY ID
- * ====================================== */
-
-router.get(
-  "/:id",
-  auth,
-  controller.getCompanyById
-);
-
-/* ========================================
- * CREATE
- * ====================================== */
-
-router.post(
-  "/",
-  auth,
-  controller.createCompany
-);
-
-/* ========================================
- * UPDATE
- * ====================================== */
-
-router.put(
-  "/:id",
-  auth,
-  controller.updateCompany
-);
-
-/* ========================================
- * DELETE
- * ====================================== */
-
-router.delete(
-  "/:id",
-  auth,
-  controller.deleteCompany
-);
+router.post("/", auth, roleCheck("ADMIN", "SUPPORT"), controller.createCompany);
+router.put("/:id", auth, roleCheck("ADMIN", "MANAGER", "SUPPORT"), controller.updateCompany);
+router.delete("/:id", auth, roleCheck("ADMIN"), controller.deleteCompany);
 
 module.exports = router;

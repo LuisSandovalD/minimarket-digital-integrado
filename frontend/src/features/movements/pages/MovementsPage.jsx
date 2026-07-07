@@ -2,73 +2,59 @@
 // features/movements/pages/MovementsPage.jsx
 // ========================================
 
+import MovementFilters from "../components/MovementFilters";
+import MovementsHeader from "../components/MovementsHeader";
+import MovementsLoading from "../components/MovementsLoading";
+import MovementsTable from "../components/MovementsTable";
 import useMovements from "../hooks/useMovements";
 
-import MovementsHeader from "../components/MovementsHeader";
-
-import MovementSearch from "../components/MovementSearch";
-
-import MovementsTable from "../components/MovementsTable";
-
-import MovementsLoading from "../components/MovementsLoading";
-
-// ========================================
-// PAGE
-// ========================================
-
 export default function MovementsPage() {
-  // ========================================
-  // HOOK
-  // ========================================
-
   const {
     movements,
-
+    pagination,
     loading,
-
-    search,
-
-    setSearch,
-
+    filters,
+    updateFilters,
+    nextPage,
+    prevPage,
     refetch,
   } = useMovements();
 
-  // ========================================
-  // LOADING
-  // ========================================
+  const handleSearch = (values) => {
+    updateFilters(values);
+  };
 
+  const handleClear = () => {
+    updateFilters({
+      search: "",
+      branchId: "",
+      productId: "",
+      type: "",
+    });
+  };
+
+  // Si está cargando (al buscar o paginar), bloquea y recarga toda la página con el loader global
   if (loading) {
     return <MovementsLoading />;
   }
 
-  // ========================================
-  // RENDER
-  // ========================================
-
   return (
-    <div
-      className="
-      p-6
-      space-y-6
-    "
-    >
-      {/* ======================================== */}
-      {/* HEADER */}
-      {/* ======================================== */}
-
+    <div className="space-y-6 p-6">
       <MovementsHeader movements={movements} onRefresh={refetch} />
 
-      {/* ======================================== */}
-      {/* SEARCH */}
-      {/* ======================================== */}
+      <MovementFilters
+        loading={loading}
+        onSearch={handleSearch}
+        onClear={handleClear}
+      />
 
-      <MovementSearch value={search} onChange={setSearch} />
-
-      {/* ======================================== */}
-      {/* TABLE */}
-      {/* ======================================== */}
-
-      <MovementsTable movements={movements} loading={loading} />
+      <MovementsTable
+        movements={movements}
+        page={pagination?.page ?? 1}
+        totalPages={pagination?.totalPages ?? 1}
+        onNextPage={nextPage}
+        onPrevPage={prevPage}
+      />
     </div>
   );
 }

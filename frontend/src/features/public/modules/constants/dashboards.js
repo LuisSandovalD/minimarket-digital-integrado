@@ -1,17 +1,29 @@
 // models/constants/dashboards.js
+import { Globe, ShieldCheck, TrendingUp, Zap } from "lucide-react";
 
 export const dashboards = [
   {
-    title: "Dashboard Ejecutivo",
-
-    image:
-      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop",
+    icon: TrendingUp,
+    subtitle: "Métricas",
+    value: "Analíticas",
+    description: "Monitoreo en tiempo real de transacciones",
   },
-
   {
-    title: "Dashboard Financiero",
-
-    image:
-      "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2015&auto=format&fit=crop",
+    icon: ShieldCheck,
+    subtitle: "Protección",
+    value: "Seguridad",
+    description: "Cifrado de extremo a extremo y roles",
+  },
+  {
+    icon: Zap,
+    subtitle: "Velocidad",
+    value: "Rendimiento",
+    description: "Optimización de consultas en milisegundos",
+  },
+  {
+    icon: Globe,
+    subtitle: "Global",
+    value: "Sincronización",
+    description: "Múltiples sucursales interconectadas",
   },
 ];

@@ -1,8 +1,11 @@
 import api from "@/api/axios";
 
-export const getUnits = async () => {
-  const { data } = await api.get("/unit");
-  return data.data;
+export const getUnits = async (params = {}) => {
+  const { data } = await api.get("/unit", {
+    params,
+  });
+
+  return data;
 };
 
 export const createUnit = async (payload) => {

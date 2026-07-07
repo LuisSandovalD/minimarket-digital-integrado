@@ -3,7 +3,6 @@
 // ========================================
 
 import { useMemo, useState } from "react";
-
 import { createUser, updateUser } from "../services/users.service";
 
 // ========================================
@@ -29,10 +28,6 @@ const INITIAL_STATE = {
 // ========================================
 
 export default function useUserForm({ user, onClose, onSuccess }) {
-  // ========================================
-  // EDIT MODE
-  // ========================================
-
   const isEdit = !!user;
 
   // ========================================
@@ -40,9 +35,7 @@ export default function useUserForm({ user, onClose, onSuccess }) {
   // ========================================
 
   const initialFormData = useMemo(() => {
-    if (!user) {
-      return INITIAL_STATE;
-    }
+    if (!user) return INITIAL_STATE;
 
     return {
       name: user.name || "",
@@ -64,8 +57,8 @@ export default function useUserForm({ user, onClose, onSuccess }) {
   // ========================================
 
   const [loading, setLoading] = useState(false);
-
   const [formData, setFormData] = useState(initialFormData);
+  const [formError, setFormError] = useState("");
 
   // ========================================
   // HANDLE CHANGE
@@ -74,10 +67,19 @@ export default function useUserForm({ user, onClose, onSuccess }) {
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
 
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+    setFormData((prev) => {
+      const updated = {
+        ...prev,
+        [name]: type === "checkbox" ? checked : value,
+      };
+
+      // Si cambia el rol, reiniciamos el managerId ya que cambian los filtros jerárquicos
+      if (name === "role") {
+        updated.managerId = "";
+      }
+
+      return updated;
+    });
   };
 
   // ========================================
@@ -86,18 +88,15 @@ export default function useUserForm({ user, onClose, onSuccess }) {
 
   const handleImageChange = (e) => {
     const file = e.target.files?.[0];
-
     if (!file) return;
 
     const reader = new FileReader();
-
     reader.onloadend = () => {
       setFormData((prev) => ({
         ...prev,
         avatar: reader.result,
       }));
     };
-
     reader.readAsDataURL(file);
   };
 
@@ -107,6 +106,7 @@ export default function useUserForm({ user, onClose, onSuccess }) {
 
   const resetForm = () => {
     setFormData(INITIAL_STATE);
+    setFormError("");
   };
 
   // ========================================
@@ -114,17 +114,10 @@ export default function useUserForm({ user, onClose, onSuccess }) {
   // ========================================
 
   const validateForm = () => {
-    if (!formData.name) {
-      throw new Error("El nombre es obligatorio");
-    }
-
-    if (!formData.email) {
-      throw new Error("El email es obligatorio");
-    }
-
-    if (!isEdit && !formData.password) {
+    if (!formData.name.trim()) throw new Error("El nombre es obligatorio");
+    if (!formData.email.trim()) throw new Error("El email es obligatorio");
+    if (!isEdit && !formData.password)
       throw new Error("La contraseña es obligatoria");
-    }
   };
 
   // ========================================
@@ -132,10 +125,9 @@ export default function useUserForm({ user, onClose, onSuccess }) {
   // ========================================
 
   const buildPayload = () => {
-    return {
+    const payload = {
       name: formData.name,
       email: formData.email,
-      password: formData.password,
       role: formData.role,
       phone: formData.phone,
       avatar: formData.avatar,
@@ -144,6 +136,12 @@ export default function useUserForm({ user, onClose, onSuccess }) {
       isActive: formData.isActive,
       twoFactorEnabled: formData.twoFactorEnabled,
     };
+
+    if (!isEdit || formData.password) {
+      payload.password = formData.password;
+    }
+
+    return payload;
   };
 
   // ========================================
@@ -152,52 +150,33 @@ export default function useUserForm({ user, onClose, onSuccess }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (loading) return;
 
     try {
       setLoading(true);
-
+      setFormError("");
       validateForm();
 
       const payload = buildPayload();
-
       let response;
-
-      // ====================================
-      // UPDATE
-      // ====================================
 
       if (isEdit) {
         response = await updateUser(user.id, payload);
-      }
-
-      // ====================================
-      // CREATE
-      // ====================================
-      else {
+      } else {
         response = await createUser(payload);
       }
 
-      // ====================================
-      // UPDATE UI INSTANTLY
-      // ====================================
+      const savedUser = response?.data || response;
 
-      onSuccess?.(response, isEdit);
-
-      // ====================================
-      // CLOSE MODAL
-      // ====================================
+      if (onSuccess) {
+        onSuccess(savedUser, isEdit);
+      }
 
       onClose?.();
-
-      // ====================================
-      // RESET
-      // ====================================
-
       resetForm();
     } catch (error) {
       console.error("Error saving user:", error);
+      setFormError(error.message || "Ocurrió un error al guardar el usuario");
     } finally {
       setLoading(false);
     }
@@ -210,6 +189,7 @@ export default function useUserForm({ user, onClose, onSuccess }) {
   return {
     loading,
     formData,
+    formError,
     isEdit,
     handleChange,
     handleImageChange,

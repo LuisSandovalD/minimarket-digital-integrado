@@ -1,8 +1,3 @@
-// ============================================================================
-// features/purchase/hooks/usePurchase.js
-// HOOK PRINCIPAL: Peticiones asíncronas y operaciones CRUD de Órdenes de Compra
-// ============================================================================
-
 import { useCallback, useEffect, useState } from "react";
 import {
   createPurchaseService,
@@ -15,65 +10,156 @@ export default function usePurchase() {
   // ========================================
   // STATES
   // ========================================
+
   const [purchases, setPurchases] = useState([]);
+
+  const [pagination, setPagination] = useState({
+    page: 1,
+    limit: 10,
+    total: 0,
+    totalPages: 0,
+    hasNext: false,
+    hasPrevious: false,
+  });
+
+  const [filters, setFilters] = useState({
+    page: 1,
+    limit: 10,
+    search: "",
+    status: "",
+    supplierId: "",
+    buyerId: "",
+    branchId: "",
+    startDate: "",
+    endDate: "",
+    sortBy: "createdAt",
+    sortOrder: "desc",
+  });
+
   const [loading, setLoading] = useState(false);
   const [actionLoading, setActionLoading] = useState(false);
 
   // ========================================
-  // FETCH PURCHASES
+  // FETCH
   // ========================================
-  const fetchPurchases = useCallback(async () => {
-    try {
-      setLoading(true);
-      const response = await getPurchasesService();
-      console.log("PURCHASE RESPONSE:", response);
 
-      const purchasesData = response?.data || [];
-      setPurchases(Array.isArray(purchasesData) ? purchasesData : []);
-    } catch (error) {
-      console.error("GET PURCHASES ERROR:", error);
-      setPurchases([]);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  const fetchPurchases = useCallback(
+    async (newFilters = {}) => {
+      try {
+        setLoading(true);
+
+        const params = {
+          ...filters,
+          ...newFilters,
+        };
+
+        const response = await getPurchasesService(params);
+
+        setPurchases(response.data || []);
+
+        setPagination(
+          response.pagination || {
+            page: 1,
+            limit: 10,
+            total: 0,
+            totalPages: 0,
+            hasNext: false,
+            hasPrevious: false,
+          },
+        );
+
+        setFilters(params);
+      } catch (error) {
+        console.error(error);
+        setPurchases([]);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [filters],
+  );
 
   // ========================================
-  // CREATE PURCHASE
+  // SEARCH
   // ========================================
+
+  function searchPurchases(searchFilters) {
+    fetchPurchases({
+      ...searchFilters,
+      page: 1,
+    });
+  }
+
+  // ========================================
+  // CLEAR FILTERS
+  // ========================================
+
+  function clearFilters() {
+    fetchPurchases({
+      page: 1,
+      limit: 10,
+      search: "",
+      status: "",
+      supplierId: "",
+      buyerId: "",
+      branchId: "",
+      startDate: "",
+      endDate: "",
+      sortBy: "createdAt",
+      sortOrder: "desc",
+    });
+  }
+
+  // ========================================
+  // CHANGE PAGE
+  // ========================================
+
+  function changePage(page) {
+    fetchPurchases({
+      page,
+    });
+  }
+
+  // ========================================
+  // CHANGE LIMIT
+  // ========================================
+
+  function changeLimit(limit) {
+    fetchPurchases({
+      page: 1,
+      limit,
+    });
+  }
+
+  // ========================================
+  // CREATE
+  // ========================================
+
   async function createPurchase(form) {
     try {
       setActionLoading(true);
 
-      // VALIDATE DETAILS
-      if (!form || !Array.isArray(form.details) || form.details.length === 0) {
-        throw new Error("Debe agregar productos");
+      if (!form.details?.length) {
+        throw new Error("Debe agregar productos.");
       }
 
-      // NORMALIZE DETAILS (Alineado con el modal)
-      const details = form.details.map((item) => ({
-        productId: Number(item.productId),
-        quantity: Number(item.quantity),
-        costPrice: Number(item.costPrice || 0),
-      }));
-
-      // PAYLOAD STRUCT
       const payload = {
         supplierId: Number(form.supplierId),
         notes: form.notes || "",
-        details,
+        details: form.details.map((item) => ({
+          productId: Number(item.productId),
+          quantity: Number(item.quantity),
+          costPrice: Number(item.costPrice),
+        })),
       };
 
-      console.log("CREATE PURCHASE PAYLOAD:", payload);
-
-      // REQUEST
       await createPurchaseService(payload);
 
-      // REFRESH
       await fetchPurchases();
+
       return true;
     } catch (error) {
-      console.error("CREATE PURCHASE ERROR:", error.response?.data || error);
+      console.error(error);
       return false;
     } finally {
       setActionLoading(false);
@@ -81,16 +167,20 @@ export default function usePurchase() {
   }
 
   // ========================================
-  // UPDATE PURCHASE
+  // UPDATE
   // ========================================
+
   async function updatePurchase(id, data) {
     try {
       setActionLoading(true);
+
       await updatePurchaseService(id, data);
+
       await fetchPurchases();
+
       return true;
     } catch (error) {
-      console.error("UPDATE PURCHASE ERROR:", error.response?.data || error);
+      console.error(error);
       return false;
     } finally {
       setActionLoading(false);
@@ -98,16 +188,20 @@ export default function usePurchase() {
   }
 
   // ========================================
-  // DELETE PURCHASE
+  // DELETE
   // ========================================
+
   async function deletePurchase(id) {
     try {
       setActionLoading(true);
+
       await deletePurchaseService(id);
+
       await fetchPurchases();
+
       return true;
     } catch (error) {
-      console.error("DELETE PURCHASE ERROR:", error.response?.data || error);
+      console.error(error);
       return false;
     } finally {
       setActionLoading(false);
@@ -117,16 +211,26 @@ export default function usePurchase() {
   // ========================================
   // INIT
   // ========================================
+
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchPurchases();
-  }, [fetchPurchases]);
+  }, []);
 
   return {
     purchases,
+
+    filters,
+    pagination,
+
     loading,
     actionLoading,
+
     fetchPurchases,
+    searchPurchases,
+    clearFilters,
+    changePage,
+    changeLimit,
+
     createPurchase,
     updatePurchase,
     deletePurchase,

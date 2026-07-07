@@ -9,40 +9,40 @@ const service =
 // GET ALL
 // ========================================
 
-exports.getInventories =
-  async (
-    req,
-    res
-  ) => {
+exports.getInventories = async (req, res) => {
+  try {
+    const result = await service.getAll({
+      companyId: req.user.companyId,
 
-    try {
+      page: req.query.page,
+      limit: req.query.limit,
 
-      const inventories =
-        await service.getAll(
-          req.user.companyId
-        );
+      search: req.query.search,
 
-      res.json({
+      branchId: req.query.branchId,
+      categoryId: req.query.categoryId,
 
-        success: true,
+      stockStatus: req.query.stockStatus,
+      minStock: req.query.minStock,
 
-        data:
-          inventories,
-      });
+      sortBy: req.query.sortBy,
+      order: req.query.order,
+    });
 
-    } catch (error) {
+    res.status(200).json({
+      success: true,
+      data: result.data,
+      pagination: result.pagination,
+    });
+  } catch (error) {
+    console.error("Error obteniendo inventario:", error);
 
-      res.status(500).json({
-
-        success: false,
-
-        message:
-          error.message,
-      });
-
-    }
-
-  };
+    res.status(500).json({
+      success: false,
+      message: error.message || "Error interno del servidor.",
+    });
+  }
+};
 
 // ========================================
 // GET BY ID

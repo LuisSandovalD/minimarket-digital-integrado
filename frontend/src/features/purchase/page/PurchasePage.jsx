@@ -1,6 +1,4 @@
-// ========================================
 // features/purchase/pages/PurchasePage.jsx
-// ========================================
 
 import { useMemo, useState } from "react";
 
@@ -8,6 +6,7 @@ import useProducts from "@/features/product/hooks/useProducts";
 import useSuppliers from "@/features/supplier/hooks/useSuppliers";
 import usePurchase from "../hooks/usePurchase";
 
+import PurchaseFilters from "../components/PurchaseFilters";
 import PurchaseFormModal from "../components/PurchaseFormModal";
 import PurchaseHeader from "../components/PurchaseHeader";
 import PurchaseLoading from "../components/PurchaseLoading";
@@ -17,8 +16,6 @@ import { mapPurchaseToForm } from "../utils/purchase-form.mapper";
 import { initialPurchaseForm } from "../utils/purchase-form.util";
 import { getPurchaseStats } from "../utils/purchase-stats.util";
 
-// Hook interno del stepper (paso actual, next, previous)
-
 export default function PurchasePage() {
   // ========================================
   // HOOKS
@@ -26,14 +23,26 @@ export default function PurchasePage() {
 
   const {
     purchases,
+
+    pagination,
+    filters,
+
     loading,
     actionLoading,
+
+    searchPurchases,
+    clearFilters,
+
+    changePage,
+    changeLimit,
+
     createPurchase,
     updatePurchase,
     deletePurchase,
   } = usePurchase();
 
   const { suppliers, loading: loadingSuppliers } = useSuppliers();
+
   const { products, loading: loadingProducts } = useProducts();
 
   // ========================================
@@ -41,10 +50,11 @@ export default function PurchasePage() {
   // ========================================
 
   const [editingId, setEditingId] = useState(null);
+
   const [openModal, setOpenModal] = useState(false);
+
   const [form, setForm] = useState(initialPurchaseForm);
 
-  // Control del stepper (paso 1, 2, 3)
   const [step, setStep] = useState(1);
 
   // ========================================
@@ -54,25 +64,13 @@ export default function PurchasePage() {
   const stats = useMemo(() => getPurchaseStats(purchases), [purchases]);
 
   // ========================================
-  // PAGE LOADING
+  // LOADING
   // ========================================
 
   const pageLoading = loading || loadingSuppliers || loadingProducts;
 
   // ========================================
-  // STEPPER HANDLERS
-  // ========================================
-
-  function handleNext() {
-    setStep((prev) => Math.min(prev + 1, 3));
-  }
-
-  function handlePrevious() {
-    setStep((prev) => Math.max(prev - 1, 1));
-  }
-
-  // ========================================
-  // RESET FORM
+  // FORM
   // ========================================
 
   function resetForm() {
@@ -82,88 +80,86 @@ export default function PurchasePage() {
     setOpenModal(false);
   }
 
-  // ========================================
-  // CREATE
-  // ========================================
-
   function handleCreate() {
     setEditingId(null);
-    setForm({ ...initialPurchaseForm, branchId: 1 });
+
+    setForm({
+      ...initialPurchaseForm,
+      branchId: 1,
+    });
+
     setStep(1);
+
     setOpenModal(true);
   }
-
-  // ========================================
-  // SUBMIT
-  // FIX: incluye batchNumber y expirationDate del carrito
-  // ========================================
 
   async function handleSubmit(e) {
     e.preventDefault();
 
-    try {
-      const finalPayload = {
-        supplierId: Number(form.supplierId),
-        branchId: Number(form.branchId),
-        notes: form.notes || "",
-        details: form.details.map((item) => ({
-          productId: Number(item.productId),
-          quantity: Number(item.quantity),
-          costPrice: Number(item.costPrice),
-          batchNumber: item.batchNumber || null,
-          expirationDate: item.expirationDate || null,
-        })),
-      };
+    const payload = {
+      supplierId: Number(form.supplierId),
+      branchId: Number(form.branchId),
+      notes: form.notes || "",
 
-      console.log("FINAL PURCHASE PAYLOAD:", finalPayload);
+      details: form.details.map((item) => ({
+        productId: Number(item.productId),
+        quantity: Number(item.quantity),
+        costPrice: Number(item.costPrice),
+        batchNumber: item.batchNumber || null,
+        expirationDate: item.expirationDate || null,
+      })),
+    };
 
-      let success = false;
+    let success = false;
 
-      if (editingId) {
-        success = await updatePurchase(editingId, finalPayload);
-      } else {
-        success = await createPurchase(finalPayload);
-      }
-
-      if (success) resetForm();
-    } catch (error) {
-      console.error("SUBMIT PURCHASE ERROR:", error);
-      alert("Error guardando compra");
+    if (editingId) {
+      success = await updatePurchase(editingId, payload);
+    } else {
+      success = await createPurchase(payload);
     }
-  }
 
-  // ========================================
-  // EDIT
-  // ========================================
+    if (success) resetForm();
+  }
 
   function handleEdit(purchase) {
     setEditingId(purchase.id);
+
     setForm(mapPurchaseToForm(purchase));
+
     setStep(1);
+
     setOpenModal(true);
   }
 
-  // ========================================
-  // DELETE
-  // ========================================
-
   async function handleDelete(purchase) {
-    const confirmDelete = window.confirm("¿Eliminar compra?");
-    if (!confirmDelete) return;
+    if (!window.confirm("¿Eliminar compra?")) return;
 
-    try {
-      await deletePurchase(purchase.id);
-    } catch (error) {
-      console.error("DELETE PURCHASE ERROR:", error);
-      alert("Error eliminando compra");
+    await deletePurchase(purchase.id);
+  }
+
+  // ========================================
+  // PAGINATION
+  // ========================================
+
+  function handleNextPage() {
+    if (pagination.hasNext) {
+      changePage(filters.page + 1);
+    }
+  }
+
+  function handlePrevPage() {
+    if (pagination.hasPrevious) {
+      changePage(filters.page - 1);
     }
   }
 
   // ========================================
-  // LOADING SCREEN
+  // LOADING
   // ========================================
 
-  if (pageLoading) return <PurchaseLoading />;
+  if (pageLoading) {
+    return <PurchaseLoading />;
+  }
 
   // ========================================
   // RENDER
@@ -178,14 +174,28 @@ export default function PurchasePage() {
         onCreate={handleCreate}
       />
 
+      <PurchaseFilters
+        filters={filters}
+        suppliers={suppliers}
+        onSearch={searchPurchases}
+        onClear={clearFilters}
+      />
+
       <PurchaseTable
         purchases={purchases}
-        loading={false}
+        page={pagination.page}
+        limit={pagination.limit}
+        total={pagination.total}
+        totalPages={pagination.totalPages}
+        hasNext={pagination.hasNext}
+        hasPrevious={pagination.hasPrevious}
+        onPrevPage={handlePrevPage}
+        onNextPage={handleNextPage}
+        onLimitChange={changeLimit}
         onEdit={handleEdit}
         onDelete={handleDelete}
       />
 
-      {/* FIX: props alineados con lo que PurchaseFormModal espera */}
       <PurchaseFormModal
         open={openModal}
         onClose={resetForm}
@@ -197,8 +207,8 @@ export default function PurchasePage() {
         setForm={setForm}
         step={step}
         setStep={setStep}
-        handleNext={handleNext}
-        handlePrevious={handlePrevious}
+        handleNext={() => setStep((s) => Math.min(s + 1, 3))}
+        handlePrevious={() => setStep((s) => Math.max(s - 1, 1))}
         handleSubmit={handleSubmit}
       />
     </div>

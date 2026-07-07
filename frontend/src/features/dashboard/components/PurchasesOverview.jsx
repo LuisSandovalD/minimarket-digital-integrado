@@ -1,6 +1,5 @@
-import { AreaChart } from "@/components/data-display";
-
 import { MetricCard } from "@/components/card/";
+import { AreaChart } from "@/components/data-display";
 import {
   Calendar,
   CreditCard,
@@ -9,133 +8,161 @@ import {
   TrendingUp,
   Trophy,
 } from "lucide-react";
+import { useMemo } from "react";
 
 export default function PurchasesOverview({
   purchases = [],
   totalPurchases = 0,
   totalOrders = 0,
 }) {
-  const chartData = purchases.reduce((acc, purchase) => {
-    const date = new Date(purchase.createdAt).toLocaleDateString("es-PE", {
-      day: "2-digit",
-      month: "short",
-    });
-
-    const existing = acc.find((item) => item.date === date);
-
-    if (existing) {
-      existing.sales += Number(purchase.total);
-      existing.orders += 1;
-    } else {
-      acc.push({
-        date,
-        sales: Number(purchase.total),
-        orders: 1,
+  // ⚡ OPTIMIZACIÓN: Cálculos y agrupaciones agrupados en un único contenedor memorizado
+  const analytics = useMemo(() => {
+    // 1. Agrupación cronológica para el gráfico de área
+    const chartData = purchases.reduce((acc, purchase) => {
+      const date = new Date(purchase.createdAt).toLocaleDateString("es-PE", {
+        day: "2-digit",
+        month: "short",
       });
+
+      const existing = acc.find((item) => item.date === date);
+      if (existing) {
+        existing.sales += Number(purchase.total || 0);
+        existing.orders += 1;
+      } else {
+        acc.push({
+          date,
+          sales: Number(purchase.total || 0),
+          orders: 1,
+        });
+      }
+      return acc;
+    }, []);
+
+    // 2. Cálculo del ticket promedio de inversión
+    const averagePurchase = totalOrders > 0 ? totalPurchases / totalOrders : 0;
+
+    // 3. Extracción de métricas extremas en un solo recorrido lineal O(n) sin mutar props
+    let lastPurchase = null;
+    let highestPurchase = 0;
+
+    if (purchases.length > 0) {
+      lastPurchase = purchases[0];
+      for (let i = 0; i < purchases.length; i++) {
+        const currentTotal = Number(purchases[i].total || 0);
+
+        // Determinar la compra de mayor valor
+        if (currentTotal > highestPurchase) {
+          highestPurchase = currentTotal;
+        }
+        // Determinar la orden más reciente
+        if (
+          new Date(purchases[i].createdAt) > new Date(lastPurchase.createdAt)
+        ) {
+          lastPurchase = purchases[i];
+        }
+      }
     }
 
-    return acc;
-  }, []);
-
-  const averagePurchase = totalOrders > 0 ? totalPurchases / totalOrders : 0;
-
-  const lastPurchase =
-    purchases.length > 0
-      ? purchases.sort(
-          (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
-        )[0]
-      : null;
-
-  const highestPurchase =
-    purchases.length > 0
-      ? Math.max(...purchases.map((p) => Number(p.total || 0)))
-      : 0;
+    return {
+      chartData,
+      averagePurchase,
+      lastPurchase,
+      highestPurchase,
+    };
+  }, [purchases, totalPurchases, totalOrders]);
 
   return (
-    <div className="rounded-3xl border border-slate-200/70 dark:border-slate-800/70 bg-white/70 dark:bg-slate-900/70 p-6 shadow-sm backdrop-blur-xl">
-      {/* Header */}
+    <div className="rounded-3xl border border-slate-200/60 bg-white/60 p-6 shadow-xl shadow-slate-200/5 backdrop-blur-xl transition-shadow duration-300 dark:border-slate-800/40 dark:bg-slate-900/60 dark:shadow-none">
+      {/* 📋 ENCABEZADO */}
       <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
-          <h2 className="text-xl font-semibold text-slate-800 dark:text-white">
+          <h2 className="text-lg font-bold tracking-tight text-slate-900 dark:text-white">
             Resumen de Compras
           </h2>
-
-          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-            Evolución de compras según el período seleccionado.
+          <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+            Evolución de egresos, adquisiciones y reabastecimiento según el
+            período seleccionado.
           </p>
         </div>
       </div>
 
+      {/* 📊 GRID DE MÉTRICAS SUPERIOR */}
       <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <MetricCard
           icon={ShoppingBag}
-          label="Total Comprado"
+          subtitle="Total Comprado"
           value={`S/ ${Number(totalPurchases).toLocaleString("es-PE", {
             minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
           })}`}
-          subtext="Monto invertido en compras"
-          variant="info"
+          description="Monto invertido en mercadería"
+          variant="default"
         />
 
         <MetricCard
           icon={CreditCard}
-          label="Órdenes"
+          subtitle="Órdenes"
           value={totalOrders}
-          subtext="Compras registradas"
-          variant="success"
+          description="Compras registradas"
+          variant="default"
         />
 
         <MetricCard
           icon={TrendingUp}
-          label="Compra Promedio"
-          value={`S/ ${averagePurchase.toLocaleString("es-PE", {
+          subtitle="Compra Promedio"
+          value={`S/ ${analytics.averagePurchase.toLocaleString("es-PE", {
             minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
           })}`}
-          subtext="Promedio por orden"
-          variant="warning"
+          description="Promedio por orden de compra"
+          variant="default"
         />
 
         <MetricCard
           icon={Calendar}
-          label="Última Compra"
+          subtitle="Última Compra"
           value={
-            lastPurchase
-              ? new Date(lastPurchase.createdAt).toLocaleDateString("es-PE")
+            analytics.lastPurchase
+              ? new Date(analytics.lastPurchase.createdAt).toLocaleDateString(
+                  "es-PE",
+                )
               : "-"
           }
-          subtext="Fecha más reciente"
+          description="Fecha del registro más reciente"
           variant="default"
         />
       </div>
 
-      {/* Gráfico */}
-      <div>
+      {/* 📉 PANEL GRÁFICO CON BORDES INTEGRADOS */}
+      <div className="rounded-2xl border border-slate-100 bg-white/40 p-4 dark:border-slate-800/40 dark:bg-slate-950/20">
         <AreaChart
           title="Compras por período"
-          data={chartData}
+          data={analytics.chartData}
           dataKey="sales"
           nameKey="date"
-          className="h-[450px]"
+          className="h-[400px] w-full"
         />
       </div>
 
+      {/* 📊 GRID DE MÉTRICAS INFERIOR */}
       <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
         <MetricCard
           icon={Trophy}
-          label="Compra Más Alta"
-          value={`S/ ${highestPurchase.toLocaleString("es-PE", {
+          subtitle="Compra Más Alta"
+          value={`S/ ${analytics.highestPurchase.toLocaleString("es-PE", {
             minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
           })}`}
-          subtext="Mayor importe registrado"
-          variant="success"
+          description="Mayor importe de inversión registrado"
+          variant="default"
         />
 
         <MetricCard
           icon={FileSearch}
-          label="Registros Analizados"
+          subtitle="Registros Analizados"
           value={purchases.length}
-          subtext="Compras procesadas en el período"
-          variant="info"
+          description="Total de facturas y boletas procesadas"
+          variant="default"
         />
       </div>
     </div>

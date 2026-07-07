@@ -1,24 +1,37 @@
-import useSupplierLoad from "./useSupplierLoad";
-
-import useSupplierForm from "./useSupplierForm";
+import { useEffect } from "react";
 
 import useSupplierActions from "./useSupplierActions";
+import useSupplierFilters from "./useSupplierFilters";
+import useSupplierForm from "./useSupplierForm";
+import useSupplierLoad from "./useSupplierLoad";
 
 export default function useSupplier() {
-  // =========================
-  // LOAD
-  // =========================
-
   const {
-    suppliers,
-    loading,
+    search,
+    setSearch,
 
-    loadSuppliers,
-  } = useSupplierLoad();
+    isActive,
+    setIsActive,
 
-  // =========================
-  // FORM
-  // =========================
+    page,
+    setPage,
+
+    limit,
+    setLimit,
+
+    resetFilters,
+  } = useSupplierFilters();
+
+  const { suppliers, meta, loading, loadSuppliers } = useSupplierLoad();
+
+  useEffect(() => {
+    loadSuppliers({
+      search,
+      isActive,
+      page,
+      limit,
+    });
+  }, [search, isActive, page, limit]);
 
   const {
     form,
@@ -30,10 +43,6 @@ export default function useSupplier() {
     resetForm,
   } = useSupplierForm();
 
-  // =========================
-  // ACTIONS
-  // =========================
-
   const {
     saving,
 
@@ -42,28 +51,36 @@ export default function useSupplier() {
   } = useSupplierActions({
     form,
     editingId,
-
     resetForm,
     loadSuppliers,
   });
 
-  // =========================
-  // RETURN
-  // =========================
-
   return {
-    // DATA
     suppliers,
+    meta,
 
-    // STATES
     loading,
     saving,
 
-    // FORM
+    search,
+    setSearch,
+
+    isActive,
+    setIsActive,
+
+    page,
+    setPage,
+
+    limit,
+    setLimit,
+
+    resetFilters,
+
     form,
     editingId,
 
-    // ACTIONS
+    loadSuppliers,
+
     handleChange,
     handleSubmit,
     handleEdit,

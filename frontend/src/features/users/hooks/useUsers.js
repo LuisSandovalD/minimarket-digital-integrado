@@ -1,279 +1,117 @@
 // ========================================
-// hooks/useUsers.js
+// features/users/hooks/useUsers.js
 // ========================================
 
-import { useCallback, useEffect, useState } from "react";
-
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 import {
-  getRootUsers,
+  getHierarchy,
   getUsers,
-  getUsersByManager,
   toggleUserStatus,
 } from "../services/users.service";
 
-// ========================================
-// HOOK
-// ========================================
+export default function useUsers(initialFilters = {}) {
+  const queryClient = useQueryClient();
 
-export default function useUsers() {
-  // ========================================
-  // STATE
-  // ========================================
+  // Estado unificado para el manejo de filtros y paginación desde el servidor
+  const [filters, setFilters] = useState({
+    page: 1,
+    limit: 10,
+    search: undefined,
+    branchId: undefined,
+    isActive: undefined,
+    sortBy: "createdAt",
+    sortOrder: "desc",
+    ...initialFilters,
+  });
 
-  const [users, setUsers] = useState([]);
-
-  const [loading, setLoading] = useState(true);
-
-  const [error, setError] = useState("");
-
+  // Estado para controlar qué nodos del organigrama/jerarquía están expandidos
   const [expandedUsers, setExpandedUsers] = useState({});
 
   // ========================================
-  // FETCH ALL USERS
+  // INVALIDATE CACHE
   // ========================================
-
-  const fetchUsers = useCallback(async () => {
-    try {
-      setLoading(true);
-
-      setError("");
-
-      const response = await getUsers();
-
-      setUsers(response.data || []);
-    } catch (error) {
-      console.error(error);
-
-      setError(error.message || "Error al obtener usuarios");
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  // ========================================
-  // FETCH ROOT USERS
-  // ========================================
-
-  const fetchRootUsers = useCallback(async () => {
-    try {
-      setLoading(true);
-
-      setError("");
-
-      const response = await getRootUsers();
-
-      setUsers(response.data || []);
-    } catch (error) {
-      console.error(error);
-
-      setError(error.message || "Error al obtener jerarquía");
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  // ========================================
-  // LOAD SUBORDINATES
-  // ========================================
-
-  const loadSubordinates = async (managerId) => {
-    try {
-      const response = await getUsersByManager(managerId);
-
-      const subordinates = response.data || [];
-
-      setUsers((prev) =>
-        prev.map((user) =>
-          user.id === managerId
-            ? {
-                ...user,
-                subordinates,
-              }
-            : user,
-        ),
-      );
-
-      setExpandedUsers((prev) => ({
-        ...prev,
-        [managerId]: true,
-      }));
-    } catch (error) {
-      console.error(error);
-    }
+  const invalidateCache = async () => {
+    await queryClient.invalidateQueries({ queryKey: ["users"] });
+    await queryClient.invalidateQueries({ queryKey: ["users-hierarchy"] });
   };
 
   // ========================================
-  // TOGGLE EXPAND
+  // QUERY: LISTADO FILTRADO Y PAGINADO
   // ========================================
+  const usersQuery = useQuery({
+    queryKey: ["users", filters],
+    queryFn: async () => {
+      const response = await getUsers(filters);
+      return {
+        data: Array.isArray(response?.data) ? response.data : [],
+        pagination: {
+          currentPage: response?.pagination?.currentPage || filters.page,
+          totalPages: response?.pagination?.totalPages || 1,
+          hasPrevPage: response?.pagination?.hasPrevPage || filters.page > 1,
+          hasNextPage: response?.pagination?.hasNextPage || false,
+          ...response?.pagination,
+        },
+      };
+    },
+    refetchOnWindowFocus: false,
+    placeholderData: (previousData) => previousData,
+  });
 
-  const toggleExpand = async (user) => {
-    const isExpanded = expandedUsers[user.id];
+  // ========================================
+  // QUERY: ESTRUCTURA JERÁRQUICA (ÁRBOL)
+  // ========================================
+  const hierarchyQuery = useQuery({
+    queryKey: ["users-hierarchy"],
+    queryFn: async () => {
+      const response = await getHierarchy();
+      return Array.isArray(response?.data) ? response.data : response || [];
+    },
+    refetchOnWindowFocus: false,
+  });
 
-    // ====================================
-    // COLLAPSE
-    // ====================================
+  // ========================================
+  // MUTACIÓN: CAMBIAR ESTADO (ACTIVO/INACTIVO)
+  // ========================================
+  const toggleStatusMutation = useMutation({
+    mutationFn: toggleUserStatus,
+    onSuccess: invalidateCache,
+    onError: (err) => console.error("TOGGLE USER STATUS ERROR:", err),
+  });
 
-    if (isExpanded) {
-      setExpandedUsers((prev) => ({
-        ...prev,
-        [user.id]: false,
-      }));
-
-      return;
-    }
-
-    // ====================================
-    // ALREADY LOADED
-    // ====================================
-
-    if (user.subordinates && user.subordinates.length > 0) {
-      setExpandedUsers((prev) => ({
-        ...prev,
-        [user.id]: true,
-      }));
-
-      return;
-    }
-
-    // ====================================
-    // FETCH FROM API
-    // ====================================
-
-    await loadSubordinates(user.id);
+  // ========================================
+  // MANEJADOR DE EXPANSIÓN (ORGANIGRAMA)
+  // ========================================
+  const toggleExpand = (userId) => {
+    setExpandedUsers((prev) => ({
+      ...prev,
+      [userId]: !prev[userId],
+    }));
   };
-
-  // ========================================
-  // ADD USER
-  // ========================================
-
-  const addUser = (newUser) => {
-    // ====================================
-    // USER WITH MANAGER
-    // ====================================
-
-    if (newUser.managerId) {
-      setUsers((prev) =>
-        prev.map((user) =>
-          user.id === newUser.managerId
-            ? {
-                ...user,
-
-                subordinates: [...(user.subordinates || []), newUser],
-              }
-            : user,
-        ),
-      );
-
-      return;
-    }
-
-    // ====================================
-    // ROOT USER
-    // ====================================
-
-    setUsers((prev) => [newUser, ...prev]);
-  };
-
-  // ========================================
-  // UPDATE USER
-  // ========================================
-
-  const updateUserLocal = (updatedUser) => {
-    const updateRecursive = (items) => {
-      return items.map((user) => {
-        if (user.id === updatedUser.id) {
-          return {
-            ...user,
-            ...updatedUser,
-          };
-        }
-
-        if (user.subordinates) {
-          return {
-            ...user,
-
-            subordinates: updateRecursive(user.subordinates),
-          };
-        }
-
-        return user;
-      });
-    };
-
-    setUsers((prev) => updateRecursive(prev));
-  };
-
-  // ========================================
-  // REMOVE USER
-  // ========================================
-
-  const removeUserLocal = (userId) => {
-    const removeRecursive = (items) => {
-      return items
-        .filter((user) => user.id !== userId)
-
-        .map((user) => ({
-          ...user,
-
-          subordinates: user.subordinates
-            ? removeRecursive(user.subordinates)
-            : [],
-        }));
-    };
-
-    setUsers((prev) => removeRecursive(prev));
-  };
-
-  // ========================================
-  // TOGGLE STATUS
-  // ========================================
-
-  const handleToggleStatus = async (userId) => {
-    try {
-      const response = await toggleUserStatus(userId);
-
-      updateUserLocal(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  // ========================================
-  // INITIAL LOAD
-  // ========================================
-
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    fetchRootUsers();
-  }, [fetchRootUsers]);
-
-  // ========================================
-  // RETURN
-  // ========================================
 
   return {
-    users,
+    // DATA & PAGINATION (Lista aplanada con filtros)
+    users: usersQuery.data?.data || [],
+    pagination: usersQuery.data?.pagination || {},
+    loading: usersQuery.isLoading,
+    error: usersQuery.error ? usersQuery.error.message : "",
 
-    loading,
+    // HIERARCHY DATA (Estructura de árbol para el organigrama)
+    hierarchy: hierarchyQuery.data || [],
+    loadingHierarchy: hierarchyQuery.isLoading,
 
-    error,
-
+    // FILTERS STATE
+    filters,
+    setFilters,
     expandedUsers,
 
-    fetchUsers,
-
-    fetchRootUsers,
-
-    loadSubordinates,
-
+    // METHODS
+    fetchUsers: usersQuery.refetch,
+    fetchHierarchy: hierarchyQuery.refetch,
     toggleExpand,
+    toggleUserStatus: async (id) => toggleStatusMutation.mutateAsync(id),
 
-    addUser,
-
-    updateUserLocal,
-
-    removeUserLocal,
-
-    toggleUserStatus: handleToggleStatus,
+    // MUTATION LOADING STATES
+    togglingStatus: toggleStatusMutation.isPending,
   };
 }

@@ -1,32 +1,10 @@
-// ========================================
-// routes/account.routes.js
-// ========================================
+const router = require("express").Router();
 
-const router =
-  require("express").Router();
+const controller = require("../controllers/account.controller");
+const auth = require("../../../middleware/auth");
 
-const controller =
-  require("../controllers/account.controller");
+router.put("/2fa", auth, controller.toggleTwoFactor);
 
-const auth =
-  require("../../../middleware/auth");
+router.delete("/delete", auth, controller.deleteMyAccount);
 
-router.put(
-  "/2fa",
-  auth,
-  controller.toggleTwoFactor
-);
-
-
-/* ======================================
- * DELETE ACCOUNT
- * ==================================== */
-
-router.delete(
-  "/delete",
-  auth,
-  controller.deleteMyAccount
-);
-
-module.exports =
-  router;
+module.exports = router;

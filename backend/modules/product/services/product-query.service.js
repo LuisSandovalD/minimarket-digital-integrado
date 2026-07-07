@@ -25,25 +25,47 @@ const calculateInventoryStock = (inventory = []) => {
 };
 
 // ========================================
-// GET ALL
+// GET ALL (EN TU SERVICIO)
 // ========================================
 
-exports.getAll = async (companyId) => {
+exports.getAll = async (companyId, query = {}) => {
+  // 1. Extraemos los filtros con valores por defecto limpios
+  const { page = 1, limit = 10, search = "", categoryId = "", status = "", sortBy = "createdAt", sortOrder = "desc" } = query;
 
-  const products = await repository.getAll(companyId);
+  const options = {
+    page: parseInt(page, 10),
+    limit: parseInt(limit, 10),
+    search: search.trim(),
+    categoryId,
+    status,
+    sortBy,
+    sortOrder: sortOrder.toLowerCase() === "asc" ? "asc" : "desc"
+  };
 
-  return products.map((product) => {
-    const stock = calculateInventoryStock(product.inventory);
+  // 2. Llamamos al nuevo repositorio adaptado a Prisma con estas opciones
+  const { data: products, total } = await repository.getAll(companyId, options);
 
-    return {
-      ...product,
-      totalStock: stock.total,
-      reservedStock: stock.reserved,
-      damagedStock: stock.damaged,
-      availableStock:
-        stock.total - stock.reserved - stock.damaged,
-    };
-  });
+  // 3. Mapeamos los productos agregando los calculados de stock y retornamos la metadata
+  return {
+    data: products.map((product) => {
+      const stock = calculateInventoryStock(product.inventory);
+      return {
+        ...product,
+        totalStock: stock.total,
+        reservedStock: stock.reserved,
+        damagedStock: stock.damaged,
+        availableStock: stock.total - stock.reserved - stock.damaged,
+      };
+    }),
+    pagination: {
+      totalItems: total,
+      totalPages: Math.ceil(total / options.limit),
+      currentPage: options.page,
+      itemsPerPage: options.limit,
+      hasNextPage: options.page * options.limit < total,
+      hasPrevPage: options.page > 1
+    }
+  };
 };
 
 // ========================================

@@ -1,288 +1,93 @@
+import { StatsGrid } from "@/components/card";
+import { defaultViewport } from "@/components/effects";
 import { motion } from "framer-motion";
-
-import { Building2, ShieldCheck, ShoppingCart, TrendingUp } from "lucide-react";
-
-import { stats } from "../constants/stats";
-
 import {
-  defaultViewport,
-  fadeUp,
-  hoverLift,
-  hoverRotate,
-  smoothTransition,
-  staggerContainer,
-} from "@/components/effects/";
+  BarChart3,
+  Building2,
+  ShieldCheck,
+  ShoppingCart,
+  TrendingUp,
+} from "lucide-react";
+import { stats } from "../constants/stats";
 
 const icons = [Building2, ShoppingCart, ShieldCheck, TrendingUp];
 
-export default function StatsSection() {
-  return (
-    <section
-      className="
-        px-4
-        py-20
+const fastStagger = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.03,
+    },
+  },
+};
 
-        sm:px-6
-        md:px-8
-        lg:px-10
-        lg:py-24
-      "
-    >
-      <div className="mx-auto max-w-7xl">
-        {/* HEADER */}
+const fastFadeUp = {
+  hidden: { opacity: 0, y: 10 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.4,
+      ease: "easeOut",
+    },
+  },
+};
+
+export default function StatsSection() {
+  const items = stats.map((item, index) => ({
+    id: item.label ?? index,
+    icon: icons[index],
+    title: item.value,
+    subtitle: item.label,
+    description: item.description,
+  }));
+
+  return (
+    <section className="relative z-10 w-full overflow-hidden px-4 py-12 sm:px-6 md:px-8 lg:px-16">
+      <div className="relative z-10 mx-auto max-w-7xl">
         <motion.div
-          variants={fadeUp}
+          variants={fastStagger}
           initial="hidden"
           whileInView="show"
-          viewport={defaultViewport}
-          transition={smoothTransition}
-          className="max-w-3xl"
+          viewport={{ ...defaultViewport, once: true }}
+          className="mx-auto flex max-w-3xl flex-col items-center text-center"
         >
-          <span
-            className="
-              inline-flex
-              items-center
-              rounded-full
-
-              border
-              border-[#d7e0e7]
-
-              px-4
-              py-2
-
-              text-sm
-              font-semibold
-
-              text-[#274c77]
-
-              dark:border-white/10
-              dark:text-[#a3cef1]
-            "
+          <motion.div
+            variants={fastFadeUp}
+            className="inline-flex items-center gap-2 rounded-full border border-[#274c77]/10 bg-[#274c77]/5 px-3 py-1 text-xs font-semibold text-[#274c77] dark:border-white/10 dark:bg-white/5 dark:text-[#a3cef1]"
           >
+            <BarChart3 size={14} />
             Plataforma empresarial
-          </span>
+          </motion.div>
 
-          <h2
-            className="
-              mt-6
-              text-4xl
-              font-black
-              leading-tight
-              tracking-tight
-
-              text-[#0f172a]
-
-              dark:text-white
-
-              md:text-5xl
-            "
+          <motion.h2
+            variants={fastFadeUp}
+            className="mt-4 text-3xl font-black tracking-tight text-[#0f172a] dark:text-white md:text-4xl"
           >
             Empresas que ya
-            <span
-              className="
-                block
-
-                bg-gradient-to-r
-                from-[#274c77]
-                via-[#6096ba]
-                to-[#a3cef1]
-
-                bg-clip-text
-                text-transparent
-              "
-            >
+            <span className="mt-1 block bg-gradient-to-r from-[#274c77] via-[#6096ba] to-[#a3cef1] bg-clip-text text-transparent">
               optimizan su negocio
             </span>
-          </h2>
+          </motion.h2>
 
-          <p
-            className="
-              mt-5
-              max-w-2xl
-              text-lg
-              leading-relaxed
-
-              text-[#5b6472]
-
-              dark:text-[#cbd5e1]
-            "
+          <motion.p
+            variants={fastFadeUp}
+            className="mt-3 max-w-xl text-base leading-relaxed text-[#5b6472] dark:text-[#cbd5e1]"
           >
             Un ERP POS moderno para gestionar ventas, inventario, reportes y
             múltiples sucursales desde un solo sistema.
-          </p>
+          </motion.p>
         </motion.div>
 
-        {/* STATS */}
-        <motion.div
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="show"
-          viewport={defaultViewport}
-          className="
-            mt-16
-            grid
-            gap-6
-
-            sm:grid-cols-2
-            lg:grid-cols-4
-          "
-        >
-          {stats.map((item, index) => {
-            const Icon = icons[index];
-
-            return (
-              <motion.article
-                key={index}
-                variants={fadeUp}
-                transition={smoothTransition}
-                whileHover={hoverLift}
-                className="
-                  group
-                  relative
-
-                  overflow-hidden
-
-                  rounded-[30px]
-
-                  border
-                  border-[#d7e0e7]
-
-                  bg-white/40
-
-                  p-8
-
-                  backdrop-blur-xl
-
-                  dark:border-white/10
-                  dark:bg-white/[0.03]
-                "
-              >
-                {/* GLOW */}
-                <div
-                  className="
-                    pointer-events-none
-                    absolute
-                    inset-0
-
-                    opacity-0
-
-                    transition-opacity
-                    duration-500
-
-                    group-hover:opacity-100
-                  "
-                  style={{
-                    background:
-                      "radial-gradient(circle at top, rgba(96,150,186,0.15), transparent 70%)",
-                  }}
-                />
-
-                {/* ICON */}
-                <motion.div
-                  whileHover={hoverRotate}
-                  className="
-                    relative
-                    z-10
-
-                    flex
-                    h-14
-                    w-14
-                    items-center
-                    justify-center
-
-                    rounded-2xl
-
-                    bg-gradient-to-br
-                    from-[#274c77]
-                    to-[#6096ba]
-
-                    text-white
-
-                    shadow-lg
-                    shadow-[#274c77]/20
-                  "
-                >
-                  <Icon size={24} />
-                </motion.div>
-
-                {/* VALUE */}
-                <motion.h3
-                  initial={{
-                    opacity: 0,
-                    y: 20,
-                  }}
-                  whileInView={{
-                    opacity: 1,
-                    y: 0,
-                  }}
-                  transition={{
-                    duration: 0.6,
-                    delay: 0.2,
-                  }}
-                  viewport={{
-                    once: true,
-                  }}
-                  className="
-                    relative
-                    z-10
-
-                    mt-7
-                    text-5xl
-                    font-black
-                    tracking-tight
-
-                    text-[#274c77]
-
-                    dark:text-[#a3cef1]
-                  "
-                >
-                  {item.value}
-                </motion.h3>
-
-                {/* LABEL */}
-                <p
-                  className="
-                    relative
-                    z-10
-
-                    mt-4
-                    text-lg
-                    font-bold
-
-                    text-[#0f172a]
-
-                    transition-colors
-                    duration-300
-
-                    group-hover:text-[#274c77]
-
-                    dark:text-white
-                  "
-                >
-                  {item.label}
-                </p>
-
-                {/* DESCRIPTION */}
-                <p
-                  className="
-                    relative
-                    z-10
-
-                    mt-3
-                    text-sm
-                    leading-relaxed
-
-                    text-[#5b6472]
-
-                    dark:text-[#cbd5e1]
-                  "
-                >
-                  {item.description}
-                </p>
-              </motion.article>
-            );
-          })}
-        </motion.div>
+        <div className="relative z-20 mt-12">
+          <StatsGrid
+            items={items}
+            columns={4}
+            animate
+            cardClassName="rounded-2xl !border-[#d7e0e7] !bg-white/40 !p-6 transition-all duration-150 dark:!border-white/10 dark:!bg-white/[0.03]"
+          />
+        </div>
       </div>
     </section>
   );

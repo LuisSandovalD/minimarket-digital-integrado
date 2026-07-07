@@ -48,7 +48,7 @@ export const useSaleDetails = (initialFilters = { page: 1, limit: 10 }) => {
         console.error("Error en el hook useSaleDetails:", err);
         setError(
           err.response?.data?.message ||
-          "Error al conectar con el servidor de detalles",
+            "Error al conectar con el servidor de detalles",
         );
         setSaleDetails([]);
       } finally {

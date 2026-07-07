@@ -8,178 +8,175 @@ import {
   Wallet,
   XCircle,
 } from "lucide-react";
+import { useMemo } from "react";
 import { Link } from "react-router-dom";
 
 export default function RecentSales({ sales = [] }) {
-  const previewSales = sales.slice(0, 5);
+  // ⚡ MEMORIZACIÓN: Evita recálculos de arrays pesados en renderizados frecuentes
+  const stats = useMemo(() => {
+    const previewSales = sales.slice(0, 5);
+    const totalSales = sales.reduce(
+      (acc, sale) => acc + Number(sale.total || 0),
+      0,
+    );
+    const completedSales = sales.filter(
+      (sale) => sale.status === "COMPLETED",
+    ).length;
+    const pendingSales = sales.filter(
+      (sale) => sale.status === "PENDING",
+    ).length;
+    const cancelledSales = sales.filter(
+      (sale) => sale.status === "CANCELLED",
+    ).length;
 
-  const totalSales = sales.reduce(
-    (acc, sale) => acc + Number(sale.total || 0),
-    0,
-  );
-
-  const completedSales = sales.filter(
-    (sale) => sale.status === "COMPLETED",
-  ).length;
-
-  const pendingSales = sales.filter((sale) => sale.status === "PENDING").length;
-
-  const cancelledSales = sales.filter(
-    (sale) => sale.status === "CANCELLED",
-  ).length;
+    return {
+      previewSales,
+      totalSales,
+      completedSales,
+      pendingSales,
+      cancelledSales,
+    };
+  }, [sales]);
 
   const getStatusBadge = (status) => {
-    switch (status) {
-      case "COMPLETED":
-        return (
-          <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-3 py-1 text-xs font-medium text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300">
-            <CheckCircle size={12} />
-            Completada
-          </span>
-        );
+    const badges = {
+      COMPLETED: {
+        bg: "bg-emerald-500/10 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400",
+        icon: <CheckCircle size={12} className="shrink-0" />,
+        text: "Completada",
+      },
+      PENDING: {
+        bg: "bg-amber-500/10 text-amber-600 dark:bg-amber-500/20 dark:text-amber-400",
+        icon: <AlertCircle size={12} className="shrink-0" />,
+        text: "Pendiente",
+      },
+      CANCELLED: {
+        bg: "bg-rose-500/10 text-rose-600 dark:bg-rose-500/20 dark:text-rose-400",
+        icon: <XCircle size={12} className="shrink-0" />,
+        text: "Cancelada",
+      },
+    };
 
-      case "PENDING":
-        return (
-          <span className="inline-flex items-center gap-1 rounded-full bg-amber-100 px-3 py-1 text-xs font-medium text-amber-700 dark:bg-amber-900/30 dark:text-amber-300">
-            <AlertCircle size={12} />
-            Pendiente
-          </span>
-        );
+    const current = badges[status] || badges.CANCELLED;
 
-      default:
-        return (
-          <span className="inline-flex items-center gap-1 rounded-full bg-rose-100 px-3 py-1 text-xs font-medium text-rose-700 dark:bg-rose-900/30 dark:text-rose-300">
-            <XCircle size={12} />
-            Cancelada
-          </span>
-        );
-    }
+    return (
+      <span
+        className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold tracking-wide ${current.bg}`}
+      >
+        {current.icon}
+        {current.text}
+      </span>
+    );
   };
 
   return (
-    <div className="rounded-3xl border border-slate-200/70 dark:border-slate-800/70 bg-white/70 dark:bg-slate-900/70 p-6 shadow-sm backdrop-blur-xl">
-      {/* Header */}
-      <div className="mb-6 flex items-center justify-between">
+    <div className="rounded-3xl border border-slate-200/60 bg-white/60 p-6 shadow-xl shadow-slate-200/5 backdrop-blur-xl transition-shadow duration-300 dark:border-slate-800/40 dark:bg-slate-900/60 dark:shadow-none">
+      {/* 📋 HEADER DE LA SECCIÓN */}
+      <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100 dark:bg-emerald-900/30">
-            <ShoppingCart size={20} className="text-emerald-600" />
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-emerald-500/10 bg-emerald-500/10 dark:bg-emerald-500/20">
+            <ShoppingCart
+              size={18}
+              className="text-emerald-600 dark:text-emerald-400"
+            />
           </div>
-
           <div>
-            <h2 className="text-lg font-semibold text-slate-800 dark:text-white">
+            <h2 className="text-lg font-bold tracking-tight text-slate-900 dark:text-white">
               Ventas Recientes
             </h2>
-
             <p className="text-xs text-slate-500 dark:text-slate-400">
-              Resumen rápido de las últimas ventas registradas
+              Resumen rápido de las últimas transacciones en el sistema
             </p>
           </div>
         </div>
-
-        <span className="rounded-xl bg-slate-100 dark:bg-slate-800 px-3 py-1 text-sm font-medium">
-          {sales.length} ventas
-        </span>
+        <div>
+          <span className="inline-block rounded-xl bg-slate-100 px-3 py-1.5 text-xs font-bold text-slate-600 border border-slate-200/20 dark:bg-slate-800 dark:text-slate-300">
+            {sales.length} registros
+          </span>
+        </div>
       </div>
 
-      <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      {/* 📊 GRID DE METRICAS (Acoplado perfectamente a las props de tu MetricCard nativo) */}
+      <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <MetricCard
           icon={ShoppingCart}
-          label="Ventas"
+          subtitle="Ventas"
           value={sales.length}
-          subtext="Transacciones registradas"
-          variant="info"
+          description="Transacciones en el periodo"
+          variant="default"
         />
-
         <MetricCard
           icon={Wallet}
-          label="Monto Total"
-          value={`S/ ${totalSales.toLocaleString("es-PE", {
+          subtitle="Monto Recaudado"
+          value={`S/ ${stats.totalSales.toLocaleString("es-PE", {
             minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
           })}`}
-          subtext="Ingresos generados"
-          variant="success"
+          description="Caja e ingresos brutos"
+          variant="default"
         />
-
         <MetricCard
           icon={CheckCircle}
-          label="Completadas"
-          value={completedSales}
-          subtext="Ventas finalizadas"
-          variant="success"
+          subtitle="Completadas"
+          value={stats.completedSales}
+          description="Entregadas y cobradas"
+          variant="default"
         />
-
         <MetricCard
           icon={Clock}
-          label="Pendientes"
-          value={pendingSales}
-          subtext="Esperando procesamiento"
-          variant="warning"
+          subtitle="Pendientes"
+          value={stats.pendingSales}
+          description="Por confirmar pago"
+          variant="default"
         />
       </div>
 
-      {/* Sin datos */}
+      {/* 🔍 CONTROL DE ESTADO VACÍO */}
       {sales.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-slate-300 dark:border-slate-700 p-10 text-center text-sm text-slate-500">
-          No existen ventas registradas.
+        <div className="rounded-2xl border border-dashed border-slate-300 p-12 text-center text-sm text-slate-400 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-950/20">
+          No se registran órdenes ni ventas en este intervalo de tiempo.
         </div>
       ) : (
         <>
-          {/* Tabla */}
-          <div className="overflow-x-auto">
-            <table className="w-full">
+          {/* 🖥️ TABLA DE DATOS RESPONSIVE */}
+          <div className="overflow-x-auto rounded-xl border border-slate-100/80 dark:border-slate-800/50">
+            <table className="w-full border-collapse text-left">
               <thead>
-                <tr className="border-b border-slate-200 dark:border-slate-700">
-                  <th className="py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
-                    Venta
-                  </th>
-
-                  <th className="py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
-                    Cliente
-                  </th>
-
-                  <th className="py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
-                    Vendedor
-                  </th>
-
-                  <th className="py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
-                    Fecha
-                  </th>
-
-                  <th className="py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
-                    Estado
-                  </th>
-
-                  <th className="py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">
-                    Total
-                  </th>
+                <tr className="border-b border-slate-100 bg-slate-50/70 text-xs font-bold uppercase tracking-wider text-slate-500 dark:border-slate-800 dark:bg-slate-950/40">
+                  <th className="px-4 py-3">Código / Ticket</th>
+                  <th className="px-4 py-3">Cliente</th>
+                  <th className="px-4 py-3">Operador</th>
+                  <th className="px-4 py-3">Fecha de Registro</th>
+                  <th className="px-4 py-3">Estado</th>
+                  <th className="px-4 py-3 text-right">Monto Total</th>
                 </tr>
               </thead>
-
-              <tbody>
-                {previewSales.map((sale) => (
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60 text-sm">
+                {stats.previewSales.map((sale) => (
                   <tr
                     key={sale.id}
-                    className="border-b border-slate-100 dark:border-slate-800"
+                    className="group transition-colors hover:bg-slate-50/50 dark:hover:bg-slate-800/20"
                   >
-                    <td className="py-4 font-medium text-slate-800 dark:text-white">
+                    <td className="px-4 py-3.5 font-mono text-xs font-bold text-slate-900 dark:text-white">
                       {sale.saleNumber}
                     </td>
-
-                    <td className="py-4 text-slate-600 dark:text-slate-300">
+                    <td className="px-4 py-3.5 text-slate-600 dark:text-slate-300 font-medium">
                       {sale.customer?.name || "Cliente General"}
                     </td>
-
-                    <td className="py-4 text-slate-600 dark:text-slate-300">
-                      {sale.seller?.name || "Sistema"}
+                    <td className="px-4 py-3.5 text-slate-500 dark:text-slate-400">
+                      {sale.seller?.name || "Automatización POS"}
                     </td>
-
-                    <td className="py-4 text-slate-600 dark:text-slate-300">
-                      {new Date(sale.createdAt).toLocaleDateString()}
+                    <td className="px-4 py-3.5 text-slate-500 dark:text-slate-400">
+                      {new Date(sale.createdAt).toLocaleDateString("es-PE", {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "numeric",
+                      })}
                     </td>
-
-                    <td className="py-4">{getStatusBadge(sale.status)}</td>
-
-                    <td className="py-4 text-right font-semibold text-emerald-500">
+                    <td className="px-4 py-3.5">
+                      {getStatusBadge(sale.status)}
+                    </td>
+                    <td className="px-4 py-3.5 text-right font-bold text-slate-900 dark:text-white">
                       S/ {Number(sale.total).toFixed(2)}
                     </td>
                   </tr>
@@ -188,24 +185,28 @@ export default function RecentSales({ sales = [] }) {
             </table>
           </div>
 
-          {/* Footer */}
-          <div className="mt-6 flex items-center justify-between border-t border-slate-200 dark:border-slate-700 pt-4">
-            <div>
-              <p className="text-sm text-slate-500">
-                Mostrando las últimas {previewSales.length} ventas
+          {/* 🏁 CONTROL INFERIOR Y ENLACES ACCIONABLES */}
+          <div className="mt-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-t border-slate-200/60 pt-4 dark:border-slate-800/40">
+            <div className="flex items-center gap-4 text-xs">
+              <p className="font-medium text-slate-500 dark:text-slate-400">
+                Mostrando las últimas{" "}
+                <span className="text-slate-900 font-bold dark:text-white">
+                  {stats.previewSales.length}
+                </span>{" "}
+                ventas
               </p>
-
-              <p className="text-xs text-slate-400">
-                {cancelledSales} ventas canceladas
+              <div className="h-4 w-px bg-slate-300 dark:bg-slate-700" />
+              <p className="text-rose-500 font-medium">
+                {stats.cancelledSales} transacciones rechazadas
               </p>
             </div>
 
             <Link
               to="/sales"
-              className="flex items-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 px-4 py-2 text-sm font-medium text-white transition-all"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-2 text-xs font-bold text-white shadow-sm transition-all duration-200 hover:bg-emerald-700 hover:shadow-emerald-600/10 transform-gpu active:scale-[0.98]"
             >
-              Ver todas las ventas
-              <ArrowRight size={16} />
+              Módulo Completo de Ventas
+              <ArrowRight size={14} />
             </Link>
           </div>
         </>

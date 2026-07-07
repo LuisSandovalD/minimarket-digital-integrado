@@ -173,8 +173,8 @@ export default function useRegisterForm(onClose = null) {
     } catch (err) {
       setError(
         err.response?.data?.message ||
-        err.message ||
-        "Ocurrió un error inesperado durante el registro.",
+          err.message ||
+          "Ocurrió un error inesperado durante el registro.",
       );
     } finally {
       setLoading(false);

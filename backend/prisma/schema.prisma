@@ -49,6 +49,7 @@ model Company {
   suppliers           Supplier[]
   supportTickets      SupportTicket[]
   units               Unit[]
+  reviews             Review[]
   users               User[]             @relation("CompanyUsers")
 
   @@index([isActive])
@@ -135,6 +136,7 @@ model User {
   manager               User?            @relation("UserHierarchy", fields: [managerId], references: [id])
   subordinates          User[]           @relation("UserHierarchy")
   sessions              UserSession[]
+  reviews               Review[]
 
   @@unique([email, companyId])
   @@index([companyId])
@@ -803,4 +805,21 @@ enum UnitType {
   DOZEN
   METER
   SQUARE_METER
+}
+
+model Review {
+  id          Int      @id @default(autoincrement())
+  rating      Int      // 1 a 5 estrellas
+  comment     String?  @db.Text
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  userId      Int
+  companyId   Int
+
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  company      Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([companyId])
 }

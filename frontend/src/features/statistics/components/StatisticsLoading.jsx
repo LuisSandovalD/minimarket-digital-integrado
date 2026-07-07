@@ -2,9 +2,9 @@
 // features/dashboard/components/DashboardLoading.jsx
 // ========================================
 import {
-    SkeletonCard,
-    SkeletonChart,
-    SkeletonHeader,
+  SkeletonCard,
+  SkeletonChart,
+  SkeletonHeader,
 } from "@/components/skeletons";
 
 export default function DashboardLoading() {

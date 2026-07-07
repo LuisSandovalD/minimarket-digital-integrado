@@ -1,4 +1,8 @@
-import { AlertCircle, AlertTriangle, CheckCircle, Info, X } from "lucide-react";
+// ========================================
+// components/feedback/AlertModal.jsx
+// ========================================
+
+import { AlertCircle, AlertTriangle, CheckCircle, Info } from "lucide-react";
 import Modal from "./Modal";
 
 export default function AlertModal({
@@ -7,42 +11,53 @@ export default function AlertModal({
   type = "info",
   title,
   message,
+  children, // <--- 1. Clave para recibir a HeaderModal y los botones
 }) {
   const styles = {
-    info: {
-      icon: Info,
-      color: "text-blue-600",
-    },
+    info: { icon: Info, color: "text-blue-600 dark:text-blue-400" },
     success: {
       icon: CheckCircle,
-      color: "text-emerald-600",
+      color: "text-emerald-600 dark:text-emerald-400",
     },
     warning: {
       icon: AlertTriangle,
-      color: "text-amber-600",
+      color: "text-amber-600 dark:text-amber-400",
     },
-    error: {
-      icon: AlertCircle,
-      color: "text-rose-600",
-    },
+    error: { icon: AlertCircle, color: "text-rose-600 dark:text-rose-400" },
   };
 
-  const style = styles[type];
+  const style = styles[type] || styles.info;
   const Icon = style.icon;
 
   return (
     <Modal open={open} onClose={onClose} size="sm">
-      <div className="p-6 flex gap-3 items-start">
-        <Icon className={style.color} size={22} />
+      <div className="p-6 relative">
+        <div className="flex gap-3.5 items-start">
+          {/* Icono de estado */}
+          <div className="mt-0.5 shrink-0">
+            <Icon className={style.color} size={22} />
+          </div>
 
-        <div className="flex-1">
-          {title && <h3 className="font-semibold text-lg">{title}</h3>}
-          {message && <p className="text-sm text-gray-500 mt-1">{message}</p>}
+          {/* Contenido dinámico */}
+          <div className="flex-1 space-y-3">
+            {/* 2. Renderizado clásico por Props (por si se usa de la forma antigua) */}
+            {(title || message) && (
+              <div>
+                {title && (
+                  <h3 className="font-semibold text-lg text-slate-900 dark:text-white">
+                    {title}
+                  </h3>
+                )}
+                {message && (
+                  <p className="text-sm text-slate-500 mt-1">{message}</p>
+                )}
+              </div>
+            )}
+
+            {/* 3. Renderizado por Composición (Aquí cae <HeaderModal /> y los botones) */}
+            {children && <div className="w-full">{children}</div>}
+          </div>
         </div>
-
-        <button onClick={onClose} className="opacity-60 hover:opacity-100">
-          <X size={18} />
-        </button>
       </div>
     </Modal>
   );

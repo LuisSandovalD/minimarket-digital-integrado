@@ -9,31 +9,159 @@ const prisma =
 // GET ALL
 // ========================================
 
-exports.getAll =
-  async (
-    companyId
-  ) => {
+exports.getAll = async ({
+  companyId,
+  page = 1,
+  limit = 10,
+  search,
+  branchId,
+  categoryId,
+  stockStatus,
+  minStock = 5,
+  sortBy = "createdAt",
+  order = "desc",
+}) => {
+  page = Number(page);
+  limit = Number(limit);
 
-    return prisma.inventory.findMany({
+  const skip = (page - 1) * limit;
 
-      where: {
-        companyId,
+  const where = {
+    companyId: Number(companyId),
+  };
+
+  // ==========================
+  // SUCURSAL
+  // ==========================
+
+  if (branchId) {
+    where.branchId = Number(branchId);
+  }
+
+  // ==========================
+  // PRODUCTO
+  // ==========================
+
+  where.product = {};
+
+  // Categoría
+
+  if (categoryId) {
+    where.product.categoryId = Number(categoryId);
+  }
+
+  // Buscador
+
+  if (search) {
+    where.product.OR = [
+      {
+        name: {
+          contains: search,
+          mode: "insensitive",
+        },
       },
+      {
+        sku: {
+          contains: search,
+          mode: "insensitive",
+        },
+      },
+      {
+        barcode: {
+          contains: search,
+          mode: "insensitive",
+        },
+      },
+    ];
+  }
+
+  // ==========================
+  // FILTROS DE STOCK
+  // ==========================
+
+  switch (stockStatus) {
+    case "out":
+      where.stock = 0;
+      break;
+
+    case "low":
+      where.stock = {
+        gt: 0,
+        lte: Number(minStock),
+      };
+      break;
+
+    case "available":
+      where.stock = {
+        gt: Number(minStock),
+      };
+      break;
+
+    default:
+      break;
+  }
+
+  // ==========================
+  // ORDENAMIENTO
+  // ==========================
+
+  const allowedSort = [
+    "createdAt",
+    "stock",
+    "lastUpdated",
+  ];
+
+  const orderBy = allowedSort.includes(sortBy)
+    ? {
+      [sortBy]: order === "asc" ? "asc" : "desc",
+    }
+    : {
+      createdAt: "desc",
+    };
+
+  // ==========================
+  // CONSULTAS
+  // ==========================
+
+  const [data, total] = await Promise.all([
+    prisma.inventory.findMany({
+      where,
 
       include: {
-
-        product: true,
+        product: {
+          include: {
+            category: true,
+            unit: true,
+          },
+        },
 
         branch: true,
       },
 
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
+      skip,
+      take: limit,
 
+      orderBy,
+    }),
+
+    prisma.inventory.count({
+      where,
+    }),
+  ]);
+
+  return {
+    data,
+
+    pagination: {
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+      hasNext: page < Math.ceil(total / limit),
+      hasPrev: page > 1,
+    },
   };
-
+};
 // ========================================
 // GET BY ID
 // ========================================

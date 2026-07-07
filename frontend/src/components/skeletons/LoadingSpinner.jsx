@@ -1,6 +1,7 @@
 // ========================================
 // components/LoadingSpinner.jsx
 // ========================================
+
 import { Loader2 } from "lucide-react";
 
 export default function LoadingSpinner({
@@ -9,7 +10,6 @@ export default function LoadingSpinner({
   fullScreen = false,
   variant = "primary",
 }) {
-  // Configuración de tamaños para el icono
   const sizeClasses = {
     sm: "w-5 h-5",
     md: "w-8 h-8",
@@ -17,7 +17,6 @@ export default function LoadingSpinner({
     xl: "w-16 h-16",
   };
 
-  // Configuración de tamaños para el texto
   const textSizes = {
     sm: "text-xs",
     md: "text-sm",
@@ -25,7 +24,6 @@ export default function LoadingSpinner({
     xl: "text-lg",
   };
 
-  // Colores de la marca basados en tu paleta de Login
   const colors = {
     primary: "text-[#274c77] dark:text-[#a3cef1]",
     blue: "text-blue-600 dark:text-blue-400",
@@ -33,16 +31,27 @@ export default function LoadingSpinner({
     white: "text-white",
   };
 
-  // Estructura base del componente
+  // Contenido base sin contenedores, bordes, padding ni fondos intermedios
   const spinnerContent = (
-    <div className="flex flex-col items-center justify-center gap-3 p-4 animate-fadeIn">
-      {/* El truco de la vuelta está en la clase "animate-spin" de Tailwind */}
+    <div className="flex flex-col items-center justify-center gap-3 text-center">
       <Loader2
-        className={`${sizeClasses[size]} ${colors[variant]} animate-spin shrink-0`}
+        className={`
+          ${sizeClasses[size]}
+          ${colors[variant]}
+          animate-spin
+          shrink-0
+        `}
+        strokeWidth={2.5}
       />
+
       {text && (
         <p
-          className={`${textSizes[size]} font-semibold tracking-wide text-slate-500 dark:text-slate-400 animate-pulse`}
+          className={`
+            ${textSizes[size]}
+            font-medium
+            text-slate-600
+            dark:text-slate-300
+          `}
         >
           {text}
         </p>
@@ -50,15 +59,19 @@ export default function LoadingSpinner({
     </div>
   );
 
-  // Si se pide pantalla completa (por ejemplo para bloqueos de rutas o cargas iniciales)
+  // Si es fullScreen, se expande en toda la pantalla de forma transparente
   if (fullScreen) {
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/70 backdrop-blur-sm dark:bg-slate-950/70">
+      <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-transparent backdrop-blur-sm">
         {spinnerContent}
       </div>
     );
   }
 
-  // De lo contrario, se renderiza normal en el contenedor donde lo metas
-  return spinnerContent;
+  // Si no es fullScreen, se adapta al contenedor padre ocupando todo su espacio de manera transparente
+  return (
+    <div className="absolute inset-0 flex items-center justify-center bg-transparent backdrop-blur-sm z-50">
+      {spinnerContent}
+    </div>
+  );
 }

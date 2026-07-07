@@ -10,4 +10,3 @@ export { default as SkeletonSearch } from "./SkeletonSearch";
 export { default as SkeletonStats } from "./SkeletonStats";
 export { default as SkeletonTable } from "./SkeletonTable";
 export { default as UserAvatarSkeleton } from "./UserAvatarSkeleton";
-

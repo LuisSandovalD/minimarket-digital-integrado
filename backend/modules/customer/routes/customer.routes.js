@@ -1,63 +1,23 @@
-const express =
-  require("express");
+// =========================================================================
+// routes/customer.routes.js
+// =========================================================================
 
-const router =
-  express.Router();
+const express = require("express");
+const router = express.Router();
+const auth = require("../../../middleware/auth");
 
-const auth =
-  require("../../../middleware/auth");
+// Importamos TODO desde el controlador unificado
+const customerController = require("../controllers/customer.controller");
 
-const {
+// --- RUTAS CRUD ESTÁNDAR ---
+router.get("/", auth, customerController.getCustomers);
+router.get("/:id", auth, customerController.getCustomerById);
+router.post("/", auth, customerController.createCustomer);
+router.put("/:id", auth, customerController.updateCustomer);
+router.delete("/:id", auth, customerController.deleteCustomer);
 
-  getCustomers,
+// --- RUTAS DE REPORTES ---
+router.get("/reports/customers/pdf", auth, customerController.downloadCustomersPDFController);
+router.get("/reports/customers/excel", auth, customerController.downloadCustomersExcelController);
 
-  getCustomer,
-
-  createCustomer,
-
-  updateCustomer,
-
-  deleteCustomer,
-
-} = require(
-  "../controllers/customer.controller"
-);
-
-const reportCustomer = require("../controllers/report-customer.controller");
-
-router.get(
-  "/",
-  auth,
-  getCustomers
-);
-
-router.get(
-  "/:id",
-  auth,
-  getCustomer
-);
-
-router.post(
-  "/",
-  auth,
-  createCustomer
-);
-
-router.put(
-  "/:id",
-  auth,
-  updateCustomer
-);
-
-router.delete(
-  "/:id",
-  auth,
-  deleteCustomer
-);
-
-// REPORTS
-router.get("/reports/customers/pdf", auth, reportCustomer.downloadCustomersPDFController);
-router.get("/reports/customers/excel", auth, reportCustomer.downloadCustomersExcelController);
-
-module.exports =
-  router;
+module.exports = router;

@@ -1,105 +1,93 @@
+import Badge from "./Badge";
+import Card from "./Card";
+import CardContent from "./CardContent";
+import CardDescription from "./CardDescription";
+import CardFooter from "./CardFooter";
+import CardHeader from "./CardHeader";
+import CardTitle from "./CardTitle";
+import IconContainer from "./IconContainer";
+import Trend from "./Trend";
+
 export default function MetricCard({
   icon: Icon,
-  label,
   value,
-  subtext,
+  subtitle,
+  title,
+  description,
+  badge,
+  actions,
+  trend,
+  trendLabel,
+  footer,
+  header,
+  loading = false,
+  children,
   variant = "default",
   className = "",
-  children,
+  ...props
 }) {
-  const variants = {
-    default: "bg-white/[0.05] border-white/10",
-    success: "bg-emerald-500/5 border-emerald-500/20",
-    warning: "bg-amber-500/5 border-amber-500/20",
-    danger: "bg-rose-500/5 border-rose-500/20",
-    info: "bg-blue-500/5 border-blue-500/20",
-  };
-
   return (
-    <div
-      className={`
-        rounded-2xl
-        border
-        backdrop-blur-xl
-        p-5
+    <Card variant={variant} className={className} {...props}>
+      {header}
 
-        transition-all
-        duration-300
-
-        hover:shadow-lg
-        hover:scale-[1.02]
-
-        ${variants[variant]}
-        ${className}
-      `}
-    >
-      <div className="flex items-start justify-between gap-3">
-        {/* ICON */}
-        {Icon && (
-          <div
-            className="
-              flex
-              h-10
-              w-10
-              shrink-0
-              items-center
-              justify-center
-
-              rounded-xl
-
-              bg-white/10
-              backdrop-blur-xl
-            "
-          >
-            <Icon size={20} className="text-slate-600 dark:text-slate-300" />
-          </div>
-        )}
-
-        {/* CONTENT */}
-        <div className="flex-1">
-          <p
-            className="
-              text-xs
-              uppercase
-              tracking-wider
-
-              text-slate-500
-              dark:text-slate-400
-            "
-          >
-            {label}
-          </p>
-
-          <h3
-            className="
-              mt-2
-              text-xl
-              font-semibold
-
-              text-slate-900
-              dark:text-white
-            "
-          >
-            {value}
-          </h3>
-
-          {subtext && (
-            <p
-              className="
-                mt-1
-                text-xs
-
-                text-slate-500
-                dark:text-slate-400
-              "
-            >
-              {subtext}
-            </p>
+      {(Icon || badge || actions) && (
+        <CardHeader align="center">
+          {Icon && (
+            <IconContainer variant={variant}>
+              <Icon strokeWidth={2.2} />
+            </IconContainer>
           )}
-        </div>
-      </div>
 
-      {children}
-    </div>
+          <div className="ml-auto flex items-center gap-2">
+            {badge &&
+              (typeof badge === "string" ? <Badge>{badge}</Badge> : badge)}
+
+            {actions}
+          </div>
+        </CardHeader>
+      )}
+
+      <CardContent className="mt-5 flex flex-col">
+        {loading ? (
+          <>
+            <div className="h-5 w-24 animate-pulse rounded bg-slate-200 dark:bg-white/10" />
+            <div className="mt-3 h-7 w-40 animate-pulse rounded bg-slate-200 dark:bg-white/10" />
+            <div className="mt-3 h-4 w-full animate-pulse rounded bg-slate-200 dark:bg-white/10" />
+          </>
+        ) : (
+          <>
+            {subtitle && (
+              <p className="mb-3 text-xs font-bold uppercase tracking-[0.25em] text-[#6096ba] dark:text-[#a3cef1]">
+                {subtitle}
+              </p>
+            )}
+
+            {value && (
+              <div className="mb-3 flex items-center justify-between">
+                <h2 className="text-3xl font-black tracking-tight text-slate-900 dark:text-white">
+                  {value}
+                </h2>
+
+                {trend !== undefined && (
+                  <Trend value={trend} label={trendLabel} />
+                )}
+              </div>
+            )}
+
+            {title && <CardTitle className="mb-3">{title}</CardTitle>}
+
+            {description && (
+              <CardDescription className="leading-7">
+                {description}
+              </CardDescription>
+            )}
+
+            {children && <div className="mt-auto pt-6">{children}</div>}
+          </>
+        )}
+      </CardContent>
+
+      {footer && <CardFooter>{footer}</CardFooter>}
+    </Card>
   );
 }

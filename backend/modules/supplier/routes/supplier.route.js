@@ -1,93 +1,80 @@
-const express = require('express')
+const router = require("express").Router();
 
-const router = express.Router()
+const auth = require("../../../middleware/auth");
+const roleCheck = require("../../../middleware/roleCheck");
 
-const supplierController = require('../controllers/supplier.controller')
-const reportSupplier = require('../controllers/report-supplier.controller')
+const supplierController = require("../controllers/supplier.controller");
+const reportSupplier = require("../controllers/supplier.export.controller");
 
-// MIDDLEWARES
-const auth = require('../../../middleware/auth')
-
-// VALIDATORS
 const {
   validateCreateSupplier,
-} = require('../validators/supplier-create.validator')
+} = require("../validators/supplier-create.validator");
 
 const {
-  validateUpdateSupplier
-} = require('../validators/supplier-update.validator')
+  validateUpdateSupplier,
+} = require("../validators/supplier-update.validator");
 
 const {
-  validateSupplierQuery
-} = require('../validators/supplier-query.validator')
+  validateSupplierQuery,
+} = require("../validators/supplier-query.validator");
 
-// ======================================================
-// QUERY
-// ======================================================
+router.use(auth);
 
 router.get(
-  '/',
-  auth,
+  "/",
+  roleCheck("ADMIN", "MANAGER", "SUPERVISOR", "EMPLOYEE", "VIEWER"),
   validateSupplierQuery,
   supplierController.getSuppliers
-)
+);
 
 router.get(
-  '/search',
-  auth,
+  "/search",
+  roleCheck("ADMIN", "MANAGER", "SUPERVISOR", "EMPLOYEE", "VIEWER"),
   supplierController.searchSuppliers
-)
+);
 
 router.get(
-  '/:id',
-  auth,
+  "/:id",
+  roleCheck("ADMIN", "MANAGER", "SUPERVISOR", "EMPLOYEE", "VIEWER"),
   supplierController.getSupplierById
-)
-
-// ======================================================
-// CREATE
-// ======================================================
+);
 
 router.post(
-  '/',
-  auth,
+  "/",
+  roleCheck("ADMIN", "MANAGER"),
   validateCreateSupplier,
   supplierController.createSupplier
-)
-
-// ======================================================
-// UPDATE
-// ======================================================
+);
 
 router.patch(
-  '/:id',
-  auth,
+  "/:id",
+  roleCheck("ADMIN", "MANAGER"),
   validateUpdateSupplier,
   supplierController.updateSupplier
-)
-
-// ======================================================
-// DELETE
-// ======================================================
+);
 
 router.delete(
-  '/:id',
-  auth,
+  "/:id",
+  roleCheck("ADMIN"),
   supplierController.deleteSupplier
-)
-
-// ======================================================
-// RESTORE
-// ======================================================
+);
 
 router.patch(
-  '/:id/restore',
-  auth,
+  "/:id/restore",
+  roleCheck("ADMIN"),
   supplierController.restoreSupplier
-)
+);
 
-// REPORTS
-router.get('/reports/suppliers/pdf', auth, reportSupplier.downloadSuppliersPDFController)
-router.get('/reports/suppliers/excel', auth, reportSupplier.downloadSuppliersExcelController)
+router.get(
+  "/reports/pdf",
+  roleCheck("ADMIN", "MANAGER", "SUPERVISOR"),
+  reportSupplier.downloadSuppliersPDF
+);
 
-module.exports = router
+router.get(
+  "/reports/excel",
+  roleCheck("ADMIN", "MANAGER", "SUPERVISOR"),
+  reportSupplier.downloadSuppliersExcel
+);
+
+module.exports = router;

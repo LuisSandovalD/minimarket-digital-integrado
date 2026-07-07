@@ -339,18 +339,29 @@ module.exports = {
     async (req, res, next) => {
       try {
         const { companyId } = req.query;
-        const report = await getTopProductsService(Number(companyId));
 
+        // 1. Validar y parsear de forma segura el ID de la empresa
+        const parsedCompanyId = parseInt(companyId, 10);
+        if (!parsedCompanyId || isNaN(parsedCompanyId)) {
+          return res.status(400).json({
+            error: "El parámetro companyId es requerido y debe ser un número válido."
+          });
+        }
+
+        // 2. Consumir el servicio con el número ya validado
+        const report = await getTopProductsService(parsedCompanyId);
+
+        // 3. Cabeceras optimizadas para visualización nativa (inline) e impresión en el iframe
         res.setHeader("Content-Type", "application/pdf");
         res.setHeader(
           "Content-Disposition",
-          `attachment; filename="top-products-${companyId || "report"}.pdf"`
+          `inline; filename="top-products-${parsedCompanyId}.pdf"`
         );
 
         const doc = new PDFDocument({ size: "A4", margin: 40 });
         doc.pipe(res);
 
-        const company = companyId ? await companyService.getById(Number(companyId)) : null;
+        const company = await companyService.getById(parsedCompanyId);
         let img = null;
         if (company && company.logo) {
           img = await fetchImageBuffer(company.logo);
@@ -434,12 +445,21 @@ module.exports = {
     async (req, res, next) => {
       try {
         const { companyId } = req.query;
-        const report = await getTopProductsService(Number(companyId));
+
+        // Validar y parsear de forma segura el ID de la empresa
+        const parsedCompanyId = parseInt(companyId, 10);
+        if (!parsedCompanyId || isNaN(parsedCompanyId)) {
+          return res.status(400).json({
+            error: "El parámetro companyId es requerido y debe ser un número válido."
+          });
+        }
+
+        const report = await getTopProductsService(parsedCompanyId);
 
         const workbook = new ExcelJS.Workbook();
         const sheet = workbook.addWorksheet("Top Products");
 
-        const company = companyId ? await companyService.getById(Number(companyId)) : null;
+        const company = await companyService.getById(parsedCompanyId);
         let imgBuf = null;
         if (company && company.logo) {
           imgBuf = await fetchImageBuffer(company.logo);
@@ -527,11 +547,11 @@ module.exports = {
         const buffer = await workbook.xlsx.writeBuffer();
 
         res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-        res.setHeader("Content-Disposition", `attachment; filename="top-products-${companyId || "report"}.xlsx"`);
+        res.setHeader("Content-Disposition", `attachment; filename="top-products-${parsedCompanyId}.xlsx"`);
         return res.send(buffer);
 
       } catch (error) {
         next(error);
       }
-    },
+    }
 };

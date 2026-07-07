@@ -1,97 +1,50 @@
 // ========================================
-// services/users.service.js
+// features/users/services/user.service.js
 // ========================================
 
 import api from "../../../api/axios";
 
-// ========================================
-// GET ALL USERS
-// ========================================
+/**
+ * Obtiene la lista de usuarios paginada y filtrada.
+ * @param {Object} filters - Filtros como { page, limit, search, branchId, isActive }
+ */
+export const getUsers = async (filters = {}) => {
+  // Pasamos los filtros dentro de la configuración de Axios usando 'params'
+  const { data } = await api.get("/user", { params: filters });
+  return data;
+};
 
-export async function getUsers() {
-  const response = await api.get("/user");
+export const getHierarchy = async () => {
+  const { data } = await api.get("/user/hierarchy");
+  return data;
+};
 
-  return response.data;
-}
+export const getUserById = async (id) => {
+  const { data } = await api.get(`/user/${id}`);
+  return data;
+};
 
-// ========================================
-// GET HIERARCHY
-// ========================================
+export const createUser = async (payload) => {
+  const { data } = await api.post("/user", payload);
+  return data;
+};
 
-export async function getRootUsers() {
-  const response = await api.get("/user/hierarchy");
+export const updateUser = async (id, payload) => {
+  const { data } = await api.put(`/user/${id}`, payload);
+  return data;
+};
 
-  return response.data;
-}
+export const toggleUserStatus = async (id) => {
+  const { data } = await api.patch(`/user/${id}/status`);
+  return data;
+};
 
-// ========================================
-// GET USERS BY MANAGER
-// OPTIONAL
-// If backend endpoint exists
-// ========================================
+export const restoreUser = async (id) => {
+  const { data } = await api.patch(`/user/${id}/restore`);
+  return data;
+};
 
-export async function getUsersByManager(managerId) {
-  const response = await api.get(`/user/${managerId}`);
-
-  return response.data;
-}
-
-// ========================================
-// GET USER BY ID
-// ========================================
-
-export async function getUserById(id) {
-  const response = await api.get(`/user/${id}`);
-
-  return response.data;
-}
-
-// ========================================
-// CREATE USER
-// ========================================
-
-export async function createUser(data) {
-  const response = await api.post("/user", data);
-
-  return response.data;
-}
-
-// ========================================
-// UPDATE USER
-// ========================================
-
-export async function updateUser(id, data) {
-  const response = await api.put(`/user/${id}`, data);
-
-  return response.data;
-}
-
-// ========================================
-// TOGGLE USER STATUS
-// ========================================
-
-export async function toggleUserStatus(id) {
-  const response = await api.patch(`/user/${id}/status`);
-
-  return response.data;
-}
-
-// ========================================
-// DELETE USER
-// ========================================
-
-export async function deleteUser(id) {
-  const response = await api.delete(`/user/${id}`);
-
-  return response.data;
-}
-
-// ========================================
-// RESTORE USER
-// ========================================
-
-export async function restoreUser(id) {
-  const response = await api.patch(`/user/restore/${id}`);
-
-  return response.data;
-}
+export const deleteUser = async (id) => {
+  const { data } = await api.delete(`/user/${id}`);
+  return data;
+};

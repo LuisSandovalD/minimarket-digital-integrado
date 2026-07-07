@@ -1,6 +1,7 @@
+const crudController = require("./supplier.crud.controller");
+const exportController = require("./supplier.export.controller");
+
 module.exports = {
-  ...require('./supplier-create.controller'),
-  ...require('./supplier-update.controller'),
-  ...require('./supplier-delete.controller'),
-  ...require('./supplier-query.controller')
-}
+  ...crudController,
+  ...exportController,
+};

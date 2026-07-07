@@ -1,6 +1,4 @@
-// ========================================
 // features/dashboard/components/DashboardLoading.jsx
-// ========================================
 import {
   SkeletonCard,
   SkeletonChart,
@@ -11,9 +9,6 @@ import {
 export default function DashboardLoading() {
   return (
     <div className="max-w-[1800px] mx-auto p-6 space-y-8 animate-pulse">
-      {/* ==========================================================
-          1. HEADER + KPIs GLOBALES
-         ========================================================== */}
       <SkeletonHeader stats={9} showActions />
 
       {/* ==========================================================

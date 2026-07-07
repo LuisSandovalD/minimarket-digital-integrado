@@ -10,6 +10,8 @@ const prisma = new PrismaClient();
 // FASE 1 - DATOS MAESTROS
 // ============================================================================
 const { adminSeed } = require("./seeds/admin.seed");
+const { commentsSeed } = require("./seeds/comments.seed");
+
 const { unitSeed } = require("./seeds/unit.seed");
 const { categorySeed } = require("./seeds/category.seed");
 const { productSeed } = require("./seeds/product.seed");
@@ -70,7 +72,9 @@ async function main() {
     // FASE 1 - ESTRUCTURA BASE
     // ======================================================================
 
-    await executeSeed(adminSeed, "1. Administrator Users");
+    // await executeSeed(adminSeed, "1. Administrator Users");
+    // await executeSeed(commentsSeed, "2. Comments for Administrators");
+
     // await executeSeed(unitSeed, "2. Measurement Units");
     // await executeSeed(categorySeed, "3. Product Categories");
     // await executeSeed(productSeed, "4. Product Catalog");
@@ -81,12 +85,12 @@ async function main() {
     // FASE 2 - INVENTARIO INICIAL
     // ======================================================================
 
-    // await executeSeed(
-    //   purchaseJsonPayloadSeed,
-    //   "7. Historical Purchases & Initial Stock"
-    // );
+    await executeSeed(
+      purchaseJsonPayloadSeed,
+      "7. Historical Purchases & Initial Stock"
+    );
 
-   
+
 
     // await executeSeed(
     //   saleJsonPayloadSeed2021,

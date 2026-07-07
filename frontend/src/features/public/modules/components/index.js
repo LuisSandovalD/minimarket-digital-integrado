@@ -1,9 +1,5 @@
 // models/components/index.js
 
-export { default as ERPPreviewCard } from "./ERPPreviewCard";
-
-export { default as ModulePreview } from "./ModulePreview";
-
 export { default as DashboardPreview } from "./DashboardPreview";
 
 export { default as AnalyticsPreview } from "./AnalyticsPreview";

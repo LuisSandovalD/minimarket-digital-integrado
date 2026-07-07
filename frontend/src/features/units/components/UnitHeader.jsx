@@ -1,52 +1,68 @@
 // ========================================
-// components/units/UnitHeader.jsx
+// FEATURES / UNITS / COMPONENTS
+// UnitHeader.jsx
 // ========================================
 
-import { Activity, Calculator, Plus, Scale } from "lucide-react";
+import { CheckCircle2, Layers, Plus, Scale, XCircle } from "lucide-react";
 
-import { PageHeader } from "@/components/data-display/";
+import { PageHeader } from "@/components/data-display";
 
-export default function UnitHeader({
-  units = [],
+// ========================================
+// COMPONENT
+// ========================================
 
-  onCreate,
-}) {
-  const stats = [
-    {
-      icon: Scale,
-      label: "TOTAL",
-      value: units.length,
-    },
-
-    {
-      icon: Activity,
-      label: "ACTIVAS",
-      value: units.filter((unit) => unit.isActive).length,
-    },
-
-    {
-      icon: Calculator,
-      label: "CONVERSIÓN",
-      value: "Automática",
-    },
-  ];
+export default function UnitHeader({ units = [], onCreate }) {
+  // ========================================
+  // CALCULO DE MÉTRICAS (Datos en tiempo real)
+  // ========================================
+  const totalUnits = units.length;
+  const activeUnits = units.filter((unit) => unit.isActive).length;
+  const inactiveUnits = totalUnits - activeUnits;
 
   return (
     <PageHeader
+      // ====================================
+      // MAIN
+      // ====================================
       icon={Scale}
-      badge="Inventario"
-      title="Gestión de Unidades"
+      badge="Configuración de Inventario"
+      title="Unidades de Medida"
       description="
-        Administra las unidades de medida
-        utilizadas para productos,
-        conversiones y control de inventario.
+        Administra las magnitudes,
+        abreviaciones y factores
+        de conversión utilizados para
+        el control de stock.
       "
-      stats={stats}
+      // ====================================
+      // ACTION
+      // ====================================
       action={{
         label: "Nueva Unidad",
         icon: Plus,
         onClick: onCreate,
       }}
+      // ====================================
+      // STATS (Igual al formato de Ventas)
+      // ====================================
+      stats={[
+        {
+          icon: Layers,
+          label: "Total Registradas",
+          value: totalUnits,
+        },
+        {
+          icon: CheckCircle2,
+          label: "Activas",
+          value: activeUnits,
+          className: "text-emerald-500 dark:text-emerald-400", // Por si tu PageHeader acepta estilos por celda
+        },
+        {
+          icon: XCircle,
+          label: "Inactivas",
+          value: inactiveUnits,
+          className: "text-rose-500 dark:text-rose-400",
+        },
+      ]}
     />
   );
 }

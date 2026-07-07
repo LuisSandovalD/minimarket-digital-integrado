@@ -1,33 +1,22 @@
-// ========================================
-// features/account/components/LoginForm.jsx
-// ========================================
 import { ModernButton, SubmitButton } from "@/components/buttons";
 import { Checkbox, FormError, Input, PasswordInput } from "@/components/forms";
 import { Lock, Mail } from "lucide-react";
 import { useState } from "react";
-
 import useLoginForm from "../../hooks/useLoginForm";
-
 import ForgotPasswordModal from "../password/ForgotPasswordModal";
-// 🚀 CAMBIO 1: Importamos el modal específico para el flujo de Login por Correo
-import TwoFactorLoginModal from "./TwoFactorLoginModal";
-
 import LoginOptions from "./LoginOptions";
+import TwoFactorLoginModal from "./TwoFactorLoginModal";
 
 export default function LoginForm({ onClose }) {
   const {
     form,
     loading,
     error,
-
     showTwoFactor,
     setShowTwoFactor,
-
     pendingUserId,
     email,
-
     completeLogin,
-
     handleChange,
     handleSubmit,
   } = useLoginForm(onClose);
@@ -69,14 +58,13 @@ export default function LoginForm({ onClose }) {
             checked={form.remember}
             onChange={handleChange}
           />
-
           <ModernButton
             type="button"
             text="¿Olvidaste tu contraseña?"
             size="sm"
             variant="ghost"
             onClick={() => setShowForgotPassword(true)}
-            className="h-auto px-0 font-semibold text-[#274c77] hover:bg-transparent hover:text-[#6096ba] dark:text-[#a3cef1]"
+            className="h-auto px-0 font-semibold text-[#274c77] hover:text-[#6096ba] dark:text-[#a3cef1]"
           />
         </LoginOptions>
 
@@ -94,14 +82,14 @@ export default function LoginForm({ onClose }) {
           Al iniciar sesión aceptas nuestros{" "}
           <button
             type="button"
-            className="font-medium text-[#274c77] transition-colors hover:text-[#6096ba] dark:text-[#a3cef1]"
+            className="font-medium text-[#274c77] hover:text-[#6096ba] dark:text-[#a3cef1]"
           >
             Términos y Condiciones
-          </button>{" "}
-          y nuestra{" "}
+          </button>
+          {" y nuestra "}
           <button
             type="button"
-            className="font-medium text-[#274c77] transition-colors hover:text-[#6096ba] dark:text-[#a3cef1]"
+            className="font-medium text-[#274c77] hover:text-[#6096ba] dark:text-[#a3cef1]"
           >
             Política de Privacidad
           </button>
@@ -109,13 +97,11 @@ export default function LoginForm({ onClose }) {
         </p>
       </form>
 
-      {/* Recuperación de contraseña */}
       <ForgotPasswordModal
         isOpen={showForgotPassword}
         onClose={() => setShowForgotPassword(false)}
       />
 
-      {/* 🚀 CAMBIO 2: Renderizamos el modal de Login (Correo) pasándole todas las propiedades */}
       <TwoFactorLoginModal
         open={showTwoFactor}
         userId={pendingUserId}

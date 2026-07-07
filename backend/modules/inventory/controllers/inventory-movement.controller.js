@@ -9,41 +9,37 @@ const service =
 // GET MOVEMENTS
 // ========================================
 
-exports.getMovements =
-  async (
-    req,
-    res
-  ) => {
 
-    try {
+exports.getMovements = async (req, res) => {
+  try {
+    const result = await service.getMovements({
+      companyId: req.user.companyId,
 
-      const movements =
-        await service.getMovements(
-          req.user.companyId
-        );
+      page: req.query.page,
+      limit: req.query.limit,
 
-      res.json({
+      search: req.query.search,
 
-        success: true,
+      branchId: req.query.branchId,
+      productId: req.query.productId,
 
-        data:
-          movements,
-      });
+      type: req.query.type,
+    });
 
-    } catch (error) {
+    res.status(200).json({
+      success: true,
+      data: result.data,
+      pagination: result.pagination,
+    });
+  } catch (error) {
+    console.error("Error obteniendo movimientos:", error);
 
-      res.status(500).json({
-
-        success: false,
-
-        message:
-          error.message,
-      });
-
-    }
-
-  };
-
+    res.status(500).json({
+      success: false,
+      message: error.message || "Error interno del servidor.",
+    });
+  }
+};
 // ========================================
 // GET PRODUCT MOVEMENTS
 // ========================================

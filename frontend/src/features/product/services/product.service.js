@@ -4,99 +4,66 @@
 
 import api from "../../../api/axios";
 
-// ========================================
-// CONSTANTS
-// ========================================
-
 const ENDPOINT = "/product";
 
 // ========================================
-// GET ALL PRODUCTS
+// SERVICIOS HTTP
 // ========================================
 
-const getProducts = async () => {
-  const { data } = await api.get(ENDPOINT);
-
+// Soporta ?page=1&limit=10&search=... a través de los params de Axios
+const getProducts = async (filters = {}) => {
+  const { data } = await api.get(ENDPOINT, {
+    params: {
+      page: filters.page || 1,
+      limit: filters.limit || 10,
+      search: filters.search || undefined, // undefined evita enviar cadenas vacías en la URL
+      categoryId: filters.categoryId || undefined,
+      status: filters.status || undefined,
+      sortBy: filters.sortBy || "createdAt",
+      sortOrder: filters.sortOrder || "desc",
+    },
+  });
   return data;
 };
-
-// ========================================
-// GET PRODUCT BY ID
-// ========================================
 
 const getProductById = async (id) => {
   const { data } = await api.get(`${ENDPOINT}/${id}`);
-
   return data;
 };
-
-// ========================================
-// CREATE PRODUCT
-// ========================================
 
 const createProduct = async (payload) => {
   const { data } = await api.post(ENDPOINT, payload);
-
   return data;
 };
-
-// ========================================
-// UPDATE PRODUCT
-// ========================================
 
 const updateProduct = async (id, payload) => {
   const { data } = await api.put(`${ENDPOINT}/${id}`, payload);
-
   return data;
 };
-
-// ========================================
-// DELETE PRODUCT
-// ========================================
 
 const deleteProduct = async (id) => {
   const { data } = await api.delete(`${ENDPOINT}/${id}`);
-
   return data;
 };
-
-// ========================================
-// RESTORE PRODUCT
-// ========================================
 
 const restoreProduct = async (id) => {
   const { data } = await api.patch(`${ENDPOINT}/${id}/restore`);
-
   return data;
 };
 
-// ========================================
-// FEATURED PRODUCTS
-// ========================================
-
-const getFeaturedProducts = async () => {
-  const { data } = await api.get(`${ENDPOINT}/featured`);
-
+// Se añade soporte opcional de query params para limitar o paginar reportes especiales
+const getFeaturedProducts = async (query = {}) => {
+  const { data } = await api.get(`${ENDPOINT}/featured`, { params: query });
   return data;
 };
 
-// ========================================
-// LOW STOCK PRODUCTS
-// ========================================
-
-const getLowStockProducts = async () => {
-  const { data } = await api.get(`${ENDPOINT}/low-stock`);
-
+const getLowStockProducts = async (query = {}) => {
+  const { data } = await api.get(`${ENDPOINT}/low-stock`, { params: query });
   return data;
 };
 
-// ========================================
-// EXPIRING PRODUCTS
-// ========================================
-
-const getExpiringProducts = async () => {
-  const { data } = await api.get(`${ENDPOINT}/expiring`);
-
+const getExpiringProducts = async (query = {}) => {
+  const { data } = await api.get(`${ENDPOINT}/expiring`, { params: query });
   return data;
 };
 
@@ -106,21 +73,13 @@ const getExpiringProducts = async () => {
 
 const productService = {
   getProducts,
-
   getProductById,
-
   createProduct,
-
   updateProduct,
-
   deleteProduct,
-
   restoreProduct,
-
   getFeaturedProducts,
-
   getLowStockProducts,
-
   getExpiringProducts,
 };
 

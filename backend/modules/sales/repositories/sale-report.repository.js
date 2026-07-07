@@ -102,98 +102,66 @@ module.exports = {
   },
 
   // ========================================
-  // TOP PRODUCTS
+  // TOP PRODUCTS - REPOSITORIO CORREGIDO
   // ========================================
 
-  getTopProducts: async (
-    companyId
-  ) => {
-
+  getTopProducts: async (companyId) => {
     const where = {};
 
-    if (
-      companyId !== undefined &&
-      companyId !== null &&
-      companyId !== ""
-    ) {
-      where.sale = {
-        companyId: Number(companyId),
-      };
+    // 1. Validamos y limpiamos el ID para asegurar que sea un entero válido y evitar un NaN
+    if (companyId !== undefined && companyId !== null && companyId !== "") {
+      const parsedCompanyId = parseInt(companyId, 10);
+
+      if (!isNaN(parsedCompanyId)) {
+        where.sale = {
+          is: { // 💡 CRUCIAL: 'is' es obligatorio para relaciones dentro de un `.groupBy()` en Prisma
+            companyId: parsedCompanyId,
+          },
+        };
+      }
     }
 
-    const rows =
-      await prisma.saleDetail.groupBy({
-
-        by: ["productId"],
-
-        where,
-
+    // 2. Ejecutamos la agrupación agregando el operador relacional correcto
+    const rows = await prisma.saleDetail.groupBy({
+      by: ["productId"],
+      where,
+      _sum: {
+        quantity: true,
+        subtotal: true,
+      },
+      orderBy: {
         _sum: {
-          quantity: true,
-          subtotal: true,
+          quantity: "desc",
         },
-
-        orderBy: {
-          _sum: {
-            quantity: "desc",
-          },
-        },
-
-        take: 10,
-
-      });
-
-    const products =
-      await prisma.product.findMany({
-
-        where: {
-          id: {
-            in: rows.map(
-              (r) => r.productId
-            ),
-          },
-        },
-
-        select: {
-          id: true,
-          name: true,
-          sku: true,
-        },
-
-      });
-
-    return rows.map((row) => {
-
-      const product =
-        products.find(
-          (p) =>
-            p.id === row.productId
-        );
-
-      return {
-
-        productId: row.productId,
-
-        productName:
-          product?.name || "Sin nombre",
-
-        sku:
-          product?.sku || "",
-
-        quantity:
-          Number(
-            row._sum.quantity || 0
-          ),
-
-        total:
-          Number(
-            row._sum.subtotal || 0
-          ),
-
-      };
-
+      },
+      take: 10,
     });
 
-  },
+    // 3. Traemos los datos de los productos implicados
+    const products = await prisma.product.findMany({
+      where: {
+        id: {
+          in: rows.map((r) => r.productId),
+        },
+      },
+      select: {
+        id: true,
+        name: true,
+        sku: true,
+      },
+    });
 
+    // 4. Mapeamos y estructuramos la respuesta final
+    return rows.map((row) => {
+      const product = products.find((p) => p.id === row.productId);
+
+      return {
+        productId: row.productId,
+        productName: product?.name || "Sin nombre",
+        sku: product?.sku || "",
+        quantity: Number(row._sum.quantity || 0),
+        total: Number(row._sum.subtotal || 0),
+      };
+    });
+  },
 };

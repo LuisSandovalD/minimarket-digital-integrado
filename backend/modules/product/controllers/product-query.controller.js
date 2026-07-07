@@ -6,35 +6,27 @@ const service =
   require("../services/product.service");
 
 // ========================================
-// GET PRODUCTS
+// GET PRODUCTS (EN TU CONTROLADOR)
 // ========================================
 
-exports.getProducts =
-  async (req, res) => {
+exports.getProducts = async (req, res) => {
+  try {
+    // Pasamos el companyId y todo el objeto req.query (filtros, paginación, orden)
+    const result = await service.getAll(req.user.companyId, req.query);
 
-    try {
+    res.json({
+      success: true,
+      data: result.data, // La lista de productos mapeados
+      pagination: result.pagination, // La metadata de paginación para el frontend
+    });
 
-      const products =
-        await service.getAll(
-          req.user.companyId
-        );
-
-      res.json({
-        success: true,
-        data: products,
-      });
-
-    } catch (error) {
-
-      res.status(500).json({
-        success: false,
-        message: error.message,
-      });
-
-    }
-
-  };
-
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 // ========================================
 // GET PRODUCT BY ID
 // ========================================

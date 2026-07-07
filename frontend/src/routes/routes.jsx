@@ -20,7 +20,6 @@ import CompaniesPage from "../features/company/pages/CompaniesPage";
 import CustomerPage from "../features/customer/pages/CustomerPage";
 import Dashboard from "../features/dashboard/pages/DashboardPage";
 import DataBasePage from "../features/database/pages/DataBasePage";
-import EmployeesPage from "../features/employee/pages/EmployeesPage";
 import GeminiPage from "../features/google_gemini/pages/GeminiPage";
 import InventoryPage from "../features/inventory/pages/InventoryPage";
 import MovementsPage from "../features/movements/pages/MovementsPage";
@@ -30,13 +29,14 @@ import ProductsPage from "../features/product/pages/ProductsPage";
 import Pricing from "../features/public/pricing/Pricing";
 import PurchasePage from "../features/purchase/page/PurchasePage";
 import ReportsPage from "../features/reports/pages/ReportsPage";
+import ReviewPage from "../features/reviews/pages/ReviewPage";
 import SaleDetailPage from "../features/sale-detail/pages/SaleDetailsPage";
 import SalesPage from "../features/sales/pages/SalesPage";
 import ConfigurationPage from "../features/settings/pages/ConfigurationPage";
 import StatisticsPage from "../features/statistics/pages/StatisticsPage";
 import SupplierPage from "../features/supplier/pages/SupplierPage";
 import SupportPage from "../features/support/pages/SupportPage";
-import UnitPage from "../features/units";
+import UnitPage from "../features/units/pages/UnitPage";
 import UsersPage from "../features/users/pages/UsersPage";
 import AppLayout from "../layout/app-layout/AppLayout";
 
@@ -146,10 +146,7 @@ export const routes = [
             path: "inventory-history",
             element: <MovementsPage />,
           },
-          {
-            path: "employees",
-            element: <EmployeesPage />,
-          },
+
           {
             path: "customers",
             element: <CustomerPage />,
@@ -213,6 +210,10 @@ export const routes = [
           {
             path: "payments",
             element: <PaymentsPage />,
+          },
+          {
+            path: "reviews",
+            element: <ReviewPage />,
           },
         ],
       },

@@ -7,7 +7,7 @@ export default function PaymentActions({ payment, onView }) {
       size="sm"
       variant="ghost"
       icon={Eye}
-      text=""
+      text="Mostrar"
       onClick={() => onView(payment)}
     />
   );

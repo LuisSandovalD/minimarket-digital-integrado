@@ -2,29 +2,35 @@
 // features/supplier/hooks/useSupplierFilters.js
 // ========================================
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
-export default function useSupplierFilters(suppliers = []) {
+export default function useSupplierFilters() {
   const [search, setSearch] = useState("");
+  const [isActive, setIsActive] = useState(undefined);
 
-  const filteredSuppliers = useMemo(() => {
-    return suppliers.filter((supplier) => {
-      const text = search.toLowerCase();
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
 
-      return (
-        supplier.name?.toLowerCase().includes(text) ||
-        supplier.ruc?.toLowerCase().includes(text) ||
-        supplier.email?.toLowerCase().includes(text) ||
-        supplier.phone?.toLowerCase().includes(text) ||
-        supplier.contactPerson?.toLowerCase().includes(text)
-      );
-    });
-  }, [suppliers, search]);
+  const resetFilters = () => {
+    setSearch("");
+    setIsActive(undefined);
+    setPage(1);
+    setLimit(10);
+  };
 
   return {
     search,
     setSearch,
 
-    filteredSuppliers,
+    isActive,
+    setIsActive,
+
+    page,
+    setPage,
+
+    limit,
+    setLimit,
+
+    resetFilters,
   };
 }

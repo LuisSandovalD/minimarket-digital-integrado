@@ -38,7 +38,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="mx-auto max-w-[1800px] space-y-8 p-6">
+    <div className="mx-auto max-w-[1800px] space-y-8">
       {/* Cabecera Principal */}
       <DashboardHeader
         totalSales={kpis.totalSales || 0}

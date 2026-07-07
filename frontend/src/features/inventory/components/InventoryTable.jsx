@@ -12,14 +12,18 @@ import {
   ShieldAlert,
 } from "lucide-react";
 
-import { Table, THead } from "@/components/data-display/";
-
+// Importamos TFooter directo de tus componentes compartidos de visualización
+import { Table, TFooter, THead } from "@/components/data-display/";
 import { getStockStatus } from "../utils/stockStatus";
 
 export default function InventoriesTable({
   inventories = [],
   loading = false,
   actionLoading = false,
+  page = 1,
+  totalPages = 1,
+  onNextPage,
+  onPrevPage,
   handleAddStock,
   handleRemoveStock,
   handleDamagedStock,
@@ -246,19 +250,7 @@ export default function InventoriesTable({
             <tr>
               <td colSpan={8} className="px-6 py-16 text-center">
                 <div className="flex flex-col items-center justify-center">
-                  <div
-                    className="
-                      mb-4
-                      flex
-                      h-16
-                      w-16
-                      items-center
-                      justify-center
-                      rounded-2xl
-                      bg-slate-100
-                      dark:bg-slate-800
-                    "
-                  >
+                  <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-100 dark:bg-slate-800">
                     <Boxes className="h-8 w-8 text-slate-400" />
                   </div>
                   <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200">
@@ -272,6 +264,14 @@ export default function InventoriesTable({
             </tr>
           )}
         </tbody>
+        {inventories.length > 0 && (
+          <TFooter
+            page={page}
+            totalPages={totalPages}
+            onPrev={onPrevPage}
+            onNext={onNextPage}
+          />
+        )}
       </Table>
     </div>
   );
