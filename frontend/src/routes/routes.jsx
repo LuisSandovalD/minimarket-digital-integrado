@@ -20,7 +20,7 @@ import CompaniesPage from "../features/company/pages/CompaniesPage";
 import CustomerPage from "../features/customer/pages/CustomerPage";
 import Dashboard from "../features/dashboard/pages/DashboardPage";
 import DataBasePage from "../features/database/pages/DataBasePage";
-import GeminiPage from "../features/google_gemini/pages/GeminiPage";
+import AIChatPage from "../features/google_gemini/pages/AIChatPage";
 import InventoryPage from "../features/inventory/pages/InventoryPage";
 import MovementsPage from "../features/movements/pages/MovementsPage";
 import NotificationsPages from "../features/notifications/pages/NotificationsPages";
@@ -132,7 +132,7 @@ export const routes = [
             path: "automation",
             element: (
               <SubscriptionGuard requiredTier="PREMIUM">
-                <GeminiPage />
+                <AIChatPage />
               </SubscriptionGuard>
             ),
           },

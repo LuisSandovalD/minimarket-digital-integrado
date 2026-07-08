@@ -20,12 +20,14 @@ export default function CompanyEditModal({
   companyId,
   onSuccess,
 }) {
-  const { loading, formData, handleChange, handleSubmit } = useCompanyEdit({
-    open,
-    companyId,
-    onClose,
-    onSuccess,
-  });
+  // 🌟 Extraemos 'handleFileChange' que creamos en el hook corregido
+  const { loading, formData, handleChange, handleFileChange, handleSubmit } =
+    useCompanyEdit({
+      open,
+      companyId,
+      onClose,
+      onSuccess,
+    });
 
   return (
     <Modal open={open} onClose={onClose} size="full">
@@ -52,12 +54,15 @@ export default function CompanyEditModal({
               </div>
               {/* Contenedor flexible secundario para forzar la expansión de la zona de carga */}
               <div className="flex-1 flex flex-col">
+                {/* 🌟 CAMBIO AQUÍ: Enlazamos el onChange con 'handleFileChange' directamente */}
                 <ModernImageUpload
                   value={formData.logo}
                   height="h-full flex-1"
-                  onChange={(file) =>
-                    handleChange({ target: { name: "logo", value: file } })
-                  }
+                  onChange={(file) => {
+                    // ModernImageUpload usualmente devuelve el archivo 'File' directamente.
+                    // Creamos el formato de evento nativo mínimo que handleFileChange espera.
+                    handleFileChange({ target: { files: [file] } });
+                  }}
                 />
               </div>
             </div>

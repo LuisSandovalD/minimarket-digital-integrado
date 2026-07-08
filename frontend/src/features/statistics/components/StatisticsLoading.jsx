@@ -9,9 +9,9 @@ import {
 
 export default function DashboardLoading() {
   return (
-    <div className="max-w-[1800px] mx-auto p-6 space-y-8 animate-pulse">
+    <div className="space-y-6 animate-pulse">
       {/* 1. HEADER + KPIs GLOBALES (Simula los 9 mini-indicadores perfectamente) */}
-      <SkeletonHeader stats={9} showActions />
+      <SkeletonHeader stats={3} showActions />
 
       {/* 2. 🚀 ACCESOS DIRECTOS PREMIUM (Simulación exacta de los 3 botones interactivos) */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">

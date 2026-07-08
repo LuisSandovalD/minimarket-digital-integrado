@@ -66,13 +66,13 @@ router.patch(
 );
 
 router.get(
-  "/reports/pdf",
+  "/reports/suppliers/pdf",
   roleCheck("ADMIN", "MANAGER", "SUPERVISOR"),
   reportSupplier.downloadSuppliersPDF
 );
 
 router.get(
-  "/reports/excel",
+  "/reports/suppliers/excel",
   roleCheck("ADMIN", "MANAGER", "SUPERVISOR"),
   reportSupplier.downloadSuppliersExcel
 );

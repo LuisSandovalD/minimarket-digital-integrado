@@ -4,7 +4,13 @@
 
 import { ModernButton, SubmitButton } from "@/components/buttons";
 import { FooterModal, HeaderModal, Modal } from "@/components/overlays";
-import { ChevronLeft, ChevronRight, Save, X } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Save,
+  Sheet,
+  X
+} from "lucide-react";
 import SaleStepper from "../SaleStepper";
 
 import CustomerStep from "../steps/CustomerStep";
@@ -38,6 +44,7 @@ export default function SaleFormModal({
        * HEADER
        * ====================================== */}
       <HeaderModal
+        icon={Sheet}
         title="Nueva Venta"
         subtitle="Proceso de venta paso a paso"
         onClose={onClose}

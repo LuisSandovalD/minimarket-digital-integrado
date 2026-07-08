@@ -9,7 +9,7 @@ import {
 
 export default function AnalyticsLoading() {
   return (
-    <div className="max-w-[1800px] mx-auto p-6 space-y-8 animate-pulse">
+    <div className="mx-auto space-y-6 animate-pulse">
       {/* 1. CONTROL DE NAVEGACIÓN SUPERIOR (Simula el botón "Regresar") */}
       <div className="h-5 bg-slate-200 dark:bg-slate-800 rounded w-40" />
 

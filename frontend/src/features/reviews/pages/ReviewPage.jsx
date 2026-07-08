@@ -63,7 +63,7 @@ export default function ReviewPage() {
   const userReviewsArray = review ? [review] : [];
 
   return (
-    <div className="space-y-8 p-4 md:p-6 transition-all duration-300 ease-in-out">
+    <div className="space-y-6 transition-all duration-300 ease-in-out">
       {/* ========================================
        * HEADER PRINCIPAL DE SECCIÓN
        * ====================================== */}

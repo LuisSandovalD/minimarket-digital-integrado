@@ -43,7 +43,7 @@ export default function StatisticsPage() {
   }
 
   return (
-    <div className="mx-auto max-w-[1800px] space-y-6 p-6">
+    <div className="space-y-6">
       {/* 1. Control Superior de Navegación */}
       <div>
         <button

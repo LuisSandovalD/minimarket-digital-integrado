@@ -42,7 +42,20 @@ export default function useUsers(initialFilters = {}) {
   const usersQuery = useQuery({
     queryKey: ["users", filters],
     queryFn: async () => {
-      const response = await getUsers(filters);
+      // 🌟 SANITIZACIÓN: Aseguramos que isActive sea Boolean estricto o undefined
+      let cleanedActive = filters.isActive;
+      if (filters.isActive === "true" || filters.isActive === true)
+        cleanedActive = true;
+      if (filters.isActive === "false" || filters.isActive === false)
+        cleanedActive = false;
+      if (filters.isActive === "" || filters.isActive === "all")
+        cleanedActive = undefined;
+
+      const response = await getUsers({
+        ...filters,
+        isActive: cleanedActive,
+      });
+
       return {
         data: Array.isArray(response?.data) ? response.data : [],
         pagination: {

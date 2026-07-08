@@ -1,24 +1,17 @@
+// ========================================
+// components/card/CardDescription.jsx
+// ========================================
+
 import clsx from "clsx";
 
 export default function CardDescription({
   children,
   className = "",
-
-  // Tamaño
   size = "sm",
-
-  // Color
   color = "default",
-
-  // Alineación
   align = "left",
-
-  // Altura de línea
   leading = "relaxed",
-
-  // Truncar texto
   lines,
-
   ...props
 }) {
   const sizes = {

@@ -6,6 +6,11 @@ const router = express.Router();
 const authController = require("../controllers/auth.controller");
 const auth = require("../../../middleware/auth"); // Tu middleware de aduana/sesión
 
+// 🌟 PATRÓN CLONADO: CONFIGURACIÓN DE MULTER EN MEMORIA PARA EL AVATAR
+const multer = require("multer");
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
 /* ======================================
  * 🔐 AUTHENTICATION
  * ==================================== */
@@ -19,10 +24,11 @@ router.post("/logout-all", auth, authController.logoutAll);
  * 👤 CURRENT USER / PROFILE
  * ==================================== */
 router.get("/me", auth, authController.getProfile);
-router.put("/profile", auth, authController.updateProfile);
-router.put("/change-password", auth, authController.changePassword);
 
-// 🚀 NUEVA RUTA: Dar de baja la cuenta (Usa DELETE)
+// 🌟 INTERCEPTAMOS EL AVATAR COMO UN ARCHIVO BINARIO REAL (Igual que con el logo)
+router.put("/profile", auth, upload.single("avatar"), authController.updateProfile);
+
+router.put("/change-password", auth, authController.changePassword);
 router.delete("/profile", auth, authController.deleteAccount);
 
 /* ======================================

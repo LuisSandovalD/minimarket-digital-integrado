@@ -10,6 +10,7 @@ import {
   RefreshCw,
   ShieldAlert,
   Smartphone,
+  TrashIcon,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -184,9 +185,10 @@ export default function SessionsModal({ open, onClose }) {
 
                   <div className="shrink-0">
                     <ModernButton
+                      icon={TrashIcon}
                       text={isRevoking ? "Revocando..." : "Revocar"}
                       variant="danger"
-                      size="xs"
+                      size="sm"
                       onClick={() => handleCloseSession(session.id)}
                       disabled={
                         sessionsLoading || isRevoking || session.isCurrent

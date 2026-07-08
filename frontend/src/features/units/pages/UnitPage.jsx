@@ -52,7 +52,7 @@ export default function UnitPage() {
   }
 
   return (
-    <div className="space-y-4 p-4">
+    <div className="space-y-6">
       {/* Header: Muestra contadores de tus datos en tiempo real */}
       <UnitHeader units={units} onCreate={handleCreate} />
 

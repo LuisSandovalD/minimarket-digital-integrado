@@ -8,10 +8,7 @@ import { companyService } from "../services/company.service";
 
 export default function useCompany() {
   const [company, setCompany] = useState(null);
-
-  // CRÍTICO: Si ya tenemos datos previos de la empresa, iniciamos en false
-  // para evitar parpadeos innecesarios en la interfaz del usuario.
-  const [loading, setLoading] = useState(!company);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   // FETCH COMPANY
@@ -29,11 +26,12 @@ export default function useCompany() {
     }
   }, []);
 
-  // UPDATE COMPANY
-  const updateCompany = async (companyId, data) => {
+  // UPDATE COMPANY (Soporta FormData para el envío de archivos binarios)
+  const updateCompany = async (companyId, formData) => {
     try {
       setError(null);
-      const response = await companyService.updateCompany(companyId, data);
+      // 'formData' debe ser una instancia de new FormData() enviada desde tu formulario
+      const response = await companyService.updateCompany(companyId, formData);
       const updatedCompany = response.data || response;
 
       setCompany(updatedCompany);
@@ -45,21 +43,14 @@ export default function useCompany() {
     }
   };
 
-  // ========================================
-  // CONTROL DE APARICIÓN DE DATOS
-  // ========================================
+  // CONTROL DE APARICIÓN DE DATOS (Se ejecuta una sola vez al montar)
   useEffect(() => {
-    // PROTECCIÓN: Solo ejecuta la petición al servidor si el estado
-    // local está vacío. Si ya "apareció" la empresa, no volvemos a cargar.
-    if (!company) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      fetchCompany();
-    }
-  }, [fetchCompany, company]);
+    fetchCompany();
+  }, [fetchCompany]);
 
   return {
     company,
-    companies: company ? [company] : [], // Si existe la empresa, se expone como array para la grilla
+    companies: company ? [company] : [], // Expone como array para la grilla si es necesario
     loading,
     error,
     fetchCompany,

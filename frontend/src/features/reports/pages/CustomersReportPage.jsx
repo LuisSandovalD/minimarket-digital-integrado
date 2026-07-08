@@ -3,61 +3,69 @@
 // ========================================
 
 import { SkeletonTable } from "@/components/skeletons";
-import { AlertCircle, RefreshCw } from "lucide-react";
+import { AlertTriangle, Calendar, RefreshCw, UserCheck } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getCompany } from "../../auth/services/session.service";
 import { getCustomersReport } from "../services/report.service";
 
 export default function CustomersReportPage({ filters }) {
   const [pdfUrl, setPdfUrl] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // Espera a los filtros iniciales
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchPdf = async () => {
-      try {
-        setLoading(true);
-        setError(null);
+  const fetchPdf = async () => {
+    if (!filters?.startDate || !filters?.endDate) {
+      setLoading(false);
+      return;
+    }
 
-        if (filters && filters.startDate && filters.endDate) {
-          const company = getCompany();
+    try {
+      setLoading(true);
+      setError(null);
 
-          // 1. Llamamos al servicio modificado que trae el Blob binario
-          const blobData = await getCustomersReport(
-            company?.id,
-            filters.startDate,
-            filters.endDate,
-          );
-
-          // Validamos que contenga información
-          if (!blobData || blobData.size === 0) {
-            throw new Error("El archivo PDF se recibió vacío.");
-          }
-
-          // 2. Creamos un Object URL a partir del Blob especificando el tipo PDF
-          const url = URL.createObjectURL(
-            new Blob([blobData], { type: "application/pdf" }),
-          );
-
-          // Limpieza preventiva: si ya existía un blob en el estado anterior, lo destruimos
-          setPdfUrl((prevUrl) => {
-            if (prevUrl) URL.revokeObjectURL(prevUrl);
-            return url;
-          });
-        }
-      } catch (err) {
-        console.error("Error al renderizar el visor de PDF:", err);
-        setError(
-          "Ocurrió un error al generar la vista previa del PDF. Inténtalo de nuevo.",
-        );
-      } finally {
-        setLoading(false);
+      const company = getCompany();
+      if (!company?.id) {
+        throw new Error("No se encontró el ID de la empresa.");
       }
-    };
 
+      // Llamamos al servicio modificado que trae el Blob binario
+      const blobData = await getCustomersReport(
+        company.id,
+        filters.startDate,
+        filters.endDate,
+      );
+
+      // Validamos que contenga información
+      if (!blobData || blobData.size === 0) {
+        throw new Error("El archivo PDF se recibió vacío.");
+      }
+
+      const blob =
+        blobData instanceof Blob
+          ? blobData
+          : new Blob([blobData], { type: "application/pdf" });
+      const url = URL.createObjectURL(blob);
+
+      // Limpieza preventiva de memoria asignada previamente
+      setPdfUrl((prevUrl) => {
+        if (prevUrl) URL.revokeObjectURL(prevUrl);
+        return url;
+      });
+    } catch (err) {
+      console.error("Error al renderizar el visor de PDF de clientes:", err);
+      setError(
+        err.message || "Error al generar el reporte maestro de clientes.",
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchPdf();
 
-    // Clean-up: Revocamos la URL de memoria cuando el componente se desmonte
+    // Clean-up: Revocamos la URL de memoria cuando el componente se desmonte o cambien filtros
     return () => {
       setPdfUrl((currentUrl) => {
         if (currentUrl) URL.revokeObjectURL(currentUrl);
@@ -66,44 +74,91 @@ export default function CustomersReportPage({ filters }) {
     };
   }, [filters]);
 
-  // Pantalla de Carga (Espera)
-  if (loading) return <SkeletonTable />;
-
-  // Estado de error amigable en UI
-  if (error) {
-    return (
-      <div className="flex flex-col items-center justify-center p-12 bg-red-50 dark:bg-red-950/20 rounded-2xl border border-red-200 dark:border-red-900/40">
-        <AlertCircle className="h-10 w-10 text-red-500 mb-3" />
-        <p className="text-sm font-medium text-red-800 dark:text-red-300 text-center mb-4">
-          {error}
-        </p>
-        <button
-          onClick={() => window.location.reload()}
-          className="inline-flex items-center gap-2 text-xs font-semibold px-4 py-2 bg-slate-200 hover:bg-slate-300 rounded-xl transition-colors"
-        >
-          <RefreshCw size={12} /> Reintentar
-        </button>
-      </div>
-    );
-  }
+  const hasFilters = filters?.startDate && filters?.endDate;
 
   return (
-    <div className="space-y-4">
-      {/* Visor Interactivo NATIVO del PDF */}
-      <div className="w-full h-[750px] bg-slate-100 dark:bg-slate-900 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm">
-        {pdfUrl ? (
+    <div className="w-full space-y-6 bg-transparent">
+      {/* HEADER DE LA PÁGINA */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-5">
+        <div>
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50 flex items-center gap-2">
+            <UserCheck className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+            Reporte Maestro de Clientes
+          </h1>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+            Visualiza de manera oficial el comportamiento, recurrencia y balance
+            de transacciones asociadas a tus clientes.
+          </p>
+        </div>
+
+        {/* ACCIONES (SÓLO ACTUALIZAR) */}
+        {pdfUrl && !loading && hasFilters && (
+          <div className="flex items-center gap-2 self-start sm:self-auto">
+            <button
+              onClick={fetchPdf}
+              className="p-2 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors border border-slate-200 dark:border-slate-700 shadow-sm"
+              title="Actualizar reporte"
+            >
+              <RefreshCw className="w-4 h-4" />
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* CONTENEDOR DEL VISOR PDF INCRUSTADO (ANCHO COMPLETO) */}
+      <div className="w-full h-[750px] bg-slate-50 dark:bg-slate-900/40 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-inner flex flex-col justify-center items-center">
+        {loading ? (
+          <div className="w-full h-full p-6 bg-white dark:bg-slate-900 animate-pulse">
+            <SkeletonTable />
+          </div>
+        ) : error ? (
+          <div className="max-w-md text-center p-6 space-y-4">
+            <div className="w-12 h-12 bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 rounded-full flex items-center justify-center mx-auto border border-red-100 dark:border-red-900/30">
+              <AlertTriangle className="w-6 h-6" />
+            </div>
+            <div>
+              <h3 className="text-lg font-medium text-slate-900 dark:text-slate-50">
+                No se pudo cargar el reporte
+              </h3>
+              <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+                {error}
+              </p>
+            </div>
+            <button
+              onClick={fetchPdf}
+              className="inline-flex items-center gap-2 px-4 py-2 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-200 text-sm font-medium rounded-lg shadow-sm transition-colors"
+            >
+              <RefreshCw className="w-4 h-4" />
+              Intentar de nuevo
+            </button>
+          </div>
+        ) : !hasFilters ? (
+          /* ESTADO INICIAL: FALTA SELECCIONAR FECHAS */
+          <div className="max-w-sm text-center p-6 space-y-3">
+            <div className="w-12 h-12 bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 rounded-full flex items-center justify-center mx-auto border border-slate-200/60 dark:border-slate-700/50">
+              <Calendar className="w-6 h-6" />
+            </div>
+            <div>
+              <h3 className="text-sm font-medium text-slate-900 dark:text-slate-200">
+                Rango de fechas requerido
+              </h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                Por favor, selecciona una fecha de inicio y de fin en el panel
+                de filtros para generar la previsualización del reporte de
+                clientes.
+              </p>
+            </div>
+          </div>
+        ) : pdfUrl ? (
           <iframe
-            src={`${pdfUrl}#toolbar=1`} // El '#toolbar=1' activa las opciones nativas de impresión y zoom del browser
-            className="w-full h-full border-none"
+            src={`${pdfUrl}#toolbar=1&navpanes=0`}
+            className="w-full h-full border-none bg-white dark:bg-slate-900"
             title="Reporte Maestro de Clientes"
           />
         ) : (
-          <div className="flex flex-col items-center justify-center h-full text-slate-400 p-6">
-            <p className="text-sm font-medium">
-              Por favor selecciona un rango de fechas en los filtros para
-              generar el PDF.
-            </p>
-          </div>
+          <p className="text-slate-400 dark:text-slate-500 text-sm">
+            No hay datos disponibles.
+          </p>
         )}
       </div>
     </div>

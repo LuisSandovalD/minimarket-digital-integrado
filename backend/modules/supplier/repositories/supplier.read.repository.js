@@ -1,5 +1,24 @@
 const prisma = require("../../../prisma/client");
 
+/**
+ * Helper privado para construir los filtros OR de búsqueda comunes
+ */
+const buildSearchCondition = (search) => {
+    if (!search) return {};
+    return {
+        OR: [
+            { name: { contains: search, mode: "insensitive" } },
+            { ruc: { contains: search, mode: "insensitive" } },
+            { email: { contains: search, mode: "insensitive" } },
+            { contactPerson: { contains: search, mode: "insensitive" } },
+        ],
+    };
+};
+
+// ========================================
+// MÉTODOS DEL REPOSITORIO
+// ========================================
+
 exports.findById = (id, companyId) => {
     return prisma.supplier.findFirst({
         where: {
@@ -8,7 +27,7 @@ exports.findById = (id, companyId) => {
             deletedAt: null,
         },
     });
-}
+};
 
 exports.findByName = (name, companyId) => {
     return prisma.supplier.findFirst({
@@ -21,7 +40,7 @@ exports.findByName = (name, companyId) => {
             deletedAt: null,
         },
     });
-}
+};
 
 exports.findByRuc = (ruc, companyId) => {
     return prisma.supplier.findFirst({
@@ -31,7 +50,7 @@ exports.findByRuc = (ruc, companyId) => {
             deletedAt: null,
         },
     });
-}
+};
 
 exports.getAll = (companyId, filters = {}) => {
     const {
@@ -47,135 +66,43 @@ exports.getAll = (companyId, filters = {}) => {
         where: {
             companyId: Number(companyId),
             deletedAt: null,
-
-            ...(typeof isActive === "boolean" && {
-                isActive,
-            }),
-
-            ...(search && {
-                OR: [
-                    {
-                        name: {
-                            contains: search,
-                            mode: "insensitive",
-                        },
-                    },
-                    {
-                        ruc: {
-                            contains: search,
-                            mode: "insensitive",
-                        },
-                    },
-                    {
-                        email: {
-                            contains: search,
-                            mode: "insensitive",
-                        },
-                    },
-                    {
-                        contactPerson: {
-                            contains: search,
-                            mode: "insensitive",
-                        },
-                    },
-                ],
-            }),
+            ...(typeof isActive === "boolean" && { isActive }),
+            ...buildSearchCondition(search), // 🔄 Reutilizado
         },
-
         skip: Number(skip),
         take: Number(limit),
-
         orderBy: {
             createdAt: "desc",
         },
     });
-}
+};
 
 exports.count = (companyId, filters = {}) => {
-    const {
-        search,
-        isActive,
-    } = filters;
+    const { search, isActive } = filters;
 
     return prisma.supplier.count({
         where: {
             companyId: Number(companyId),
             deletedAt: null,
-
-            ...(typeof isActive === "boolean" && {
-                isActive,
-            }),
-
-            ...(search && {
-                OR: [
-                    {
-                        name: {
-                            contains: search,
-                            mode: "insensitive",
-                        },
-                    },
-                    {
-                        ruc: {
-                            contains: search,
-                            mode: "insensitive",
-                        },
-                    },
-                    {
-                        email: {
-                            contains: search,
-                            mode: "insensitive",
-                        },
-                    },
-                    {
-                        contactPerson: {
-                            contains: search,
-                            mode: "insensitive",
-                        },
-                    },
-                ],
-            }),
+            ...(typeof isActive === "boolean" && { isActive }),
+            ...buildSearchCondition(search), // 🔄 Reutilizado
         },
     });
-}
+};
 
 exports.searchSuppliers = (companyId, search) => {
+    // 🛡️ Control de daños: Si no hay término de búsqueda, evitamos un query pesado o con fallos
+    if (!search || !search.trim()) return [];
+
     return prisma.supplier.findMany({
         where: {
             companyId: Number(companyId),
             deletedAt: null,
-
-            OR: [
-                {
-                    name: {
-                        contains: search,
-                        mode: "insensitive",
-                    },
-                },
-                {
-                    ruc: {
-                        contains: search,
-                        mode: "insensitive",
-                    },
-                },
-                {
-                    email: {
-                        contains: search,
-                        mode: "insensitive",
-                    },
-                },
-                {
-                    contactPerson: {
-                        contains: search,
-                        mode: "insensitive",
-                    },
-                },
-            ],
+            ...buildSearchCondition(search.trim()),
         },
-
         orderBy: {
             name: "asc",
         },
-
         take: 20,
     });
-}
+};

@@ -1,65 +1,40 @@
-// ========================================
-// repositories/sale-report.repository.js
-// ========================================
-
 const prisma = require("../../../prisma/client");
 
 module.exports = {
-
   // ========================================
   // DAILY SALES
   // ========================================
-
-  getDailySales: async (
-    companyId,
-    startDate,
-    endDate
-  ) => {
-
+  getDailySales: async (companyId, startDate, endDate) => {
     const where = {
       status: {
         not: "CANCELLED",
       },
     };
 
-    if (
-      startDate &&
-      !isNaN(new Date(startDate).getTime())
-    ) {
+    if (startDate && !isNaN(new Date(startDate).getTime())) {
       where.createdAt = {
         ...(where.createdAt || {}),
         gte: new Date(startDate),
       };
     }
 
-    if (
-      endDate &&
-      !isNaN(new Date(endDate).getTime())
-    ) {
+    if (endDate && !isNaN(new Date(endDate).getTime())) {
       where.createdAt = {
         ...(where.createdAt || {}),
         lte: new Date(endDate),
       };
     }
 
-    if (
-      companyId !== undefined &&
-      companyId !== null &&
-      companyId !== ""
-    ) {
+    if (companyId !== undefined && companyId !== null && companyId !== "") {
       where.companyId = Number(companyId);
     }
 
     return prisma.sale.findMany({
-
       where,
-
       orderBy: {
         createdAt: "desc",
       },
-
       include: {
-
         customer: {
           select: {
             id: true,
@@ -68,7 +43,6 @@ module.exports = {
             phone: true,
           },
         },
-
         details: {
           include: {
             product: {
@@ -80,48 +54,41 @@ module.exports = {
             },
           },
         },
-
         seller: {
           select: {
             id: true,
             name: true,
           },
         },
-
         branch: {
           select: {
             id: true,
             name: true,
           },
         },
-
       },
-
     });
-
   },
 
   // ========================================
-  // TOP PRODUCTS - REPOSITORIO CORREGIDO
+  // TOP PRODUCTS
   // ========================================
-
   getTopProducts: async (companyId) => {
     const where = {};
 
-    // 1. Validamos y limpiamos el ID para asegurar que sea un entero válido y evitar un NaN
     if (companyId !== undefined && companyId !== null && companyId !== "") {
       const parsedCompanyId = parseInt(companyId, 10);
 
       if (!isNaN(parsedCompanyId)) {
+        // 🛠️ CORRECCIÓN: En Prisma, para filtrar relaciones N:1 en un query directo o groupBy,
+        // se accede al objeto relacional de forma directa, NO usando 'is'.
         where.sale = {
-          is: { // 💡 CRUCIAL: 'is' es obligatorio para relaciones dentro de un `.groupBy()` en Prisma
-            companyId: parsedCompanyId,
-          },
+          companyId: parsedCompanyId,
         };
       }
     }
 
-    // 2. Ejecutamos la agrupación agregando el operador relacional correcto
+    // Ejecutamos la agrupación de los detalles de venta
     const rows = await prisma.saleDetail.groupBy({
       by: ["productId"],
       where,
@@ -137,7 +104,9 @@ module.exports = {
       take: 10,
     });
 
-    // 3. Traemos los datos de los productos implicados
+    if (rows.length === 0) return [];
+
+    // Traemos los datos de los productos implicados
     const products = await prisma.product.findMany({
       where: {
         id: {
@@ -151,7 +120,7 @@ module.exports = {
       },
     });
 
-    // 4. Mapeamos y estructuramos la respuesta final
+    // Mapeamos y estructuramos la respuesta final
     return rows.map((row) => {
       const product = products.find((p) => p.id === row.productId);
 

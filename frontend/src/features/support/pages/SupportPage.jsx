@@ -16,7 +16,7 @@ export default function SupportPage() {
   }
 
   return (
-    <div className="relative flex min-h-[86dvh] flex-col gap-6 pb-8 font-sans text-slate-100">
+    <div className="relative flex min-h-[86dvh] flex-col gap-6 font-sans text-slate-100">
       {/* =========================
        * 1. HEADER
        * ========================= */}

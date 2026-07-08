@@ -1,19 +1,16 @@
+// ========================================
+// components/card/CardHeader.jsx
+// ========================================
+
 import clsx from "clsx";
 
 export default function CardHeader({
   children,
   className = "",
-
-  // Distribución
   justify = "between",
   align = "start",
-
-  // Espaciado
   gap = 4,
-
-  // Mostrar borde inferior
   divider = false,
-
   ...props
 }) {
   const justifyClasses = {
@@ -49,7 +46,7 @@ export default function CardHeader({
         justifyClasses[justify],
         alignClasses[align],
         gapClasses[gap],
-        divider && "border-b border-slate-200 pb-4 dark:border-white/10",
+        divider && "border-b border-slate-100 pb-4 dark:border-slate-800/60",
         className,
       )}
       {...props}

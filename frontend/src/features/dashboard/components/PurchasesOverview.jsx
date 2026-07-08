@@ -134,15 +134,13 @@ export default function PurchasesOverview({
       </div>
 
       {/* 📉 PANEL GRÁFICO CON BORDES INTEGRADOS */}
-      <div className="rounded-2xl border border-slate-100 bg-white/40 p-4 dark:border-slate-800/40 dark:bg-slate-950/20">
-        <AreaChart
-          title="Compras por período"
-          data={analytics.chartData}
-          dataKey="sales"
-          nameKey="date"
-          className="h-[400px] w-full"
-        />
-      </div>
+      <AreaChart
+        title="Compras por período"
+        data={analytics.chartData}
+        dataKey="sales"
+        nameKey="date"
+        className="h-[400px] w-full"
+      />
 
       {/* 📊 GRID DE MÉTRICAS INFERIOR */}
       <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">

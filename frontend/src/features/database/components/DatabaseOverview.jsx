@@ -1,57 +1,47 @@
-// modules/database/components/DatabaseOverview.jsx
-
-import { Activity, Cpu, Database, HardDrive } from "lucide-react";
+// ========================================
+// features/database/components/DatabaseOverview.jsx
+// ========================================
 
 import MetricCard from "@/components/card/MetricCard";
+import { Activity, Cpu, Database, HardDrive } from "lucide-react";
 
-export default function DatabaseOverview({
-  health,
-
-  metrics,
-
-  monitoring,
-}) {
+export default function DatabaseOverview({ health, metrics, monitoring }) {
   return (
-    <div
-      className="
-        grid
-        grid-cols-1
-        gap-4
-
-        md:grid-cols-2
-        xl:grid-cols-4
-      "
-    >
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
       <MetricCard
         icon={Activity}
-        label="Database Status"
+        title="Database Status"
         value={health?.status}
-        subtext={health?.latency}
+        description={health?.latency}
         variant="info"
+        className="border border-neutral-200 dark:border-neutral-800 bg-background"
       />
 
       <MetricCard
         icon={Database}
-        label="Database Size"
+        title="Database Size"
         value={metrics?.databaseSize}
-        subtext={`${metrics?.tables} tables`}
+        description={`${metrics?.tables || 0} tablas detectadas`}
         variant="success"
+        className="border border-neutral-200 dark:border-neutral-800 bg-background"
       />
 
       <MetricCard
         icon={HardDrive}
-        label="Connections"
+        title="Connections"
         value={metrics?.activeConnections}
-        subtext="Active PostgreSQL Connections"
+        description="Conexiones activas a PostgreSQL"
         variant="warning"
+        className="border border-neutral-200 dark:border-neutral-800 bg-background"
       />
 
       <MetricCard
         icon={Cpu}
-        label="Node Version"
+        title="Node Version"
         value={monitoring?.nodeVersion}
-        subtext="Runtime Environment"
+        description="Entorno de ejecución (Runtime)"
         variant="default"
+        className="border border-neutral-200 dark:border-neutral-800 bg-background"
       />
     </div>
   );

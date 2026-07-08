@@ -8,7 +8,7 @@ import {
 
 export default function DashboardLoading() {
   return (
-    <div className="max-w-[1800px] mx-auto p-6 space-y-8 animate-pulse">
+    <div className="space-y-8 animate-pulse">
       <SkeletonHeader stats={9} showActions />
 
       {/* ==========================================================

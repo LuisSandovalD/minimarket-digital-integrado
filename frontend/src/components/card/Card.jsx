@@ -1,34 +1,28 @@
+// ========================================
+// components/card/Card.jsx
+// ========================================
+
 import clsx from "clsx";
 
 export default function Card({
   children,
   className = "",
-
-  // Variantes
   variant = "default",
-
-  // Estados
   hover = true,
   bordered = true,
   shadow = "sm",
-
-  // Layout
   padding = "md",
-  rounded = "2xl",
-
-  // HTML
+  rounded = "xl", // Sincronizado por defecto con el key "xl"
   as: Component = "div",
   ...props
 }) {
   const variants = {
-    default: "bg-white dark:bg-[#0f172a] border-slate-200 dark:border-white/10",
-
+    default:
+      "bg-white dark:bg-[#0f172a] border-slate-100 dark:border-slate-800/60",
     glass:
-      "bg-white/70 backdrop-blur-xl dark:bg-white/5 border-slate-200/60 dark:border-white/10",
-
+      "bg-white/70 backdrop-blur-xl dark:bg-slate-900/40 border-slate-100/80 dark:border-slate-800/50",
     muted:
-      "bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-white/10",
-
+      "bg-slate-50 dark:bg-slate-900/50 border-slate-100 dark:border-slate-800/60",
     transparent: "bg-transparent border-transparent",
   };
 
@@ -59,24 +53,13 @@ export default function Card({
     <Component
       className={clsx(
         "relative overflow-hidden transition-all duration-300",
-
         bordered && "border",
-
         variants[variant],
-
         shadows[shadow],
-
         paddings[padding],
-
         radius[rounded],
-
-        hover && [
-          "hover:-translate-y-1",
-          "hover:shadow-xl",
-          "transform-gpu",
-          "will-change-transform",
-        ],
-
+        hover &&
+          "hover:-translate-y-1 hover:shadow-xl transform-gpu will-change-transform",
         className,
       )}
       {...props}

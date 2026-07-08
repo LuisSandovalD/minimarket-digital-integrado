@@ -1,12 +1,11 @@
 const prisma = require("../../../prisma/client");
 
-// ========================================
-// CREAR SUCURSAL
-// ========================================
 exports.create = (data) => {
     return prisma.branch.create({
         data: {
             name: data.name,
+            slug: data.slug,
+            code: data.code,
             address: data.address,
             phone: data.phone,
             email: data.email,
@@ -16,40 +15,81 @@ exports.create = (data) => {
             state: data.state,
             country: data.country,
             postalCode: data.postalCode,
-            companyId: Number(data.companyId), // 🛡️ Aseguramos que sea entero
+            companyId: Number(data.companyId),
         },
     });
 };
 
-// ========================================
-// ACTUALIZAR SUCURSAL
-// ========================================
 exports.update = (id, data) => {
-    // Desestructuramos para evitar cambiar accidentalmente el ID o CompanyId
     const { id: _, companyId: __, createdAt, ...updateData } = data;
 
     return prisma.branch.update({
         where: {
-            id: Number(id), // 🛡️ Crucial: Forzamos a Number para evitar fallos de Prisma
+            id: Number(id),
         },
-        // Al usar el spread, solo actualizamos lo que viene en el req.body
         data: {
             ...updateData,
-            updatedAt: new Date(), // Prisma suele manejar esto solo, pero forzarlo está bien
+            updatedAt: new Date(),
         },
     });
 };
 
-// ========================================
-// ELIMINAR SUCURSAL (SOFT DELETE)
-// ========================================
 exports.softDelete = (id) => {
     return prisma.branch.update({
         where: {
-            id: Number(id), // 🛡️ Forzamos a Number
+            id: Number(id),
         },
         data: {
             deletedAt: new Date(),
         },
     });
+};
+
+exports.findById = (id, companyId) => {
+    return prisma.branch.findFirst({
+        where: {
+            id: Number(id),
+            companyId: Number(companyId),
+            deletedAt: null,
+        },
+    });
+};
+
+exports.getBranches = async (companyId, options = {}) => {
+    const { search, city, country, isActive, page = 1, limit = 10 } = options;
+    const skip = (page - 1) * limit;
+
+    const where = {
+        companyId: Number(companyId),
+        deletedAt: null,
+    };
+
+    if (search) {
+        where.OR = [
+            { name: { contains: search, mode: "insensitive" } },
+            { code: { contains: search, mode: "insensitive" } },
+        ];
+    }
+
+    if (city) where.city = city;
+    if (country) where.country = country;
+    if (isActive !== undefined) where.isActive = isActive;
+
+    const [total, branches] = await prisma.$transaction([
+        prisma.branch.count({ where }),
+        prisma.branch.findMany({
+            where,
+            skip,
+            take: limit,
+            orderBy: { createdAt: "desc" },
+        }),
+    ]);
+
+    return {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+        branches,
+    };
 };

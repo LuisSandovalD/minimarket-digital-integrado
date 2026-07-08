@@ -1,20 +1,17 @@
+// ========================================
+// components/card/CardFooter.jsx
+// ========================================
+
 import clsx from "clsx";
 
 export default function CardFooter({
   children,
   className = "",
-
-  // Layout
   justify = "between",
   align = "center",
   wrap = true,
-
-  // Espaciado
   gap = 3,
-
-  // Línea divisoria superior
   divider = true,
-
   ...props
 }) {
   const justifyClasses = {
@@ -47,15 +44,11 @@ export default function CardFooter({
     <footer
       className={clsx(
         "mt-auto flex w-full",
-
         wrap ? "flex-wrap" : "flex-nowrap",
-
         justifyClasses[justify],
         alignClasses[align],
         gapClasses[gap],
-
-        divider && "border-t border-slate-200 pt-4 dark:border-white/10",
-
+        divider && "border-t border-slate-100 pt-4 dark:border-slate-800/60",
         className,
       )}
       {...props}

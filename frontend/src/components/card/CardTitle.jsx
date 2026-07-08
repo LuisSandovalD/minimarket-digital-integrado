@@ -1,30 +1,26 @@
+// ========================================
+// components/card/CardTitle.jsx
+// ========================================
+
 import clsx from "clsx";
 
 export default function CardTitle({
   children,
   className = "",
-
-  // Tamaños
-  size = "md",
-
-  // Peso
-  weight = "bold",
-
-  // Alineación
+  size = "sm", // Reducido por defecto para mejor balance en las tarjetas
+  weight = "semibold", // Semibold suele verse más limpio que bold puro en títulos modernos
   align = "left",
-
-  // Número de líneas antes de truncar
   lines,
-
   ...props
 }) {
+  // Escala de tamaños de fuente optimizada (más compacta y refinada)
   const sizes = {
-    xs: "text-sm",
-    sm: "text-base",
-    md: "text-lg",
-    lg: "text-xl",
-    xl: "text-2xl",
-    "2xl": "text-3xl",
+    xs: "text-xs",
+    sm: "text-sm",
+    md: "text-base",
+    lg: "text-lg",
+    xl: "text-xl",
+    "2xl": "text-2xl",
   };
 
   const weights = {
@@ -51,7 +47,7 @@ export default function CardTitle({
   return (
     <h3
       className={clsx(
-        "tracking-tight text-slate-900 dark:text-white",
+        "tracking-tight text-slate-800 dark:text-slate-100", // Tonos ligeramente suavizados
         sizes[size],
         weights[weight],
         aligns[align],

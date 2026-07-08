@@ -2,13 +2,12 @@
 // features/dashboard/statistics/components/StatisticsHeader.jsx
 // ========================================
 import {
-  Activity,
   BarChart3,
   Calendar,
   Package,
   RefreshCw,
   Truck,
-  Users,
+  Users
 } from "lucide-react";
 
 import { ModernButton } from "@/components/buttons";
@@ -63,11 +62,6 @@ export default function StatisticsHeader({
             icon: Truck,
             label: "Cartera Proveedores",
             value: Number(suppliers).toLocaleString("es-PE"),
-          },
-          {
-            icon: Activity,
-            label: "Eventos Registrados",
-            value: Number(totalLogs).toLocaleString("es-PE"),
           },
         ]}
       />

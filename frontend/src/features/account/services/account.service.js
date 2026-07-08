@@ -1,7 +1,7 @@
-// ========================================
+// ============================================================================
 // services/account.service.js
-// ========================================
-import api from "@/api/axios"; // Tu instancia de Axios configurada
+// ============================================================================
+import api from "@/api/axios";
 
 /* ======================================
  * 👤 MI PERFIL
@@ -12,7 +12,28 @@ export const getMyAccount = async () => {
 };
 
 export const updateMyAccount = async (data) => {
-  const response = await api.put("/auth/profile", data);
+  // ADAPTACIÓN CONTRA EL ERROR DE AVATAR:
+  // Si viene un archivo (instancia de File), mutamos el payload a FormData automáticamente
+  let payload = data;
+  let headers = {};
+
+  if (data && (data.avatar instanceof File || data instanceof FormData)) {
+    if (!(data instanceof FormData)) {
+      payload = new FormData();
+      Object.keys(data).forEach((key) => {
+        // Si el avatar es un archivo, lo adjunta directo; si no hay archivo nuevo, evita mandar un objeto vacío
+        if (key === "avatar") {
+          if (data.avatar instanceof File)
+            payload.append("avatar", data.avatar);
+        } else if (data[key] !== undefined && data[key] !== null) {
+          payload.append(key, data[key]);
+        }
+      });
+    }
+    headers = { "Content-Type": "multipart/form-data" };
+  }
+
+  const response = await api.put("/auth/profile", payload, { headers });
   return response.data;
 };
 
@@ -26,10 +47,9 @@ export const changePassword = async (data) => {
  * ==================================== */
 export const setupTwoFactor = async () => {
   const response = await api.post("/auth/2fa/setup");
-  return response.data; // { success: true, secret: '...', qrCode: 'data:image...' }
+  return response.data;
 };
 
-// 🚀 SOLUCIÓN: Ahora recibe el objeto completo { token, password } y lo envía en el body del POST
 export const enableTwoFactor = async ({ token, password }) => {
   const response = await api.post("/auth/2fa/enable", { token, password });
   return response.data;
@@ -49,15 +69,14 @@ export const getSessions = async () => {
 };
 
 export const closeSession = async (sessionId) => {
-  // Envía el ID numérico limpio directo a la URL estandarizada del backend
   const response = await api.delete(`/auth/sessions/${sessionId}`);
   return response.data;
 };
 
 /* ======================================
  * 🛑 BAJA DE CUENTA
- * ==================================== */
+ * ====================================== */
 export const deleteMyAccount = async (data) => {
-  const response = await api.delete("/auth/profile", { data }); // Envía { password } seguro en el body
+  const response = await api.delete("/auth/profile", { data });
   return response.data;
 };

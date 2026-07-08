@@ -1,8 +1,11 @@
+// ========================================
+// features/analytics/components/TopCustomersChart.jsx
+// ========================================
+
+import MetricCard from "@/components/card/MetricCard";
+import { HorizontalBarChart } from "@/components/data-display";
 import { ArrowRight, Crown, ShoppingCart, Users } from "lucide-react";
 import { Link } from "react-router-dom";
-
-import { MetricCard } from "@/components/card";
-import { HorizontalBarChart } from "@/components/data-display";
 
 export default function TopCustomersChart({ customers = [] }) {
   const chartData = customers
@@ -18,9 +21,7 @@ export default function TopCustomersChart({ customers = [] }) {
     (acc, customer) => acc + customer.total,
     0,
   );
-
   const topCustomer = chartData[0];
-
   const topPercentage =
     totalPurchases > 0 && topCustomer
       ? ((topCustomer.total / totalPurchases) * 100).toFixed(1)
@@ -33,12 +34,10 @@ export default function TopCustomersChart({ customers = [] }) {
         <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-100 dark:bg-cyan-900/30">
           <Users size={20} className="text-cyan-600" />
         </div>
-
         <div>
           <h2 className="text-lg font-semibold text-slate-800 dark:text-white">
             Top Clientes
           </h2>
-
           <p className="text-xs text-slate-500 dark:text-slate-400">
             Clientes con mayor frecuencia de compra
           </p>
@@ -54,21 +53,23 @@ export default function TopCustomersChart({ customers = [] }) {
           {/* Gráfico */}
           <HorizontalBarChart title="Clientes Frecuentes" data={chartData} />
 
+          {/* Bloque de Métricas Utilizando MetricCard Correctamente */}
           <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
             <MetricCard
               icon={ShoppingCart}
-              label="Compras Registradas"
+              title="Compras Registradas"
               value={totalPurchases}
-              subtext="Operaciones realizadas"
+              description="Operaciones realizadas"
               variant="info"
+              className="border border-slate-100 dark:border-slate-800 bg-background"
             />
-
             <MetricCard
               icon={Crown}
-              label="Cliente Líder"
+              title="Cliente Líder"
               value={topCustomer?.name || "Sin registros"}
-              subtext={`${topPercentage}% de participación`}
+              description={`${topPercentage}% de participación`}
               variant="warning"
+              className="border border-slate-100 dark:border-slate-800 bg-background"
             />
           </div>
 
@@ -89,18 +90,15 @@ export default function TopCustomersChart({ customers = [] }) {
                     <span className="flex h-7 w-7 items-center justify-center rounded-full bg-cyan-100 dark:bg-cyan-900/30 text-xs font-bold text-cyan-700 dark:text-cyan-300">
                       #{index + 1}
                     </span>
-
                     <div>
                       <p className="font-medium text-slate-800 dark:text-white">
                         {customer.name}
                       </p>
-
                       <p className="text-xs text-slate-500">
                         {percentage}% de participación
                       </p>
                     </div>
                   </div>
-
                   <span className="font-semibold text-cyan-600 dark:text-cyan-400">
                     {customer.total} compras
                   </span>

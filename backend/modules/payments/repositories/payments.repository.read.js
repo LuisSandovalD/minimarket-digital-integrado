@@ -1,13 +1,23 @@
-// ========================================
-// PAYMENTS REPOSITORY - READ (QUERIES)
-// ========================================
-
 const prisma = require("../../../prisma/client");
-const paymentInclude = require("../includes/payments.include")
-
-// ========================================
-// INCLUDE
-// ========================================
+const paymentInclude = {
+    method: true,
+    sale: {
+        select: {
+            id: true,
+            saleNumber: true,
+            total: true,
+            status: true
+        }
+    },
+    purchase: {
+        select: {
+            id: true,
+            purchaseNumber: true,
+            total: true,
+            status: true
+        }
+    }
+};
 
 // ========================================
 // READ METHODS (CON FILTROS, BUSCADOR Y PAGINACIÓN)
@@ -19,11 +29,13 @@ const findAll = async (companyId, queryParams = {}) => {
         limit = 10,
         search,
         status,
-        paymentMethod, // ID referenciado del método de pago
+        paymentMethod, // ID del método de pago
         startDate,
         endDate,
         type // 'SALE' o 'PURCHASE'
     } = queryParams;
+
+    const parsedCompanyId = Number(companyId);
 
     // Calcular el offset para la paginación
     const skip = (Number(page) - 1) * Number(limit);
@@ -32,25 +44,25 @@ const findAll = async (companyId, queryParams = {}) => {
     // 1. Filtros base de seguridad por Compañía (Garantiza el aislamiento multi-tenant)
     const companyFilter = {
         OR: [
-            { sale: { companyId } },
-            { purchase: { companyId } },
+            { sale: { companyId: parsedCompanyId } },
+            { purchase: { companyId: parsedCompanyId } },
         ],
     };
 
     // 2. Construcción dinámica de filtros adicionales (whereConditions)
     const andConditions = [companyFilter];
 
-    // Filtro por Estado (Ej: PENDING, COMPLETED, etc)
+    // Filtro por Estado (Ej: PENDING, COMPLETED)
     if (status) {
         andConditions.push({ status: status.toUpperCase() });
     }
 
-    // Filtro por Método de Pago (Clave foránea típica de Prisma: paymentMethodId)
+    // Filtro por Método de Pago (Aseguramos la foreign key correcta de la relación)
     if (paymentMethod && !isNaN(paymentMethod)) {
         andConditions.push({ paymentMethodId: Number(paymentMethod) });
     }
 
-    // Filtro por Rango de Fechas (Basado en la fecha de pago con validación de seguridad)
+    // Filtro por Rango de Fechas (Basado en la fecha de pago)
     if (startDate || endDate) {
         const dateFilter = {};
 
@@ -59,13 +71,11 @@ const findAll = async (companyId, queryParams = {}) => {
         }
 
         if (endDate && !isNaN(Date.parse(endDate))) {
-            // Seteamos el final del día (23:59:59) para que incluya los pagos realizados en el último día elegido
             const end = new Date(endDate);
             end.setHours(23, 59, 59, 999);
             dateFilter.lte = end;
         }
 
-        // Solo añadimos el filtro si alguna de las fechas es válida
         if (Object.keys(dateFilter).length > 0) {
             andConditions.push({ paidAt: dateFilter });
         }
@@ -106,7 +116,7 @@ const findAll = async (companyId, queryParams = {}) => {
     const [payments, total] = await prisma.$transaction([
         prisma.payment.findMany({
             where: { AND: andConditions },
-            include: paymentInclude, // Asegúrate de que incluya 'method', 'sale' y 'purchase'
+            include: paymentInclude,
             skip,
             take,
             orderBy: {
@@ -129,9 +139,10 @@ const findAll = async (companyId, queryParams = {}) => {
         },
     };
 };
+
 const findById = async (id) => {
     return prisma.payment.findUnique({
-        where: { id },
+        where: { id: Number(id) },
         include: paymentInclude,
     });
 };
@@ -139,7 +150,7 @@ const findById = async (id) => {
 const findPendingSales = async (companyId) => {
     return prisma.sale.findMany({
         where: {
-            companyId,
+            companyId: Number(companyId),
             status: "COMPLETED",
             payments: {
                 none: {},
@@ -156,7 +167,7 @@ const findPendingSales = async (companyId) => {
 
 const findBySale = async (saleId) => {
     return prisma.payment.findMany({
-        where: { saleId },
+        where: { saleId: Number(saleId) },
         include: paymentInclude,
         orderBy: {
             createdAt: "desc",
@@ -166,7 +177,7 @@ const findBySale = async (saleId) => {
 
 const findByPurchase = async (purchaseId) => {
     return prisma.payment.findMany({
-        where: { purchaseId },
+        where: { purchaseId: Number(purchaseId) },
         include: paymentInclude,
         orderBy: {
             createdAt: "desc",

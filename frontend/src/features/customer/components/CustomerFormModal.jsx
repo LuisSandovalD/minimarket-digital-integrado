@@ -6,11 +6,13 @@ import {
   Building2,
   CheckCircle2,
   DollarSign,
+  Edit2,
   FileText,
   Mail,
   MapPin,
   Phone,
   User,
+  UserCheck,
   X,
 } from "lucide-react";
 
@@ -35,35 +37,46 @@ export default function CustomerFormModal({
   return (
     <Modal open={open} onClose={onClose} size="xl">
       <HeaderModal
+        icon={isEdit ? Edit2 : UserCheck}
         title={isEdit ? "Editar Cliente" : "Nuevo Cliente"}
-        subtitle="Gestiona la información del cliente."
+        subtitle={
+          isEdit
+            ? "Modifica el expediente, límites crediticios e información de contacto."
+            : "Registra los datos fiscales, comerciales y de contacto del nuevo cliente."
+        }
         onClose={onClose}
       />
 
-      <form onSubmit={handleSubmit} className="flex flex-col">
-        <div className="max-h-[72vh] overflow-y-auto space-y-8 px-6 py-6">
-          {/* INFORMACIÓN PERSONAL */}
-          <section className="space-y-5">
-            <div className="flex items-center gap-3">
-              <User size={20} />
-              <div>
-                <h3 className="text-sm font-semibold">Información Personal</h3>
-                <p className="text-xs text-slate-500">
-                  Datos principales del cliente
-                </p>
-              </div>
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col text-slate-800 dark:text-slate-100"
+      >
+        {/* CONTENEDOR PRINCIPAL CON ESPACIADO EQUILIBRADO */}
+        <div className="max-h-[72vh] overflow-y-auto px-6 py-5 space-y-5">
+          {/* BLOQUE 1: INFORMACIÓN PERSONAL */}
+          <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-900/40 p-5 space-y-4">
+            <div className="flex items-center gap-2.5">
+              <User
+                size={16}
+                className="text-violet-600 dark:text-violet-400"
+              />
+              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+                Información Personal
+              </h3>
             </div>
 
-            <div className="grid gap-5 md:grid-cols-3">
-              <Input
-                label="Nombre Completo"
-                name="name"
-                value={form.name}
-                onChange={onChange}
-                required
-                icon={User}
-              />
-
+            <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
+              <div className="md:col-span-1">
+                <Input
+                  label="Nombre Completo"
+                  name="name"
+                  value={form.name}
+                  onChange={onChange}
+                  required
+                  placeholder="Ej. Distribuidora S.A."
+                  icon={User}
+                />
+              </div>
               <Select
                 label="Tipo Documento"
                 name="documentType"
@@ -77,93 +90,96 @@ export default function CustomerFormModal({
                   { value: "PASSPORT", label: "Pasaporte" },
                 ]}
               />
-
               <Input
                 label="Número Documento"
                 name="documentNumber"
                 value={form.documentNumber}
                 onChange={onChange}
+                placeholder="10745896..."
                 icon={FileText}
               />
             </div>
-          </section>
+          </div>
 
-          {/* CONTACTO */}
-          <section className="space-y-5">
-            <div className="flex items-center gap-3">
-              <Phone size={20} />
-              <div>
-                <h3 className="text-sm font-semibold">
+          {/* BLOQUE 2: CONTACTO Y UBICACIÓN */}
+          <div className="grid gap-5 md:grid-cols-2">
+            {/* SUB-BLOQUE: CONTACTO */}
+            <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-900/40 p-5 space-y-4">
+              <div className="flex items-center gap-2.5">
+                <Phone
+                  size={16}
+                  className="text-violet-600 dark:text-violet-400"
+                />
+                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                   Información de Contacto
                 </h3>
-                <p className="text-xs text-slate-500">Medios de comunicación</p>
+              </div>
+              <div className="grid gap-4">
+                <Input
+                  label="Correo Electrónico"
+                  name="email"
+                  type="email"
+                  value={form.email}
+                  onChange={onChange}
+                  placeholder="cliente@empresa.com"
+                  icon={Mail}
+                />
+                <Input
+                  label="Teléfono / Celular"
+                  name="phone"
+                  value={form.phone}
+                  onChange={onChange}
+                  placeholder="+51 999 999 999"
+                  icon={Phone}
+                />
               </div>
             </div>
 
-            <div className="grid gap-5 md:grid-cols-2">
-              <Input
-                label="Correo Electrónico"
-                name="email"
-                type="email"
-                value={form.email}
-                onChange={onChange}
-                icon={Mail}
-              />
-
-              <Input
-                label="Teléfono"
-                name="phone"
-                value={form.phone}
-                onChange={onChange}
-                icon={Phone}
-              />
-            </div>
-          </section>
-
-          {/* UBICACIÓN */}
-          <section className="space-y-5">
-            <div className="flex items-center gap-3">
-              <MapPin size={20} />
-              <div>
-                <h3 className="text-sm font-semibold">Ubicación</h3>
-                <p className="text-xs text-slate-500">Dirección del cliente</p>
-              </div>
-            </div>
-
-            <div className="grid gap-5 md:grid-cols-2">
-              <Input
-                label="Ciudad"
-                name="city"
-                value={form.city}
-                onChange={onChange}
-                icon={Building2}
-              />
-
-              <Input
-                label="Dirección"
-                name="address"
-                value={form.address}
-                onChange={onChange}
-                icon={MapPin}
-              />
-            </div>
-          </section>
-
-          {/* INFORMACIÓN FINANCIERA */}
-          <section className="space-y-5">
-            <div className="flex items-center gap-3">
-              <DollarSign size={20} />
-              <div>
-                <h3 className="text-sm font-semibold">
-                  Información Financiera
+            {/* SUB-BLOQUE: UBICACIÓN */}
+            <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-900/40 p-5 space-y-4">
+              <div className="flex items-center gap-2.5">
+                <MapPin
+                  size={16}
+                  className="text-violet-600 dark:text-violet-400"
+                />
+                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+                  Ubicación Residencial / Fiscal
                 </h3>
-                <p className="text-xs text-slate-500">
-                  Límites de crédito y deudas
-                </p>
+              </div>
+              <div className="grid gap-4">
+                <Input
+                  label="Ciudad / Región"
+                  name="city"
+                  value={form.city}
+                  onChange={onChange}
+                  placeholder="Ej. Lima"
+                  icon={Building2}
+                />
+                <Input
+                  label="Dirección Fiscal"
+                  name="address"
+                  value={form.address}
+                  onChange={onChange}
+                  placeholder="Av. Los Tulipanes 123..."
+                  icon={MapPin}
+                />
               </div>
             </div>
+          </div>
 
-            <div className="grid gap-5 md:grid-cols-2">
+          {/* BLOQUE 3: FINANZAS Y ESTADO */}
+          <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-900/40 p-5 space-y-4">
+            <div className="flex items-center gap-2.5">
+              <DollarSign
+                size={16}
+                className="text-violet-600 dark:text-violet-400"
+              />
+              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+                Parámetros Financieros y Sistema
+              </h3>
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-3">
               <Input
                 label="Límite de Crédito"
                 name="creditLimit"
@@ -171,9 +187,9 @@ export default function CustomerFormModal({
                 step="0.01"
                 value={form.creditLimit}
                 onChange={onChange}
+                placeholder="0.00"
                 icon={DollarSign}
               />
-
               <Input
                 label="Deuda Actual"
                 name="currentDebt"
@@ -181,82 +197,64 @@ export default function CustomerFormModal({
                 step="0.01"
                 value={form.currentDebt}
                 onChange={onChange}
+                placeholder="0.00"
                 icon={DollarSign}
-                disabled={!isEdit} // Opcional: Solo permitir editar deuda si se está editando, no al crear
+                disabled={!isEdit}
+              />
+              <Select
+                label="Estado del Cliente"
+                name="isActive"
+                value={form.isActive?.toString()}
+                onChange={(e) => {
+                  onChange({
+                    target: {
+                      name: "isActive",
+                      value: e.target.value === "true",
+                    },
+                  });
+                }}
+                icon={CheckCircle2}
+                options={[
+                  { value: "true", label: "Activo" },
+                  { value: "false", label: "Inactivo" },
+                ]}
               />
             </div>
-          </section>
+          </div>
 
-          {/* ESTADO Y ADICIONAL */}
-          <section className="space-y-5">
-            <div className="flex items-center gap-3">
-              <CheckCircle2 size={20} />
-              <div>
-                <h3 className="text-sm font-semibold">
-                  Estado y Configuración
-                </h3>
-                <p className="text-xs text-slate-500">
-                  Disponibilidad del cliente en el sistema
-                </p>
-              </div>
+          {/* BLOQUE 4: NOTAS ADICIONALES */}
+          <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-900/40 p-5 space-y-3">
+            <div className="flex items-center gap-2.5">
+              <FileText
+                size={16}
+                className="text-violet-600 dark:text-violet-400"
+              />
+              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+                Información Adicional
+              </h3>
             </div>
-
-            <div className="grid gap-5 md:grid-cols-3">
-              <div className="md:col-span-1">
-                <Select
-                  label="Estado del Cliente"
-                  name="isActive"
-                  value={form.isActive.toString()} // Convierte a string para compatibilidad con el componente Select
-                  onChange={(e) => {
-                    // Mapea el valor de string de vuelta a un Booleano real en el handler si es necesario,
-                    // o maneja el cambio directamente pasando el target simulado.
-                    onChange({
-                      target: {
-                        name: "isActive",
-                        value: e.target.value === "true",
-                      },
-                    });
-                  }}
-                  icon={CheckCircle2}
-                  options={[
-                    { value: "true", label: "Activo" },
-                    { value: "false", label: "Inactivo" },
-                  ]}
-                />
-              </div>
-            </div>
-          </section>
-
-          {/* NOTAS */}
-          <section className="space-y-5">
-            <div className="flex items-center gap-3">
-              <FileText size={20} />
-              <div>
-                <h3 className="text-sm font-semibold">Información Adicional</h3>
-                <p className="text-xs text-slate-500">Observaciones internas</p>
-              </div>
-            </div>
-
             <TextArea
-              label="Notas"
+              label="Observaciones internas / Notas de venta"
               name="notes"
-              rows={4}
+              rows={3}
               value={form.notes}
               onChange={onChange}
+              placeholder="Añade detalles importantes sobre las condiciones de este cliente..."
             />
-          </section>
+          </div>
         </div>
 
+        {/* PIE DE PÁGINA */}
         <FooterModal>
-          <div className="flex w-full items-center justify-end gap-3 pb-5">
+          <div className="flex w-full items-center justify-end gap-3 pb-3 pt-1">
             <ModernButton
               type="button"
               text="Cancelar"
               variant="outline"
               icon={X}
               onClick={onClose}
+              size="sm"
             />
-
             <SubmitButton
               loading={loading}
               text={
@@ -264,8 +262,9 @@ export default function CustomerFormModal({
                   ? "Guardando..."
                   : isEdit
                     ? "Actualizar Cliente"
-                    : "Guardar Cliente"
+                    : "Registrar Cliente"
               }
+              size="sm"
             />
           </div>
         </FooterModal>

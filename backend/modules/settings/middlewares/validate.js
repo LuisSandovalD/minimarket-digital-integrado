@@ -3,12 +3,16 @@ const validate = (schema) => async (req, res, next) => {
     req.body = await schema.parseAsync(req.body);
     return next();
   } catch (error) {
-    if (error.name === "ZodError" || error.errors) {
-      // Mapeamos los errores de forma inteligente soportando paths anidados
-      const formattedErrors = error.errors.reduce((acc, curr) => {
-        // Une los paths con puntos (ej: ['company', 'name'] se vuelve 'company.name')
-        const field = curr.path.join(".") || "general";
+    console.error("Validation Error:", error);
+
+    if (error.name === "ZodError") {
+      const issues = error.issues || error.errors || [];
+
+      const formattedErrors = issues.reduce((acc, curr) => {
+        const field = curr.path?.join(".") || "general";
+
         acc[field] = curr.message;
+
         return acc;
       }, {});
 
@@ -21,7 +25,7 @@ const validate = (schema) => async (req, res, next) => {
 
     return res.status(500).json({
       success: false,
-      message: "Ocurrió un error inesperado durante la validación",
+      message: error.message || "Ocurrió un error inesperado durante la validación",
     });
   }
 };

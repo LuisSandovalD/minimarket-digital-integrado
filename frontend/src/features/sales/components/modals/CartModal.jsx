@@ -21,6 +21,7 @@ export default function CartModal({
     <Modal open={open} onClose={onClose} size="lg">
       {/* HEADER */}
       <HeaderModal
+        icon={ShoppingCart}
         title="Carrito de Compras"
         subtitle={`${totalUnits} unidades seleccionadas`}
         onClose={onClose}

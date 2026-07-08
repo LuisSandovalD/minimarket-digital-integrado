@@ -4,18 +4,8 @@
 
 import api from "../../../api/axios";
 
-/**
- * Obtiene la lista de usuarios paginada y filtrada.
- * @param {Object} filters - Filtros como { page, limit, search, branchId, isActive }
- */
-export const getUsers = async (filters = {}) => {
-  // Pasamos los filtros dentro de la configuración de Axios usando 'params'
-  const { data } = await api.get("/user", { params: filters });
-  return data;
-};
-
-export const getHierarchy = async () => {
-  const { data } = await api.get("/user/hierarchy");
+export const getUsers = async (params = {}) => {
+  const { data } = await api.get("/user", { params });
   return data;
 };
 
@@ -24,13 +14,18 @@ export const getUserById = async (id) => {
   return data;
 };
 
-export const createUser = async (payload) => {
-  const { data } = await api.post("/user", payload);
+export const getHierarchy = async () => {
+  const { data } = await api.get("/user/hierarchy");
   return data;
 };
 
-export const updateUser = async (id, payload) => {
-  const { data } = await api.put(`/user/${id}`, payload);
+export const createUser = async (userData) => {
+  const { data } = await api.post("/user", userData);
+  return data;
+};
+
+export const updateUser = async (id, userData) => {
+  const { data } = await api.put(`/user/${id}`, userData);
   return data;
 };
 

@@ -1,11 +1,36 @@
-const express = require('express');
-const router = express.Router();
+// ========================================
+// routes/gemini.routes.js
+// ========================================
 
-const controller = require('../controllers/gemini.controller.js');
-const auth = require('../../../middleware/auth');
-const { validateChatInput, validateMigrationInput } = require('../validations/gemini.validation.js');
+const router =
+    require("express").Router();
 
-router.post('/chat', auth, validateChatInput, controller.handleAdminChat);
-router.post('/migrate', auth, validateMigrationInput, controller.handleExcelMigrationAnalysis);
+const auth =
+    require("../../../middleware/auth");
+
+const roleCheck =
+    require("../../../middleware/roleCheck");
+
+const controller =
+    require("../controllers/gemini.controller");
+
+const {
+    validateChatRequest
+} = require("../validations/chat.validator");
+
+// ========================================
+// CHAT IA
+// ========================================
+
+router.post(
+    "/chat",
+    auth,
+    roleCheck(
+        "ADMIN",
+        "MANAGER"
+    ),
+    validateChatRequest,
+    controller.sendMessage
+);
 
 module.exports = router;

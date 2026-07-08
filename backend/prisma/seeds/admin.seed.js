@@ -425,14 +425,8 @@ async function adminSeed() {
     const lastMonth = new Date(now);
     lastMonth.setMonth(lastMonth.getMonth() - 1);
 
-    // Asignación dinámica de montos simulados basados en el tier
-    const amount = company.subscriptionTier === "PREMIUM"
-      ? 99.90
-      : company.subscriptionTier === "PREMIUM"
-        ? 49.90
-        : company.subscriptionTier === "PREMIUM"
-          ? 29.90
-          : 19.90;
+    // Corregido: Asignación dinámica de montos realista por plan
+    const amount = company.subscriptionTier === "PREMIUM" ? 99.90 : 49.90;
 
     await prisma.billingHistory.createMany({
       data: [
@@ -464,7 +458,7 @@ async function adminSeed() {
       }
     });
 
-    // 5. Crear Sucursal Principal
+    // 5. Crear Sucursal Principal (Necesaria en un objeto para mapear al Admin de abajo)
     const branch = await prisma.branch.create({
       data: {
         name: "Sucursal Principal",
@@ -479,7 +473,56 @@ async function adminSeed() {
       }
     });
 
-    // 6. Crear ÚNICO Usuario Administrador enlazado a la sucursal y la empresa
+    // 5b. NUEVO: Inyección masiva de Sucursales Regionales por Empresa
+    // =================================================================
+    // 5b. GENERADOR DINÁMICO DE SUCURSALES REGIONALES (Genera ~50 en total)
+    // =================================================================
+
+    // Pool de ciudades peruanas con datos geográficos reales para el mapeo
+    const regionesPeru = [
+      { city: "Trujillo", state: "La Libertad", code: "TRU", address: "Av. Larco 789, Urb. San Andrés" },
+      { city: "Arequipa", state: "Arequipa", code: "AQP", address: "Calle Mercaderes 402, Cercado" },
+      { city: "Huancayo", state: "Junín", code: "HYO", address: "Av. Real 1045, El Tambo" },
+      { city: "Piura", state: "Piura", code: "PIU", address: "Av. Grau 1420, Urb. Santa Isabel" },
+      { city: "Chiclayo", state: "Lambayeque", code: "CIX", address: "Av. Balta 345, Cercado" },
+      { city: "Cusco", state: "Cusco", code: "CUZ", address: "Av. El Sol 612" },
+      { city: "Iquitos", state: "Loreto", code: "IQT", address: "Jr. Próspero 564" },
+      { city: "Tacna", state: "Tacna", code: "TAC", address: "Av. Bolognesi 830" },
+      { city: "Chimbote", state: "Áncash", code: "CHM", address: "Av. José Pardo 415" },
+      { city: "Pucallpa", state: "Ucayali", code: "PCL", address: "Jr. Tarapacá 710" }
+    ];
+
+    // Asignamos de forma determinista 2 o 3 ciudades del pool basadas en el índice o ID de la empresa
+    // Esto asegura que cada empresa tenga sucursales distintas y en total sumen ~50 sucursales.
+    const numSucursalesAdicionales = (company.id % 2 === 0) ? 3 : 2;
+    const sucursalesData = [];
+
+    for (let i = 0; i < numSucursalesAdicionales; i++) {
+      // Tomamos una región del pool rotando dinámicamente usando aritmética modular
+      const regionIndex = (company.id + i) % regionesPeru.length;
+      const region = regionesPeru[regionIndex];
+
+      sucursalesData.push({
+        name: `Sucursal ${region.city}`,
+        // El código incluye el slug de la empresa para garantizar la restricción UNIQUE en la DB
+        code: `${company.slug.substring(0, 5).toUpperCase()}-${region.code}-${i + 1}`,
+        address: region.address,
+        city: region.city,
+        state: region.state,
+        country: "Perú",
+        phone: company.phone,
+        email: `${region.city.toLowerCase()}.${company.slug}@empresa.com`,
+        companyId: company.id
+      });
+    }
+
+    // Insertamos el bloque de sucursales en lote único por empresa
+    await prisma.branch.createMany({
+      data: sucursalesData,
+      skipDuplicates: true // Evita colisiones si ejecutas el seed repetidas veces
+    });
+
+    // 6. Crear ÚNICO Usuario Administrador enlazado a la sucursal principal y la empresa
     const admin = await prisma.user.create({
       data: {
         name: item.admin.name,
@@ -492,7 +535,7 @@ async function adminSeed() {
       }
     });
 
-    console.log(`✅ Registro exitoso para ${company.name}`);
+    console.log(`✅ Registro exitoso para ${company.name} (+3 sucursales regionales)`);
     console.log(`   🔑 ADMIN: ${admin.email}`);
   }
 

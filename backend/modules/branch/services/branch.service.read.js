@@ -1,25 +1,12 @@
 const repository = require("../repositories/branch.repository");
 
 exports.getBranches = async (companyId, query = {}) => {
-    const {
-        search,
-        city,
-        country,
-        isActive,
-        page = 1,
-        limit = 10,
-    } = query;
+    const { search, city, country, isActive, page = 1, limit = 10 } = query;
 
-    // Conversión y validación de paginación
     const parsedPage = Math.max(parseInt(page, 10) || 1, 1);
-    const parsedLimit = Math.min(
-        Math.max(parseInt(limit, 10) || 10, 1),
-        100
-    );
+    const parsedLimit = Math.min(Math.max(parseInt(limit, 10) || 10, 1), 100);
 
-    // Conversión del estado activo
     let activeFilter;
-
     if (isActive !== undefined) {
         if (isActive === "true" || isActive === true) {
             activeFilter = true;

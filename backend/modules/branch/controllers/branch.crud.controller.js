@@ -1,47 +1,41 @@
 const branchService = require("../services/branch.service");
+const cloudinary = require("../../../config/cloudinary");
+const { successResponse, errorResponse } = require("../../auth/responses/auth.response");
 
-// OBTENER SUCURSALES
+const uploadToCloudinary = (fileBuffer) => {
+    return new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+            { folder: "branches_logos" },
+            (error, result) => {
+                if (error) return reject(error);
+                resolve(result.secure_url);
+            }
+        );
+        stream.end(fileBuffer);
+    });
+};
+
 exports.getBranches = async (req, res) => {
     try {
         const { companyId } = req.user;
-
-        const {
-            search,
-            city,
-            country,
-            isActive,
-            page,
-            limit,
-        } = req.query;
+        const { search, city, country, isActive, page, limit } = req.query;
 
         const options = {
             search,
             city,
             country,
-            isActive:
-                isActive !== undefined
-                    ? isActive === "true"
-                    : undefined,
+            isActive: isActive !== undefined ? isActive === "true" : undefined,
             page: page ? Number(page) : undefined,
             limit: limit ? Number(limit) : undefined,
         };
 
         const data = await branchService.getBranches(companyId, options);
-
-        return res.status(200).json({
-            success: true,
-            data,
-        });
+        return successResponse(res, data);
     } catch (error) {
-        console.error("Error obteniendo sucursales:", error);
-
-        return res.status(500).json({
-            success: false,
-            message: error.message || "Error interno del servidor.",
-        });
+        return errorResponse(res, error);
     }
 };
-// OBTENER SUCURSAL POR ID
+
 exports.getBranchById = async (req, res) => {
     try {
         const branchId = Number(req.params.id);
@@ -53,65 +47,35 @@ exports.getBranchById = async (req, res) => {
             });
         }
 
-        const data = await branchService.getBranchById(
-            branchId,
-            req.user.companyId
-        );
-
-        return res.json({
-            success: true,
-            data,
-        });
+        const data = await branchService.getBranchById(branchId, req.user.companyId);
+        return successResponse(res, data);
     } catch (error) {
-        console.error(error);
-
         if (error.message === "Sucursal no encontrada") {
-            return res.status(404).json({
-                success: false,
-                message: error.message,
-            });
+            return res.status(404).json({ success: false, message: error.message });
         }
-
-        return res.status(500).json({
-            success: false,
-            message: error.message,
-        });
+        return errorResponse(res, error);
     }
 };
 
-// CREAR SUCURSAL
 exports.createBranch = async (req, res) => {
     try {
+        const data = { ...req.body };
 
-        const data = {
-            ...req.body,
-            logo: req.file ? req.file.buffer : null,
-        };
+        if (req.file) {
+            data.logo = await uploadToCloudinary(req.file.buffer);
+        } else {
+            data.logo = null;
+        }
 
-        const branch = await branchService.createBranch(
-            data,
-            req.user.companyId
-        );
-
-        return res.status(201).json({
-            success: true,
-            data: branch,
-        });
-
+        const branch = await branchService.createBranch(data, req.user.companyId);
+        return successResponse(res, branch, 201);
     } catch (error) {
-        console.error(error);
-
-        return res.status(500).json({
-            success: false,
-            message: error.message,
-        });
+        return errorResponse(res, error);
     }
 };
 
-// ACTUALIZAR SUCURSAL
 exports.updateBranch = async (req, res) => {
     try {
-
         const branchId = Number(req.params.id);
 
         if (Number.isNaN(branchId)) {
@@ -121,44 +85,22 @@ exports.updateBranch = async (req, res) => {
             });
         }
 
-        const data = {
-            ...req.body,
-        };
+        const data = { ...req.body };
 
         if (req.file) {
-            data.logo = req.file.buffer;
+            data.logo = await uploadToCloudinary(req.file.buffer);
         }
 
-        const branch = await branchService.updateBranch(
-            branchId,
-            data,
-            req.user.companyId
-        );
-
-        return res.json({
-            success: true,
-            data: branch,
-        });
-
+        const branch = await branchService.updateBranch(branchId, data, req.user.companyId);
+        return successResponse(res, branch);
     } catch (error) {
-        console.error(error);
-
         if (error.message === "Sucursal no encontrada") {
-            return res.status(404).json({
-                success: false,
-                message: error.message,
-            });
+            return res.status(404).json({ success: false, message: error.message });
         }
-
-        return res.status(500).json({
-            success: false,
-            message: error.message,
-        });
+        return errorResponse(res, error);
     }
 };
 
-
-// ELIMINAR SUCURSAL
 exports.deleteBranch = async (req, res) => {
     try {
         const branchId = Number(req.params.id);
@@ -170,28 +112,12 @@ exports.deleteBranch = async (req, res) => {
             });
         }
 
-        await branchService.deleteBranch(
-            branchId,
-            req.user.companyId
-        );
-
-        return res.json({
-            success: true,
-            message: "Sucursal eliminada correctamente",
-        });
+        await branchService.deleteBranch(branchId, req.user.companyId);
+        return successResponse(res, { message: "Sucursal eliminada correctamente" });
     } catch (error) {
-        console.error(error);
-
         if (error.message === "Sucursal no encontrada") {
-            return res.status(404).json({
-                success: false,
-                message: error.message,
-            });
+            return res.status(404).json({ success: false, message: error.message });
         }
-
-        return res.status(500).json({
-            success: false,
-            message: error.message,
-        });
+        return errorResponse(res, error);
     }
 };

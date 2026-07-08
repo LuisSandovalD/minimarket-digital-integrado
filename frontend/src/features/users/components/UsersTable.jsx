@@ -21,18 +21,15 @@ import UserStatusBadge from "./UserStatusBadge";
 export default function UsersTable({
   users = [],
   onEdit,
-  onToggleStatus,
-  onDelete,
+  onToggleStatusTrigger, // 🌟 Cambiado para recibir el disparador del AlertModal
+  onDeleteTrigger, // 🌟 Cambiado para recibir el disparador del AlertModal de borrado
   loading,
   page = 1,
   totalPages = 1,
   onPrevPage,
   onNextPage,
 }) {
-  // El stack maneja la navegación:
-  // []           -> Nivel 0: Solo Gerentes (MANAGERS)
-  // [manager]    -> Nivel 1: Solo Supervisores del manager seleccionado
-  // [mgr, sup]   -> Nivel 2: Solo Empleados del supervisor seleccionado
+  // El stack maneja la navegación jerárquica
   const [navigationStack, setNavigationStack] = useState([]);
 
   const currentTarget = navigationStack[navigationStack.length - 1] || null;
@@ -50,7 +47,7 @@ export default function UsersTable({
       return cleanUsers.filter((user) => user.role === "MANAGER");
     }
 
-    // Nivel 1 o 2: Desglosamos los subordinados directos del usuario en el stack (excluyendo admins)
+    // Nivel 1 o 2: Desglosamos los subordinados directos del usuario seleccionado
     if (currentTarget) {
       return (currentTarget.subordinates || []).filter(
         (user) => user.role !== "ADMIN",
@@ -86,7 +83,7 @@ export default function UsersTable({
 
   return (
     <div className="space-y-5">
-      {/* BREADCRUMBS MODIFICADOS EN EL ORDEN CORRECTO */}
+      {/* BREADCRUMBS JERÁRQUICOS */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex flex-wrap items-center gap-1.5 text-sm text-slate-500">
@@ -176,7 +173,7 @@ export default function UsersTable({
                           <h3 className="text-sm font-semibold text-slate-800 dark:text-white">
                             {user.name}
                           </h3>
-                          <p className="text-xs text-slate-500">
+                          <p className="text-xs text-slate-400 dark:text-white/40">
                             @{user.slug || user.email.split("@")[0]}
                           </p>
                         </div>
@@ -223,14 +220,14 @@ export default function UsersTable({
 
                     {/* ÚLTIMO ACCESO */}
                     <td className="px-6 py-5">
-                      <span className="text-sm text-slate-500">
+                      <span className="text-sm text-slate-500 dark:text-slate-400">
                         {formatDate(user.lastLogin)}
                       </span>
                     </td>
 
                     {/* CREADO */}
                     <td className="px-6 py-5">
-                      <div className="flex items-center gap-2 text-sm text-slate-500">
+                      <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
                         <Calendar size={14} className="shrink-0" />
                         <span>{formatDate(user.createdAt)}</span>
                       </div>
@@ -238,7 +235,8 @@ export default function UsersTable({
 
                     {/* ACCIONES */}
                     <td className="px-6 py-5">
-                      <div className="flex items-center justify-end gap-2">
+                      <div className="flex items-center justify-end gap-3">
+                        {/* BOTÓN DRILL-DOWN JERÁRQUICO */}
                         {currentLevel < 2 &&
                           user.subordinates &&
                           user.subordinates.length > 0 && (
@@ -254,11 +252,13 @@ export default function UsersTable({
                               onClick={() => handleDrillDown(user)}
                             />
                           )}
+
+                        {/* COMPONENTE DE ACCIONES SANITIZADO */}
                         <UserActions
                           user={user}
                           onEdit={onEdit}
-                          onToggleStatus={onToggleStatus}
-                          onDelete={onDelete}
+                          onToggleStatusTrigger={onToggleStatusTrigger} // 🌟 Pasamos el disparador de estado
+                          onDeleteTrigger={onDeleteTrigger} // 🌟 Pasamos el disparador de borrado
                         />
                       </div>
                     </td>
@@ -268,7 +268,7 @@ export default function UsersTable({
                 <tr>
                   <td
                     colSpan={8}
-                    className="px-6 py-16 text-center text-sm text-slate-500"
+                    className="px-6 py-16 text-center text-sm text-slate-500 dark:text-white/40"
                   >
                     No hay registros asignados en este nivel jerárquico.
                   </td>
@@ -276,7 +276,7 @@ export default function UsersTable({
               )}
             </tbody>
 
-            {/* ESTRUCTURA TFOOT CORRECTA PARA LA PAGINACIÓN */}
+            {/* SECCIÓN DE PAGINACIÓN */}
             {currentLevel === 0 && totalPages > 1 && (
               <tfoot>
                 <tr>

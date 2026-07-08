@@ -1,3 +1,7 @@
+// ========================================
+// components/MetricCard.jsx
+// ========================================
+
 import Badge from "./Badge";
 import Card from "./Card";
 import CardContent from "./CardContent";
@@ -37,11 +41,9 @@ export default function MetricCard({
               <Icon strokeWidth={2.2} />
             </IconContainer>
           )}
-
           <div className="ml-auto flex items-center gap-2">
             {badge &&
               (typeof badge === "string" ? <Badge>{badge}</Badge> : badge)}
-
             {actions}
           </div>
         </CardHeader>
@@ -67,7 +69,6 @@ export default function MetricCard({
                 <h2 className="text-3xl font-black tracking-tight text-slate-900 dark:text-white">
                   {value}
                 </h2>
-
                 {trend !== undefined && (
                   <Trend value={trend} label={trendLabel} />
                 )}

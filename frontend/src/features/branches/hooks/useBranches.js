@@ -7,29 +7,33 @@ import { getBranches } from "../services/branch.service";
 
 export default function useBranches(params = {}) {
   const [branches, setBranches] = useState([]);
+  const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const { search, city, country, isActive, page = 1, limit = 10 } = params;
 
-  /* ========================================
-   * FETCH BRANCHES
-   * ====================================== */
   const fetchBranches = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
 
+      // 🌟 Sanitizamos el filtro 'isActive' por si viene como String desde la barra de filtros
+      let normalizedActive = isActive;
+      if (isActive === "true" || isActive === true) normalizedActive = true;
+      if (isActive === "false" || isActive === false) normalizedActive = false;
+
       const data = await getBranches({
         search,
         city,
         country,
-        isActive,
+        isActive: normalizedActive,
         page,
         limit,
       });
 
-      setBranches(data);
+      setBranches(data?.branches || []);
+      setTotalPages(data?.totalPages || 1);
     } catch (err) {
       setError(err.message || "Error al obtener sucursales.");
     } finally {
@@ -37,38 +41,39 @@ export default function useBranches(params = {}) {
     }
   }, [search, city, country, isActive, page, limit]);
 
-  /* ========================================
-   * ADD BRANCH
-   * ====================================== */
   const addBranch = (newBranch) => {
-    setBranches((prev) => [newBranch, ...prev]);
+    if (!newBranch) return;
+    setBranches((prev) => [newBranch, ...prev].filter(Boolean));
   };
 
-  /* ========================================
-   * UPDATE BRANCH
-   * ====================================== */
   const updateBranchLocal = (updatedBranch) => {
+    if (!updatedBranch?.id) return;
     setBranches((prev) =>
-      prev.map((branch) =>
-        branch.id === updatedBranch.id ? updatedBranch : branch,
-      ),
+      prev
+        .filter(Boolean)
+        .map((branch) =>
+          branch?.id === updatedBranch.id ? updatedBranch : branch,
+        ),
     );
   };
 
-  /* ========================================
-   * AUTO FETCH
-   * ====================================== */
+  const removeBranchLocal = (branchId) => {
+    if (!branchId) return;
+    setBranches((prev) => prev.filter((branch) => branch?.id !== branchId));
+  };
+
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchBranches();
   }, [fetchBranches]);
 
   return {
     branches,
+    totalPages,
     loading,
     error,
     fetchBranches,
     addBranch,
     updateBranchLocal,
+    removeBranchLocal,
   };
 }

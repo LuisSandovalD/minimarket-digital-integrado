@@ -2,12 +2,8 @@
 // hooks/useUserForm.js
 // ========================================
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { createUser, updateUser } from "../services/users.service";
-
-// ========================================
-// INITIAL STATE
-// ========================================
 
 const INITIAL_STATE = {
   name: "",
@@ -23,17 +19,12 @@ const INITIAL_STATE = {
   twoFactorEnabled: false,
 };
 
-// ========================================
-// HOOK
-// ========================================
-
 export default function useUserForm({ user, onClose, onSuccess }) {
   const isEdit = !!user;
 
   // ========================================
   // INITIAL FORM DATA
   // ========================================
-
   const initialFormData = useMemo(() => {
     if (!user) return INITIAL_STATE;
 
@@ -45,7 +36,8 @@ export default function useUserForm({ user, onClose, onSuccess }) {
       role: user.role || "EMPLOYEE",
       phone: user.phone || "",
       avatar: user.avatar || "",
-      branchId: user.branchId || "",
+      // Normalizamos a String o vacío para que los estados de los inputs/botones no se confundan con ceros o undefined
+      branchId: user.branchId || user.branch?.id || "",
       managerId: user.managerId || "",
       isActive: user.isActive ?? true,
       twoFactorEnabled: user.twoFactorEnabled ?? false,
@@ -55,55 +47,40 @@ export default function useUserForm({ user, onClose, onSuccess }) {
   // ========================================
   // STATE
   // ========================================
-
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState(initialFormData);
   const [formError, setFormError] = useState("");
 
+  // Sincroniza el estado cuando el usuario cambia en la UI principal
+  useEffect(() => {
+    setFormData(initialFormData);
+    setFormError("");
+  }, [initialFormData]);
+
   // ========================================
   // HANDLE CHANGE
   // ========================================
-
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
 
     setFormData((prev) => {
-      const updated = {
-        ...prev,
-        [name]: type === "checkbox" ? checked : value,
-      };
+      let finalValue = type === "checkbox" ? checked : value;
 
-      // Si cambia el rol, reiniciamos el managerId ya que cambian los filtros jerárquicos
-      if (name === "role") {
-        updated.managerId = "";
+      // Normalización de selectores booleanos si los hubiera
+      if (name === "isActive") {
+        finalValue = value === "true";
       }
 
-      return updated;
-    });
-  };
-
-  // ========================================
-  // HANDLE IMAGE
-  // ========================================
-
-  const handleImageChange = (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setFormData((prev) => ({
+      return {
         ...prev,
-        avatar: reader.result,
-      }));
-    };
-    reader.readAsDataURL(file);
+        [name]: finalValue,
+      };
+    });
   };
 
   // ========================================
   // RESET FORM
   // ========================================
-
   const resetForm = () => {
     setFormData(INITIAL_STATE);
     setFormError("");
@@ -112,29 +89,29 @@ export default function useUserForm({ user, onClose, onSuccess }) {
   // ========================================
   // VALIDATIONS
   // ========================================
-
   const validateForm = () => {
     if (!formData.name.trim()) throw new Error("El nombre es obligatorio");
     if (!formData.email.trim()) throw new Error("El email es obligatorio");
-    if (!isEdit && !formData.password)
-      throw new Error("La contraseña es obligatoria");
+    if (!isEdit && !formData.password) throw new Error("La contraseña es obligatoria");
   };
 
   // ========================================
-  // CLEAN DATA
+  // CLEAN DATA (BUILD PAYLOAD)
   // ========================================
-
   const buildPayload = () => {
+    const strictActive = formData.isActive === true || String(formData.isActive).toLowerCase() === "true";
+
     const payload = {
-      name: formData.name,
-      email: formData.email,
+      name: formData.name.trim(),
+      email: formData.email.trim(),
       role: formData.role,
       phone: formData.phone,
       avatar: formData.avatar,
+      // Enviamos IDs limpios (Números reales si existen, o null si están vacíos)
       branchId: formData.branchId ? Number(formData.branchId) : null,
       managerId: formData.managerId ? Number(formData.managerId) : null,
-      isActive: formData.isActive,
-      twoFactorEnabled: formData.twoFactorEnabled,
+      isActive: strictActive,
+      twoFactorEnabled: !!formData.twoFactorEnabled,
     };
 
     if (!isEdit || formData.password) {
@@ -147,7 +124,6 @@ export default function useUserForm({ user, onClose, onSuccess }) {
   // ========================================
   // SUBMIT
   // ========================================
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (loading) return;
@@ -182,17 +158,12 @@ export default function useUserForm({ user, onClose, onSuccess }) {
     }
   };
 
-  // ========================================
-  // RETURN
-  // ========================================
-
   return {
     loading,
     formData,
     formError,
     isEdit,
     handleChange,
-    handleImageChange,
     handleSubmit,
     resetForm,
   };

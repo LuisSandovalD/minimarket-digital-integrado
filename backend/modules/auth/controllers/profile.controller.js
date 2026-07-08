@@ -1,17 +1,22 @@
-// ========================================
-// controllers/profile.controller.js
-// ========================================
-
-// 🚀 IMPORTACIÓN CORRECTA: Usamos tu instancia extendida centralizada con auditoría automática
-const prisma = require("../../../config/prisma.config"); // 👈 Ajusta los ../ si tu estructura de carpetas varía
+const cloudinary = require("../../../config/cloudinary");
+const prisma = require("../../../config/prisma.config");
 const bcrypt = require("bcryptjs");
-
 const profileService = require("../services/profile.service");
 const { successResponse, errorResponse } = require("../responses/auth.response");
 
-/**
- * 👤 Obtener datos del perfil del usuario autenticado
- */
+const uploadToCloudinary = (fileBuffer) => {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      { folder: "users_avatars" },
+      (error, result) => {
+        if (error) return reject(error);
+        resolve(result.secure_url);
+      }
+    );
+    stream.end(fileBuffer);
+  });
+};
+
 const getProfile = async (req, res) => {
   try {
     const data = await profileService.getProfile(req.user.id);
@@ -21,16 +26,11 @@ const getProfile = async (req, res) => {
   }
 };
 
-/**
- * 🛑 softDeleteAccount / deleteAccount
- * Realiza la baja lógica de un usuario del ERP detonando la auditoría automatizada.
- */
 const deleteAccount = async (req, res) => {
   try {
-    const userId = req.user.id; // Extraído de forma segura por el middleware 'auth'
-    const { password } = req.body; // Recibe el objeto estructurado { password: "..." } desde el frontend
+    const userId = req.user.id;
+    const { password } = req.body;
 
-    // 1. Validación básica de entrada
     if (!password) {
       return res.status(400).json({
         success: false,
@@ -38,7 +38,6 @@ const deleteAccount = async (req, res) => {
       });
     }
 
-    // 2. Buscar al usuario activo en la base de datos a través del cliente extendido
     const user = await prisma.user.findUnique({
       where: { id: userId }
     });
@@ -50,7 +49,6 @@ const deleteAccount = async (req, res) => {
       });
     }
 
-    // 3. Verificar que la contraseña coincida con el hash almacenado
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       return res.status(401).json({
@@ -59,19 +57,16 @@ const deleteAccount = async (req, res) => {
       });
     }
 
-    // 4. ¡SOFT DELETE INTEGRADO CON PRISMA EXTENSIONS!
-    // Al pasar 'isDeleted: true', tu extensión registrará automáticamente la acción "SOFT_DELETE" en AuditLog.
     const updatedUser = await prisma.user.update({
       where: { id: userId },
       data: {
-        isActive: false,       // Inhabilita la cuenta para operaciones diarias
-        isDeleted: true,       // Lo oculta de las listas de personal del ERP
-        isOnline: false,       // Corta la sesión visual inmediata
-        deletedAt: new Date()  // Almacena marca de tiempo histórica por auditoría externa
+        isActive: false,
+        isDeleted: true,
+        isOnline: false,
+        deletedAt: new Date()
       }
     });
 
-    // 5. Responder utilizando tu estandarización de respuestas corporativas
     return successResponse(res, {
       message: "Tu cuenta ha sido dada de baja del sistema de Don Luchito S.A.C. con éxito.",
       userId: updatedUser.id
@@ -83,21 +78,30 @@ const deleteAccount = async (req, res) => {
   }
 };
 
-/**
- * ✏️ Actualizar datos del perfil
- */
 const updateProfile = async (req, res) => {
   try {
-    const data = await profileService.updateProfile(req.user.id, req.body);
-    return successResponse(res, data);
+    const dataToUpdate = { ...req.body };
+
+    if (req.file) {
+      dataToUpdate.avatar = await uploadToCloudinary(req.file.buffer);
+    }
+
+    const updatedUser = await profileService.updateProfile(req.user.id, dataToUpdate);
+
+    return successResponse(res, {
+      message: "Perfil corporativo actualizado con éxito.",
+      user: {
+        id: updatedUser.id,
+        name: updatedUser.name,
+        phone: updatedUser.phone,
+        avatar: updatedUser.avatar
+      }
+    });
   } catch (error) {
     return errorResponse(res, error);
   }
 };
 
-/**
- * 📈 Obtener estado general de la cuenta corporativa
- */
 const getAccountStatus = async (req, res) => {
   try {
     const data = await profileService.getAccountStatus(req.user.id);
@@ -107,7 +111,6 @@ const getAccountStatus = async (req, res) => {
   }
 };
 
-// EXPORTACIÓN UNIFICADA SIN ERRORES EN FRÍO
 module.exports = {
   getProfile,
   updateProfile,

@@ -1,8 +1,11 @@
-import { MetricCard } from "@/components/card";
+// ========================================
+// features/analytics/components/TopProductsChart.jsx
+// ========================================
+
+import MetricCard from "@/components/card/MetricCard";
+import { BarChart } from "@/components/data-display";
 import { ArrowRight, Package, Trophy } from "lucide-react";
 import { Link } from "react-router-dom";
-
-import { BarChart } from "@/components/data-display";
 
 export default function TopProductsChart({ products = [] }) {
   const chartData = products
@@ -15,9 +18,7 @@ export default function TopProductsChart({ products = [] }) {
     .slice(0, 5);
 
   const totalSold = chartData.reduce((acc, item) => acc + item.quantity, 0);
-
   const topProduct = chartData[0];
-
   const topPercentage =
     totalSold > 0 && topProduct
       ? ((topProduct.quantity / totalSold) * 100).toFixed(1)
@@ -30,12 +31,10 @@ export default function TopProductsChart({ products = [] }) {
         <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-100 dark:bg-blue-900/30">
           <Package size={20} className="text-blue-600" />
         </div>
-
         <div>
           <h2 className="text-lg font-semibold text-slate-800 dark:text-white">
             Top Productos
           </h2>
-
           <p className="text-xs text-slate-500 dark:text-slate-400">
             Productos con mayor volumen de ventas
           </p>
@@ -43,7 +42,7 @@ export default function TopProductsChart({ products = [] }) {
       </div>
 
       {chartData.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-slate-300 dark:border-slate-700 p-10 text-center text-sm text-slate-500 ">
+        <div className="rounded-2xl border border-dashed border-slate-300 dark:border-slate-700 p-10 text-center text-sm text-slate-500">
           No existen ventas registradas.
         </div>
       ) : (
@@ -57,21 +56,23 @@ export default function TopProductsChart({ products = [] }) {
             className="h-128"
           />
 
+          {/* Bloque de Métricas Utilizando MetricCard Correctamente */}
           <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
             <MetricCard
               icon={Package}
-              label="Total Vendido"
+              title="Total Vendido"
               value={totalSold}
-              subtext="Unidades comercializadas"
+              description="Unidades comercializadas"
               variant="info"
+              className="border border-slate-100 dark:border-slate-800 bg-background"
             />
-
             <MetricCard
               icon={Trophy}
-              label="Producto Líder"
+              title="Producto Líder"
               value={topProduct?.name || "Sin registros"}
-              subtext={`${topPercentage}% del total vendido`}
+              description={`${topPercentage}% del total vendido`}
               variant="success"
+              className="border border-slate-100 dark:border-slate-800 bg-background"
             />
           </div>
 
@@ -92,18 +93,15 @@ export default function TopProductsChart({ products = [] }) {
                     <span className="flex h-7 w-7 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/30 text-xs font-bold text-blue-700 dark:text-blue-300">
                       #{index + 1}
                     </span>
-
                     <div>
                       <p className="font-medium text-slate-800 dark:text-white">
                         {product.name}
                       </p>
-
                       <p className="text-xs text-slate-500">
                         {percentage}% de participación
                       </p>
                     </div>
                   </div>
-
                   <span className="font-semibold text-blue-600 dark:text-blue-400">
                     {product.quantity} und.
                   </span>

@@ -132,15 +132,13 @@ export default function SalesOverview({
       </div>
 
       {/* 📉 PANEL GRÁFICO (Contenedor con bordes pulidos) */}
-      <div className="rounded-2xl border border-slate-100 bg-white/40 p-4 dark:border-slate-800/40 dark:bg-slate-950/20">
-        <AreaChart
-          title="Ventas por Período"
-          data={analytics.chartData}
-          dataKey="sales"
-          nameKey="date"
-          className="h-[400px] w-full"
-        />
-      </div>
+      <AreaChart
+        title="Ventas por Período"
+        data={analytics.chartData}
+        dataKey="sales"
+        nameKey="date"
+        className="h-[400px] w-full"
+      />
 
       {/* 📊 GRID DE MÉTRICAS INFERIOR */}
       <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-3">

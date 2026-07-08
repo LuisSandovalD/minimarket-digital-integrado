@@ -1,18 +1,15 @@
+// ========================================
+// components/card/CardContent.jsx
+// ========================================
+
 import clsx from "clsx";
 
 export default function CardContent({
   children,
   className = "",
-
-  // Espaciado entre elementos
   gap = 4,
-
-  // Permite ocupar toda la altura disponible
   grow = true,
-
-  // Centrar contenido
   centered = false,
-
   ...props
 }) {
   const gapClasses = {

@@ -2,16 +2,22 @@
 // components/BranchModal.jsx
 // ========================================
 
-import { FileText, Globe, Mail, MapPin, Phone, Store, X } from "lucide-react";
-
-import { FooterModal, HeaderModal, Modal } from "@/components/overlays/";
-
-import { Input } from "@/components/forms/";
-
 import { ModernButton, SubmitButton } from "@/components/buttons/";
-
+import { Input, Select } from "@/components/forms/";
 import { ModernImageUpload } from "@/components/media/";
-
+import { FooterModal, HeaderModal, Modal } from "@/components/overlays/";
+import {
+  Edit2,
+  FileText,
+  Globe,
+  Mail,
+  MapPin,
+  Phone,
+  Store,
+  StoreIcon,
+  ToggleLeft,
+  X
+} from "lucide-react";
 import useBranchForm from "../hooks/useBranchForm";
 
 export default function BranchModal({
@@ -20,15 +26,14 @@ export default function BranchModal({
   onSuccess,
   branch = null,
 }) {
+  // 🌟 Extraemos 'handleImageChange' y 'previewUrl' para gestionar correctamente la carga del Logo
   const {
     loading,
-
     formData,
-
+    previewUrl,
     isEdit,
-
     handleChange,
-
+    handleImageChange,
     handleSubmit,
   } = useBranchForm({
     branch,
@@ -38,11 +43,9 @@ export default function BranchModal({
 
   return (
     <Modal open={open} onClose={onClose} size="full">
-      {/* ========================================
-       * HEADER
-       * ====================================== */}
-
+      {/* HEADER */}
       <HeaderModal
+        icon={isEdit ? Edit2 : StoreIcon}
         title={isEdit ? "Editar Sucursal" : "Nueva Sucursal"}
         subtitle={
           isEdit
@@ -52,132 +55,47 @@ export default function BranchModal({
         onClose={onClose}
       />
 
-      {/* ========================================
-       * FORM
-       * ====================================== */}
-
-      <form
-        onSubmit={handleSubmit}
-        className="
-          flex
-          flex-col
-        "
-      >
+      {/* FORM */}
+      <form onSubmit={handleSubmit} className="flex flex-col">
         {/* BODY */}
-
-        <div
-          className="
-            max-h-[75vh]
-            overflow-y-auto
-            px-6
-            py-5
-          "
-        >
-          <div
-            className="
-              grid
-              gap-6
-
-              xl:grid-cols-[340px_1fr]
-            "
-          >
-            {/* ========================================
-             * IMAGE SECTION
-             * ====================================== */}
-
+        <div className="max-h-[75vh] overflow-y-auto px-6 py-5">
+          <div className="grid gap-6 xl:grid-cols-[340px_1fr]">
+            {/* IMAGE SECTION */}
             <div className="space-y-4">
               <div>
-                <h3
-                  className="
-                    text-sm
-                    font-semibold
-                    text-slate-800
-                    dark:text-slate-100
-                  "
-                >
+                <h3 className="text-sm font-semibold text-slate-800 dark:text-slate-100">
                   Logo de la Sucursal
                 </h3>
-
-                <p
-                  className="
-                    mt-1
-                    text-xs
-                    text-slate-500
-                    dark:text-slate-400
-                  "
-                >
+                <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
                   Sube una imagen representativa de la sucursal.
                 </p>
               </div>
 
+              {/* 🌟 Vinculamos el cargador con el previewUrl e inyectamos el método handleImageChange de forma nativa */}
               <ModernImageUpload
-                value={formData.logo}
-                onChange={(file) =>
-                  handleChange({
-                    target: {
-                      name: "logo",
-                      value: file,
-                    },
-                  })
-                }
+                value={previewUrl || formData.logo}
+                onChange={(file) => {
+                  // Simulamos la estructura que espera recibir el e.target de handleImageChange
+                  handleImageChange({ target: { files: [file] } });
+                }}
                 height="h-90"
               />
             </div>
 
-            {/* ========================================
-             * FORM SECTION
-             * ====================================== */}
-
+            {/* FORM SECTION */}
             <div className="space-y-6">
-              {/* ========================================
-               * GENERAL INFO
-               * ====================================== */}
-
-              <div
-                className="
-                  rounded-3xl
-                  border
-                  border-slate-200
-                  dark:border-slate-800
-
-                  bg-slate-50/70
-                  dark:bg-slate-900/40
-
-                  p-5
-                "
-              >
+              {/* GENERAL INFO */}
+              <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-900/40 p-5">
                 <div className="mb-5">
-                  <h3
-                    className="
-                      text-sm
-                      font-semibold
-                      text-slate-800
-                      dark:text-slate-100
-                    "
-                  >
+                  <h3 className="text-sm font-semibold text-slate-800 dark:text-slate-100">
                     Información General
                   </h3>
-
-                  <p
-                    className="
-                      mt-1
-                      text-xs
-                      text-slate-500
-                      dark:text-slate-400
-                    "
-                  >
-                    Datos principales de identificación.
+                  <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                    Datos principales de identificación y estado.
                   </p>
                 </div>
 
-                <div
-                  className="
-                    grid
-                    gap-5
-                    lg:grid-cols-3
-                    md:grid-cols-2
-                  "
-                >
+                <div className="grid gap-5 lg:grid-cols-3 md:grid-cols-2">
                   <Input
                     label="Nombre"
                     name="name"
@@ -187,7 +105,6 @@ export default function BranchModal({
                     icon={Store}
                     required
                   />
-
                   <Input
                     label="Correo"
                     name="email"
@@ -196,7 +113,6 @@ export default function BranchModal({
                     placeholder="correo@sucursal.com"
                     icon={Mail}
                   />
-
                   <Input
                     label="Teléfono"
                     name="phone"
@@ -205,7 +121,6 @@ export default function BranchModal({
                     placeholder="+51 999 999 999"
                     icon={Phone}
                   />
-
                   <Input
                     label="Ciudad"
                     name="city"
@@ -214,7 +129,6 @@ export default function BranchModal({
                     placeholder="Lima"
                     icon={MapPin}
                   />
-
                   <Input
                     label="Departamento"
                     name="state"
@@ -223,7 +137,6 @@ export default function BranchModal({
                     placeholder="Lima"
                     icon={MapPin}
                   />
-
                   <Input
                     label="País"
                     name="country"
@@ -232,50 +145,35 @@ export default function BranchModal({
                     placeholder="Perú"
                     icon={Globe}
                   />
+
+                  {/* SELECT COMPONENT */}
+                  <Select
+                    label="Estado de la Sucursal"
+                    name="isActive"
+                    value={String(formData.isActive ?? true)}
+                    onChange={handleChange}
+                    options={[
+                      { value: "true", label: "Activo" },
+                      { value: "false", label: "Inactivo" },
+                    ]}
+                    placeholder="Seleccione un estado"
+                    icon={ToggleLeft}
+                    required
+                  />
                 </div>
               </div>
 
               <div className="grid lg:grid-cols-2 md:grid-cols-1 gap-2">
-                {/* ========================================
-                 * DESCRIPTION
-                 * ====================================== */}
-                <div
-                  className="
-                    rounded-3xl
-                    border
-                    border-slate-200
-                    dark:border-slate-800
-
-                    bg-slate-50/70
-                    dark:bg-slate-900/40
-
-                    p-5
-                  "
-                >
+                {/* DESCRIPTION */}
+                <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-900/40 p-5">
                   <div className="mb-5">
-                    <h3
-                      className="
-                        text-sm
-                        font-semibold
-                        text-slate-800
-                        dark:text-slate-100
-                      "
-                    >
+                    <h3 className="text-sm font-semibold text-slate-800 dark:text-slate-100">
                       Descripción
                     </h3>
-
-                    <p
-                      className="
-                        mt-1
-                        text-xs
-                        text-slate-500
-                        dark:text-slate-400
-                      "
-                    >
+                    <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
                       Información adicional sobre la sucursal.
                     </p>
                   </div>
-
                   <Input
                     label="Descripción"
                     name="description"
@@ -286,47 +184,16 @@ export default function BranchModal({
                   />
                 </div>
 
-                {/* ========================================
-                 * ADDRESS
-                 * ====================================== */}
-
-                <div
-                  className="
-                    rounded-3xl
-                    border
-                    border-slate-200
-                    dark:border-slate-800
-
-                    bg-slate-50/70
-                    dark:bg-slate-900/40
-
-                    p-5
-                  "
-                >
+                {/* ADDRESS */}
+                <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-900/40 p-5">
                   <div className="mb-5">
-                    <h3
-                      className="
-                        text-sm
-                        font-semibold
-                        text-slate-800
-                        dark:text-slate-100
-                      "
-                    >
+                    <h3 className="text-sm font-semibold text-slate-800 dark:text-slate-100">
                       Ubicación
                     </h3>
-
-                    <p
-                      className="
-                        mt-1
-                        text-xs
-                        text-slate-500
-                        dark:text-slate-400
-                      "
-                    >
+                    <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
                       Dirección principal de la sucursal.
                     </p>
                   </div>
-
                   <Input
                     label="Dirección"
                     name="address"
@@ -341,41 +208,13 @@ export default function BranchModal({
           </div>
         </div>
 
-        {/* ========================================
-         * FOOTER
-         * ====================================== */}
-
+        {/* FOOTER */}
         <FooterModal>
-          <div
-            className="
-              flex
-              w-full
-              items-center
-              justify-between
-              gap-4
-              pb-5
-            "
-          >
-            <div
-              className="
-                hidden
-                text-xs
-                text-slate-500
-
-                sm:block
-              "
-            >
+          <div className="flex w-full items-center justify-between gap-4">
+            <div className="hidden text-xs text-slate-500 sm:block">
               La información será guardada automáticamente en la sucursal.
             </div>
-
-            <div
-              className="
-                ml-auto
-                flex
-                items-center
-                gap-3
-              "
-            >
+            <div className="ml-auto flex items-center gap-3">
               <ModernButton
                 type="button"
                 text="Cancelar"
@@ -383,7 +222,6 @@ export default function BranchModal({
                 icon={X}
                 onClick={onClose}
               />
-
               <SubmitButton
                 text={isEdit ? "Guardar Cambios" : "Crear Sucursal"}
                 loading={loading}
