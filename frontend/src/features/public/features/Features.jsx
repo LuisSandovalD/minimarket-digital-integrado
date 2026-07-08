@@ -1,8 +1,8 @@
+// features/Features.jsx
 import { PageGlow } from "@/components/effects/";
 import {
   AutomationSection,
   FAQFeatures,
-  FeaturesGrid,
   FeaturesHeroSection,
   FeatureStats,
   FeatureWorkflow,
@@ -15,28 +15,7 @@ import {
 
 export default function Features() {
   return (
-    <main
-      className="
-        relative
-        overflow-hidden
-
-        bg-gradient-to-b
-        from-[#f8fbfd]
-        via-white
-        to-[#eef4f8]
-
-        text-[#0f172a]
-
-        transition-colors
-        duration-300
-
-        dark:from-[#020617]
-        dark:via-[#07111f]
-        dark:to-[#0f172a]
-
-        dark:text-[#e7ecef]
-      "
-    >
+    <main className="relative overflow-hidden bg-gradient-to-b from-[#f8fbfd] via-white to-[#eef4f8] text-[#0f172a] transition-colors duration-300 dark:from-[#020617] dark:via-[#07111f] dark:to-[#0f172a] dark:text-[#e7ecef]">
       <PageGlow />
 
       {/* CONTENT */}
@@ -44,8 +23,6 @@ export default function Features() {
         <FeaturesHeroSection />
 
         <FeatureStats />
-
-        <FeaturesGrid />
 
         <AutomationSection />
 

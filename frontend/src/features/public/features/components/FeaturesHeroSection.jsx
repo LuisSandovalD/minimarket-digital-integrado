@@ -130,20 +130,13 @@ export default function FeaturesHeroSection() {
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className="relative transform-gpu lg:mt-0 mt-8"
           >
-            {/* Resplandor trasero */}
-            <div className="absolute inset-0 bg-[#6096ba]/10 blur-3xl pointer-events-none rounded-[24px]" />
-
-            <div className="overflow-hidden rounded-[24px] border border-[#274c77]/10 bg-white/30 p-1.5 shadow-xl backdrop-blur-sm dark:border-white/5 dark:bg-black/10">
-              <div className="overflow-hidden rounded-[18px]">
-                <motion.img
-                  whileHover={{ scale: 1.015, rotate: 0.1 }}
-                  transition={{ duration: 0.3 }}
-                  src={dashboardImage}
-                  alt="ERP Dashboard Analytics Preview"
-                  className="w-full h-full object-cover shadow-sm"
-                />
-              </div>
-            </div>
+            <motion.img
+              whileHover={{ scale: 1.015, rotate: 0.1 }}
+              transition={{ duration: 0.3 }}
+              src={dashboardImage}
+              alt="ERP Dashboard Analytics Preview"
+              className="w-full h-full object-cover shadow-sm"
+            />
           </motion.div>
         </div>
       </div>

@@ -1,20 +1,13 @@
-// ========================================
-// features/barcodes/hooks/useBarcode.jsx
-// ========================================
-
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import productService from "@/features/product/services/product.service";
 
+import { exportBarcodesPDF } from "../utils/export-barcodes-pdf";
 import { filterProducts } from "../utils/filter-products";
 
-import { exportBarcodesPDF } from "../utils/export-barcodes-pdf";
+const ITEMS_PER_PAGE = 12;
 
 export default function useBarcode() {
-  // ========================================
-  // STATES
-  // ========================================
-
   const [products, setProducts] = useState([]);
 
   const [loading, setLoading] = useState(true);
@@ -23,9 +16,7 @@ export default function useBarcode() {
 
   const [selectedProducts, setSelectedProducts] = useState([]);
 
-  // ========================================
-  // LOAD PRODUCTS
-  // ========================================
+  const [currentPage, setCurrentPage] = useState(1);
 
   const loadProducts = useCallback(async () => {
     try {
@@ -40,19 +31,29 @@ export default function useBarcode() {
   }, []);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadProducts();
   }, [loadProducts]);
 
-  // ========================================
-  // FILTERED PRODUCTS
-  // ========================================
+  const filteredProducts = useMemo(
+    () => filterProducts(products, search),
+    [products, search],
+  );
 
-  const filteredProducts = filterProducts(products, search);
+  const totalPages = Math.max(
+    1,
+    Math.ceil(filteredProducts.length / ITEMS_PER_PAGE),
+  );
 
-  // ========================================
-  // TOGGLE PRODUCT
-  // ========================================
+  const paginatedProducts = useMemo(() => {
+    const start = (currentPage - 1) * ITEMS_PER_PAGE;
+
+    return filteredProducts.slice(start, start + ITEMS_PER_PAGE);
+  }, [filteredProducts, currentPage]);
+
+  const handleSearch = (value) => {
+    setSearch(value);
+    setCurrentPage(1);
+  };
 
   const toggleProduct = (product) => {
     const exists = selectedProducts.find((item) => item.id === product.id);
@@ -67,10 +68,6 @@ export default function useBarcode() {
 
     setSelectedProducts((prev) => [...prev, product]);
   };
-
-  // ========================================
-  // SELECT ALL
-  // ========================================
 
   const handleSelectAll = () => {
     const allSelected = filteredProducts.every((product) =>
@@ -95,34 +92,30 @@ export default function useBarcode() {
     setSelectedProducts((prev) => [...prev, ...newProducts]);
   };
 
-  // ========================================
-  // EXPORT PDF
-  // ========================================
-
   const handleExportPDF = async () => {
     await exportBarcodesPDF(selectedProducts);
   };
-
-  // ========================================
-  // PRINT
-  // ========================================
 
   const handlePrint = () => {
     window.print();
   };
 
-  // ========================================
-  // EXPORTS
-  // ========================================
-
   return {
-    products: filteredProducts,
+    products: paginatedProducts,
+
+    totalProducts: filteredProducts.length,
+
+    currentPage,
+
+    totalPages,
+
+    setCurrentPage,
 
     loading,
 
     search,
 
-    setSearch,
+    setSearch: handleSearch,
 
     selectedProducts,
 

@@ -1,25 +1,26 @@
-// ========================================
+// ============================================================================
 // prisma/seeds/purchase.seed.js
-// ========================================
+// ============================================================================
 
 const { PrismaClient, PurchaseStatus, PaymentStatus } = require("@prisma/client");
 const crypto = require("crypto");
 const prisma = new PrismaClient();
 
+const PURCHASE_TO_PRODUCT_RATIO_MIN = 0.8;
+const PURCHASE_TO_PRODUCT_RATIO_MAX = 1.3;
+
 /**
  * Helper para generar fechas distribuidas en el rango histórico solicitado.
- * Inicia a fines de 2022 hasta el año actual 2026.
  */
 const generateHistoricalPurchaseDate = (currentStep, totalRecords) => {
-    const startDate = new Date("2022-12-01T07:00:00");
-    const endDate = new Date(); // Año actual: 2026
+    const startDate = new Date("2021-01-01T07:00:00");
+    const endDate = new Date(); // Año en curso (2026)
 
     const totalTimeRange = endDate.getTime() - startDate.getTime();
     const incrementalTime = (totalTimeRange / totalRecords) * currentStep;
 
     const targetDate = new Date(startDate.getTime() + incrementalTime);
 
-    // Variación horaria realista de oficina/almacén (Entre 7 AM y 4 PM)
     const randomHour = 7 + Math.floor(Math.random() * 9);
     const randomMinute = Math.floor(Math.random() * 60);
     targetDate.setHours(randomHour, randomMinute, 0, 0);
@@ -27,9 +28,6 @@ const generateHistoricalPurchaseDate = (currentStep, totalRecords) => {
     return targetDate;
 };
 
-/**
- * Helper para mezclar arrays (Algoritmo Fisher-Yates) para aleatoriedad pura.
- */
 const shuffleArray = (array) => {
     const arr = [...array];
     for (let i = arr.length - 1; i > 0; i--) {
@@ -40,108 +38,89 @@ const shuffleArray = (array) => {
 };
 
 async function purchaseJsonPayloadSeed() {
-    console.log("🚀 Iniciando carga masiva histórica de Compras e Inventarios para las 20 empresas...");
+    console.log("🚀 Iniciando carga masiva histórica de Compras Distribuidas por Sucursal (2021 - hoy)...");
 
-    // ==================================================
-    // 1. OBTENER TODAS LAS EMPRESAS DISPONIBLES
-    // ==================================================
-    const allCompanies = await prisma.company.findMany({ select: { id: true } });
+    const allCompanies = await prisma.company.findMany({ select: { id: true, name: true } });
 
     if (allCompanies.length === 0) {
-        throw new Error("Asegúrate de tener registros en la tabla Company antes de procesar compras.");
+        throw new Error("❌ Asegúrate de tener registros en la tabla Company antes de procesar compras.");
     }
 
-    // Pool de notas realistas para variabilidad transaccional
     const poolNotes = [
-        "Compra de reposición de bebidas y aguas para el almacén central",
-        "Abastecimiento urgente de lácteos para vitrinas refrigeradas",
-        "Pedido regular de fideos y harinas - Abastecimiento por campaña",
-        "Reposición mensual de útiles e insumos de limpieza del hogar",
-        "Compra masiva stock extra de aceites vegetales y arroz",
-        "Lote de cervezas y aguas gasificadas para temporada de alta demanda",
-        "Embutidos y carnes frías con cadena de frío prioritaria",
-        "Reposición de chocolates, confitería y café instantáneo",
-        "Pedido regular quincenal de tarros de leche evaporada",
-        "Cargamento de pañales y productos de higiene femenina",
-        "Stock de galletas, avenas y sémolas para góndolas",
-        "Compra de volumen de papel higiénico y servilletas institucionales",
-        "Compra de contingencia de desinfectantes e insecticidas",
-        "Abastecimiento mensual de harinas industriales y mantecas",
-        "Útiles de oficina y papelería para stock interno y comercial"
+        "Compra de reposición para stock general de almacén",
+        "Abastecimiento urgente para vitrinas de exhibición",
+        "Pedido regular - Abastecimiento programado por campaña",
+        "Reposición mensual de útiles e insumos logísticos",
+        "Compra masiva stock extra para inventario estacional",
+        "Lote prioritario para cubrir picos de demanda local",
+        "Insumos con cadena de frío de distribución rápida",
+        "Reposición estándar de góndolas principales",
+        "Pedido regular quincenal de alta rotación",
+        "Cargamento especial coordinado por administración central"
     ];
 
     let grandTotalPurchases = 0;
 
-    // ==================================================
-    // 2. ITERAR EN LAS 20 EMPRESAS DE FORMA EXCLUSIVA
-    // ==================================================
     for (const currentCompany of allCompanies) {
         const companyId = currentCompany.id;
 
-        // Obtener la primera sucursal, comprador, productos y proveedores específicos de ESTA empresa
-        const branch = await prisma.branch.findFirst({ where: { companyId } });
-        const buyer = await prisma.user.findFirst({ where: { companyId } });
+        // Traemos todas las dependencias necesarias de manera controlada
+        const allBranches = await prisma.branch.findMany({ where: { companyId }, select: { id: true } });
+        const buyer = await prisma.user.findFirst({ where: { companyId }, select: { id: true } });
         const allProducts = await prisma.product.findMany({ where: { companyId }, select: { id: true } });
         const allSuppliers = await prisma.supplier.findMany({ where: { companyId }, select: { id: true } });
 
-        // Si la empresa no tiene catálogo de datos maestros listo, salta preventivamente para evitar fallos de Foreign Key
-        if (!branch || !buyer || allProducts.length === 0 || allSuppliers.length === 0) {
-            console.warn(`⚠️ Empresa ID ${companyId} omitida: Faltan productos, proveedores, sucursales o usuarios.`);
+        // Validación estricta para evitar accesos a propiedades de nulos o arreglos vacíos
+        if (allBranches.length === 0 || !buyer || allProducts.length === 0 || allSuppliers.length === 0) {
+            console.warn(`⚠️ Empresa "${currentCompany.name}" (ID ${companyId}) omitida: Faltan sucursales, productos, proveedores o usuarios.`);
             continue;
         }
 
-        // Configuración/Verificación de métodos de pago únicos para esta empresa específica
         const paymentMethodsToSeed = [
             { name: "Efectivo Caja General", type: "CASH" },
             { name: "Tarjeta de Crédito/Débito", type: "CARD" },
             { name: "Transferencia Bancaria", type: "TRANSFER" },
-            { name: "Billeteras Digitales", type: "WALLET" },
-            { name: "Cheque Comercial", type: "CHECK" }
+            { name: "Billeteras Digitales", type: "WALLET" }
         ];
 
         let availablePaymentMethods = [];
-
         for (const method of paymentMethodsToSeed) {
-            let dbMethod = await prisma.paymentMethod_DB.findFirst({
-                where: { type: method.type, companyId }
-            });
-
+            let dbMethod = await prisma.paymentMethod_DB.findFirst({ where: { type: method.type, companyId } });
             if (!dbMethod) {
                 dbMethod = await prisma.paymentMethod_DB.create({
-                    data: {
-                        name: method.name,
-                        type: method.type,
-                        isActive: true,
-                        companyId
-                    }
+                    data: { name: method.name, type: method.type, isActive: true, companyId }
                 });
             }
-
-            if (dbMethod.isActive) {
+            if (dbMethod && dbMethod.isActive) {
                 availablePaymentMethods.push(dbMethod);
             }
         }
 
-        // Definimos entre 40 y 60 compras históricas exclusivas por cada empresa
-        const totalRecordsPerCompany = Math.floor(Math.random() * 21) + 40;
-        console.log(` 🏢 Empresa ID ${companyId}: Inyectando ${totalRecordsPerCompany} Órdenes de Compra (2022 - 2026)...`);
+        // Si por alguna razón no hay métodos de pago activos, evitamos un posterior crash masivo
+        if (availablePaymentMethods.length === 0) {
+            console.warn(`⚠️ Omitiendo compras para empresa ID ${companyId} debido a la falta de métodos de pago válidos.`);
+            continue;
+        }
+
+        const ratio = PURCHASE_TO_PRODUCT_RATIO_MIN + Math.random() * (PURCHASE_TO_PRODUCT_RATIO_MAX - PURCHASE_TO_PRODUCT_RATIO_MIN);
+        const totalRecordsPerCompany = Math.max(40, Math.floor(allProducts.length * ratio));
+
+        console.log(`🏢 Empresa: "${currentCompany.name}" → Generando ${totalRecordsPerCompany} Órdenes de Compra distribuidas...`);
 
         let companyPurchaseCounter = 1;
 
-        // ==================================================
-        // 3. BUCLE DE COMPRAS TRANSACCIONAL POR EMPRESA
-        // ==================================================
         for (let i = 0; i < totalRecordsPerCompany; i++) {
             const randomSupplier = allSuppliers[Math.floor(Math.random() * allSuppliers.length)];
             const shuffledProducts = shuffleArray(allProducts);
-            const detailCount = Math.floor(Math.random() * 4) + 1; // Entre 1 y 4 ítems por compra
+            const detailCount = Math.floor(Math.random() * 4) + 1;
             const selectedProducts = shuffledProducts.slice(0, detailCount);
+            const targetBranch = allBranches[Math.floor(Math.random() * allBranches.length)];
 
             const purchaseDetailsPayload = selectedProducts.map(p => {
                 return {
                     productId: p.id,
-                    quantity: Math.floor(Math.random() * 400) + 50,                  // 50 a 450 unidades
-                    costPrice: parseFloat((Math.random() * (20 - 1) + 1).toFixed(2)) // Costos de 1.00 a 20.00 PEN
+                    quantity: Math.floor(Math.random() * 400) + 50,
+                    costPrice: parseFloat((Math.random() * (20 - 1) + 1).toFixed(2))
                 };
             });
 
@@ -160,7 +139,6 @@ async function purchaseJsonPayloadSeed() {
                     const discount = cabeceraSubtotal > 1000 ? 30.00 : 0.00;
                     const total = parseFloat((cabeceraSubtotal + tax - discount).toFixed(2));
 
-                    // Formato correlativo estructurado por año y contador de la empresa
                     const purchaseNumber = `COM-${currentYear}-${String(companyId).padStart(2, "0")}-${String(companyPurchaseCounter).padStart(4, "0")}`;
                     const transactionHex = crypto.randomBytes(3).toString("hex").toUpperCase();
                     const transactionId = `TX-PURCH-${currentYear}-${transactionHex}`;
@@ -170,7 +148,7 @@ async function purchaseJsonPayloadSeed() {
                     companyPurchaseCounter++;
                     grandTotalPurchases++;
 
-                    // A. Registrar la Cabecera de la Compra
+                    // A. Registrar la Cabecera de Compra
                     const newPurchase = await tx.purchase.create({
                         data: {
                             purchaseNumber,
@@ -179,19 +157,19 @@ async function purchaseJsonPayloadSeed() {
                             discount,
                             total,
                             status: PurchaseStatus.COMPLETED,
-                            notes: note,
+                            notes: `${note} | Destino: Sucursal ID ${targetBranch.id}`,
                             expectedDelivery: historicalDate,
                             actualDelivery: historicalDate,
                             createdAt: historicalDate,
                             updatedAt: historicalDate,
                             buyerId: buyer.id,
-                            branchId: branch.id,
+                            branchId: targetBranch.id,
                             companyId,
                             supplierId: randomSupplier.id
                         }
                     });
 
-                    // B. Registrar el Flujo de Pago de la compra
+                    // B. Flujo de Transacción/Pago Asociado
                     await tx.payment.create({
                         data: {
                             amount: total,
@@ -206,15 +184,14 @@ async function purchaseJsonPayloadSeed() {
                         }
                     });
 
-                    // C. Detalles de la orden, Afectación de Stock, Kárdex y Lotes individuales
+                    // C. Detalles e impacto en Inventario y Lotes
                     for (const detail of purchaseDetailsPayload) {
                         const itemSubtotal = detail.quantity * detail.costPrice;
-
                         const batchHex = crypto.randomBytes(2).toString("hex").toUpperCase();
                         const generatedBatch = `LOT-${String(currentYear).substring(2)}-${batchHex}`;
 
                         const expDate = new Date(historicalDate);
-                        expDate.setFullYear(expDate.getFullYear() + 1); // Expira en 1 año
+                        expDate.setFullYear(expDate.getFullYear() + 1);
 
                         const createdDetail = await tx.purchaseDetail.create({
                             data: {
@@ -233,7 +210,7 @@ async function purchaseJsonPayloadSeed() {
                             where: {
                                 productId_branchId: {
                                     productId: detail.productId,
-                                    branchId: branch.id
+                                    branchId: targetBranch.id
                                 }
                             }
                         });
@@ -241,12 +218,11 @@ async function purchaseJsonPayloadSeed() {
                         const previousStock = currentInventory?.stock ?? 0;
                         const newStock = previousStock + detail.quantity;
 
-                        // Incremento atómico y seguro de stock
                         const inventory = await tx.inventory.upsert({
                             where: {
                                 productId_branchId: {
                                     productId: detail.productId,
-                                    branchId: branch.id
+                                    branchId: targetBranch.id
                                 }
                             },
                             update: {
@@ -255,7 +231,7 @@ async function purchaseJsonPayloadSeed() {
                             },
                             create: {
                                 productId: detail.productId,
-                                branchId: branch.id,
+                                branchId: targetBranch.id,
                                 companyId,
                                 stock: detail.quantity,
                                 reservedStock: 0,
@@ -264,24 +240,24 @@ async function purchaseJsonPayloadSeed() {
                             }
                         });
 
-                        // Insertar movimiento cronológico de Kárdex
+                        // Historial de Kárdex
                         await tx.inventoryHistory.create({
                             data: {
                                 type: "PURCHASE",
                                 quantity: detail.quantity,
                                 previousStock,
                                 newStock,
-                                reason: `Entrada por compra correlativo ${purchaseNumber}`,
+                                reason: `Entrada por compra centralizada para sucursal ${targetBranch.id}`,
                                 reference: purchaseNumber,
                                 productId: detail.productId,
                                 inventoryId: inventory.id,
-                                branchId: branch.id,
+                                branchId: targetBranch.id,
                                 companyId,
                                 createdAt: historicalDate
                             }
                         });
 
-                        // Trazabilidad física del lote
+                        // Trazabilidad por Lotes Físicos
                         await tx.productBatch.create({
                             data: {
                                 batchNumber: generatedBatch,
@@ -292,7 +268,7 @@ async function purchaseJsonPayloadSeed() {
                                 isActive: true,
                                 productId: detail.productId,
                                 purchaseDetailId: createdDetail.id,
-                                branchId: branch.id,
+                                branchId: targetBranch.id,
                                 companyId,
                                 createdAt: historicalDate,
                                 updatedAt: historicalDate
@@ -300,18 +276,31 @@ async function purchaseJsonPayloadSeed() {
                         });
                     }
                 },
-                { timeout: 60000 } // Timeout transaccional de 1 minuto por bloque de compra individual
+                { timeout: 60000 }
             );
+
+            if ((companyPurchaseCounter - 1) % 50 === 0) {
+                console.log(`   ...${companyPurchaseCounter - 1}/${totalRecordsPerCompany} compras procesadas.`);
+            }
         }
     }
 
     console.log(`\n======================================================`);
-    console.log(`✅ SEED LOGÍSTICO MULTIEMPRESA COMPLETADO EXITOSAMENTE`);
-    console.log(`📊 Total global inyectado: ${grandTotalPurchases} compras distribuidas en las 20 empresas.`);
-    console.log(`📅 Cobertura histórica: 2022 - 2026.`);
+    console.log(`✅ SEED LOGÍSTICO MULTI-SUCURSAL COMPLETADO`);
+    console.log(`📊 Total global inyectado: ${grandTotalPurchases} compras distribuidas.`);
     console.log(`======================================================\n`);
 }
 
-module.exports = {
-    purchaseJsonPayloadSeed
-};
+// Bloque de ejecución segura e independiente
+if (require.main === module) {
+    purchaseJsonPayloadSeed()
+        .catch((e) => {
+            console.error("❌ Error detectado en el proceso de seed de compras:", e);
+            process.exit(1);
+        })
+        .finally(async () => {
+            await prisma.$disconnect();
+        });
+}
+
+module.exports = { purchaseJsonPayloadSeed };

@@ -72,11 +72,12 @@ async function main() {
     // FASE 1 - ESTRUCTURA BASE
     // ======================================================================
 
+
     // await executeSeed(adminSeed, "1. Administrator Users");
     // await executeSeed(commentsSeed, "2. Comments for Administrators");
-
     // await executeSeed(unitSeed, "2. Measurement Units");
     // await executeSeed(categorySeed, "3. Product Categories");
+
     // await executeSeed(productSeed, "4. Product Catalog");
     // await executeSeed(customerSeed, "5. Customers");
     // await executeSeed(supplierSeed, "6. Suppliers");
@@ -85,10 +86,10 @@ async function main() {
     // FASE 2 - INVENTARIO INICIAL
     // ======================================================================
 
-    await executeSeed(
-      purchaseJsonPayloadSeed,
-      "7. Historical Purchases & Initial Stock"
-    );
+    // await executeSeed(
+    //   purchaseJsonPayloadSeed,
+    //   "7. Historical Purchases & Initial Stock"
+    // );
 
 
 
@@ -117,10 +118,10 @@ async function main() {
     //   "12. Historic Sales Ledger Year 2025"
     // );
 
-    // await executeSeed(
-    //   saleJsonPayloadSeed2026,
-    //   "13. Historic Sales Ledger Year 2026"
-    // );
+    await executeSeed(
+      saleJsonPayloadSeed2026,
+      "13. Historic Sales Ledger Year 2026"
+    );
 
     console.log("\n====================================================================");
     console.log("🎉 BASE DE DATOS INYECTADA CORRECTAMENTE");

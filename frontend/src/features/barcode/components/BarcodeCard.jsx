@@ -1,12 +1,14 @@
-import { useEffect, useRef } from "react";
 import JsBarcode from "jsbarcode";
-import { Check, Tag, Package, DollarSign, Barcode } from "lucide-react";
+import { Barcode, Check, DollarSign, Package, Tag } from "lucide-react";
+import { useEffect, useRef } from "react";
 
 export default function BarcodeCard({ product, selected, onSelect }) {
   const svgRef = useRef(null);
 
   useEffect(() => {
-    if (!svgRef.current || !product?.barcode) return;
+    if (!svgRef.current || !product?.barcode) {
+      return;
+    }
 
     JsBarcode(svgRef.current, product.barcode, {
       format: "CODE128",
@@ -15,140 +17,114 @@ export default function BarcodeCard({ product, selected, onSelect }) {
       displayValue: false,
       margin: 8,
       background: "transparent",
-      lineColor: "#e5e7eb",
+      lineColor: "#0f172a",
     });
   }, [product]);
 
   return (
-    <div
+    <article
       onClick={onSelect}
-      className={`
-        group cursor-pointer relative
-        rounded-xl border-2
-        transition-all duration-300
-        overflow-hidden
-
-        ${
-          selected
-            ? "border-gray-500/50 bg-gradient-to-br from-gray-900/50 to-gray-800/50 shadow-lg shadow-gray-500/20"
-            : "border-gray-700/50 bg-gradient-to-br from-gray-900/30 to-gray-800/20 hover:border-gray-600/80 hover:shadow-md hover:shadow-gray-900/50"
-        }
-      `}
+      className={`group relative cursor-pointer overflow-hidden rounded-3xl border transition-all duration-300 ${
+        selected
+          ? "border-primary/40 bg-primary/5 shadow-lg"
+          : "border-slate-200 bg-white hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-lg dark:border-slate-800 dark:bg-slate-950 dark:hover:border-slate-700"
+      }`}
     >
-      {/* GRADIENT BACKGROUND SUBTLE */}
-      <div className="absolute inset-0 opacity-40 pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-500/5 via-transparent to-blue-500/5" />
-      </div>
-
-      <div className="relative p-6 space-y-5">
-        {/* HEADER */}
+      <div className="p-6">
         <div className="flex items-start justify-between gap-4">
-          <div className="flex-1 min-w-0">
-            <h3 className="text-base font-semibold text-white truncate">
+          <div className="min-w-0 flex-1">
+            <h3 className="truncate text-lg font-medium text-slate-900 dark:text-slate-100">
               {product.name}
             </h3>
-            <p className="text-xs text-gray-400 mt-1 line-clamp-1">
-              {product.description || "Producto en catálogo"}
+
+            <p className="mt-1 truncate text-sm text-slate-500 dark:text-slate-400">
+              {product.description || "Producto registrado"}
             </p>
           </div>
 
-          {/* CHECKBOX */}
           <button
+            type="button"
             onClick={(e) => {
               e.stopPropagation();
               onSelect();
             }}
-            className={`
-              flex-shrink-0 mt-1
-              w-5 h-5 rounded border
-              transition-all duration-200
-              flex items-center justify-center
-
-              ${
-                selected
-                  ? "bg-gray-500 border-gray-400 shadow-lg shadow-gray-500/50"
-                  : "border-gray-600 bg-gray-800/50 hover:border-gray-500 hover:bg-gray-700/50"
-              }
-            `}
+            className={`flex h-6 w-6 items-center justify-center rounded-md border transition-all ${
+              selected
+                ? "border-primary bg-primary text-white"
+                : "border-slate-300 bg-white text-slate-400 dark:border-slate-700 dark:bg-slate-900"
+            }`}
           >
-            {selected && (
-              <Check size={14} className="text-white" strokeWidth={3} />
-            )}
+            {selected && <Check size={14} strokeWidth={3} />}
           </button>
         </div>
 
-        {/* INFO ITEMS GRID */}
-        <div className="grid grid-cols-3 gap-3 pt-2">
-          <InfoItem icon={Tag} label="SKU" value={product.sku} />
-          <InfoItem
-            icon={Package}
-            label="CATEGORÍA"
-            value={product.category?.name || "—"}
-          />
-          <InfoItem
-            icon={Package}
-            label="STOCK"
-            value={`${product.availableStock}`}
-          />
+        <div className="mt-6 grid grid-cols-3 gap-4">
+          <div>
+            <div className="flex items-center gap-2 text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">
+              <Tag size={13} />
+              <span>SKU</span>
+            </div>
+
+            <p className="mt-2 truncate text-sm font-semibold text-slate-900 dark:text-slate-100">
+              {product.sku || "—"}
+            </p>
+          </div>
+
+          <div>
+            <div className="flex items-center gap-2 text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">
+              <Package size={13} />
+              <span>Categoría</span>
+            </div>
+
+            <p className="mt-2 truncate text-sm font-semibold text-slate-900 dark:text-slate-100">
+              {product.category?.name || "—"}
+            </p>
+          </div>
+
+          <div>
+            <div className="flex items-center gap-2 text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">
+              <Package size={13} />
+              <span>Stock</span>
+            </div>
+
+            <p className="mt-2 truncate text-sm font-semibold text-slate-900 dark:text-slate-100">
+              {product.availableStock ?? 0}
+            </p>
+          </div>
         </div>
 
-        {/* DIVIDER */}
-        <div className="border-t border-gray-700/50" />
+        <div className="my-6 border-t border-slate-200 dark:border-slate-800" />
 
-        {/* PRICE SECTION */}
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <DollarSign size={14} className="text-gray-400" />
-            <span className="text-xs font-medium text-gray-400 uppercase tracking-wide">
-              Precio venta
-            </span>
+          <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+            <DollarSign size={15} />
+            <span>Precio de venta</span>
           </div>
-          <strong className="text-lg font-bold text-transparent bg-gradient-to-r from-gray-400 to-blue-400 bg-clip-text">
-            S/ {product.salePrice}
-          </strong>
+
+          <span className="text-xl font-bold text-slate-900 dark:text-slate-100">
+            S/ {Number(product.salePrice || 0).toFixed(2)}
+          </span>
         </div>
 
-        {/* DIVIDER */}
-        <div className="border-t border-gray-700/50" />
+        <div className="my-6 border-t border-slate-200 dark:border-slate-800" />
 
-        {/* BARCODE SECTION */}
-        <div className="space-y-3 pt-2">
-          <div className="flex items-center gap-2">
-            <Barcode size={14} className="text-gray-500" />
-            <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">
-              Código de barras
-            </span>
+        <div>
+          <div className="mb-3 flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+            <Barcode size={15} />
+            <span>Código de barras</span>
           </div>
 
-          <div className="flex justify-center py-4 px-3 bg-gray-900/80 rounded-lg border border-gray-700/50 backdrop-blur-sm">
-            <svg ref={svgRef} className="scale-95" />
+          <div className="flex justify-center rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-100">
+            <svg ref={svgRef} />
           </div>
 
-          <p className="text-xs text-center text-gray-500 font-mono tracking-widest">
+          <p className="mt-3 text-center font-mono text-xs tracking-wider text-slate-500 dark:text-slate-400">
             {product.barcode}
           </p>
         </div>
       </div>
 
-      {/* SELECTED INDICATOR LINE */}
-      {selected && (
-        <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-gray-500 via-gray-500 to-transparent" />
-      )}
-    </div>
-  );
-}
-
-// REUSABLE INFO ITEM
-function InfoItem({ icon: Icon, label, value }) {
-  return (
-    <div className="space-y-2">
-      <div className="flex items-center gap-1.5">
-        <Icon size={13} className="text-gray-500 flex-shrink-0" />
-        <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">
-          {label}
-        </span>
-      </div>
-      <p className="text-sm font-semibold text-gray-200 pl-5">{value}</p>
-    </div>
+      {selected && <div className="absolute inset-x-0 top-0 h-1 bg-primary" />}
+    </article>
   );
 }
