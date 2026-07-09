@@ -12,46 +12,15 @@ export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
+
     visualizer({
+      filename: "stats.html",
       open: true,
       gzipSize: true,
-      filename: "stats.html",
+      brotliSize: true,
     }),
   ],
 
-  rollupOptions: {
-    output: {
-      manualChunks(id) {
-        if (id.includes("node_modules")) {
-          if (
-            id.includes("react") ||
-            id.includes("react-dom") ||
-            id.includes("react-router")
-          ) {
-            return "react-vendor";
-          }
-
-          if (id.includes("recharts") || id.includes("chart.js")) {
-            return "charts";
-          }
-
-          if (id.includes("xlsx") || id.includes("exceljs")) {
-            return "excel";
-          }
-
-          if (id.includes("jspdf") || id.includes("html2canvas")) {
-            return "pdf";
-          }
-
-          if (id.includes("emoji-picker-react")) {
-            return "emoji";
-          }
-
-          return "vendor";
-        }
-      },
-    },
-  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
@@ -88,39 +57,55 @@ export default defineConfig({
     outDir: "dist",
     sourcemap: false,
 
+    // Aumenta el límite de advertencia para proyectos grandes
     chunkSizeWarningLimit: 1000,
 
     rollupOptions: {
       output: {
         manualChunks(id) {
-          // Dependencias externas
-          if (id.includes("node_modules")) {
-            if (
-              id.includes("react") ||
-              id.includes("react-dom") ||
-              id.includes("react-router")
-            ) {
-              return "react-vendor";
-            }
+          if (!id.includes("node_modules")) return;
 
-            if (id.includes("recharts")) {
-              return "charts";
-            }
-
-            if (id.includes("jspdf") || id.includes("html2canvas")) {
-              return "pdf";
-            }
-
-            if (id.includes("emoji-picker-react")) {
-              return "emoji";
-            }
-
-            if (id.includes("lucide-react")) {
-              return "icons";
-            }
-
-            return "vendor";
+          // React
+          if (
+            id.includes("react") ||
+            id.includes("react-dom") ||
+            id.includes("react-router") ||
+            id.includes("scheduler")
+          ) {
+            return "react-vendor";
           }
+
+          // Gráficos
+          if (id.includes("recharts") || id.includes("chart.js")) {
+            return "charts";
+          }
+
+          // Excel
+          if (id.includes("xlsx") || id.includes("exceljs")) {
+            return "excel";
+          }
+
+          // PDF e impresión
+          if (
+            id.includes("jspdf") ||
+            id.includes("html2canvas") ||
+            id.includes("pdfjs")
+          ) {
+            return "pdf";
+          }
+
+          // Emojis
+          if (id.includes("emoji-picker-react")) {
+            return "emoji";
+          }
+
+          // Íconos
+          if (id.includes("lucide-react")) {
+            return "icons";
+          }
+
+          // Todo lo demás
+          return "vendor";
         },
       },
     },
