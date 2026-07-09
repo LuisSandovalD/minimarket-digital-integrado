@@ -1,6 +1,7 @@
 // ========================================
 // features/sale-detail/pages/SaleDetailsPage.jsx
 // ========================================
+import { getUser } from "@/features/auth/services/session.service";
 import { useCallback, useMemo, useState } from "react";
 
 import { useSaleDetails } from "../hooks/useSaleDetails";
@@ -11,30 +12,30 @@ import SaleDetailLoading from "../components/SaleDetailLoading";
 import SaleDetailModal from "../components/SaleDetailModal";
 import SaleDetailsTable from "../components/SaleDetailsTable";
 
-// ========================================
-// SALE DETAILS PAGE
-// ========================================
-
+/**
+ * PÁGINA: DETALLES DE VENTAS
+ * Permite la visualización de los detalles de ítems vendidos.
+ * El acceso a los datos está protegido a nivel de API mediante middleware de backend.
+ */
 export default function SaleDetailsPage() {
+  const user = getUser();
+
   const {
-    saleDetails = [], // Mapeado directo a data.results de tu API
+    saleDetails = [],
     loading = false,
-    pagination = {}, // Contiene { page, totalPages } extraídos de data.info
-    metrics = {}, // Contiene { totalItems } extraído de data.info.total
-    actions = {}, // Contiene las funciones de cambio de página y filtros
+    pagination = {},
+    metrics = {},
+    actions = {},
   } = useSaleDetails();
 
   const [selectedDetail, setSelectedDetail] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
 
   // ========================================
-  // STATS (Cómputo optimizado con useMemo)
+  // STATS (Cómputo optimizado)
   // ========================================
-
-  // Total global de registros en la base de datos (Ej: 2081 ítems)
   const total = Number(metrics?.totalItems || 0);
 
-  // Memorizado defensivo para evitar recalcular reducers en re-renders innecesarios
   const { totalQuantity, totalRevenue } = useMemo(() => {
     return saleDetails.reduce(
       (acc, item) => {
@@ -48,9 +49,8 @@ export default function SaleDetailsPage() {
   }, [saleDetails]);
 
   // ========================================
-  // CONTROL DE MODALES (useCallback)
+  // CONTROL DE MODALES
   // ========================================
-
   const handleView = useCallback((detail) => {
     if (!detail) return;
     setSelectedDetail(detail);
@@ -59,41 +59,35 @@ export default function SaleDetailsPage() {
 
   const handleClose = useCallback(() => {
     setModalOpen(false);
-    // Retraso técnico opcional para evitar parpadeos visuales en la animación de salida
     setTimeout(() => {
       setSelectedDetail(null);
     }, 200);
   }, []);
 
   // ========================================
-  // LOADING (Estrategia No Bloqueante en Background Fetch)
+  // RENDERING
   // ========================================
-
   if (loading && saleDetails.length === 0) {
     return <SaleDetailLoading />;
   }
 
-  // ========================================
-  // RENDER
-  // ========================================
-
   return (
     <div className="space-y-6">
-      {/* HEADER: Muestra estadísticas de la página actual e indicadores globales */}
+      {/* HEADER: Indicadores globales */}
       <SaleDetailHeader
         total={total}
         totalQuantity={totalQuantity}
         totalRevenue={totalRevenue}
       />
 
-      {/* PANEL DE FILTROS ORIENTADO A BACKEND */}
+      {/* FILTROS: Interacción con el servidor */}
       <SaleDetailFilters
         onSearch={actions?.handleApplyFilters}
         onClear={actions?.handleClearFilters}
         loading={loading}
       />
 
-      {/* TABLE: Renderiza las filas actuales de la API y controla los botones de TFooter */}
+      {/* TABLE: Listado de detalles */}
       <SaleDetailsTable
         details={saleDetails}
         onView={handleView}
@@ -103,7 +97,7 @@ export default function SaleDetailsPage() {
         onNextPage={actions?.handleNextPage || (() => {})}
       />
 
-      {/* MODAL DEL DETALLE DE PARTIDA / ÍTEM */}
+      {/* MODAL: Detalle de ítem */}
       <SaleDetailModal
         open={modalOpen}
         detail={selectedDetail}

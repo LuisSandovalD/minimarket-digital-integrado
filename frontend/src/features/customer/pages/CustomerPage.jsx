@@ -14,11 +14,14 @@ import CustomerTable from "../components/CustomerTable";
 import { useCustomerForm } from "../hooks/useCustomerForm";
 import { useCustomers } from "../hooks/useCustomers";
 import { useCustomerStats } from "../hooks/useCustomerStats";
+// 🌟 Importamos el servicio de sesión para validar el rol
+import { getUser } from "@/features/auth/services/session.service";
 
 export default function CustomerPage() {
-  // ========================================
-  // HOOK DE CLIENTES (FILTROS Y DATOS)
-  // ========================================
+  // 🌟 Validamos el rol del usuario
+  const user = getUser();
+  const isAdmin = user?.role === "ADMIN";
+
   const {
     customers,
     pagination,
@@ -29,15 +32,9 @@ export default function CustomerPage() {
     refresh,
   } = useCustomers();
 
-  // ========================================
-  // ESTADOS LOCALES PARA ELIMINACIÓN
-  // ========================================
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
 
-  // ========================================
-  // HOOK DE FORMULARIO (CREAR / EDITAR)
-  // ========================================
   const {
     form,
     handleChange,
@@ -50,13 +47,11 @@ export default function CustomerPage() {
     remove,
   } = useCustomerForm(refresh);
 
-  // Estadísticas calculadas en base a los clientes actuales
   const stats = useCustomerStats(customers);
 
-  // ========================================
-  // MANEJADORES DE ELIMINACIÓN
-  // ========================================
   const handleOpenDelete = (customer) => {
+    // 🛡️ Seguridad extra: Si no es admin, ignoramos la acción
+    if (!isAdmin) return;
     setSelectedCustomer(customer);
     setDeleteModalOpen(true);
   };
@@ -67,18 +62,14 @@ export default function CustomerPage() {
   };
 
   const handleDelete = async () => {
-    if (!selectedCustomer) return;
+    if (!selectedCustomer || !isAdmin) return;
 
     await remove(selectedCustomer.id);
     handleCloseDelete();
   };
 
-  // ========================================
-  // MANEJADORES DE FILTROS (CORREGIDO)
-  // ========================================
   const handleFilterChange = useCallback(
     (newFilters) => {
-      // Al filtrar, siempre reiniciamos a la página 1 para evitar bugs de desborde
       updateFilters({
         ...newFilters,
         page: 1,
@@ -87,9 +78,6 @@ export default function CustomerPage() {
     [updateFilters],
   );
 
-  // ========================================
-  // MANEJADORES DE PAGINACIÓN
-  // ========================================
   const handleNextPage = () => {
     if (pagination && filters.page < pagination.totalPages) {
       updateFilters({ page: filters.page + 1 });
@@ -102,46 +90,39 @@ export default function CustomerPage() {
     }
   };
 
-  // ========================================
-  // VISTA DE CARGA
-  // ========================================
   if (loading) {
     return <CustomerLoading />;
   }
 
-  // ========================================
-  // RENDER COMPONENTE PRINCIPAL
-  // ========================================
   return (
     <div className="space-y-6">
-      {/* HEADER DE LA SECCIÓN */}
       <CustomerHeader
         total={stats.totalCustomers}
         active={stats.activeCustomers}
-        onCreate={openCreate}
+        // 🛡️ Solo permitimos crear si es admin
+        onCreate={isAdmin ? openCreate : undefined}
       />
 
-      {/* BARRA DE FILTROS Y BÚSQUEDA CORREGIDA */}
       <CustomerFilters
         filters={filters}
         loading={loading}
-        onChange={handleFilterChange} // 💡 Cambiado de onSearch a onChange si tu componente lo maneja de forma reactiva
-        onSearch={handleFilterChange} // 💡 Mantenemos onSearch por si acaso tu botón lo ejecuta así
+        onChange={handleFilterChange}
+        onSearch={handleFilterChange}
         onClear={clearFilters}
       />
 
-      {/* TABLA DE DATOS */}
       <CustomerTable
         customers={customers}
         page={filters.page}
         totalPages={pagination?.totalPages ?? 1}
         onPrevPage={handlePrevPage}
         onNextPage={handleNextPage}
+        // 🛡️ Pasamos la lógica de edición/eliminación limitada
         onEdit={openEdit}
-        onDelete={handleOpenDelete}
+        onDelete={isAdmin ? handleOpenDelete : undefined}
       />
 
-      {/* MODAL DE CREACIÓN Y EDICIÓN */}
+      {/* 🛡️ El modal de formulario también debe protegerse en el onSubmit si fuera necesario */}
       <CustomerFormModal
         open={modalOpen}
         onClose={closeModal}
@@ -152,13 +133,15 @@ export default function CustomerPage() {
         isEdit={Boolean(form.id)}
       />
 
-      {/* MODAL DE CONFIRMACIÓN DE ELIMINACIÓN */}
-      <CustomerDeleteModal
-        open={deleteModalOpen}
-        onClose={handleCloseDelete}
-        selectedCustomer={selectedCustomer}
-        reload={handleDelete}
-      />
+      {/* MODAL DE CONFIRMACIÓN */}
+      {isAdmin && (
+        <CustomerDeleteModal
+          open={deleteModalOpen}
+          onClose={handleCloseDelete}
+          selectedCustomer={selectedCustomer}
+          reload={handleDelete}
+        />
+      )}
     </div>
   );
 }

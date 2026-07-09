@@ -7,19 +7,19 @@ import * as z from "zod";
 export const productSchema = z.object({
   name: z.string().min(2, "El nombre es requerido"),
 
-  slug: z.string().min(2, "El slug es requerido"),
+  description: z.string().optional().nullable(),
 
-  description: z.string().optional(),
+  purchasePrice: z.coerce
+    .number()
+    .min(0, "El precio de compra no puede ser negativo"),
 
-  sku: z.string().optional(),
-
-  barcode: z.string().optional(),
-
-  purchasePrice: z.coerce.number().min(0),
+  costPrice: z.coerce.number().min(0),
 
   salePrice: z.coerce.number().min(0),
 
-  costPrice: z.coerce.number().min(0),
+  profitMargin: z.coerce.number().min(0),
+
+  profitAmount: z.coerce.number().min(0),
 
   stock: z.coerce.number().min(0),
 
@@ -27,21 +27,19 @@ export const productSchema = z.object({
 
   maxStock: z.coerce.number().nullable().optional(),
 
-  expirationDate: z.string().nullable().optional(),
-
-  batchNumber: z.string().optional(),
-
   requiresExpiration: z.boolean().default(false),
 
   isActive: z.boolean().default(true),
 
   isFeatured: z.boolean().default(false),
 
-  categoryId: z.coerce.number(),
+  categoryId: z.coerce.number({
+    required_error: "La categoría es requerida",
+  }),
 
-  unitId: z.coerce.number(),
-
-  branchId: z.coerce.number().optional(),
+  unitId: z.coerce.number({
+    required_error: "La unidad es requerida",
+  }),
 });
 
 export default productSchema;

@@ -12,6 +12,7 @@ import {
   Settings2,
   ShoppingCart,
   User,
+  UserCheck, // 🚀 Icono para la columna Vendedor
 } from "lucide-react";
 
 import { ModernButton } from "@/components/buttons";
@@ -58,12 +59,22 @@ export default function SaleTable({
         </div>
       ),
     },
+    // 🌟 NUEVA COLUMNA INTEGRADA: Vendedor / Atendido por
+    {
+      key: "seller",
+      label: (
+        <div className="flex items-center gap-2">
+          <UserCheck size={14} />
+          Atendido por
+        </div>
+      ),
+    },
     {
       key: "subtotal",
       label: (
         <div className="flex items-center gap-2">
           <DollarSign size={14} />
-          Subtotal (sin IGV)
+          Subtotal
         </div>
       ),
     },
@@ -81,7 +92,7 @@ export default function SaleTable({
       label: (
         <div className="flex items-center gap-2">
           <DollarSign size={14} />
-          Total (con IGV)
+          Total
         </div>
       ),
     },
@@ -117,71 +128,52 @@ export default function SaleTable({
     });
   }
 
-  // ========================================
-  // FORMATEADOR DE MONEDA NACIONAL (PEN)
-  // ========================================
   const formatPrice = (value) =>
     new Intl.NumberFormat("es-PE", {
       style: "currency",
       currency: "PEN",
     }).format(Number(value || 0));
 
-  // ========================================
-  // MAPEO DE ESTADOS SINCRO CON ENUM SALESTATUS
-  // ========================================
   const getStatusDetails = (status) => {
     const normalizedStatus = String(status || "")
       .toUpperCase()
       .trim();
-
     switch (normalizedStatus) {
       case "DRAFT":
         return {
           label: "Borrador",
           styles:
-            "bg-slate-100 text-slate-700 dark:bg-slate-800/60 dark:text-slate-300 border border-slate-200 dark:border-slate-700",
+            "bg-slate-100 text-slate-700 dark:bg-slate-800/60 dark:text-slate-300 border-slate-200 dark:border-slate-700",
         };
       case "PENDING":
         return {
           label: "Pendiente",
           styles:
-            "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 border border-amber-200 dark:border-amber-800/50",
+            "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 border-amber-200 dark:border-amber-800/50",
         };
       case "COMPLETED":
         return {
           label: "Completado",
           styles:
-            "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/50",
+            "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800/50",
         };
       case "CANCELLED":
         return {
           label: "Cancelado",
           styles:
-            "bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-400 border border-rose-200 dark:border-rose-800/50",
+            "bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-400 border-rose-200 dark:border-rose-800/50",
         };
       case "RETURNED":
         return {
           label: "Devuelto",
           styles:
-            "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800/50",
-        };
-      case "ARCHIVED":
-        return {
-          label: "Archivado",
-          styles:
-            "bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-400 border border-violet-200 dark:border-violet-800/50",
-        };
-      case "CREDIT_PENDING":
-        return {
-          label: "Crédito Pendiente",
-          styles:
-            "bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400 border border-orange-200 dark:border-orange-800/50",
+            "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400 border-indigo-200 dark:border-indigo-800/50",
         };
       default:
         return {
           label: status || "Desconocido",
           styles:
-            "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 border border-slate-200 dark:border-slate-700",
+            "bg-slate-100 text-slate-600 dark:bg-slate-800 border-slate-200 dark:border-slate-700",
         };
     }
   };
@@ -209,25 +201,23 @@ export default function SaleTable({
 
               const rowKey = sale.id || `sale-${index}`;
               const statusInfo = getStatusDetails(sale.status);
-
               const totalAmount = Number(sale.total || 0);
               const discountAmount = Number(sale.discount || 0);
-
-              // Cálculo financiero defensivo del subtotal con base imponible (Perú: IGV 18%)
               const subtotalAmount =
                 sale.subtotal !== undefined
                   ? Number(sale.subtotal || 0)
                   : totalAmount / 1.18;
 
-              // Manejo seguro del objeto o string relacional del cliente
               const customerName =
-                sale.customer?.name ||
-                sale.customerName ||
-                (typeof sale.customer === "string"
-                  ? sale.customer
-                  : "Cliente General");
+                sale.customer?.name || sale.customerName || "Cliente General";
 
-              // Tolerancia relacional para contar los ítems de la venta
+              // 🌟 Extracción segura del vendedor (soporta fallback .seller o .user)
+              const sellerData = sale.seller || sale.user;
+              const sellerName = sellerData?.name || "No asignado";
+              const sellerRole = sellerData?.role || "EMPLOYEE";
+              const sellerAvatar = sellerData?.avatar;
+              const sellerOnline = sellerData?.isOnline || false;
+
               const totalProducts = Array.isArray(sale.details)
                 ? sale.details.length
                 : Array.isArray(sale.SaleDetails)
@@ -246,9 +236,7 @@ export default function SaleTable({
                         <ShoppingCart size={16} />
                       </div>
                       <span className="text-sm font-semibold text-slate-800 dark:text-white">
-                        {sale.saleNumber ||
-                          sale.invoiceNumber ||
-                          `N° ${sale.id}`}
+                        {sale.saleNumber || `N° ${sale.id}`}
                       </span>
                     </div>
                   </td>
@@ -256,11 +244,41 @@ export default function SaleTable({
                   {/* CLIENTE */}
                   <td className="px-6 py-4">
                     <p
-                      className="text-sm font-medium text-slate-900 dark:text-white max-w-[200px] truncate"
+                      className="text-sm font-medium text-slate-900 dark:text-white max-w-[180px] truncate"
                       title={customerName}
                     >
                       {customerName}
                     </p>
+                  </td>
+
+                  {/* 🌟 NUEVA CELDA: DETALLE DEL VENDEDOR CON AVATAR E INDICADOR ONLINE */}
+                  <td className="px-6 py-4">
+                    <div className="flex items-center gap-2.5">
+                      <div className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 font-semibold text-xs border border-white dark:border-slate-800">
+                        {sellerAvatar ? (
+                          <img
+                            src={sellerAvatar}
+                            alt={sellerName}
+                            className="h-full w-full rounded-full object-cover"
+                          />
+                        ) : (
+                          sellerName.charAt(0).toUpperCase()
+                        )}
+                        {/* Indicador de Conexión en tiempo real */}
+                        <span
+                          className={`absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-white dark:border-slate-950 ${sellerOnline ? "bg-emerald-500" : "bg-slate-400"}`}
+                        />
+                      </div>
+                      <div className="flex flex-col min-w-0">
+                        <span className="text-sm font-medium text-slate-800 dark:text-slate-200 truncate max-w-[140px]">
+                          {sellerName.split(" ")[0]}{" "}
+                          {sellerName.split(" ")[1] || ""}
+                        </span>
+                        <span className="text-[11px] text-slate-400 dark:text-slate-500 font-mono tracking-wider">
+                          {sellerRole}
+                        </span>
+                      </div>
+                    </div>
                   </td>
 
                   {/* SUBTOTAL */}
@@ -305,7 +323,7 @@ export default function SaleTable({
                     )}
                   </td>
 
-                  {/* BADGE DE ESTADO DEL ENUM */}
+                  {/* BADGE DE ESTADO */}
                   <td className="px-6 py-4">
                     <span
                       className={`inline-flex items-center rounded-lg px-2.5 py-1 text-xs font-medium shadow-sm border ${statusInfo.styles}`}
@@ -334,7 +352,7 @@ export default function SaleTable({
             })
           ) : (
             <tr>
-              <td colSpan={readOnly ? 7 : 8} className="px-6 py-16 text-center">
+              <td colSpan={readOnly ? 8 : 9} className="px-6 py-16 text-center">
                 <div className="flex flex-col items-center">
                   <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-100 dark:bg-slate-800">
                     <ShoppingCart className="h-6 w-6 text-slate-400" />
@@ -342,16 +360,12 @@ export default function SaleTable({
                   <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200">
                     No hay ventas registradas
                   </h3>
-                  <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
-                    Las transacciones que realices aparecerán en esta lista.
-                  </p>
                 </div>
               </td>
             </tr>
           )}
         </tbody>
 
-        {/* CONTROLES DE PAGINACIÓN */}
         {safeSales.length > 0 && (
           <TFooter
             page={page}

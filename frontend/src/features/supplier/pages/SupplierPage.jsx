@@ -1,50 +1,52 @@
+// ========================================
+// features/suppliers/pages/SupplierPage.jsx
+// ========================================
+
+import { getUser } from "@/features/auth/services/session.service";
 import { useState } from "react";
 
 import SupplierFilters from "../components/SupplierFilters";
 import SupplierFormModal from "../components/SupplierFormModal";
 import SupplierHeader from "../components/SupplierHeader";
+import SupplierLoading from "../components/SupplierLoading";
 import SupplierTable from "../components/SupplierTable";
-
-import SupplierLoading from "../components/SupplierLoading"; // o el componente de loading que uses
 
 import useSupplier from "../hooks/useSuppliers";
 
 export default function SupplierPage() {
+  const user = getUser();
+  const canManageSuppliers = ["ADMIN", "MANAGER"].includes(user?.role);
+
   const {
     suppliers,
     meta,
     loading,
     saving,
-
     search,
     setSearch,
-
     isActive,
     setIsActive,
-
     page,
     setPage,
-
     form,
     editingId,
-
     handleChange,
     handleSubmit,
     handleEdit,
     handleDelete,
-
-    loadSuppliers,
     resetForm,
   } = useSupplier();
 
   const [openModal, setOpenModal] = useState(false);
 
   const handleOpenCreate = () => {
+    if (!canManageSuppliers) return;
     resetForm();
     setOpenModal(true);
   };
 
   const handleOpenEdit = (supplier) => {
+    if (!canManageSuppliers) return;
     handleEdit(supplier);
     setOpenModal(true);
   };
@@ -55,8 +57,8 @@ export default function SupplierPage() {
   };
 
   const handleSaveSupplier = async () => {
+    if (!canManageSuppliers) return;
     const success = await handleSubmit();
-
     if (success) {
       setOpenModal(false);
     }
@@ -88,7 +90,8 @@ export default function SupplierPage() {
         total={total}
         active={active}
         inactive={inactive}
-        onCreate={handleOpenCreate}
+        // 🛡️ Solo permitimos crear si tiene permisos
+        onCreate={canManageSuppliers ? handleOpenCreate : undefined}
       />
 
       <SupplierFilters
@@ -104,19 +107,23 @@ export default function SupplierPage() {
         totalPages={meta.totalPages}
         onPrevPage={() => setPage((p) => Math.max(1, p - 1))}
         onNextPage={() => setPage((p) => Math.min(meta.totalPages, p + 1))}
-        handleEdit={handleOpenEdit}
-        handleDelete={handleDelete}
+        // 🛡️ Pasamos las acciones solo si tiene permisos
+        handleEdit={canManageSuppliers ? handleOpenEdit : undefined}
+        handleDelete={canManageSuppliers ? handleDelete : undefined}
       />
 
-      <SupplierFormModal
-        open={openModal}
-        onClose={handleCloseModal}
-        onSubmit={handleSaveSupplier}
-        form={form}
-        onChange={handleChange}
-        loading={saving}
-        isEdit={!!editingId}
-      />
+      {/* 🛡️ Solo renderizamos el modal si tiene permisos */}
+      {canManageSuppliers && (
+        <SupplierFormModal
+          open={openModal}
+          onClose={handleCloseModal}
+          onSubmit={handleSaveSupplier}
+          form={form}
+          onChange={handleChange}
+          loading={saving}
+          isEdit={!!editingId}
+        />
+      )}
     </div>
   );
 }

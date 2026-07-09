@@ -12,7 +12,13 @@ import UnitHeader from "../components/UnitHeader";
 import UnitLoading from "../components/UnitLoading";
 import UnitsTable from "../components/UnitsTable";
 
+// 🌟 Importación del servicio de sesión
+import { getUser } from "@/features/auth/services/session.service";
+
 export default function UnitPage() {
+  const user = getUser();
+  const isAdmin = user?.role === "ADMIN";
+
   const {
     units,
     loading,
@@ -30,6 +36,7 @@ export default function UnitPage() {
   const [selectedUnit, setSelectedUnit] = useState(null);
 
   const handleCreate = () => {
+    if (!isAdmin) return;
     setSelectedUnit(null);
     setOpenForm(true);
   };
@@ -40,26 +47,22 @@ export default function UnitPage() {
   };
 
   const handleDelete = (unit) => {
-    setSelectedUnit(unit); // Setea la unidad antes de abrir el modal
-    setOpenDelete(true); // Abre el modal de confirmación
+    if (!isAdmin) return;
+    setSelectedUnit(unit);
+    setOpenDelete(true);
   };
 
-  // ========================================
-  // CONTROL DE CARGA (Aquí lo querías)
-  // ========================================
   if (loading) {
     return <UnitLoading />;
   }
 
   return (
     <div className="space-y-6">
-      {/* Header: Muestra contadores de tus datos en tiempo real */}
-      <UnitHeader units={units} onCreate={handleCreate} />
+      {/* 🛡️ Solo el Admin ve la opción de crear */}
+      <UnitHeader units={units} onCreate={isAdmin ? handleCreate : undefined} />
 
-      {/* Filtros de Búsqueda */}
       <UnitFilters loading={loading} onSearch={search} onClear={clearFilters} />
 
-      {/* Tabla con carga directa normal */}
       <UnitsTable
         units={units}
         page={page}
@@ -67,7 +70,8 @@ export default function UnitPage() {
         onPrevPage={prevPage}
         onNextPage={nextPage}
         onEdit={handleEdit}
-        onDelete={handleDelete}
+        // 🛡️ Solo el Admin puede disparar la eliminación
+        onDelete={isAdmin ? handleDelete : undefined}
       />
 
       {/* Modal para Crear / Editar */}
@@ -78,13 +82,15 @@ export default function UnitPage() {
         selectedUnit={selectedUnit}
       />
 
-      {/* Modal para Confirmar Eliminación */}
-      <UnitDeleteModal
-        open={openDelete}
-        onClose={() => setOpenDelete(false)}
-        reload={reload}
-        selectedUnit={selectedUnit}
-      />
+      {/* 🛡️ Solo renderizamos el modal de eliminación si es Admin */}
+      {isAdmin && (
+        <UnitDeleteModal
+          open={openDelete}
+          onClose={() => setOpenDelete(false)}
+          reload={reload}
+          selectedUnit={selectedUnit}
+        />
+      )}
     </div>
   );
 }

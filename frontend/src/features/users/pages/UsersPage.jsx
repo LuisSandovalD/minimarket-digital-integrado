@@ -12,10 +12,14 @@ import UsersTableEmpty from "../components/UsersTableEmpty";
 import UserDeleteModal from "../components/UserDeleteModal";
 import UserStatusModal from "../components/UserStatusModal";
 
-// 🌟 Importamos la lógica extraída de la página
 import { useUsersPageData } from "../hooks/useUsersPageData";
+// 🌟 Importamos el servicio de sesión para validar
+import { getUser } from "@/features/auth/services/session.service";
 
 export default function UsersPage() {
+  const user = getUser();
+  const isAdmin = user?.role === "ADMIN";
+
   const {
     branches,
     users,
@@ -46,19 +50,15 @@ export default function UsersPage() {
     handleSuccess,
   } = useUsersPageData();
 
-  // ========================================
-  // LOADING STATE (UI Guard)
-  // ========================================
   if (loading && (!users || users.length === 0)) {
     return <UsersLoading />;
   }
 
   return (
     <div className="space-y-6">
-      {/* HEADER */}
-      <UsersHeader onCreate={handleCreate} />
+      {/* 🛡️ Solo el Admin puede crear nuevos usuarios */}
+      <UsersHeader onCreate={isAdmin ? handleCreate : undefined} />
 
-      {/* FILTERS CONTROLLER */}
       <UserFilters
         onSearch={handleSearch}
         onClear={handleClear}
@@ -66,15 +66,17 @@ export default function UsersPage() {
         loading={loading || loadingBranches}
       />
 
-      {/* TABLE CONTROLLER */}
       {Array.isArray(users) && users.length > 0 ? (
         <UsersTable
           users={users}
           expandedUsers={expandedUsers}
           onToggleExpand={toggleExpand}
           onEdit={handleEdit}
-          onToggleStatusTrigger={handleToggleStatusTrigger}
-          onDeleteTrigger={handleDeleteTrigger}
+          // 🛡️ Pasamos triggers solo si es admin
+          onToggleStatusTrigger={
+            isAdmin ? handleToggleStatusTrigger : undefined
+          }
+          onDeleteTrigger={isAdmin ? handleDeleteTrigger : undefined}
           loading={loading}
           page={pagination?.currentPage || 1}
           totalPages={pagination?.totalPages || 1}
@@ -82,34 +84,36 @@ export default function UsersPage() {
           onNextPage={handleNextPage}
         />
       ) : (
-        <UsersTableEmpty onCreate={handleCreate} />
+        <UsersTableEmpty onCreate={isAdmin ? handleCreate : undefined} />
       )}
 
-      {/* FORMULARIO MODAL */}
-      <UserModal
-        open={openModal}
-        onClose={() => setOpenModal(false)}
-        onSuccess={handleSuccess}
-        user={selectedUser}
-        branches={branches}
-        allUsers={allUsersRaw || users || []}
-      />
+      {/* MODALES PROTEGIDOS POR SEGURIDAD */}
+      {isAdmin && (
+        <>
+          <UserModal
+            open={openModal}
+            onClose={() => setOpenModal(false)}
+            onSuccess={handleSuccess}
+            user={selectedUser}
+            branches={branches}
+            allUsers={allUsersRaw || users || []}
+          />
 
-      {/* INTERRUPTOR DE ACCESOS (STATUS) */}
-      <UserStatusModal
-        open={openStatusAlert}
-        onClose={() => setOpenStatusAlert(false)}
-        user={userForAction}
-        onToggleStatus={toggleUserStatus}
-      />
+          <UserStatusModal
+            open={openStatusAlert}
+            onClose={() => setOpenStatusAlert(false)}
+            user={userForAction}
+            onToggleStatus={toggleUserStatus}
+          />
 
-      {/* ELIMINACIÓN PERMANENTE */}
-      <UserDeleteModal
-        open={openDeleteAlert}
-        onClose={() => setOpenDeleteAlert(false)}
-        user={userForAction}
-        onDelete={(id) => deleteMutation.mutateAsync(id)}
-      />
+          <UserDeleteModal
+            open={openDeleteAlert}
+            onClose={() => setOpenDeleteAlert(false)}
+            user={userForAction}
+            onDelete={(id) => deleteMutation.mutateAsync(id)}
+          />
+        </>
+      )}
     </div>
   );
 }

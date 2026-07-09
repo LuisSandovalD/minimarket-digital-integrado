@@ -16,6 +16,9 @@ import {
 import { Table, TFooter, THead } from "@/components/data-display";
 import CustomerActions from "./CustomerActions";
 
+// 🌟 Importación limpia del servicio de sesión para validar el rol
+import { getUser } from "@/features/auth/services/session.service";
+
 // ========================================
 // HELPERS
 // ========================================
@@ -41,11 +44,19 @@ export default function CustomersTable({
   onPrevPage,
   onNextPage,
 }) {
+  // 🌟 Recuperamos el rol exacto desde la sesión del usuario
+  const user = getUser();
+  const currentRole = user?.role || "VIEWER";
+
+  // 🛡️ Evaluación de interfaz basada en la matriz de permisos
+  // Si el usuario es un "VIEWER" o la vista es estrictamente "readOnly", ocultamos las acciones globales
+  const canViewActions = currentRole !== "VIEWER" && !readOnly;
+
   // ========================================
   // TABLE COLUMNS
   // ========================================
 
-  const columns = [
+  const rawColumns = [
     {
       key: "customer",
       label: (
@@ -110,6 +121,11 @@ export default function CustomersTable({
       ),
     },
   ];
+
+  // 🛡️ Si no tiene permisos de acciones, filtramos la columna para que no quede vacía a la derecha
+  const columns = canViewActions
+    ? rawColumns
+    : rawColumns.filter((col) => col.key !== "actions");
 
   return (
     <div className="space-y-5">
@@ -205,26 +221,34 @@ export default function CustomersTable({
                   {/* STATUS */}
                   <td className="px-6 py-5">
                     <span
-                      className={`inline-flex items-center rounded-xl px-3 py-1 text-xs font-medium ${customer.isActive ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400" : "bg-red-100 text-red-700 dark:bg-red-500/10 dark:text-red-400"}`}
+                      className={`inline-flex items-center rounded-xl px-3 py-1 text-xs font-medium ${
+                        customer.isActive
+                          ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400"
+                          : "bg-red-100 text-red-700 dark:bg-red-500/10 dark:text-red-400"
+                      }`}
                     >
                       {customer.isActive ? "Activo" : "Inactivo"}
                     </span>
                   </td>
 
                   {/* ACTIONS */}
-                  <td className="px-6 py-5">
-                    <CustomerActions
-                      customer={customer}
-                      onEdit={onEdit}
-                      onDelete={onDelete}
-                    />
-                  </td>
+                  {canViewActions && (
+                    <td className="px-6 py-5">
+                      {/* 🌟 Pasamos el rol real para segmentar botones adentro */}
+                      <CustomerActions
+                        customer={customer}
+                        onEdit={onEdit}
+                        onDelete={onDelete}
+                        currentRole={currentRole}
+                      />
+                    </td>
+                  )}
                 </tr>
               );
             })
           ) : (
             <tr>
-              <td colSpan={7} className="px-6 py-16 text-center">
+              <td colSpan={columns.length} className="px-6 py-16 text-center">
                 <div className="flex flex-col items-center justify-center">
                   <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-100 dark:bg-slate-800">
                     <Users className="h-8 w-8 text-slate-400" />
@@ -241,7 +265,7 @@ export default function CustomersTable({
           )}
         </tbody>
 
-        {/* CONTROLES DE PAGINACIÓN (Correctamente ubicados dentro de la tabla) */}
+        {/* CONTROLES DE PAGINACIÓN */}
         {customers.length > 0 && (
           <TFooter
             page={page}

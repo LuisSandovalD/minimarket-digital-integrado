@@ -3,6 +3,8 @@
 // ========================================
 
 import { useEffect, useState } from "react";
+
+import ProductDeleteModal from "../components/ProductDeleteModal";
 import ProductFilters from "../components/ProductFilters";
 import ProductFormModal from "../components/ProductFormModal";
 import ProductHeader from "../components/ProductHeader";
@@ -16,7 +18,6 @@ import { getCategories } from "@/features/categories/services/category.service";
 import { getUnits } from "@/features/units/services/unit.service";
 
 export default function ProductsPage() {
-  // Extraemos toda la lógica del servidor, paginación y filtros desde el hook unificado
   const {
     products,
     pagination,
@@ -32,8 +33,11 @@ export default function ProductsPage() {
   const stats = useProductStats(products);
 
   const [openModal, setOpenModal] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openNotifications, setOpenNotifications] = useState(false);
+
   const [editing, setEditing] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   const [categories, setCategories] = useState([]);
   const [units, setUnits] = useState([]);
@@ -53,6 +57,9 @@ export default function ProductsPage() {
           getCategories(),
           getUnits(),
         ]);
+
+        console.log("CATEGORIES:", categoriesData);
+        console.log("UNITS:", unitsData);
 
         setCategories(
           Array.isArray(categoriesData)
@@ -75,13 +82,13 @@ export default function ProductsPage() {
   }, []);
 
   // ========================================
-  // HANDLERS (SEARCH & FILTERS)
+  // FILTERS
   // ========================================
   const handleSearch = (newFilters) => {
     setFilters((prev) => ({
       ...prev,
       ...newFilters,
-      page: 1, // Resetea siempre a la primera página al realizar una nueva búsqueda
+      page: 1,
     }));
   };
 
@@ -98,30 +105,37 @@ export default function ProductsPage() {
   };
 
   // ========================================
-  // HANDLERS (PAGINATION)
+  // PAGINATION
   // ========================================
   const handlePrevPage = () => {
     if (pagination.hasPrevPage) {
-      setFilters((prev) => ({ ...prev, page: prev.page - 1 }));
+      setFilters((prev) => ({
+        ...prev,
+        page: prev.page - 1,
+      }));
     }
   };
 
   const handleNextPage = () => {
     if (pagination.hasNextPage) {
-      setFilters((prev) => ({ ...prev, page: prev.page + 1 }));
+      setFilters((prev) => ({
+        ...prev,
+        page: prev.page + 1,
+      }));
     }
   };
 
   // ========================================
-  // HANDLERS (CRUD)
+  // CRUD
   // ========================================
   const handleCreate = () => {
     setEditing(null);
     resetForm();
     setOpenModal(true);
   };
-
   const handleEdit = (product) => {
+    console.log("PRODUCT EDIT:", product);
+
     setEditing(product);
     setFormValues(product);
     setOpenModal(true);
@@ -134,22 +148,28 @@ export default function ProductsPage() {
       } else {
         await createProduct(form);
       }
+
       setOpenModal(false);
       resetForm();
+      setEditing(null);
     } catch (err) {
       console.error("Error submitting form:", err);
     }
   };
 
-  const handleDelete = async (product) => {
-    const confirmDelete = confirm(
-      `¿Eliminar "${product.name}"? Esta acción no se puede deshacer.`,
-    );
+  const handleDelete = (product) => {
+    setSelectedProduct(product);
+    setOpenDeleteModal(true);
+  };
 
-    if (!confirmDelete) return;
+  const handleConfirmDelete = async () => {
+    if (!selectedProduct) return;
 
     try {
-      await deleteProduct(product.id);
+      await deleteProduct(selectedProduct.id);
+
+      setOpenDeleteModal(false);
+      setSelectedProduct(null);
     } catch (err) {
       console.error("Error deleting product:", err);
     }
@@ -161,9 +181,13 @@ export default function ProductsPage() {
     setEditing(null);
   };
 
+  const handleCloseDeleteModal = () => {
+    setOpenDeleteModal(false);
+    setSelectedProduct(null);
+  };
+
   return (
     <div className="space-y-6">
-      {/* HEADER */}
       <ProductHeader
         total={stats.totalProducts}
         lowStock={stats.lowStockProducts}
@@ -171,7 +195,6 @@ export default function ProductsPage() {
         onNotifications={() => setOpenNotifications(true)}
       />
 
-      {/* FILTERS */}
       <ProductFilters
         onSearch={handleSearch}
         onClear={handleClear}
@@ -179,7 +202,6 @@ export default function ProductsPage() {
         loading={productsLoading}
       />
 
-      {/* TABLE */}
       <ProductsTable
         products={products}
         onEdit={handleEdit}
@@ -191,7 +213,6 @@ export default function ProductsPage() {
         onNextPage={handleNextPage}
       />
 
-      {/* MODAL - PRODUCT FORM */}
       <ProductFormModal
         open={openModal}
         onClose={handleCloseModal}
@@ -204,7 +225,13 @@ export default function ProductsPage() {
         isEdit={Boolean(editing)}
       />
 
-      {/* ERROR ALERT */}
+      <ProductDeleteModal
+        open={openDeleteModal}
+        onClose={handleCloseDeleteModal}
+        onConfirm={handleConfirmDelete}
+        selectedProduct={selectedProduct}
+      />
+
       {error && (
         <div className="fixed bottom-4 right-4 rounded-lg border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20 px-4 py-3 text-sm text-red-700 dark:text-red-400 z-50 animate-fade-in">
           {error}
