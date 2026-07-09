@@ -56,58 +56,6 @@ export default defineConfig({
   build: {
     outDir: "dist",
     sourcemap: false,
-
-    // Aumenta el límite de advertencia para proyectos grandes
     chunkSizeWarningLimit: 1000,
-
-    rollupOptions: {
-      output: {
-        manualChunks(id) {
-          if (!id.includes("node_modules")) return;
-
-          // React
-          if (
-            id.includes("react") ||
-            id.includes("react-dom") ||
-            id.includes("react-router") ||
-            id.includes("scheduler")
-          ) {
-            return "react-vendor";
-          }
-
-          // Gráficos
-          if (id.includes("recharts") || id.includes("chart.js")) {
-            return "charts";
-          }
-
-          // Excel
-          if (id.includes("xlsx") || id.includes("exceljs")) {
-            return "excel";
-          }
-
-          // PDF e impresión
-          if (
-            id.includes("jspdf") ||
-            id.includes("html2canvas") ||
-            id.includes("pdfjs")
-          ) {
-            return "pdf";
-          }
-
-          // Emojis
-          if (id.includes("emoji-picker-react")) {
-            return "emoji";
-          }
-
-          // Íconos
-          if (id.includes("lucide-react")) {
-            return "icons";
-          }
-
-          // Todo lo demás
-          return "vendor";
-        },
-      },
-    },
   },
 });
