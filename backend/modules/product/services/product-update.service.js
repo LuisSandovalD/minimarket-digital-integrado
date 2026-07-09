@@ -248,85 +248,46 @@ exports.update = async (
   // UPDATE DATA
   // ========================================
 
+  // ========================================
+  // UPDATE DATA (CORREGIDO)
+  // ========================================
+
   const updateData = {
+    name: body.name,
+    description: body.description,
 
-    // ========================================
-    // GENERAL
-    // ========================================
+    // Incluimos los campos que habías olvidado guardar en la BD:
+    sku: body.sku,
+    barcode: body.barcode,
+    expirationDate: body.expirationDate ? new Date(body.expirationDate) : null,
+    batchNumber: body.batchNumber,
 
-    name:
-      body.name,
+    purchasePrice: pricing.purchasePrice,
+    costPrice: pricing.costPrice,
+    salePrice: pricing.salePrice,
+    profitMargin: pricing.profitMargin,
+    profitAmount: pricing.profitAmount,
 
-    description:
-      body.description,
+    minStock: Number(body.minStock || 0),
+    maxStock: body.maxStock ? Number(body.maxStock) : null,
 
-    // ========================================
-    // PRICING
-    // ========================================
-
-    purchasePrice:
-      pricing.purchasePrice,
-
-    costPrice:
-      pricing.costPrice,
-
-    salePrice:
-      pricing.salePrice,
-
-    profitMargin:
-      pricing.profitMargin,
-
-    profitAmount:
-      pricing.profitAmount,
-
-    // ========================================
-    // STOCK
-    // ========================================
-
-    minStock:
-      Number(body.minStock || 0),
-
-    maxStock:
-      body.maxStock
-        ? Number(body.maxStock)
-        : null,
-
-    // ========================================
-    // RELATIONS
-    // ========================================
-
-    categoryId:
-      Number(body.categoryId),
-
-    unitId:
-      Number(body.unitId),
-
-    // ========================================
-    // EXTRA
-    // ========================================
-
-    expirationDate:
-      body.expirationDate || null,
-
-    batchNumber:
-      body.batchNumber || null,
-
-    requiresExpiration:
-      Boolean(
-        body.requiresExpiration
-      ),
-
-    isActive:
-      Boolean(
-        body.isActive
-      ),
-
-    isFeatured:
-      Boolean(
-        body.isFeatured
-      ),
+    requiresExpiration: Boolean(body.requiresExpiration),
+    isActive: Boolean(body.isActive),
+    isFeatured: Boolean(body.isFeatured),
   };
 
+  // Conectar relaciones SOLO si cambiaron respecto al producto original
+  if (body.categoryId && Number(body.categoryId) !== oldProduct.categoryId) {
+    updateData.category = {
+      connect: { id: Number(body.categoryId) },
+    };
+  }
+
+  if (body.unitId && Number(body.unitId) !== oldProduct.unitId) {
+    updateData.unit = {
+      connect: { id: Number(body.unitId) },
+    };
+  }
   // ========================================
   // TRANSACTION
   // ========================================

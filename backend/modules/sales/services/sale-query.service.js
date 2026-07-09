@@ -50,7 +50,7 @@ module.exports = {
   },
 
   // ========================================
-  // GET SALE BY ID (Búsqueda única)
+  // GET SALE BY ID (Búsqueda única con Vendedor)
   // ========================================
   getSaleService: async (id) => {
     try {
@@ -59,7 +59,25 @@ module.exports = {
       }
 
       // 🛡️ Casteo explícito a número para asegurar coincidencia con tipos enteros en DB (Prisma)
-      return await getSaleById(Number(id));
+      const sale = await getSaleById(Number(id));
+
+      // 🛡️ CONTROL DE INTEGRIDAD EN RELACIONES (Estructura de usuario integrada):
+      // Si la venta existe pero el usuario fue eliminado o la relación falló, 
+      // inyectamos un objeto fallback con la misma forma del esquema real para proteger el Frontend.
+      if (sale && !sale.user) {
+        sale.user = {
+          id: null,
+          name: "Usuario no registrado o eliminado",
+          email: "N/A",
+          role: "N/A",
+          avatar: null,
+          phone: null,
+          isOnline: false,
+          branchId: null
+        };
+      }
+
+      return sale;
     } catch (error) {
       throw new Error(`Error al obtener venta por ID: ${error.message}`);
     }
@@ -74,7 +92,23 @@ module.exports = {
         throw new Error("El número de venta/comprobante es requerido.");
       }
 
-      return await getSaleByNumber(String(saleNumber).trim());
+      const sale = await getSaleByNumber(String(saleNumber).trim());
+
+      // 🛡️ CONTROL DE INTEGRIDAD EN RELACIONES (Estructura de usuario integrada):
+      if (sale && !sale.user) {
+        sale.user = {
+          id: null,
+          name: "Usuario no registrado o eliminado",
+          email: "N/A",
+          role: "N/A",
+          avatar: null,
+          phone: null,
+          isOnline: false,
+          branchId: null
+        };
+      }
+
+      return sale;
     } catch (error) {
       throw new Error(`Error al obtener venta por número: ${error.message}`);
     }

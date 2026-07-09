@@ -1,90 +1,37 @@
-const express =
-    require("express");
+const express = require("express");
+const router = express.Router();
 
-const router =
-    express.Router();
+const alertController = require("../controllers/alert.controller");
 
-/*
-|--------------------------------------------------------------------------
-| Controllers
-|--------------------------------------------------------------------------
-*/
-
-const alertController =
-    require(
-        "../controllers/alert.controller"
-    );
-
-/*
-|--------------------------------------------------------------------------
-| Middleware
-|--------------------------------------------------------------------------
-*/
-
-const auth =
-    require(
-        "../../../middleware/auth"
-    );
-
-/*
-|--------------------------------------------------------------------------
-| Alerts
-|--------------------------------------------------------------------------
-*/
+const auth = require("../../../middleware/auth");
+const checkRole = require("../../../middleware/roleCheck");
 
 router.get(
-
     "/",
     auth,
-
-    alertController
-        .getAlerts
+    checkRole("ADMIN", "MANAGER", "SUPERVISOR"),
+    alertController.getAlerts
 );
 
-/*
-|--------------------------------------------------------------------------
-| Low Stock
-|--------------------------------------------------------------------------
-*/
-
 router.get(
-
     "/low-stock",
     auth,
-
-    alertController
-        .getAlerts
+    checkRole("ADMIN", "MANAGER", "SUPERVISOR"),
+    alertController.getAlerts
 );
 
-/*
-|--------------------------------------------------------------------------
-| Expiring Products
-|--------------------------------------------------------------------------
-*/
-
 router.get(
-
     "/expiring-products",
     auth,
-
-    alertController
-        .getAlerts
+    checkRole("ADMIN", "MANAGER", "SUPERVISOR"),
+    alertController.getAlerts
 );
-
-/*
-|--------------------------------------------------------------------------
-| Notifications
-|--------------------------------------------------------------------------
-*/
 
 router.get(
-
     "/notifications",
     auth,
-
-    alertController
-        .getAlerts
+    checkRole("ADMIN", "MANAGER", "SUPERVISOR", "EMPLOYEE"),
+    alertController.getAlerts
 );
 
-module.exports =
-    router;
+module.exports = router;

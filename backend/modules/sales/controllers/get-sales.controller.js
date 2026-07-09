@@ -5,51 +5,56 @@
 const {
   getSalesService,
   getSaleService,
-  getSaleByNumberService, // 🚀 Añadido por consistencia del módulo de consultas
+  getSaleByNumberService,
 } = require("../services/sale-query.service");
 
 module.exports = {
 
   // ========================================
-  // GET SALES (Filtros Avanzados, Paginación y Roles)
+  // GET SALES (Control de Visibilidad Jerárquico)
   // ========================================
   getSalesController: async (req, res, next) => {
     try {
       const currentUser = req.user;
 
-      if (!currentUser) {
+      if (!currentUser || !currentUser.companyId) {
         return res.status(401).json({
           success: false,
-          message: "No autorizado: No se encontraron datos de usuario en la petición",
+          message: "No autorizado: Contexto de empresa no identificado.",
         });
       }
 
-      // Sanitización estricta de Paginación para evitar divisiones por cero o valores negativos
+      // 1. 🔒 FILTRO DE EMPRESA OBLIGATORIO (Aislamiento Multi-tenant)
+      const tenantCompanyId = Number(currentUser.companyId);
+
+      // Sanitización de paginación básica
       const page = req.query.page ? Math.max(1, parseInt(req.query.page, 10)) : 1;
       const limit = req.query.limit ? Math.max(1, parseInt(req.query.limit, 10)) : 10;
 
-      // Evaluar Rol para aplicar Restricción de Vendedor de manera estricta
-      const rolesPermitidos = ["ADMIN", "SUPERVISOR", "MANAGER"];
+      // Evaluar roles
       const userRol = String(currentUser.role || currentUser.rol || "").toUpperCase();
+      const isAdmin = userRol === "ADMIN";
 
       let assignedUserId = undefined;
 
-      if (!rolesPermitidos.includes(userRol)) {
-        // 🔒 Forzamos que el vendedor de piso solo vea sus propias ventas
-        assignedUserId = Number(currentUser.id);
-      } else {
-        // 🔓 El administrador/supervisor puede ver todo o filtrar por un empleado específico en el combobox
+      // 2. 👁️ APLICACIÓN DE POLÍTICAS DE VISIBILIDAD JERÁRQUICA
+      if (isAdmin) {
+        // ✅ Si es ADMIN: Puede ver todo lo de su empresa.
+        // Si además el admin seleccionó un empleado específico en un combobox del frontend, lo filtramos.
         assignedUserId = req.query.userId && String(req.query.userId).trim() !== ""
           ? Number(req.query.userId)
           : undefined;
+      } else {
+        // 🔒 Si NO es admin (Vendedor, Gerente, Supervisor, etc.): SÓLO ve sus propias ventas.
+        assignedUserId = Number(currentUser.id);
       }
 
-      // Construcción del Objeto de Filtros Completo (Sanitizado contra strings vacíos "")
+      // Construcción del objeto de filtros sanitizado
       const filters = {
-        companyId: req.query.companyId && String(req.query.companyId).trim() !== "" ? Number(req.query.companyId) : undefined,
+        companyId: tenantCompanyId, // Bloqueado a su entorno corporativo
         branchId: req.query.branchId && String(req.query.branchId).trim() !== "" ? Number(req.query.branchId) : undefined,
         customerId: req.query.customerId && String(req.query.customerId).trim() !== "" ? Number(req.query.customerId) : undefined,
-        userId: assignedUserId,
+        userId: assignedUserId, // Aplica la restricción jerárquica calculada arriba
         search: req.query.search && String(req.query.search).trim() !== "" ? String(req.query.search).trim() : undefined,
         status: req.query.status && String(req.query.status).trim() !== "" ? String(req.query.status).trim() : undefined,
         paymentStatus: req.query.paymentStatus && String(req.query.paymentStatus).trim() !== "" ? String(req.query.paymentStatus).trim() : undefined,
@@ -63,14 +68,12 @@ module.exports = {
         limit,
       };
 
-      // Llamada al servicio analítico
       const result = await getSalesService(filters);
 
-      // 🎯 RETORNO HOMOGÉNEO DE LA RESPUESTA PARA EL HOOK (success, meta, data)
       return res.json({
         success: true,
         meta: result.meta,
-        data: result.data, // Array estructurado con totalProducts, subtotales e include de clientes/detalles
+        data: result.data,
       });
     } catch (error) {
       next(error);
@@ -78,41 +81,38 @@ module.exports = {
   },
 
   // ========================================
-  // GET SALE BY ID
+  // GET SALE BY ID (Protección de rutas individuales)
   // ========================================
   getSaleController: async (req, res, next) => {
     try {
       const id = Number(req.params.id);
+      const currentUser = req.user;
 
       if (!req.params.id || Number.isNaN(id) || !Number.isInteger(id)) {
-        return res.status(400).json({
-          success: false,
-          message: "Parámetro 'id' inválido o faltante en la URL",
-        });
+        return res.status(400).json({ success: false, message: "ID de venta inválido." });
       }
 
-      // Llama al servicio blindado con casteo numérico
       const sale = await getSaleService(id);
 
       if (!sale) {
-        return res.status(404).json({
+        return res.status(404).json({ success: false, message: "La venta solicitada no existe." });
+      }
+
+      // 🛡️ CONTROL MULTI-TENANT: ¿Pertenece a otra empresa? 403 de inmediato.
+      if (Number(sale.companyId) !== Number(currentUser.companyId)) {
+        return res.status(403).json({
           success: false,
-          message: "La transacción solicitada no existe en el sistema",
+          message: "Acceso denegado: Esta transacción no pertenece a tu organización.",
         });
       }
 
-      // Control de brecha de seguridad a nivel de datos (Data Leakage)
-      const currentUser = req.user;
-      const rolesPermitidos = ["ADMIN", "SUPERVISOR", "MANAGER"];
+      // 🛡️ CONTROL JERÁRQUICO: Si no es Admin, verifica si es el dueño de la venta
       const userRol = String(currentUser?.role || currentUser?.rol || "").toUpperCase();
-
-      if (currentUser && !rolesPermitidos.includes(userRol)) {
-        if (Number(sale.userId) !== Number(currentUser.id)) {
-          return res.status(403).json({
-            success: false,
-            message: "Acceso denegado: No tienes autorización para auditar esta venta.",
-          });
-        }
+      if (userRol !== "ADMIN" && Number(sale.userId) !== Number(currentUser.id)) {
+        return res.status(403).json({
+          success: false,
+          message: "Acceso denegado: No tienes autorización para ver las ventas de otros usuarios.",
+        });
       }
 
       return res.json({

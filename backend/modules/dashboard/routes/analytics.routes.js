@@ -1,101 +1,23 @@
-const express =
-    require("express");
+const express = require("express");
+const router = express.Router();
 
-const router =
-    express.Router();
+const analyticsController = require("../controllers/analytics.controller");
 
-/*
-|--------------------------------------------------------------------------
-| Controllers
-|--------------------------------------------------------------------------
-*/
+const auth = require("../../../middleware/auth");
+const checkRole = require("../../../middleware/roleCheck");
 
-const analyticsController =
-    require(
-        "../controllers/analytics.controller"
-    );
+const ADMIN_MANAGER = checkRole("ADMIN", "MANAGER");
 
-/*
-|--------------------------------------------------------------------------
-| Middleware
-|--------------------------------------------------------------------------
-*/
+router.get("/", auth, ADMIN_MANAGER, analyticsController.getAnalytics);
 
-const auth =
-    require(
-        "../../../middleware/auth"
-    );
+router.get("/sales", auth, ADMIN_MANAGER, analyticsController.getAnalytics);
 
-/*
-|--------------------------------------------------------------------------
-| Analytics
-|--------------------------------------------------------------------------
-*/
+router.get("/top-products", auth, ADMIN_MANAGER, analyticsController.getAnalytics);
 
-router.get(
+router.get("/top-customers", auth, ADMIN_MANAGER, analyticsController.getAnalytics);
 
-    "/",
-    auth,
+router.get("/purchases", auth, ADMIN_MANAGER, analyticsController.getAnalytics);
 
-    analyticsController
-        .getAnalytics
-);
+router.get("/top-suppliers", auth, ADMIN_MANAGER, analyticsController.getAnalytics);
 
-/*
-|--------------------------------------------------------------------------
-| Sales Analytics
-|--------------------------------------------------------------------------
-*/
-
-router.get(
-
-    "/sales",
-    auth,
-
-    analyticsController
-        .getAnalytics
-);
-
-/*
-|--------------------------------------------------------------------------
-| Top Products
-|--------------------------------------------------------------------------
-*/
-
-router.get(
-
-    "/top-products",
-    auth,
-
-    analyticsController
-        .getAnalytics
-);
-
-/*
-|--------------------------------------------------------------------------
-| Top Customers
-|--------------------------------------------------------------------------
-*/
-
-router.get(
-
-    "/top-customers",
-    auth,
-
-    analyticsController
-        .getAnalytics
-);
-
-router.get(
-    "/purchases",
-    auth,
-    analyticsController.getAnalytics
-);
-
-router.get(
-    "/top-suppliers",
-    auth,
-    analyticsController.getAnalytics
-);
-module.exports =
-    router;
+module.exports = router;

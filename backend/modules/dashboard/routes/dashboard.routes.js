@@ -1,70 +1,21 @@
-const express =
-    require("express");
+const express = require("express");
+const router = express.Router();
 
-const router =
-    express.Router();
+const dashboardController = require("../controllers/dashboard.controller");
+const kpiController = require("../controllers/kpi.controller");
+const reportActivity = require("../controllers/report-activity.controller");
 
-/*
-|--------------------------------------------------------------------------
-| Controllers
-|--------------------------------------------------------------------------
-*/
+const auth = require("../../../middleware/auth");
+const checkRole = require("../../../middleware/roleCheck");
 
-const dashboardController =
-    require(
-        "../controllers/dashboard.controller"
-    );
+const ADMIN_MANAGER = checkRole("ADMIN", "MANAGER");
 
-const kpiController =
-    require(
-        "../controllers/kpi.controller"
-    );
-const reportActivity = require('../controllers/report-activity.controller')
+router.get("/", auth, dashboardController.getDashboard);
 
-/*
-|--------------------------------------------------------------------------
-| Middleware
-|--------------------------------------------------------------------------
-*/
+router.get("/kpis", auth, checkRole("ADMIN", "MANAGER", "SUPERVISOR"), kpiController.getKPIs);
 
-const auth =
-    require(
-        "../../../middleware/auth"
-    );
+router.get("/reports/activity/pdf", auth, ADMIN_MANAGER, reportActivity.downloadActivityPDFController);
 
-/*
-|--------------------------------------------------------------------------
-| Dashboard
-|--------------------------------------------------------------------------
-*/
+router.get("/reports/activity/excel", auth, ADMIN_MANAGER, reportActivity.downloadActivityExcelController);
 
-router.get(
-
-    "/",
-    auth,
-
-    dashboardController
-        .getDashboard
-);
-
-/*
-|--------------------------------------------------------------------------
-| KPIs
-|--------------------------------------------------------------------------
-*/
-
-router.get(
-
-    "/kpis",
-    auth,
-
-    kpiController
-        .getKPIs
-);
-
-// REPORTS - ACTIVITY / AUDIT
-router.get('/reports/activity/pdf', auth, reportActivity.downloadActivityPDFController)
-router.get('/reports/activity/excel', auth, reportActivity.downloadActivityExcelController)
-
-module.exports =
-    router;
+module.exports = router;

@@ -1,60 +1,23 @@
-const express =
-    require("express");
+const express = require("express");
+const router = express.Router();
 
-const router =
-    express.Router();
+const activityController = require("../controllers/activity.controller");
 
-/*
-|--------------------------------------------------------------------------
-| Controllers
-|--------------------------------------------------------------------------
-*/
-
-const activityController =
-    require(
-        "../controllers/activity.controller"
-    );
-
-/*
-|--------------------------------------------------------------------------
-| Middleware
-|--------------------------------------------------------------------------
-*/
-
-const auth =
-    require(
-        "../../../middleware/auth"
-    );
-
-/*
-|--------------------------------------------------------------------------
-| Activity
-|--------------------------------------------------------------------------
-*/
+const auth = require("../../../middleware/auth");
+const checkRole = require("../../../middleware/roleCheck");
 
 router.get(
-
     "/",
     auth,
-
-    activityController
-        .getActivity
+    checkRole("ADMIN", "MANAGER"),
+    activityController.getActivity
 );
-
-/*
-|--------------------------------------------------------------------------
-| Recent Activity
-|--------------------------------------------------------------------------
-*/
 
 router.get(
-
     "/recent",
     auth,
-
-    activityController
-        .getActivity
+    checkRole("ADMIN", "MANAGER", "SUPERVISOR", "EMPLOYEE"),
+    activityController.getActivity
 );
 
-module.exports =
-    router;
+module.exports = router;
