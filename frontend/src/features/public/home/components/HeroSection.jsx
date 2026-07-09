@@ -43,15 +43,18 @@ export default function HeroSection() {
   const { isAuthenticated } = useSelector((state) => state.auth);
 
   return (
-    <section className="relative z-10 flex min-h-[75vh] w-full items-center justify-center overflow-hidden bg-[#f8fbfd] px-4 py-12 dark:bg-[#0f172a] sm:px-6 md:px-8 lg:px-16">
-      {/* CAPA DE FONDO */}
-      <div className="pointer-events-none absolute inset-0 -z-20 select-none opacity-40 blur-[2px] transform-gpu dark:opacity-20">
-        <img
+    <section className="relative isolate flex items-center justify-center w-full overflow-hidden px-4 py-14 sm:px-6 md:px-8 lg:h-[75vh] lg:py-0 lg:px-10 z-10">
+      <div className="absolute inset-0 -z-20 transform-gpu">
+        <motion.img
+          initial={{ scale: 1.05, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
           src={herosection}
-          alt=""
+          alt="ERP Modules"
           className="h-full w-full object-cover"
-          loading="eager"
         />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#f8fbfd]/95 via-[#eef4f8]/90 to-[#dbeafe]/85 dark:from-[#0f172a]/95 dark:via-[#0f172a]/85 dark:to-[#274c77]/80" />
+        <div className="absolute inset-0 bg-white/20 dark:bg-black/30" />
       </div>
 
       {/* EFECTO DE LUZ */}
