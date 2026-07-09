@@ -1,5 +1,3 @@
-import herosection from "@/assets/imagenes/home/hero/hero-section.svg";
-import heroBanner from "@/assets/imagenes/home/hero/hero_banner.svg";
 import { ModernButton } from "@/components/buttons";
 import { defaultViewport } from "@/components/effects";
 import { motion } from "framer-motion";
@@ -49,7 +47,7 @@ export default function HeroSection() {
           initial={{ scale: 1.05, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-          src={herosection}
+          src="https://res.cloudinary.com/dgaq5afjl/image/upload/v1783568892/hero-section_jnbdp8.svg"
           alt="ERP Modules"
           className="h-full w-full object-cover"
         />
@@ -153,7 +151,7 @@ export default function HeroSection() {
           <div className="pointer-events-none absolute inset-0 -z-10 bg-[#6096ba]/5 blur-3xl dark:bg-[#6096ba]/10" />
 
           <img
-            src={heroBanner}
+            src="https://res.cloudinary.com/dgaq5afjl/image/upload/v1783568893/hero_banner_vtnpo2.svg"
             alt="Dashboard Preview"
             className="h-auto w-full max-w-md select-none object-contain drop-shadow-[0_20px_50px_rgba(39,76,119,0.15)] transform-gpu dark:drop-shadow-[0_20px_50px_rgba(0,0,0,0.4)] lg:max-w-none"
             loading="eager"

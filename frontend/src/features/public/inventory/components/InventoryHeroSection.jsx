@@ -11,9 +11,6 @@ import {
 import { motion } from "framer-motion";
 import { BarChart3, Boxes, PackageCheck, Warehouse } from "lucide-react";
 
-import inventoryBg from "@/assets/imagenes/inventory/hero/inventory-hero-bg.svg";
-import inventoryImage from "@/assets/imagenes/inventory/hero/inventory-hero-dashboard.svg";
-
 const statsCards = [
   { icon: PackageCheck, title: "Stock" },
   { icon: Warehouse, title: "Almacenes" },
@@ -29,7 +26,7 @@ export default function InventoryHeroSection() {
           initial={{ scale: 1.1, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
-          src={inventoryBg}
+          src="https://res.cloudinary.com/dgaq5afjl/image/upload/v1783568930/inventory-hero-bg_jbwxpa.svg"
           alt="Inventory"
           className="h-full w-full object-cover"
         />
@@ -123,7 +120,7 @@ export default function InventoryHeroSection() {
             <motion.img
               whileHover={{ scale: 1.03, rotate: 0.3 }}
               transition={{ duration: 0.4 }}
-              src={inventoryImage}
+              src="https://res.cloudinary.com/dgaq5afjl/image/upload/v1783568893/inventory-hero-dashboard_ltt7vr.svg"
               alt="Inventory"
               className="w-full object-cover"
             />

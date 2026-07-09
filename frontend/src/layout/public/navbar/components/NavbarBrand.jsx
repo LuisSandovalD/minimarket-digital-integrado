@@ -1,4 +1,3 @@
-import logo from "@/assets/logos/minimarket_logo.svg";
 import { Link } from "react-router-dom";
 
 export default function NavbarBrand() {
@@ -9,7 +8,7 @@ export default function NavbarBrand() {
       className="flex items-center transition-opacity hover:opacity-90"
     >
       <img
-        src={logo}
+        src="https://res.cloudinary.com/dgaq5afjl/image/upload/v1783568897/minimarket_logo_noc7b3.svg"
         alt="Minimarket Digital Integrado"
         className="h-12 w-auto"
       />

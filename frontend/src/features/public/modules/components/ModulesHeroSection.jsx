@@ -1,5 +1,3 @@
-import dashboardImage from "@/assets/imagenes/modules/hero/dashboard-modules.svg";
-import heroBackground from "@/assets/imagenes/modules/hero/modules-hero-bg.svg";
 import {
   fadeScale,
   fadeUp,
@@ -19,7 +17,7 @@ export default function ModulesHeroSection() {
           initial={{ scale: 1.05, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-          src={heroBackground}
+          src="https://res.cloudinary.com/dgaq5afjl/image/upload/v1783568898/modules-hero-bg_pp6mlh.svg"
           alt="ERP Modules"
           className="h-full w-full object-cover"
         />
@@ -113,7 +111,7 @@ export default function ModulesHeroSection() {
             <motion.img
               whileHover={{ scale: 1.01 }}
               transition={{ duration: 0.3 }}
-              src={dashboardImage}
+              src="https://res.cloudinary.com/dgaq5afjl/image/upload/v1783568895/dashboard-modules_hr8pcj.svg"
               alt="ERP Dashboard Preview"
               className="w-full h-auto max-h-[40vh] lg:max-h-[55vh] object-contain drop-shadow-2xl"
             />

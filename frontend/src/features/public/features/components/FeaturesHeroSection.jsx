@@ -3,9 +3,6 @@
 import { motion } from "framer-motion";
 import { ShieldCheck } from "lucide-react";
 
-import featuresBg from "@/assets/imagenes/features/hero/features-bg.svg";
-import dashboardImage from "@/assets/imagenes/features/hero/features-dashboard.svg";
-
 import {
   defaultViewport,
   fadeScale,
@@ -30,7 +27,7 @@ export default function FeaturesHeroSection() {
           initial={{ scale: 1.05, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-          src={featuresBg}
+          src="https://res.cloudinary.com/dgaq5afjl/image/upload/v1783568894/features-bg_k5xcnd.svg"
           alt="ERP Modules"
           className="h-full w-full object-cover"
         />
@@ -167,7 +164,7 @@ export default function FeaturesHeroSection() {
               transition={{
                 duration: 0.3,
               }}
-              src={dashboardImage}
+              src="https://res.cloudinary.com/dgaq5afjl/image/upload/v1783568894/features-dashboard_xc08x8.svg"
               alt="ERP Dashboard Analytics Preview"
               className="h-full w-full object-cover"
             />

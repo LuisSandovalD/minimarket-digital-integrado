@@ -7,8 +7,6 @@ import {
 import { motion } from "framer-motion";
 import { ArrowUpRight, Mail } from "lucide-react";
 
-import contactBg from "@/assets/imagenes/contact/hero/contact-hero-bg.svg";
-import contactImage from "@/assets/imagenes/contact/hero/contact-hero-image.svg";
 
 export default function ContactHero() {
   return (
@@ -19,7 +17,7 @@ export default function ContactHero() {
           initial={{ scale: 1.1, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
-          src={contactBg}
+          src="https://res.cloudinary.com/dgaq5afjl/image/upload/v1783568982/contact-hero-bg_io0sdi.svg"
           alt="ERP POS"
           className="h-full w-full object-cover"
         />
@@ -142,7 +140,7 @@ export default function ContactHero() {
           <motion.img
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.7 }}
-            src={contactImage}
+            src="https://res.cloudinary.com/dgaq5afjl/image/upload/v1783568892/contact-hero-image_hfly9c.svg"
             alt="Contacto empresarial"
             className="w-full object-cover"
           />

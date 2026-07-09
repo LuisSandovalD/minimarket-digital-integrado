@@ -1,112 +1,80 @@
-import { lazy, Suspense } from "react";
 import { Navigate } from "react-router-dom";
 
-// Un spinner o mensaje simple para mostrar mientras se descarga el trozo de código de la página
-const PageLoader = () => (
-  <div
-    style={{ padding: "2rem", textAlign: "center", fontFamily: "sans-serif" }}
-  >
-    Cargando sección...
-  </div>
-);
-
-/* ================= COMPONENTES CRÍTICOS / GUARDS ================= */
-// Dejamos los Layouts y Guards con importación estática para evitar parpadeos visuales molestos
-import SubscriptionGuard from "@/features/auth/guards/SubscriptionGuard";
-import RequireAuth from "../features/auth/guards/RequireAuth";
-import AppLayout from "../layout/app-layout/AppLayout";
+/* ================= PUBLIC LAYOUT ================= */
 import PublicLayout from "../layout/public/PublicLayout";
 
-/* ================= PUBLIC (LAZY) ================= */
-const Contact = lazy(() => import("../features/public/contact/Contact"));
-const Features = lazy(() => import("../features/public/features/Features"));
-const Home = lazy(() => import("../features/public/home/Home"));
-const Inventory = lazy(() => import("../features/public/inventory/Inventory"));
-const Modules = lazy(() => import("../features/public/modules/Modules"));
-const Pricing = lazy(() => import("../features/public/pricing/Pricing"));
+/* ================= PUBLIC ================= */
+import Contact from "../features/public/contact/Contact";
+import Features from "../features/public/features/Features";
+import Home from "../features/public/home/Home";
+import Inventory from "../features/public/inventory/Inventory";
+import Modules from "../features/public/modules/Modules";
 
-/* ================= APP (LAZY) ================= */
-const AnalyticsPage = lazy(
-  () => import("../features/analytics/pages/AnalyticsPage"),
-);
-const BarcodePages = lazy(
-  () => import("../features/barcode/pages/BarcodePages"),
-);
-const BranchesPage = lazy(
-  () => import("../features/branches/pages/BranchesPage"),
-);
-const CategoriesPage = lazy(
-  () => import("../features/categories/pages/CategoriesPage"),
-);
-const CompaniesPage = lazy(
-  () => import("../features/company/pages/CompaniesPage"),
-);
-const CustomerPage = lazy(
-  () => import("../features/customer/pages/CustomerPage"),
-);
-const Dashboard = lazy(
-  () => import("../features/dashboard/pages/DashboardPage"),
-);
-const DataBasePage = lazy(
-  () => import("../features/database/pages/DataBasePage"),
-);
-const AIChatPage = lazy(
-  () => import("../features/google_gemini/pages/AIChatPage"),
-);
-const InventoryPage = lazy(
-  () => import("../features/inventory/pages/InventoryPage"),
-);
-const MovementsPage = lazy(
-  () => import("../features/movements/pages/MovementsPage"),
-);
-const NotificationsPages = lazy(
-  () => import("../features/notifications/pages/NotificationsPages"),
-);
-const PaymentsPage = lazy(
-  () => import("../features/payments/pages/PaymentsPage"),
-);
-const ProductsPage = lazy(
-  () => import("../features/product/pages/ProductsPage"),
-);
-const PurchasePage = lazy(
-  () => import("../features/purchase/page/PurchasePage"),
-);
-const ReportsPage = lazy(() => import("../features/reports/pages/ReportsPage"));
-const ReviewPage = lazy(() => import("../features/reviews/pages/ReviewPage"));
-const SaleDetailPage = lazy(
-  () => import("../features/sale-detail/pages/SaleDetailsPage"),
-);
-const SalesPage = lazy(() => import("../features/sales/pages/SalesPage"));
-const ConfigurationPage = lazy(
-  () => import("../features/settings/pages/ConfigurationPage"),
-);
-const StatisticsPage = lazy(
-  () => import("../features/statistics/pages/StatisticsPage"),
-);
-const SupplierPage = lazy(
-  () => import("../features/supplier/pages/SupplierPage"),
-);
-const SupportPage = lazy(() => import("../features/support/pages/SupportPage"));
-const UnitPage = lazy(() => import("../features/units/pages/UnitPage"));
-const UsersPage = lazy(() => import("../features/users/pages/UsersPage"));
+/* ================= APP ================= */
+import AnalyticsPage from "../features/analytics/pages/AnalyticsPage";
+import RequireAuth from "../features/auth/guards/RequireAuth";
+import BarcodePages from "../features/barcode/pages/BarcodePages";
+import BranchesPage from "../features/branches/pages/BranchesPage";
+import CategoriesPage from "../features/categories/pages/CategoriesPage";
+import CompaniesPage from "../features/company/pages/CompaniesPage";
+import CustomerPage from "../features/customer/pages/CustomerPage";
+import Dashboard from "../features/dashboard/pages/DashboardPage";
+import DataBasePage from "../features/database/pages/DataBasePage";
+import AIChatPage from "../features/google_gemini/pages/AIChatPage";
+import InventoryPage from "../features/inventory/pages/InventoryPage";
+import MovementsPage from "../features/movements/pages/MovementsPage";
+import NotificationsPages from "../features/notifications/pages/NotificationsPages";
+import PaymentsPage from "../features/payments/pages/PaymentsPage";
+import ProductsPage from "../features/product/pages/ProductsPage";
+import Pricing from "../features/public/pricing/Pricing";
+import PurchasePage from "../features/purchase/page/PurchasePage";
+import ReportsPage from "../features/reports/pages/ReportsPage";
+import ReviewPage from "../features/reviews/pages/ReviewPage";
+import SaleDetailPage from "../features/sale-detail/pages/SaleDetailsPage";
+import SalesPage from "../features/sales/pages/SalesPage";
+import ConfigurationPage from "../features/settings/pages/ConfigurationPage";
+import StatisticsPage from "../features/statistics/pages/StatisticsPage";
+import SupplierPage from "../features/supplier/pages/SupplierPage";
+import SupportPage from "../features/support/pages/SupportPage";
+import UnitPage from "../features/units/pages/UnitPage";
+import UsersPage from "../features/users/pages/UsersPage";
+import AppLayout from "../layout/app-layout/AppLayout";
+
+/* ================= GUARDS ================= */
+import SubscriptionGuard from "@/features/auth/guards/SubscriptionGuard"; // <-- Ajusta la ruta relativa aquí
 
 export const routes = [
   /* ========================================
    * PUBLIC
    * ====================================== */
   {
-    element: (
-      <Suspense fallback={<PageLoader />}>
-        <PublicLayout />
-      </Suspense>
-    ),
+    element: <PublicLayout />,
     children: [
-      { path: "/", element: <Home /> },
-      { path: "/features", element: <Features /> },
-      { path: "/inventory", element: <Inventory /> },
-      { path: "/pricing", element: <Pricing /> },
-      { path: "/modules", element: <Modules /> },
-      { path: "/contact", element: <Contact /> },
+      {
+        path: "/",
+        element: <Home />,
+      },
+      {
+        path: "/features",
+        element: <Features />,
+      },
+      {
+        path: "/inventory",
+        element: <Inventory />,
+      },
+
+      {
+        path: "/pricing",
+        element: <Pricing />,
+      },
+      {
+        path: "/modules",
+        element: <Modules />,
+      },
+      {
+        path: "/contact",
+        element: <Contact />,
+      },
     ],
   },
 
@@ -118,13 +86,12 @@ export const routes = [
     element: <RequireAuth />,
     children: [
       {
-        element: (
-          <Suspense fallback={<PageLoader />}>
-            <AppLayout />
-          </Suspense>
-        ),
+        element: <AppLayout />,
         children: [
-          { path: "dashboard", element: <Dashboard /> },
+          {
+            path: "dashboard",
+            element: <Dashboard />,
+          },
 
           /* ----- PLAN: BASIC REQUERIDO ----- */
           {
@@ -171,25 +138,83 @@ export const routes = [
           },
 
           /* ----- PLAN: FREE / LIBRES ----- */
-          { path: "branches", element: <BranchesPage /> },
-          { path: "inventory-history", element: <MovementsPage /> },
-          { path: "customers", element: <CustomerPage /> },
-          { path: "users", element: <UsersPage /> },
-          { path: "categories", element: <CategoriesPage /> },
-          { path: "notifications", element: <NotificationsPages /> },
-          { path: "companies", element: <CompaniesPage /> },
-          { path: "units", element: <UnitPage /> },
-          { path: "products", element: <ProductsPage /> },
-          { path: "sales", element: <SalesPage /> },
-          { path: "purchases", element: <PurchasePage /> },
-          { path: "suppliers", element: <SupplierPage /> },
-          { path: "barcode", element: <BarcodePages /> },
-          { path: "settings", element: <ConfigurationPage /> },
-          { path: "support", element: <SupportPage /> },
-          { path: "inventory", element: <InventoryPage /> },
-          { path: "sale-details", element: <SaleDetailPage /> },
-          { path: "payments", element: <PaymentsPage /> },
-          { path: "reviews", element: <ReviewPage /> },
+          {
+            path: "branches",
+            element: <BranchesPage />,
+          },
+          {
+            path: "inventory-history",
+            element: <MovementsPage />,
+          },
+
+          {
+            path: "customers",
+            element: <CustomerPage />,
+          },
+          {
+            path: "users",
+            element: <UsersPage />,
+          },
+          {
+            path: "categories",
+            element: <CategoriesPage />,
+          },
+          {
+            path: "notifications",
+            element: <NotificationsPages />,
+          },
+          {
+            path: "companies",
+            element: <CompaniesPage />,
+          },
+          {
+            path: "units",
+            element: <UnitPage />,
+          },
+          {
+            path: "products",
+            element: <ProductsPage />,
+          },
+          {
+            path: "sales",
+            element: <SalesPage />,
+          },
+          {
+            path: "purchases",
+            element: <PurchasePage />,
+          },
+          {
+            path: "suppliers",
+            element: <SupplierPage />,
+          },
+          {
+            path: "barcode",
+            element: <BarcodePages />,
+          },
+          {
+            path: "settings",
+            element: <ConfigurationPage />,
+          },
+          {
+            path: "support",
+            element: <SupportPage />,
+          },
+          {
+            path: "inventory",
+            element: <InventoryPage />,
+          },
+          {
+            path: "sale-details",
+            element: <SaleDetailPage />,
+          },
+          {
+            path: "payments",
+            element: <PaymentsPage />,
+          },
+          {
+            path: "reviews",
+            element: <ReviewPage />,
+          },
         ],
       },
     ],
