@@ -1,4 +1,3 @@
-import DemoVideo from "@/assets/videos/minimarket_digital_integrado.mp4";
 import { FooterModal, HeaderModal, Modal } from "@/components/overlays";
 import { Play, Tv } from "lucide-react";
 
@@ -43,7 +42,10 @@ export default function VideoDemoModal({ open, onClose }) {
               preload="metadata"
               playsInline
             >
-              <source src={DemoVideo} type="video/mp4" />
+              <source
+                src="https://res.cloudinary.com/dgaq5afjl/video/upload/v1783568898/minimarket_digital_integrado_ebfkvt.mp4"
+                type="video/mp4"
+              />
               Tu navegador no soporta la reproducción de video.
             </video>
           </div>
