@@ -1,34 +1,27 @@
 name: Frontend Pipeline
 
 on:
-
   workflow_call:
 
 jobs:
-
   frontend:
-
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     defaults:
-
       run:
-
         working-directory: frontend
 
     steps:
-
       # ========================================
       # CHECKOUT
       # ========================================
-
       - name: Checkout Repository
         uses: actions/checkout@v4
 
       # ========================================
       # NODE
       # ========================================
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -39,20 +32,41 @@ jobs:
       # ========================================
       # INSTALL
       # ========================================
-
       - name: Install Dependencies
-        run: npm install
+        run: npm ci
+
+      # ========================================
+      # LINT
+      # ========================================
+      - name: Lint Frontend
+        run: npm run lint --if-present
 
       # ========================================
       # BUILD
       # ========================================
-
       - name: Build Frontend
         run: npm run build
 
       # ========================================
+      # VERIFY DIST
+      # ========================================
+      - name: Verify Build Output
+        run: |
+          test -d dist
+          echo "Dist folder generated successfully"
+
+      # ========================================
+      # BUILD SIZE
+      # ========================================
+      - name: Show Build Size
+        run: |
+          du -sh dist
+
+      # ========================================
       # SUCCESS
       # ========================================
-
       - name: Frontend Success
-        run: echo "Frontend validated"
+        run: |
+          echo "===================================="
+          echo "FRONTEND VALIDATED SUCCESSFULLY"
+          echo "===================================="

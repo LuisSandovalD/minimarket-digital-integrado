@@ -1,34 +1,27 @@
 name: Backend Pipeline
 
 on:
-
   workflow_call:
 
 jobs:
-
   backend:
-
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     defaults:
-
       run:
-
         working-directory: backend
 
     steps:
-
       # ========================================
       # CHECKOUT
       # ========================================
-
       - name: Checkout Repository
         uses: actions/checkout@v4
 
       # ========================================
       # NODE
       # ========================================
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -39,27 +32,44 @@ jobs:
       # ========================================
       # INSTALL
       # ========================================
-
       - name: Install Dependencies
-        run: npm install
+        run: npm ci
 
       # ========================================
-      # PRISMA
+      # PRISMA GENERATE
       # ========================================
-
       - name: Prisma Generate
         run: npx prisma generate
 
       # ========================================
+      # PRISMA VALIDATE
+      # ========================================
+      - name: Prisma Validate
+        run: npx prisma validate
+
+      # ========================================
+      # LINT
+      # ========================================
+      - name: Backend Lint
+        run: npm run lint --if-present
+
+      # ========================================
       # TESTS
       # ========================================
-
       - name: Backend Tests
-        run: echo "Backend tests pending"
+        run: npm test --if-present
+
+      # ========================================
+      # VERIFY PACKAGE
+      # ========================================
+      - name: Verify Package
+        run: npm pack --dry-run
 
       # ========================================
       # SUCCESS
       # ========================================
-
       - name: Backend Success
-        run: echo "Backend validated"
+        run: |
+          echo "===================================="
+          echo "BACKEND VALIDATED SUCCESSFULLY"
+          echo "===================================="

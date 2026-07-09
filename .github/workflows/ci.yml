@@ -10,19 +10,59 @@ on:
       - main
       - develop
 
+# Evita ejecutar pipelines simultáneos en el mismo branch/PR
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+# Principio de menor privilegio
+permissions:
+  contents: read
+
 jobs:
   backend:
+    name: Backend Validation
+    timeout-minutes: 15
     uses: ./.github/workflows/backend.yml
 
   frontend:
+    name: Frontend Validation
+    timeout-minutes: 15
     uses: ./.github/workflows/frontend.yml
 
-  docker:
+  # ========================================
+  # PIPELINE SUCCESS
+  # ========================================
+  pipeline-success:
+    name: Pipeline Completed
     needs:
       - backend
       - frontend
-    uses: ./.github/workflows/docker.yml
-    # Le pasamos los secretos al workflow de docker para que pueda usarlos
-    secrets:
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
-      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Success Message
+        run: |
+          echo "===================================="
+          echo "ALL VALIDATIONS PASSED"
+          echo "Backend OK"
+          echo "Frontend OK"
+          echo "===================================="
+
+  # ========================================
+  # PIPELINE FAILURE
+  # ========================================
+  pipeline-failure:
+    name: Pipeline Failed
+    needs:
+      - backend
+      - frontend
+    if: always() && (needs.backend.result == 'failure' || needs.frontend.result == 'failure')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Failure Message
+        run: |
+          echo "===================================="
+          echo "PIPELINE FAILED"
+          echo "Review previous jobs"
+          echo "===================================="
+          exit 1
