@@ -46,21 +46,5 @@ export default defineConfig({
   build: {
     outDir: "dist",
     sourcemap: false,
-    chunkSizeWarningLimit: 800, /
-    rollupOptions: {
-  output: {
-    manualChunks(id) {
-      // Si el archivo viene de node_modules, lo separamos en su propio paquete
-      if (id.includes("node_modules")) {
-        // Esto agrupa dependencias grandes por nombre de librería (ej: vendor-lucide-react)
-        return id
-          .toString()
-          .split("node_modules/")[1]
-          .split("/")[0]
-          .toString();
-      }
-    },
-  },
-},
   },
 });
