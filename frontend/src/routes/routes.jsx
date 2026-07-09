@@ -1,47 +1,102 @@
+import { lazy, Suspense } from "react";
 import { Navigate } from "react-router-dom";
 
-/* ================= PUBLIC LAYOUT ================= */
+/* ================= COMPONENTE DE CARGA (SPINNER/LOADER) ================= */
+// Puedes cambiar este diseño por un spinner de Tailwind, una barra superior, etc.
+const PageLoader = () => (
+  <div className="flex h-screen w-full items-center justify-center p-6 text-gray-500">
+    <div className="text-center">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto mb-2"></div>
+      <p className="text-sm">Cargando módulo...</p>
+    </div>
+  </div>
+);
+
+// Helper para envolver de forma limpia cada componente dinámico con su Suspense
+const withSuspense = (Component) => (
+  <Suspense fallback={<PageLoader />}>
+    <Component />
+  </Suspense>
+);
+
+/* ================= LAYOUTS Y GUARDS (Estáticos, se necesitan desde el inicio) ================= */
+import SubscriptionGuard from "@/features/auth/guards/SubscriptionGuard";
+import RequireAuth from "../features/auth/guards/RequireAuth";
+import AppLayout from "../layout/app-layout/AppLayout";
 import PublicLayout from "../layout/public/PublicLayout";
 
-/* ================= PUBLIC ================= */
-import Contact from "../features/public/contact/Contact";
-import Features from "../features/public/features/Features";
-import Home from "../features/public/home/Home";
-import Inventory from "../features/public/inventory/Inventory";
-import Modules from "../features/public/modules/Modules";
+/* ================= PUBLIC (Lazy Imports) ================= */
+const Home = lazy(() => import("../features/public/home/Home"));
+const Features = lazy(() => import("../features/public/features/Features"));
+const Inventory = lazy(() => import("../features/public/inventory/Inventory"));
+const Pricing = lazy(() => import("../features/public/pricing/Pricing"));
+const Modules = lazy(() => import("../features/public/modules/Modules"));
+const Contact = lazy(() => import("../features/public/contact/Contact"));
 
-/* ================= APP ================= */
-import AnalyticsPage from "../features/analytics/pages/AnalyticsPage";
-import RequireAuth from "../features/auth/guards/RequireAuth";
-import BarcodePages from "../features/barcode/pages/BarcodePages";
-import BranchesPage from "../features/branches/pages/BranchesPage";
-import CategoriesPage from "../features/categories/pages/CategoriesPage";
-import CompaniesPage from "../features/company/pages/CompaniesPage";
-import CustomerPage from "../features/customer/pages/CustomerPage";
-import Dashboard from "../features/dashboard/pages/DashboardPage";
-import DataBasePage from "../features/database/pages/DataBasePage";
-import AIChatPage from "../features/google_gemini/pages/AIChatPage";
-import InventoryPage from "../features/inventory/pages/InventoryPage";
-import MovementsPage from "../features/movements/pages/MovementsPage";
-import NotificationsPages from "../features/notifications/pages/NotificationsPages";
-import PaymentsPage from "../features/payments/pages/PaymentsPage";
-import ProductsPage from "../features/product/pages/ProductsPage";
-import Pricing from "../features/public/pricing/Pricing";
-import PurchasePage from "../features/purchase/page/PurchasePage";
-import ReportsPage from "../features/reports/pages/ReportsPage";
-import ReviewPage from "../features/reviews/pages/ReviewPage";
-import SaleDetailPage from "../features/sale-detail/pages/SaleDetailsPage";
-import SalesPage from "../features/sales/pages/SalesPage";
-import ConfigurationPage from "../features/settings/pages/ConfigurationPage";
-import StatisticsPage from "../features/statistics/pages/StatisticsPage";
-import SupplierPage from "../features/supplier/pages/SupplierPage";
-import SupportPage from "../features/support/pages/SupportPage";
-import UnitPage from "../features/units/pages/UnitPage";
-import UsersPage from "../features/users/pages/UsersPage";
-import AppLayout from "../layout/app-layout/AppLayout";
-
-/* ================= GUARDS ================= */
-import SubscriptionGuard from "@/features/auth/guards/SubscriptionGuard"; // <-- Ajusta la ruta relativa aquí
+/* ================= PRIVATE APP (Lazy Imports) ================= */
+const Dashboard = lazy(
+  () => import("../features/dashboard/pages/DashboardPage"),
+);
+const ReportsPage = lazy(() => import("../features/reports/pages/ReportsPage"));
+const StatisticsPage = lazy(
+  () => import("../features/statistics/pages/StatisticsPage"),
+);
+const DataBasePage = lazy(
+  () => import("../features/database/pages/DataBasePage"),
+);
+const AnalyticsPage = lazy(
+  () => import("../features/analytics/pages/AnalyticsPage"),
+);
+const AIChatPage = lazy(
+  () => import("../features/google_gemini/pages/AIChatPage"),
+);
+const BranchesPage = lazy(
+  () => import("../features/branches/pages/BranchesPage"),
+);
+const MovementsPage = lazy(
+  () => import("../features/movements/pages/MovementsPage"),
+);
+const CustomerPage = lazy(
+  () => import("../features/customer/pages/CustomerPage"),
+);
+const UsersPage = lazy(() => import("../features/users/pages/UsersPage"));
+const CategoriesPage = lazy(
+  () => import("../features/categories/pages/CategoriesPage"),
+);
+const NotificationsPages = lazy(
+  () => import("../features/notifications/pages/NotificationsPages"),
+);
+const CompaniesPage = lazy(
+  () => import("../features/company/pages/CompaniesPage"),
+);
+const UnitPage = lazy(() => import("../features/units/pages/UnitPage"));
+const ProductsPage = lazy(
+  () => import("../features/product/pages/ProductsPage"),
+);
+const SalesPage = lazy(() => import("../features/sales/pages/SalesPage"));
+const PurchasePage = lazy(
+  () => import("../features/purchase/page/PurchasePage"),
+);
+const SupplierPage = lazy(
+  () => import("../features/supplier/pages/SupplierPage"),
+);
+const BarcodePages = lazy(
+  () => import("../features/barcode/pages/BarcodePages"),
+);
+const ConfigurationPage = lazy(
+  () => import("../features/settings/pages/ConfigurationPage"),
+);
+const SupportPage = lazy(() => import("../features/support/pages/SupportPage"));
+const InventoryPage = lazy(
+  () => import("../features/inventory/pages/InventoryPage"),
+);
+const SaleDetailPage = lazy(
+  () => import("../features/sale-detail/pages/SaleDetailsPage"),
+);
+const PaymentsPage = lazy(
+  () => import("../features/payments/pages/PaymentsPage"),
+);
+const ReviewPage = lazy(() => import("../features/reviews/pages/ReviewPage"));
 
 export const routes = [
   /* ========================================
@@ -52,28 +107,27 @@ export const routes = [
     children: [
       {
         path: "/",
-        element: <Home />,
+        element: withSuspense(Home),
       },
       {
         path: "/features",
-        element: <Features />,
+        element: withSuspense(Features),
       },
       {
         path: "/inventory",
-        element: <Inventory />,
+        element: withSuspense(Inventory),
       },
-
       {
         path: "/pricing",
-        element: <Pricing />,
+        element: withSuspense(Pricing),
       },
       {
         path: "/modules",
-        element: <Modules />,
+        element: withSuspense(Modules),
       },
       {
         path: "/contact",
-        element: <Contact />,
+        element: withSuspense(Contact),
       },
     ],
   },
@@ -90,7 +144,7 @@ export const routes = [
         children: [
           {
             path: "dashboard",
-            element: <Dashboard />,
+            element: withSuspense(Dashboard),
           },
 
           /* ----- PLAN: BASIC REQUERIDO ----- */
@@ -98,7 +152,7 @@ export const routes = [
             path: "reports",
             element: (
               <SubscriptionGuard requiredTier="BASIC">
-                <ReportsPage />
+                {withSuspense(ReportsPage)}
               </SubscriptionGuard>
             ),
           },
@@ -106,7 +160,7 @@ export const routes = [
             path: "statistics",
             element: (
               <SubscriptionGuard requiredTier="BASIC">
-                <StatisticsPage />
+                {withSuspense(StatisticsPage)}
               </SubscriptionGuard>
             ),
           },
@@ -116,7 +170,7 @@ export const routes = [
             path: "database",
             element: (
               <SubscriptionGuard requiredTier="PREMIUM">
-                <DataBasePage />
+                {withSuspense(DataBasePage)}
               </SubscriptionGuard>
             ),
           },
@@ -124,7 +178,7 @@ export const routes = [
             path: "analytics",
             element: (
               <SubscriptionGuard requiredTier="PREMIUM">
-                <AnalyticsPage />
+                {withSuspense(AnalyticsPage)}
               </SubscriptionGuard>
             ),
           },
@@ -132,7 +186,7 @@ export const routes = [
             path: "automation",
             element: (
               <SubscriptionGuard requiredTier="PREMIUM">
-                <AIChatPage />
+                {withSuspense(AIChatPage)}
               </SubscriptionGuard>
             ),
           },
@@ -140,80 +194,79 @@ export const routes = [
           /* ----- PLAN: FREE / LIBRES ----- */
           {
             path: "branches",
-            element: <BranchesPage />,
+            element: withSuspense(BranchesPage),
           },
           {
             path: "inventory-history",
-            element: <MovementsPage />,
+            element: withSuspense(MovementsPage),
           },
-
           {
             path: "customers",
-            element: <CustomerPage />,
+            element: withSuspense(CustomerPage),
           },
           {
             path: "users",
-            element: <UsersPage />,
+            element: withSuspense(UsersPage),
           },
           {
             path: "categories",
-            element: <CategoriesPage />,
+            element: withSuspense(CategoriesPage),
           },
           {
             path: "notifications",
-            element: <NotificationsPages />,
+            element: withSuspense(NotificationsPages),
           },
           {
             path: "companies",
-            element: <CompaniesPage />,
+            element: withSuspense(CompaniesPage),
           },
           {
             path: "units",
-            element: <UnitPage />,
+            element: withSuspense(UnitPage),
           },
           {
             path: "products",
-            element: <ProductsPage />,
+            element: withSuspense(ProductsPage),
           },
           {
             path: "sales",
-            element: <SalesPage />,
+            element: withSuspense(SalesPage),
           },
           {
             path: "purchases",
-            element: <PurchasePage />,
+            element: withSuspense(PurchasePage),
           },
           {
             path: "suppliers",
-            element: <SupplierPage />,
+            element: withSuspense(SupplierPage),
           },
           {
             path: "barcode",
-            element: <BarcodePages />,
+            element: withSuspense(BarcodePages),
           },
           {
             path: "settings",
-            element: <ConfigurationPage />,
+            element: withSuspense(ConfigurationPage),
           },
           {
             path: "support",
-            element: <SupportPage />,
+            element: withSuspense(SupportPage),
           },
           {
             path: "inventory",
-            element: <InventoryPage />,
+            element: withSuspense(InventoryPage),
           },
           {
             path: "sale-details",
-            element: <SaleDetailPage />,
+            element: withSuspense(SaleDetailPage),
           },
           {
             path: "payments",
-            element: <PaymentsPage />,
+            element: withSuspense(PaymentsPage),
           },
           {
             path: "reviews",
-            element: <ReviewPage />,
+            element: withSuspense(ReviewPage),
           },
         ],
       },

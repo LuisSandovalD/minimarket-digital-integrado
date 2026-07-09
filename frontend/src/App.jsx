@@ -6,20 +6,19 @@ import { useCallback, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { BrowserRouter, useRoutes } from "react-router-dom";
 
-import { routes } from "./routes/routes";
+// Aquí importamos el index.jsx centralizado que une lo público y lo privado
+import { routes } from "./routes/index";
 
 import { meService } from "./features/auth/services/auth.service";
-
+import {
+  clearSession,
+  getToken,
+} from "./features/auth/services/session.service";
 import {
   loginSuccess,
   logout,
   setLoading,
 } from "./features/auth/store/authSlice";
-
-import {
-  clearSession,
-  getToken,
-} from "./features/auth/services/session.service";
 
 export default function App() {
   const dispatch = useDispatch();
@@ -32,9 +31,7 @@ export default function App() {
         dispatch(loginSuccess(response));
       } else {
         console.warn("⚠️ Sesión inválida");
-
         clearSession();
-
         dispatch(logout());
       }
     } catch (error) {
@@ -42,9 +39,7 @@ export default function App() {
         "❌ Error verificando sesión:",
         error?.response?.data || error.message,
       );
-
       clearSession();
-
       dispatch(logout());
     } finally {
       dispatch(setLoading(false));
@@ -56,9 +51,7 @@ export default function App() {
 
     if (!token) {
       dispatch(logout());
-
       dispatch(setLoading(false));
-
       return;
     }
 
