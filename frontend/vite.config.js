@@ -33,9 +33,6 @@ export default defineConfig({
     },
   },
 
-  // 🔥 ESTO SOLUCIONA EL "CONNECTION RESET BY PEER" (Saturación de Nginx)
-  // Fuerza a Vite a empaquetar previamente las dependencias grandes (lucide-react, emoji-picker, etc.)
-  // en lugar de enviarlas como miles de pequeños archivos sueltos a Nginx.
   optimizeDeps: {
     include: ["lucide-react", "emoji-picker-react", "react", "react-dom"],
     disabled: false,
@@ -49,5 +46,21 @@ export default defineConfig({
   build: {
     outDir: "dist",
     sourcemap: false,
+    chunkSizeWarningLimit: 800, /
+    rollupOptions: {
+  output: {
+    manualChunks(id) {
+      // Si el archivo viene de node_modules, lo separamos en su propio paquete
+      if (id.includes("node_modules")) {
+        // Esto agrupa dependencias grandes por nombre de librería (ej: vendor-lucide-react)
+        return id
+          .toString()
+          .split("node_modules/")[1]
+          .split("/")[0]
+          .toString();
+      }
+    },
+  },
+},
   },
 });
