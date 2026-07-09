@@ -1,6 +1,7 @@
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
+import { visualizer } from "rollup-plugin-visualizer";
 import { fileURLToPath } from "url";
 import { defineConfig } from "vite";
 
@@ -8,8 +9,49 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [
+    react(),
+    tailwindcss(),
+    visualizer({
+      open: true,
+      gzipSize: true,
+      filename: "stats.html",
+    }),
+  ],
 
+  rollupOptions: {
+    output: {
+      manualChunks(id) {
+        if (id.includes("node_modules")) {
+          if (
+            id.includes("react") ||
+            id.includes("react-dom") ||
+            id.includes("react-router")
+          ) {
+            return "react-vendor";
+          }
+
+          if (id.includes("recharts") || id.includes("chart.js")) {
+            return "charts";
+          }
+
+          if (id.includes("xlsx") || id.includes("exceljs")) {
+            return "excel";
+          }
+
+          if (id.includes("jspdf") || id.includes("html2canvas")) {
+            return "pdf";
+          }
+
+          if (id.includes("emoji-picker-react")) {
+            return "emoji";
+          }
+
+          return "vendor";
+        }
+      },
+    },
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
@@ -19,23 +61,22 @@ export default defineConfig({
   server: {
     host: "0.0.0.0",
     port: 5173,
-    strictPort: true, // Evita que Vite cambie de puerto si encuentra interferencia
-    // Permite que la recarga en vivo viaje a través de Nginx (Puerto 80)
+    strictPort: true,
+
     hmr: {
       clientPort: 80,
-      protocol: "ws", // Asegura que se use el protocolo de WebSocket estándar
+      protocol: "ws",
     },
-    // Activa la vigilancia forzada de archivos dentro del contenedor
+
     watch: {
       usePolling: true,
       interval: 100,
-      ignored: ["**/node_modules/**", "**/dist/**"], // Evita sobrecargar el disco de Docker
+      ignored: ["**/node_modules/**", "**/dist/**"],
     },
   },
 
   optimizeDeps: {
-    include: ["lucide-react", "emoji-picker-react", "react", "react-dom"],
-    disabled: false,
+    include: ["react", "react-dom", "lucide-react", "emoji-picker-react"],
   },
 
   preview: {
@@ -46,5 +87,42 @@ export default defineConfig({
   build: {
     outDir: "dist",
     sourcemap: false,
+
+    chunkSizeWarningLimit: 1000,
+
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          // Dependencias externas
+          if (id.includes("node_modules")) {
+            if (
+              id.includes("react") ||
+              id.includes("react-dom") ||
+              id.includes("react-router")
+            ) {
+              return "react-vendor";
+            }
+
+            if (id.includes("recharts")) {
+              return "charts";
+            }
+
+            if (id.includes("jspdf") || id.includes("html2canvas")) {
+              return "pdf";
+            }
+
+            if (id.includes("emoji-picker-react")) {
+              return "emoji";
+            }
+
+            if (id.includes("lucide-react")) {
+              return "icons";
+            }
+
+            return "vendor";
+          }
+        },
+      },
+    },
   },
 });
