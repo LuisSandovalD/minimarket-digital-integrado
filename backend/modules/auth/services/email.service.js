@@ -32,7 +32,7 @@ function validateSMTP() {
 }
 
 /* ======================================
- * LOG CONFIG
+ * MOSTRAR CONFIGURACIÓN
  * ==================================== */
 console.log("=================================");
 console.log("SMTP CONFIGURATION");
@@ -57,8 +57,8 @@ if (validateSMTP()) {
         host: process.env.SMTP_HOST,
         port: Number(process.env.SMTP_PORT),
 
-        // true para 465
-        // false para 587
+        // Puerto 465 => SSL
+        // Puerto 587 => STARTTLS
         secure: Number(process.env.SMTP_PORT) === 465,
 
         auth: {
@@ -69,22 +69,28 @@ if (validateSMTP()) {
         tls: {
             rejectUnauthorized: false,
         },
+
+        // Timeouts para evitar cuelgues
+        connectionTimeout: 15000,
+        greetingTimeout: 15000,
+        socketTimeout: 15000,
     });
 
-    transporter
-        .verify()
-        .then(() => {
-            console.log("=================================");
+    transporter.verify((error) => {
+        console.log("=================================");
+        console.log("SMTP VERIFY");
+        console.log("=================================");
+
+        if (error) {
+            console.error("SMTP ERROR:");
+            console.error(error);
+        } else {
             console.log("SMTP READY");
             console.log("Conexión SMTP exitosa");
-            console.log("=================================");
-        })
-        .catch((error) => {
-            console.error("=================================");
-            console.error("SMTP ERROR");
-            console.error(error);
-            console.error("=================================");
-        });
+        }
+
+        console.log("=================================");
+    });
 }
 
 /* ======================================
@@ -97,6 +103,7 @@ const sendEmail = async ({
     html,
     text = null,
 }) => {
+
     if (!transporter) {
         throw new Error(
             "Servicio SMTP no disponible."
@@ -104,11 +111,14 @@ const sendEmail = async ({
     }
 
     try {
+
         console.log("=================================");
         console.log("INTENTANDO ENVIAR CORREO");
         console.log("TO:", to);
         console.log("SUBJECT:", subject);
         console.log("=================================");
+
+        console.log("ANTES DE SENDMAIL");
 
         const info = await transporter.sendMail({
             from: `"ERP POS System" <${process.env.SMTP_USER}>`,
@@ -117,6 +127,8 @@ const sendEmail = async ({
             text,
             html,
         });
+
+        console.log("DESPUÉS DE SENDMAIL");
 
         console.log("=================================");
         console.log("EMAIL ENVIADO");
@@ -127,11 +139,14 @@ const sendEmail = async ({
         console.log("=================================");
 
         return info;
+
     } catch (error) {
+
         console.error("=================================");
         console.error("ERROR ENVIANDO EMAIL");
         console.error(error);
         console.error("=================================");
+
         throw error;
     }
 };
@@ -144,16 +159,20 @@ const sendPasswordResetCode = async ({
     email,
     code,
 }) => {
+
     return await sendEmail({
         to: email,
         subject: "Recuperación de contraseña",
         html: `
-            <div style="font-family:Arial;padding:20px">
+            <div style="font-family: Arial, sans-serif; padding: 20px;">
                 <h2>Recuperación de contraseña</h2>
 
                 <p>Utiliza el siguiente código:</p>
 
-                <h1 style="color:#2563eb;letter-spacing:8px;">
+                <h1 style="
+                    color:#2563eb;
+                    letter-spacing:8px;
+                ">
                     ${code}
                 </h1>
 
@@ -177,16 +196,21 @@ const sendTwoFactorCode = async (
     email,
     code
 ) => {
+
     return await sendEmail({
         to: email,
         subject: "Código de verificación",
         html: `
-            <div style="font-family:Arial;padding:20px">
+            <div style="font-family: Arial, sans-serif; padding: 20px;">
+
                 <h2>Verificación en dos pasos</h2>
 
                 <p>Tu código es:</p>
 
-                <h1 style="color:#2563eb;letter-spacing:8px;">
+                <h1 style="
+                    color:#2563eb;
+                    letter-spacing:8px;
+                ">
                     ${code}
                 </h1>
 
@@ -197,6 +221,7 @@ const sendTwoFactorCode = async (
                 <hr>
 
                 <small>ERP POS System</small>
+
             </div>
         `,
     });
