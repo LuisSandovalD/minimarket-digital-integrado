@@ -42,11 +42,18 @@ const requestPasswordReset = async (email) => {
         expiresAt
     );
 
-    await emailService.sendPasswordResetCode({
+    // 🔥 LE QUITAMOS EL AWAIT: El correo se envía de fondo, 
+    // y no detiene la respuesta hacia Axios.
+    emailService.sendPasswordResetCode({
         email,
         code: resetCode
+    }).catch(error => {
+        // Captura el error en logs por si algo falla internamente
+        console.error("Error en segundo plano al enviar email:", error);
     });
 
+    // 🚀 Esto se ejecutará DE INMEDIATO. Axios recibirá la respuesta 
+    // en menos de 1 segundo y el frontend te dejará avanzar.
     return {
         success: true,
         message: "Si el correo coincide con nuestros registros, recibirá un código de verificación"

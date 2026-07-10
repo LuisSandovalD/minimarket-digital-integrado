@@ -25,7 +25,7 @@ export default function RegisterModal({ open, onClose, onSwitchToLogin }) {
 
   return (
     <Modal open={open} onClose={onClose} size="full">
-      <div className="flex h-[850px] max-h-[95vh] overflow-hidden rounded-[36px]">
+      <div className="flex h-[850px] max-h-[95vh] overflow-hidden">
         {/* PANEL IZQUIERDO — IMAGEN DE FONDO (Optimizado estático) */}
         <motion.div
           initial={{ opacity: 0 }}

@@ -12,7 +12,7 @@ export default function LoginModal({ open, onClose, onSwitchToRegister }) {
 
   return (
     <Modal open={open} onClose={onClose} size="full">
-      <div className="flex h-[750px] overflow-hidden rounded-[36px]">
+      <div className="flex h-[850px] max-h-[95vh] overflow-hidden">
         {/* PANEL IZQUIERDO */}
         <motion.div
           initial={{ opacity: 0 }}

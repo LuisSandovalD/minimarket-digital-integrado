@@ -4,6 +4,7 @@ import { isAuthenticated } from "@/features/auth/services/session.service";
 
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
+
 import Footer from "./footer/Footer";
 import Navbar from "./navbar/Navbar";
 
@@ -14,7 +15,7 @@ export default function PublicLayout() {
 
   return (
     <div className="min-h-screen bg-white text-zinc-900 dark:bg-black dark:text-white">
-      {/* NAVBAR: Ahora recibe los estados como props directas */}
+      {/* NAVBAR */}
       <Navbar setOpenLogin={setOpenLogin} setOpenRegister={setOpenRegister} />
 
       {/* MAIN CONTENT */}
