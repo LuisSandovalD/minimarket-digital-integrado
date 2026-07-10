@@ -1,150 +1,86 @@
 // ========================================
-// services/email.service.js
+// services/email.service.js (Versión API HTTP)
 // ========================================
 
 require("dotenv").config();
-const nodemailer = require("nodemailer");
-const dns = require("dns");
 
 /* ======================================
- * DNS TEST SMTP
+ * VALIDAR CONFIGURACIÓN API
  * ==================================== */
-dns.lookup(
-    process.env.SMTP_HOST || "smtp-relay.brevo.com",
-    { all: true },
-    (err, addresses) => {
-        console.log("=================================");
-        console.log("DNS RESULT SMTP");
-        console.log("=================================");
-        if (err) {
-            console.error("DNS ERROR:", err);
-        } else {
-            console.log("ADDRESSES:", addresses);
-        }
-        console.log("=================================");
-    }
-);
-
-/* ======================================
- * VALIDAR VARIABLES SMTP
- * ==================================== */
-function validateSMTP() {
-    const required = [
-        "SMTP_HOST",
-        "SMTP_PORT",
-        "SMTP_USER",
-        "SMTP_PASS",
-        "SMTP_FROM"
-    ];
-
+function validateAPI() {
+    const required = ["BREVO_API_KEY", "SMTP_FROM"];
     const missing = required.filter((key) => !process.env[key]);
 
     if (missing.length > 0) {
         console.error("=================================");
-        console.error("SMTP CONFIGURATION ERROR");
+        console.error("BREVO CONFIGURATION ERROR");
         console.error("=================================");
-        console.error("Faltan variables:", missing.join(", "));
+        console.error("Faltan variables críticas:", missing.join(", "));
         console.error("=================================");
         return false;
     }
     return true;
 }
 
-/* ======================================
- * MOSTRAR CONFIGURACIÓN
- * ==================================== */
-console.log("=================================");
-console.log("SMTP CONFIGURATION");
-console.log("=================================");
-console.log("HOST:", process.env.SMTP_HOST || "NO CONFIGURADO");
-console.log("PORT:", process.env.SMTP_PORT || "NO CONFIGURADO");
-console.log("USER:", process.env.SMTP_USER || "NO CONFIGURADO");
-console.log("FROM:", process.env.SMTP_FROM || "NO CONFIGURADO");
-console.log("PASSWORD:", process.env.SMTP_PASS ? "CONFIGURADA" : "NO CONFIGURADA");
-console.log("=================================");
-
-/* ======================================
- * CREAR TRANSPORTER
- * ==================================== */
-let transporter = null;
-
-if (validateSMTP()) {
-    // Si usas Brevo, apuntamos a su IP directa de relay para saltarnos bloqueos de red/DNS de Render
-    const targetHost = process.env.SMTP_HOST === "smtp-relay.brevo.com"
-        ? "185.107.232.242"
-        : process.env.SMTP_HOST;
-
-    const port = Number(process.env.SMTP_PORT);
-
-    transporter = nodemailer.createTransport({
-        host: targetHost,
-        port: port,
-        // Si usas puerto 465 se activa 'secure: true'. Para puerto 587 se queda en false.
-        secure: port === 465,
-        auth: {
-            user: process.env.SMTP_USER,
-            pass: process.env.SMTP_PASS,
-        },
-        // Forzar IPv4 para evitar los problemas de ruteo IPv6 de Render
-        family: 4,
-        tls: {
-            rejectUnauthorized: false,
-            minVersion: "TLSv1.2" // Requerido por la infraestructura moderna de Render
-        },
-        connectionTimeout: 30000, // 30 segundos de margen para evitar el ETIMEDOUT
-        greetingTimeout: 30000,
-        socketTimeout: 30000,
-    });
-
-    transporter.verify((error) => {
-        console.log("=================================");
-        console.log("SMTP VERIFY");
-        console.log("=================================");
-        if (error) {
-            console.error("SMTP ERROR:");
-            console.error(error);
-        } else {
-            console.log("SMTP READY");
-            console.log("Conexión SMTP exitosa con el servidor de correos");
-        }
-        console.log("=================================");
-    });
+// Validación inicial al arrancar el servidor
+if (validateAPI()) {
+    console.log("=================================");
+    console.log("BREVO API SYSTEM READY");
+    console.log("Usando envío HTTP a través de la API (Sin bloqueos de Render)");
+    console.log("=================================");
 }
 
 /* ======================================
- * ENVIAR CORREO
+ * ENVIAR CORREO (VÍA API REST REST)
  * ==================================== */
 const sendEmail = async ({ to, subject, html, text = null }) => {
-    if (!transporter) {
-        throw new Error("Servicio SMTP no disponible debido a un error de configuración.");
+    if (!process.env.BREVO_API_KEY) {
+        throw new Error("Servicio de Email no disponible (Falta BREVO_API_KEY).");
     }
 
     try {
         console.log("=================================");
-        console.log("INTENTANDO ENVIAR CORREO");
+        console.log("INTENTANDO ENVIAR CORREO VÍA API");
         console.log("TO:", to);
         console.log("SUBJECT:", subject);
         console.log("=================================");
 
-        const info = await transporter.sendMail({
-            from: `"ERP POS System" <${process.env.SMTP_FROM}>`,
-            to,
-            subject,
-            text,
-            html,
+        const response = await fetch("https://api.brevo.com/v3/smtp/email", {
+            method: "POST",
+            headers: {
+                "accept": "application/json",
+                "api-key": process.env.BREVO_API_KEY,
+                "content-type": "application/json"
+            },
+            body: JSON.stringify({
+                sender: {
+                    name: "ERP POS System",
+                    email: process.env.SMTP_FROM
+                },
+                to: [{ email: to }],
+                subject: subject,
+                htmlContent: html,
+                textContent: text || undefined
+            })
         });
 
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.message || "Error devuelto por la API de Brevo");
+        }
+
         console.log("=================================");
-        console.log("EMAIL ENVIADO EXITOSAMENTE");
-        console.log("MESSAGE ID:", info.messageId);
-        console.log("RESPONSE:", info.response);
+        console.log("EMAIL ENVIADO EXITOSAMENTE VÍA API");
+        console.log("MESSAGE ID:", data.messageId);
         console.log("=================================");
 
-        return info;
+        return data;
+
     } catch (error) {
         console.error("=================================");
-        console.error("ERROR ENVIANDO EMAIL");
-        console.error(error);
+        console.error("ERROR ENVIANDO EMAIL VÍA API");
+        console.error(error.message || error);
         console.error("=================================");
         throw error;
     }
