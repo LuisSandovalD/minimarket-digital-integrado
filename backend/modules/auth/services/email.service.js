@@ -25,7 +25,6 @@ function validateSMTP() {
         console.error("=================================");
         console.error("Faltan variables:", missing.join(", "));
         console.error("=================================");
-
         return false;
     }
 
@@ -33,7 +32,7 @@ function validateSMTP() {
 }
 
 /* ======================================
- * MOSTRAR CONFIGURACIÓN
+ * LOG CONFIG
  * ==================================== */
 console.log("=================================");
 console.log("SMTP CONFIGURATION");
@@ -54,10 +53,12 @@ console.log("=================================");
 let transporter = null;
 
 if (validateSMTP()) {
-
     transporter = nodemailer.createTransport({
         host: process.env.SMTP_HOST,
         port: Number(process.env.SMTP_PORT),
+
+        // true para 465
+        // false para 587
         secure: Number(process.env.SMTP_PORT) === 465,
 
         auth: {
@@ -75,16 +76,15 @@ if (validateSMTP()) {
         .then(() => {
             console.log("=================================");
             console.log("SMTP READY");
-            console.log("Conexión con Gmail exitosa");
+            console.log("Conexión SMTP exitosa");
             console.log("=================================");
         })
         .catch((error) => {
             console.error("=================================");
             console.error("SMTP ERROR");
-            console.error(error.message);
+            console.error(error);
             console.error("=================================");
         });
-
 }
 
 /* ======================================
@@ -97,24 +97,43 @@ const sendEmail = async ({
     html,
     text = null,
 }) => {
-
     if (!transporter) {
         throw new Error(
-            "Servicio SMTP no disponible. Verifique las variables de entorno."
+            "Servicio SMTP no disponible."
         );
     }
 
-    const info = await transporter.sendMail({
-        from: `"ERP POS System" <${process.env.SMTP_USER}>`,
-        to,
-        subject,
-        text,
-        html,
-    });
+    try {
+        console.log("=================================");
+        console.log("INTENTANDO ENVIAR CORREO");
+        console.log("TO:", to);
+        console.log("SUBJECT:", subject);
+        console.log("=================================");
 
-    console.log("Correo enviado:", info.messageId);
+        const info = await transporter.sendMail({
+            from: `"ERP POS System" <${process.env.SMTP_USER}>`,
+            to,
+            subject,
+            text,
+            html,
+        });
 
-    return info;
+        console.log("=================================");
+        console.log("EMAIL ENVIADO");
+        console.log("MESSAGE ID:", info.messageId);
+        console.log("ACCEPTED:", info.accepted);
+        console.log("REJECTED:", info.rejected);
+        console.log("RESPONSE:", info.response);
+        console.log("=================================");
+
+        return info;
+    } catch (error) {
+        console.error("=================================");
+        console.error("ERROR ENVIANDO EMAIL");
+        console.error(error);
+        console.error("=================================");
+        throw error;
+    }
 };
 
 /* ======================================
@@ -125,8 +144,7 @@ const sendPasswordResetCode = async ({
     email,
     code,
 }) => {
-
-    return sendEmail({
+    return await sendEmail({
         to: email,
         subject: "Recuperación de contraseña",
         html: `
@@ -135,10 +153,7 @@ const sendPasswordResetCode = async ({
 
                 <p>Utiliza el siguiente código:</p>
 
-                <h1 style="
-                    color:#2563eb;
-                    letter-spacing:8px;
-                ">
+                <h1 style="color:#2563eb;letter-spacing:8px;">
                     ${code}
                 </h1>
 
@@ -152,7 +167,6 @@ const sendPasswordResetCode = async ({
             </div>
         `,
     });
-
 };
 
 /* ======================================
@@ -163,21 +177,16 @@ const sendTwoFactorCode = async (
     email,
     code
 ) => {
-
-    return sendEmail({
+    return await sendEmail({
         to: email,
         subject: "Código de verificación",
         html: `
             <div style="font-family:Arial;padding:20px">
-
                 <h2>Verificación en dos pasos</h2>
 
                 <p>Tu código es:</p>
 
-                <h1 style="
-                    color:#2563eb;
-                    letter-spacing:8px;
-                ">
+                <h1 style="color:#2563eb;letter-spacing:8px;">
                     ${code}
                 </h1>
 
@@ -188,11 +197,9 @@ const sendTwoFactorCode = async (
                 <hr>
 
                 <small>ERP POS System</small>
-
             </div>
         `,
     });
-
 };
 
 module.exports = {
