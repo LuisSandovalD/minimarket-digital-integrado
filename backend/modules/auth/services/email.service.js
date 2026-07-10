@@ -3,10 +3,34 @@
 // ========================================
 
 const nodemailer = require("nodemailer");
+const dns = require("dns");
+
+/* ======================================
+ * DNS TEST SMTP
+ * ==================================== */
+
+dns.lookup(
+    process.env.SMTP_HOST || "smtp.gmail.com",
+    { all: true },
+    (err, addresses) => {
+        console.log("=================================");
+        console.log("DNS RESULT SMTP");
+        console.log("=================================");
+
+        if (err) {
+            console.error("DNS ERROR:", err);
+        } else {
+            console.log("ADDRESSES:", addresses);
+        }
+
+        console.log("=================================");
+    }
+);
 
 /* ======================================
  * VALIDAR VARIABLES SMTP
  * ==================================== */
+
 function validateSMTP() {
     const required = [
         "SMTP_HOST",
@@ -25,6 +49,7 @@ function validateSMTP() {
         console.error("=================================");
         console.error("Faltan variables:", missing.join(", "));
         console.error("=================================");
+
         return false;
     }
 
@@ -34,6 +59,7 @@ function validateSMTP() {
 /* ======================================
  * MOSTRAR CONFIGURACIÓN
  * ==================================== */
+
 console.log("=================================");
 console.log("SMTP CONFIGURATION");
 console.log("=================================");
@@ -53,12 +79,11 @@ console.log("=================================");
 let transporter = null;
 
 if (validateSMTP()) {
+
     transporter = nodemailer.createTransport({
         host: process.env.SMTP_HOST,
         port: Number(process.env.SMTP_PORT),
 
-        // Puerto 465 => SSL
-        // Puerto 587 => STARTTLS
         secure: Number(process.env.SMTP_PORT) === 465,
 
         auth: {
@@ -66,17 +91,20 @@ if (validateSMTP()) {
             pass: process.env.SMTP_PASS,
         },
 
+        // Fuerza IPv4
+        family: 4,
+
         tls: {
             rejectUnauthorized: false,
         },
 
-        // Timeouts para evitar cuelgues
         connectionTimeout: 15000,
         greetingTimeout: 15000,
         socketTimeout: 15000,
     });
 
     transporter.verify((error) => {
+
         console.log("=================================");
         console.log("SMTP VERIFY");
         console.log("=================================");
@@ -169,10 +197,7 @@ const sendPasswordResetCode = async ({
 
                 <p>Utiliza el siguiente código:</p>
 
-                <h1 style="
-                    color:#2563eb;
-                    letter-spacing:8px;
-                ">
+                <h1 style="color:#2563eb;letter-spacing:8px;">
                     ${code}
                 </h1>
 
@@ -202,15 +227,11 @@ const sendTwoFactorCode = async (
         subject: "Código de verificación",
         html: `
             <div style="font-family: Arial, sans-serif; padding: 20px;">
-
                 <h2>Verificación en dos pasos</h2>
 
                 <p>Tu código es:</p>
 
-                <h1 style="
-                    color:#2563eb;
-                    letter-spacing:8px;
-                ">
+                <h1 style="color:#2563eb;letter-spacing:8px;">
                     ${code}
                 </h1>
 
@@ -221,7 +242,6 @@ const sendTwoFactorCode = async (
                 <hr>
 
                 <small>ERP POS System</small>
-
             </div>
         `,
     });
