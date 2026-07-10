@@ -2,7 +2,6 @@
 // services/email.service.js
 // ========================================
 
-// Asegúrate de instalar dotenv (npm i dotenv) si manejas un archivo .env
 require("dotenv").config();
 const nodemailer = require("nodemailer");
 const dns = require("dns");
@@ -11,7 +10,7 @@ const dns = require("dns");
  * DNS TEST SMTP
  * ==================================== */
 dns.lookup(
-    process.env.SMTP_HOST || "smtp.gmail.com",
+    process.env.SMTP_HOST || "smtp-relay.brevo.com",
     { all: true },
     (err, addresses) => {
         console.log("=================================");
@@ -35,7 +34,7 @@ function validateSMTP() {
         "SMTP_PORT",
         "SMTP_USER",
         "SMTP_PASS",
-        "SMTP_FROM" // Añadido como requerido
+        "SMTP_FROM"
     ];
 
     const missing = required.filter((key) => !process.env[key]);
@@ -70,23 +69,31 @@ console.log("=================================");
 let transporter = null;
 
 if (validateSMTP()) {
+    // Si usas Brevo, apuntamos a su IP directa de relay para saltarnos bloqueos de red/DNS de Render
+    const targetHost = process.env.SMTP_HOST === "smtp-relay.brevo.com"
+        ? "185.107.232.242"
+        : process.env.SMTP_HOST;
+
+    const port = Number(process.env.SMTP_PORT);
+
     transporter = nodemailer.createTransport({
-        host: process.env.SMTP_HOST,
-        port: Number(process.env.SMTP_PORT),
-        // Brevo usa STARTTLS en el puerto 587, por ende secure debe ser false
-        secure: Number(process.env.SMTP_PORT) === 465,
+        host: targetHost,
+        port: port,
+        // Si usas puerto 465 se activa 'secure: true'. Para puerto 587 se queda en false.
+        secure: port === 465,
         auth: {
             user: process.env.SMTP_USER,
             pass: process.env.SMTP_PASS,
         },
-        family: 4, // Fuerza IPv4
+        // Forzar IPv4 para evitar los problemas de ruteo IPv6 de Render
+        family: 4,
         tls: {
-            // Brevo a veces requiere mantener esto en false en entornos locales
             rejectUnauthorized: false,
+            minVersion: "TLSv1.2" // Requerido por la infraestructura moderna de Render
         },
-        connectionTimeout: 15000,
-        greetingTimeout: 15000,
-        socketTimeout: 15000,
+        connectionTimeout: 30000, // 30 segundos de margen para evitar el ETIMEDOUT
+        greetingTimeout: 30000,
+        socketTimeout: 30000,
     });
 
     transporter.verify((error) => {
@@ -98,7 +105,7 @@ if (validateSMTP()) {
             console.error(error);
         } else {
             console.log("SMTP READY");
-            console.log("Conexión SMTP exitosa con Brevo");
+            console.log("Conexión SMTP exitosa con el servidor de correos");
         }
         console.log("=================================");
     });
@@ -109,7 +116,7 @@ if (validateSMTP()) {
  * ==================================== */
 const sendEmail = async ({ to, subject, html, text = null }) => {
     if (!transporter) {
-        throw new Error("Servicio SMTP no disponible.");
+        throw new Error("Servicio SMTP no disponible debido a un error de configuración.");
     }
 
     try {
@@ -120,7 +127,6 @@ const sendEmail = async ({ to, subject, html, text = null }) => {
         console.log("=================================");
 
         const info = await transporter.sendMail({
-            // CORRECCIÓN AQUÍ: Se usa SMTP_FROM en lugar de SMTP_USER
             from: `"ERP POS System" <${process.env.SMTP_FROM}>`,
             to,
             subject,
@@ -129,7 +135,7 @@ const sendEmail = async ({ to, subject, html, text = null }) => {
         });
 
         console.log("=================================");
-        console.log("EMAIL ENVIADO");
+        console.log("EMAIL ENVIADO EXITOSAMENTE");
         console.log("MESSAGE ID:", info.messageId);
         console.log("RESPONSE:", info.response);
         console.log("=================================");
@@ -145,7 +151,7 @@ const sendEmail = async ({ to, subject, html, text = null }) => {
 };
 
 /* ======================================
- * REUSAR MÉTODOS EXISTENTES
+ * RECUPERACIÓN DE CONTRASEÑA
  * ==================================== */
 const sendPasswordResetCode = async ({ email, code }) => {
     return await sendEmail({
@@ -164,6 +170,9 @@ const sendPasswordResetCode = async ({ email, code }) => {
     });
 };
 
+/* ======================================
+ * CÓDIGO 2FA
+ * ==================================== */
 const sendTwoFactorCode = async (email, code) => {
     return await sendEmail({
         to: email,
