@@ -48,6 +48,7 @@ export default function useCategories() {
 
   // Se ejecuta automáticamente cada vez que cambia la página o se aplica un filtro
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchCategories();
   }, [fetchCategories]);
 

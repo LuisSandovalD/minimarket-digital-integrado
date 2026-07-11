@@ -42,6 +42,7 @@ export function useCustomers() {
   // CUANDO CAMBIAN LOS FILTROS
   // ========================================
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchCustomers(filters);
   }, [filters, fetchCustomers]);
 

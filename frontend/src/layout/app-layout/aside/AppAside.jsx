@@ -15,6 +15,7 @@ import { menuByRole } from "./data/asideMenu";
 
 export default function AppAside({ isOpen }) {
   const navigate = useNavigate();
+  //useAuth solo lee pasivamente el estado, manteniéndose nativo y limpio
   const { user, logout, loading } = useAuth();
   const company = getCompany();
 

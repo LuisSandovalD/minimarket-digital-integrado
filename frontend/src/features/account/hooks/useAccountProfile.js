@@ -1,7 +1,6 @@
-// ========================================
-// hooks/useAccountProfile.js
-// ========================================
+import { updateUser } from "@/features/auth/store/authSlice"; // 2. Importamos la acción de tu slice de Redux
 import { useState } from "react";
+import { useDispatch } from "react-redux"; // 1. Importamos el dispatch de Redux
 import useAccountStore from "../store/account.store";
 import {
   validatePassword,
@@ -9,6 +8,8 @@ import {
 } from "../validations/account.validation";
 
 export default function useAccountProfile() {
+  const dispatch = useDispatch(); // 3. Inicializamos el dispatch
+
   const user = useAccountStore((state) => state.user);
   const loading = useAccountStore((state) => state.loading);
   const saving = useAccountStore((state) => state.saving);
@@ -21,7 +22,6 @@ export default function useAccountProfile() {
   const updatePassword = useAccountStore((state) => state.updatePassword);
   const removeAccount = useAccountStore((state) => state.removeAccount);
 
-  // Estados locales para errores de validación en tiempo de ejecución (UI)
   const [validationErrors, setValidationErrors] = useState({});
 
   // Acción: Actualizar datos personales
@@ -35,7 +35,20 @@ export default function useAccountProfile() {
     }
 
     try {
+      // Zustand hace la petición a la API y actualiza su store local
       await updateProfile(formData);
+
+      // 🚀 LA SOLUCIÓN: Sincronizamos Redux inmediatamente.
+      // Le pasamos a Redux los mismos datos que se acaban de guardar (incluyendo el avatar).
+      // Al actualizar Redux, el hook useAuth() de la barra lateral se entera y cambia la foto sin F5.
+      dispatch(
+        updateUser({
+          name: formData.name,
+          email: formData.email,
+          avatar: formData.avatar, // O la propiedad exacta donde manejes la URL de la imagen
+        }),
+      );
+
       return true;
     } catch (err) {
       return false;
@@ -63,11 +76,7 @@ export default function useAccountProfile() {
     }
   };
 
-  // ========================================
-  // hooks/useAccountProfile.js (CORREGIDO)
-  // ========================================
-
-  // Acción: Dar de baja la cuenta (Requiere password de confirmación)
+  // Acción: Dar de baja la cuenta
   const handleDeleteAccount = async (password) => {
     if (!password) {
       setValidationErrors({
@@ -77,8 +86,6 @@ export default function useAccountProfile() {
     }
 
     try {
-      // 🚀 SOLUCIÓN: Empaquetamos la variable en un objeto con la propiedad 'password'
-      // de esta manera tu service la recibe limpia y estructurada
       await removeAccount({ password: password });
       return true;
     } catch (err) {

@@ -1,40 +1,21 @@
 export default function FooterBrand() {
   return (
-    <div className="max-w-sm">
-      <div className="flex items-center gap-3">
-        <div
-          className="
-            flex
-            h-14
-            w-14
-            items-center
-            justify-center
-            rounded-2xl
-            bg-zinc-900
-            font-black
-            text-white
-          "
-        >
-          E
-        </div>
-
-        <div>
-          <h2 className="text-xl font-black">ERP POS</h2>
-
-          <p className="text-sm text-zinc-500">Multiempresa</p>
-        </div>
+    <div className="flex flex-col gap-4 max-w-md text-left">
+      {/* Contenedor del Logo optimizado para cambios de contraste */}
+      <div className="flex items-center gap-3.5">
+        <img
+          src="https://res.cloudinary.com/dgaq5afjl/image/upload/v1783568897/minimarket_logo_noc7b3.svg"
+          alt="Minimarket Digital Integrado"
+          // Si el logo es oscuro por defecto, dark:invert-0 dark:brightness-200 o dark:invert te ayudará si requiere adaptación total
+          className="h-12 w-auto select-none object-contain transition-all duration-300 transform-gpu dark:brightness-110 dark:contrast-115"
+          loading="lazy"
+        />
       </div>
 
-      <p
-        className="
-          mt-5
-          text-sm
-          leading-relaxed
-          text-zinc-500
-        "
-      >
+      {/* Descripción con balance de contraste perfecto entre modos */}
+      <p className="text-sm leading-relaxed text-slate-500 hover:text-slate-600 dark:text-[#cbd5e1]/70 dark:hover:text-[#cbd5e1]/90 transition-colors duration-200">
         Plataforma moderna para la gestión empresarial, inventario, ventas y
-        operaciones avanzadas.
+        operaciones avanzadas en tiempo real.
       </p>
     </div>
   );

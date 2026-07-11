@@ -62,7 +62,7 @@ export default function RequireAuth() {
         },
       });
     }
-  }, [user]);
+  }, [session, user]);
 
   /* ======================================
    * LOADING

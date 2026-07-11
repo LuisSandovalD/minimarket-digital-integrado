@@ -11,6 +11,7 @@ export default function AsideFooter({
   branch,
   onLogout,
   isLoading = false,
+  onProfileUpdated, // 1. Recibimos el callback del componente padre (AppAside)
 }) {
   const [openProfile, setOpenProfile] = useState(false);
 
@@ -20,6 +21,7 @@ export default function AsideFooter({
         className={`rounded-3xl border border-slate-200/70 bg-white/80 p-3 shadow-sm backdrop-blur-md dark:border-slate-800/70 dark:bg-slate-900/80 ${isCollapsed ? "flex justify-center" : ""}`}
       >
         <UserAvatar
+          key={`${user?.id}-${user?.avatar}`}
           user={user}
           size="md"
           showInfo={!isCollapsed}
@@ -49,12 +51,14 @@ export default function AsideFooter({
         )}
       </button>
 
+      {/* 2. Le inyectamos el callback al modal para que lo use tras guardar los cambios */}
       <AccountModal
         open={openProfile}
         onClose={() => setOpenProfile(false)}
         user={user}
         company={company}
         branch={branch}
+        onUpdateSuccess={onProfileUpdated}
       />
     </div>
   );

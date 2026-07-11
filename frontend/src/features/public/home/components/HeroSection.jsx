@@ -75,7 +75,7 @@ export default function HeroSection() {
             variants={fastFadeUp}
             className="inline-flex items-center gap-2 rounded-full border border-[#274c77]/10 bg-[#274c77]/5 px-3 py-1 text-xs font-semibold tracking-wider text-[#274c77] dark:border-white/10 dark:bg-white/5 dark:text-[#a3cef1]"
           >
-            • ERP & POS MULTIEMPRESA
+            • Minimarket Digital Integrado
           </motion.div>
 
           {/* Título */}

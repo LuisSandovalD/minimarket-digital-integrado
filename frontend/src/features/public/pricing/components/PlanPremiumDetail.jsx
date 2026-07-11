@@ -61,7 +61,7 @@ export default function PlanPremiumDetail() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.7 }}
-      className="relative w-full max-w-7xl mx-auto mt-10 bg-transparent"
+      className="relative w-full  mx-auto mt-10 bg-transparent"
     >
       <div className="relative p-8 bg-transparent">
         {/* Header */}

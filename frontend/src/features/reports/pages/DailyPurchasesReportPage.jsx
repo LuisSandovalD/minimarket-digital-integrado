@@ -62,6 +62,7 @@ export default function DailyPurchasesReportPage({ filters }) {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchPdf();
 
     // Desmontado seguro: libera el Object URL del scope de memoria del navegador

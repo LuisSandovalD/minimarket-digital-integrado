@@ -16,7 +16,7 @@ import {
   Store,
   StoreIcon,
   ToggleLeft,
-  X
+  X,
 } from "lucide-react";
 import useBranchForm from "../hooks/useBranchForm";
 

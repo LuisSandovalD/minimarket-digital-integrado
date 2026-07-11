@@ -1,180 +1,169 @@
+import { ModernButton } from "@/components/buttons";
+import emailjs from "@emailjs/browser";
+import { AnimatePresence, motion } from "framer-motion";
+import { CheckCircle2, Send } from "lucide-react";
 import { useState } from "react";
-import { motion } from "framer-motion";
-import { MessageSquare, Send } from "lucide-react";
-import { ModernButton } from "@/components/buttons/";
-import { Input } from "@/components/forms/";
-import { benefits } from "../constants/benefits";
-import { inputs } from "../constants/inputs";
-import {
-  fadeUp,
-  fadeScale,
-  hoverLift,
-  smoothTransition,
-  springTransition,
-  staggerContainer,
-  defaultViewport,
-} from "@/components/effects";
+import { FORM_FIELDS } from "../constants/contactData.js";
+
+const EMPTY = {
+  nombre: "",
+  correo: "",
+  empresa: "",
+  telefono: "",
+  mensaje: "",
+};
 
 export default function ContactForm() {
+  const [values, setValues] = useState(EMPTY);
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    company: "",
-    phone: "",
-    message: "",
-  });
+  const [sent, setSent] = useState(false);
 
-  const handleChange = (e) =>
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setValues((prev) => ({ ...prev, [name]: value }));
+  };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      setLoading(true);
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      console.log(formData);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
+    setLoading(true);
+
+    // Mapeamos los campos del estado hacia los parámetros que recibirá tu plantilla de EmailJS
+    const templateParams = {
+      from_name: values.nombre,
+      user_email: values.correo,
+      company: values.empresa || "No especificada",
+      phone: values.telefono || "No especificado",
+      message: values.mensaje,
+      time: new Date().toLocaleString("es-ES", {
+        dateStyle: "medium",
+        timeStyle: "short",
+      }),
+    };
+
+    // Reutilizamos tus mismas credenciales expuestas temporales
+    emailjs
+      .send(
+        "service_vj08bgm",
+        "template_ianlekb", // Nota: Puedes usar el mismo service, pero lo ideal es que en EmailJS crees un template exclusivo para esto.
+        templateParams,
+        "3kx4H0jM5Gq2uayHH",
+      )
+      .then(
+        () => {
+          setSent(true);
+          setValues(EMPTY);
+          setLoading(false);
+          setTimeout(() => setSent(false), 5000);
+        },
+        (error) => {
+          alert(
+            "Hubo un error al enviar el formulario. Por favor, intenta de nuevo.",
+          );
+          setLoading(false);
+        },
+      );
   };
 
   return (
-    <section className="relative overflow-hidden py-24">
-      <div className="relative mx-auto grid max-w-7xl items-start gap-14 px-6 lg:grid-cols-2 lg:px-8">
-        {/* Left */}
-        <motion.div
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, amount: 0.2 }}
-          className="max-w-xl"
-        >
-          <motion.div
-            variants={fadeUp}
-            transition={smoothTransition}
-            className="inline-flex items-center gap-2 rounded-full border border-[#d7e0e7] bg-white/70 px-4 py-2 text-sm font-semibold text-[#274c77] shadow-lg backdrop-blur-xl dark:border-white/10 dark:bg-white/10 dark:text-[#dbeafe]"
-          >
-            <MessageSquare size={16} />
-            Formulario de contacto
-          </motion.div>
+    <section className="relative overflow-hidden bg-dark text-dark-foreground px-4 sm:px-6 md:px-8 lg:px-10 z-10 pb-24">
+      <motion.form
+        onSubmit={handleSubmit}
+        initial={{ opacity: 0, y: 15 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ type: "spring", stiffness: 400, damping: 30 }}
+        className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.02] backdrop-blur-md p-6 sm:p-8 shadow-2xl transform-gpu"
+      >
+        {/* Luz ambiental interna sutil */}
+        <div className="pointer-events-none absolute -right-16 -top-16 -z-10 h-40 w-40 rounded-full bg-primary/10 blur-3xl" />
 
-          <motion.h2
-            variants={fadeUp}
-            transition={smoothTransition}
-            className="mt-8 text-5xl font-black leading-tight tracking-tight text-[#0f172a] dark:text-white"
-          >
-            Hablemos sobre tu
-            <span className="mt-2 block bg-gradient-to-r from-[#274c77] via-[#6096ba] to-[#a3cef1] bg-clip-text text-transparent">
-              próximo ERP
-            </span>
-          </motion.h2>
+        <h2 className="text-xl font-black tracking-tight text-white sm:text-2xl">
+          Escríbenos
+        </h2>
+        <p className="mt-1 text-sm text-dark-foreground/65">
+          Completa el formulario y un asesor se pondrá en contacto contigo.
+        </p>
 
-          <motion.p
-            variants={fadeUp}
-            transition={smoothTransition}
-            className="mt-6 text-base leading-relaxed text-[#475569] dark:text-[#cbd5e1]"
-          >
-            Cuéntanos qué necesita tu empresa y nuestro equipo te ayudará a
-            encontrar una solución moderna, escalable y preparada para crecer.
-          </motion.p>
-
-          {/* Benefits */}
-          <motion.div variants={staggerContainer} className="mt-10 space-y-4">
-            {benefits.map(({ icon: Icon, title, description }) => (
-              <motion.div
-                key={title}
-                variants={fadeScale}
-                transition={springTransition}
-                whileHover={hoverLift}
-                className="flex items-start gap-4 rounded-3xl border border-[#d7e0e7] bg-white/70 p-5 shadow-sm backdrop-blur-xl dark:border-white/10 dark:bg-white/[0.04]"
+        {/* Grid de Inputs dinámicos */}
+        <div className="mt-6 grid gap-5 sm:grid-cols-2">
+          {FORM_FIELDS.map((field) => (
+            <div key={field.name} className="flex flex-col gap-1.5">
+              <label
+                htmlFor={field.name}
+                className="text-xs font-semibold uppercase tracking-wider text-dark-foreground/75"
               >
-                <motion.div
-                  whileHover={{ rotate: [0, -8, 8, 0], scale: 1.1 }}
-                  transition={{ duration: 0.5 }}
-                  className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-[#6096ba] to-[#274c77] text-white shadow-lg"
-                >
-                  <Icon size={20} />
-                </motion.div>
-                <div>
-                  <h3 className="text-sm font-bold text-[#0f172a] dark:text-white">
-                    {title}
-                  </h3>
-                  <p className="mt-1 text-sm leading-relaxed text-[#64748b] dark:text-[#cbd5e1]">
-                    {description}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-        </motion.div>
-
-        {/* Right — form card */}
-        <motion.div
-          initial={{ opacity: 0, x: 60, scale: 0.96 }}
-          whileInView={{ opacity: 1, x: 0, scale: 1 }}
-          viewport={defaultViewport}
-          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-          className="relative overflow-hidden rounded-[36px] border border-[#d7e0e7] bg-white/70 p-7 shadow-[0_20px_80px_rgba(15,23,42,0.08)] backdrop-blur-2xl dark:border-white/10 dark:bg-white/[0.04] dark:shadow-[0_20px_80px_rgba(0,0,0,0.45)] md:p-10"
-        >
-          <h3 className="text-3xl font-black text-[#0f172a] dark:text-white">
-            Solicita información
-          </h3>
-          <p className="mt-3 text-sm leading-relaxed text-[#64748b] dark:text-[#cbd5e1]">
-            Completa el formulario y nuestro equipo se pondrá en contacto
-            contigo.
-          </p>
-
-          <form onSubmit={handleSubmit} className="mt-10 space-y-6">
-            <div className="grid gap-5 md:grid-cols-2">
-              {inputs.map((item, index) => (
-                <Input
-                  key={index}
-                  type={item.type}
-                  name={item.name}
-                  label={item.label}
-                  icon={item.icon}
-                  placeholder={item.placeholder}
-                  value={formData[item.name]}
-                  onChange={handleChange}
-                />
-              ))}
-            </div>
-
-            {/* Textarea */}
-            <div>
-              <label className="mb-2 block text-sm font-semibold text-[#334155] dark:text-[#dbe4ee]">
-                Mensaje
+                {field.label}
+                {field.required && <span className="text-primary"> *</span>}
               </label>
-              <div className="group relative overflow-hidden rounded-3xl border border-zinc-200 bg-white/80 backdrop-blur-xl transition-all duration-300 focus-within:border-zinc-400 focus-within:ring-4 focus-within:ring-zinc-200/50 dark:border-zinc-800 dark:bg-zinc-900/80 dark:focus-within:border-zinc-600 dark:focus-within:ring-zinc-800/50">
-                <div className="absolute left-4 top-5 text-zinc-400">
-                  <MessageSquare size={18} />
-                </div>
-                <textarea
-                  name="message"
-                  value={formData.message}
-                  onChange={handleChange}
-                  placeholder="Cuéntanos sobre tu proyecto, empresa o necesidades..."
-                  required
-                  className="min-h-[180px] w-full resize-none bg-transparent pb-4 pl-12 pr-4 pt-5 text-sm text-zinc-800 outline-none placeholder:text-zinc-400 dark:text-white"
-                />
-              </div>
+              <input
+                id={field.name}
+                name={field.name}
+                type={field.type}
+                value={values[field.name]}
+                onChange={handleChange}
+                placeholder={field.placeholder}
+                required={field.required}
+                disabled={loading}
+                className="h-11 w-full rounded-xl border border-white/10 bg-dark/40 px-4 text-sm text-white placeholder-dark-foreground/30 outline-none transition-all duration-300 focus:border-primary focus:bg-dark/60 focus:ring-2 focus:ring-primary/20 disabled:opacity-50"
+              />
             </div>
+          ))}
+        </div>
 
+        {/* Textarea de Mensaje */}
+        <div className="mt-5 flex flex-col gap-1.5">
+          <label
+            htmlFor="mensaje"
+            className="text-xs font-semibold uppercase tracking-wider text-dark-foreground/75"
+          >
+            Mensaje<span className="text-primary"> *</span>
+          </label>
+          <textarea
+            id="mensaje"
+            name="mensaje"
+            rows={4}
+            value={values.mensaje}
+            onChange={handleChange}
+            required
+            disabled={loading}
+            placeholder="Cuéntanos qué necesitas para tu negocio..."
+            className="w-full rounded-xl border border-white/10 bg-dark/40 px-4 py-3 text-sm text-white placeholder-dark-foreground/30 outline-none transition-all duration-300 focus:border-primary focus:bg-dark/60 focus:ring-2 focus:ring-primary/20 resize-none disabled:opacity-50"
+          />
+        </div>
+
+        {/* Botón de Enviar */}
+        <div className="mt-6">
+          <motion.div
+            whileHover={{ scale: loading ? 1 : 1.01 }}
+            whileTap={{ scale: loading ? 1 : 0.99 }}
+            className="w-full transform-gpu"
+          >
             <ModernButton
               type="submit"
-              text="Enviar mensaje"
+              text={loading ? "Enviando..." : "Enviar mensaje"}
               icon={Send}
-              loading={loading}
-              size="lg"
-              fullWidth
-              once
+              variant="primary"
+              disabled={loading}
+              className="w-full justify-center py-3"
             />
-          </form>
-        </motion.div>
-      </div>
+          </motion.div>
+        </div>
+
+        {/* Notificación de Éxito Animada */}
+        <AnimatePresence>
+          {sent && (
+            <motion.div
+              initial={{ opacity: 0, y: 10, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -10, scale: 0.95 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+              className="absolute inset-x-6 bottom-6 sm:inset-x-8 sm:bottom-8 z-20 flex items-center gap-3 rounded-xl border border-accent/20 bg-accent/10 backdrop-blur-md px-4 py-3.5 text-sm font-semibold text-accent shadow-lg"
+            >
+              <CheckCircle2 className="h-5 w-5 shrink-0" aria-hidden="true" />
+              <span>Mensaje enviado con éxito. Te contactaremos pronto.</span>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.form>
     </section>
   );
 }

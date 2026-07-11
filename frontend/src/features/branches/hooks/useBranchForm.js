@@ -29,6 +29,7 @@ export default function useBranchForm({ branch, onClose, onSuccess }) {
 
   useEffect(() => {
     if (!branch) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setFormData(INITIAL_STATE);
       setPreviewUrl("");
       return;

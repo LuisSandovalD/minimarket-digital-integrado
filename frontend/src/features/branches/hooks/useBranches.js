@@ -63,6 +63,7 @@ export default function useBranches(params = {}) {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchBranches();
   }, [fetchBranches]);
 

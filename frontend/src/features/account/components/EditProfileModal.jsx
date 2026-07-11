@@ -95,6 +95,14 @@ export default function EditProfileModal({ open, onClose }) {
               </h3>
             </div>
 
+            <div className="p-3 rounded-xl bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900">
+              <p className="text-xs font-medium text-amber-700 dark:text-amber-400">
+                El correo electrónico y la contraseña son credenciales de acceso
+                administradas por el sistema y no pueden modificarse desde este
+                perfil.
+              </p>
+            </div>
+
             <div className="grid gap-4 sm:grid-cols-2">
               <Input
                 label="Nombre Completo"
@@ -106,17 +114,15 @@ export default function EditProfileModal({ open, onClose }) {
                 error={validationErrors.name}
                 required
               />
+
               <Input
                 label="Correo Electrónico"
                 name="email"
-                type="email"
                 value={form.email}
-                onChange={handleChange}
                 icon={Mail}
-                placeholder="correo@empresa.com"
-                error={validationErrors.email}
-                required
+                disabled
               />
+
               <Input
                 label="Teléfono / Celular"
                 name="phone"
@@ -125,24 +131,28 @@ export default function EditProfileModal({ open, onClose }) {
                 icon={Phone}
                 placeholder="+51 999 999 999"
               />
+
               <Input
                 label="Rol de Acceso"
                 value={ROLE_LABELS[user?.role] || user?.role || "Personal"}
                 icon={Shield}
                 disabled
               />
+
               <Input
                 label="Empresa Asignada"
                 value={companyName || "—"}
                 icon={Building2}
                 disabled
               />
+
               <Input
                 label="Sucursal Local"
                 value={branchName || "—"}
                 icon={Briefcase}
                 disabled
               />
+
               <Input
                 label="Fecha de Registro"
                 value={

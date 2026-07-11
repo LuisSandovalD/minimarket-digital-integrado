@@ -1,9 +1,11 @@
-// ========================================
-// hooks/useTwoFactor.js
-// ========================================
+import { updateUser } from "@/features/auth/store/authSlice"; // 2. Importamos la acción de tu slice de Redux
+
+import { useDispatch } from "react-redux"; // 1. Importamos dispatch de Redux
 import useAccountStore from "../store/account.store";
 
 export default function useTwoFactor() {
+  const dispatch = useDispatch(); // 3. Inicializamos el dispatch de Redux
+
   const user = useAccountStore((state) => state.user);
   const twoFactorLoading = useAccountStore((state) => state.twoFactorLoading);
   const serverError = useAccountStore((state) => state.error);
@@ -27,11 +29,21 @@ export default function useTwoFactor() {
       }
     },
 
-    // Paso 2: SOLUCIÓN AL BUG - Ahora recibe el objeto { token, password } desde el Modal
+    // Paso 2: Confirmar y activar 2FA
     confirm2FA: async ({ token, password }) => {
       try {
-        // Le pasamos el objeto estructurado a Zustand para que viaje al servidor
-        return await enableTwoFactor({ token, password });
+        const result = await enableTwoFactor({ token, password });
+
+        // 🚀 LA SOLUCIÓN: Si Zustand activa el 2FA con éxito, actualizamos Redux al instante
+        if (result) {
+          dispatch(
+            updateUser({
+              twoFactorEnabled: true, // Le avisamos a Redux que ahora está activo
+            }),
+          );
+        }
+
+        return result;
       } catch (err) {
         return null;
       }
@@ -40,7 +52,17 @@ export default function useTwoFactor() {
     // Paso 3: Apagar el segundo factor pidiendo password
     turnOff2FA: async (password) => {
       try {
-        await disableTwoFactor(password);
+        const result = await disableTwoFactor(password);
+
+        // 🚀 LA SOLUCIÓN: Si Zustand desactiva el 2FA con éxito, actualizamos Redux al instante
+        if (result) {
+          dispatch(
+            updateUser({
+              twoFactorEnabled: false, // Le avisamos a Redux que se apagó
+            }),
+          );
+        }
+
         return true;
       } catch (err) {
         return false;

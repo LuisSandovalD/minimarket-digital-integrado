@@ -13,9 +13,31 @@ export default function UserAvatar({
 }) {
   const fullName = user?.name || "Usuario";
   const email = user?.email || "correo@empresa.com";
-  const avatar = user?.avatar || null;
   const isActive = user?.isActive ?? true;
   const role = user?.role || "EMPLOYEE";
+  const avatar = user?.avatar || null;
+
+  // ==========================================
+  // OBTENER URL EVITANDO FALSOS NEGATIVOS DE CACHÉ
+  // ==========================================
+  const getAvatarUrl = () => {
+    // 🛡️ CONTROL DE DAÑOS CRÍTICO:
+    // Si no hay avatar, o si por un error de estado llega algo que NO es un string
+    // (como un objeto File binario), cancelamos amablemente para que pinte las iniciales.
+    if (!avatar || typeof avatar !== "string") return null;
+
+    // Si es una imagen de previsualización local (Blob de input) o base64, va directo
+    if (avatar.startsWith("data:") || avatar.startsWith("blob:")) {
+      return avatar;
+    }
+
+    // Si viene del servidor, le inyectamos un query param dinámico (Cache Buster).
+    // Al no estar en un useMemo rígido, si Redux cambia, el timestamp se refresca de inmediato.
+    const separator = avatar.includes("?") ? "&" : "?";
+    return `${avatar}${separator}t=${new Date().getTime()}`;
+  };
+
+  const avatarUrl = getAvatarUrl();
 
   const initials = fullName
     ?.trim()
@@ -64,9 +86,6 @@ export default function UserAvatar({
 
   const currentSize = sizes[size] || sizes.md;
 
-  // ==========================================
-  // RENDER DE SKELETON (Pasando props dinámicas)
-  // ==========================================
   if (isLoading) {
     return (
       <UserAvatarSkeleton
@@ -79,20 +98,18 @@ export default function UserAvatar({
     );
   }
 
-  // ==========================================
-  // RENDER COMPONENTE COMPLETO
-  // ==========================================
   return (
     <button
       type="button"
       onClick={onClick}
-      className={`flex items-center justify-start text-left gap-2.5 transition-opacity duration-200 hover:opacity-75 active:scale-95 ${className}`}
+      disabled={!onClick}
+      className={`flex items-center justify-start text-left gap-2.5 transition-opacity duration-200 ${onClick ? "hover:opacity-75 active:scale-95 cursor-pointer" : "cursor-default"} ${className}`}
     >
       {/* AVATAR */}
       <div className="relative flex-shrink-0">
-        {avatar ? (
+        {avatarUrl ? (
           <img
-            src={avatar}
+            src={avatarUrl}
             alt={fullName}
             className={`${currentSize.avatar} object-cover border border-slate-200 dark:border-slate-700`}
           />

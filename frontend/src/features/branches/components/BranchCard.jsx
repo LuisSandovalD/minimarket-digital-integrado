@@ -20,8 +20,6 @@ import BranchStatusBadge from "./BranchStatusBadge";
 // 🌟 Importación limpia del servicio de sesión del frontend (según tu patrón funcional)
 import { getUser } from "@/features/auth/services/session.service";
 
-
-
 // ========================================
 // STYLES (Lineales)
 // ========================================

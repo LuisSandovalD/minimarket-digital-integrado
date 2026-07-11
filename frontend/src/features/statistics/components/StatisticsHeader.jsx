@@ -7,7 +7,7 @@ import {
   Package,
   RefreshCw,
   Truck,
-  Users
+  Users,
 } from "lucide-react";
 
 import { ModernButton } from "@/components/buttons";

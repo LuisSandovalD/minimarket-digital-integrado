@@ -213,7 +213,9 @@ export default function usePurchase() {
   // ========================================
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchPurchases();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return {

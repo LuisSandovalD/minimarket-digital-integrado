@@ -21,6 +21,7 @@ export default function DeleteAccountModal({ open, onClose }) {
   // Limpiar el formulario y errores locales de manera proactiva al abrir/cerrar el modal
   useEffect(() => {
     if (!open) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setPassword("");
       setLocalError("");
     }

@@ -3,9 +3,9 @@
 // ========================================
 
 import {
-    SkeletonHeader,
-    SkeletonSearch,
-    SkeletonTable,
+  SkeletonHeader,
+  SkeletonSearch,
+  SkeletonTable,
 } from "@/components/skeletons";
 
 export default function PaymentLoading() {

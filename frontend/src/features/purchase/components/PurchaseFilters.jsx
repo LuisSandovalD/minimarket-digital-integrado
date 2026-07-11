@@ -8,7 +8,7 @@ import {
   Search,
   Store,
   Truck,
-  User
+  User,
 } from "lucide-react";
 
 import { useState } from "react";

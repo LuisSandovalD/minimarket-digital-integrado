@@ -1,33 +1,6 @@
 import { motion } from "framer-motion";
-import { Archive, FileBarChart, ScanLine, Store } from "lucide-react";
 
-const modules = [
-  {
-    icon: Store,
-    title: "Soporte Multisucursales Real",
-    description:
-      "Crea, edita y supervisa el inventario de todas tus tiendas o bodegas desde una misma cuenta.",
-  },
-  {
-    icon: Archive,
-    title: "Historial de Kárdex Completo",
-    description:
-      "Audita quién modificó el stock, cuándo ocurrió y cuál fue el motivo para evitar pérdidas.",
-  },
-  {
-    icon: FileBarChart,
-    title: "Reportes y Exportación",
-    description:
-      "Exporta ventas e inventarios a Excel y analiza métricas mediante gráficos interactivos.",
-  },
-  {
-    icon: ScanLine,
-    title: "Generador de Códigos de Barras",
-    description:
-      "Genera etiquetas para productos sin código de fábrica y acelera el proceso de venta.",
-  },
-];
-
+import { modules } from "../constants/plans";
 const container = {
   hidden: {},
   show: {
@@ -58,7 +31,7 @@ export default function PlanBasicDetail() {
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.65 }}
       viewport={{ once: true }}
-      className="relative w-full max-w-7xl mx-auto mt-10 overflow-hidden bg-transparent"
+      className="relative w-full  mx-auto mt-10 overflow-hidden bg-transparent"
     >
       <div className="relative p-8 bg-transparent">
         {/* Header */}

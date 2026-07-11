@@ -17,11 +17,13 @@ const {
   generateSaleNumber,
 } = require("../helpers/generate-sale-number.helper");
 
+// IMPORTAMOS EL CLIENTE BASE DE CORREO
+const { sendEmail } = require("../../../config/email.config");
+
 module.exports = {
   createSaleService: async (body, user) => {
     console.time("🚀 TOTAL_PROCESS");
 
-    // Generamos el número correlativo de la venta afuera para evitar bloqueos
     const saleNumber = await generateSaleNumber();
 
     // Cálculo de montos en memoria RAM
@@ -32,22 +34,19 @@ module.exports = {
     const tax = parseFloat((subtotal * 0.18).toFixed(2));
     const discount = Number(body.discount || 0);
     const total = parseFloat((subtotal + tax - discount).toFixed(2));
-
-    // Determinar el estado de la venta basándonos en el body (por defecto COMPLETED)
     const saleStatus = body.status || "COMPLETED";
 
-    return prisma.$transaction(
+    // Creamos una variable para almacenar los datos del cliente necesarios para el correo
+    let customerEmail = body.customerEmail || null;
+    let customerName = "Cliente General";
+
+    const transactionResult = await prisma.$transaction(
       async (tx) => {
 
         // ========================================
         // 1. CONTROL DE CRÉDITO Y DEUDA DEL CLIENTE
         // ========================================
-        if (saleStatus === "CREDIT_PENDING") {
-          if (!body.customerId) {
-            throw new Error("Para registrar una venta al crédito es obligatorio asociar un cliente (customerId).");
-          }
-
-          // Obtener el cliente de forma atómica dentro de la transacción
+        if (body.customerId) {
           const customer = await tx.customer.findUnique({
             where: { id: Number(body.customerId) }
           });
@@ -60,24 +59,29 @@ module.exports = {
             throw new Error("El cliente seleccionado se encuentra inactivo.");
           }
 
-          // Calculamos el monto total que se irá a cuenta por cobrar (status === PENDING)
-          const creditAmount = body.payments
-            .filter(p => p.status === "PENDING")
-            .reduce((sum, p) => sum + Number(p.amount), 0);
+          // Rescatamos los datos informativos de la Base de Datos para el correo
+          customerEmail = customer.email;
+          customerName = customer.name;
 
-          // Validar si excede el límite de crédito asignado
-          const potentialDebt = Number(customer.currentDebt) + creditAmount;
-          if (customer.creditLimit && potentialDebt > Number(customer.creditLimit)) {
-            throw new Error(`Crédito insuficiente. La operación incrementaría la deuda a ${potentialDebt}, superando el límite de ${customer.creditLimit}.`);
-          }
+          if (saleStatus === "CREDIT_PENDING") {
+            const creditAmount = body.payments
+              .filter(p => p.status === "PENDING")
+              .reduce((sum, p) => sum + Number(p.amount), 0);
 
-          // Incrementar la deuda del cliente de manera atómica
-          if (creditAmount > 0) {
-            await tx.customer.update({
-              where: { id: customer.id },
-              data: { currentDebt: { increment: creditAmount } }
-            });
+            const potentialDebt = Number(customer.currentDebt) + creditAmount;
+            if (customer.creditLimit && potentialDebt > Number(customer.creditLimit)) {
+              throw new Error(`Crédito insuficiente. La operación incrementaría la deuda a ${potentialDebt}, superando el límite de ${customer.creditLimit}.`);
+            }
+
+            if (creditAmount > 0) {
+              await tx.customer.update({
+                where: { id: customer.id },
+                data: { currentDebt: { increment: creditAmount } }
+              });
+            }
           }
+        } else if (saleStatus === "CREDIT_PENDING") {
+          throw new Error("Para registrar una venta al crédito es obligatorio asociar un cliente (customerId).");
         }
 
         // ========================================
@@ -95,7 +99,7 @@ module.exports = {
             discount,
             total,
             notes: body.notes || null,
-            status: saleStatus, // 🔥 Dinámico: "COMPLETED" o "CREDIT_PENDING"
+            status: saleStatus,
           },
           tx
         );
@@ -135,36 +139,70 @@ module.exports = {
 
             return {
               amount: Number(payment.amount),
-              remainingAmount: isCreditInstallment ? Number(payment.amount) : 0.00, // 🔥 Saldo pendiente inicial si es crédito
+              remainingAmount: isCreditInstallment ? Number(payment.amount) : 0.00,
               status: payment.status || "COMPLETED",
               paymentMethodId: Number(payment.paymentMethodId),
               reference: payment.reference || (isCreditInstallment ? `CRÉDITO-${saleNumber}` : `INICIAL-${saleNumber}`),
               transactionId: `TX-SALE-${Math.floor(100000 + Math.random() * 900000)}`,
               notes: isCreditInstallment ? "Cuenta por cobrar generada por venta al crédito." : "Ingreso de caja por cuota inicial / pago contado.",
-              paidAt: isCreditInstallment ? null : new Date(), // 🔥 No tiene fecha de pago si sigue pendiente
-              dueDate: payment.dueDate ? new Date(payment.dueDate) : null // 🔥 Fecha de vencimiento asignada
+              paidAt: isCreditInstallment ? null : new Date(),
+              dueDate: payment.dueDate ? new Date(payment.dueDate) : null
             };
           });
 
           await createManyPayments(sale.id, payments, tx);
         }
 
-        console.timeEnd("🚀 TOTAL_PROCESS");
-
-        // Retornamos la respuesta limpia simulando el comprobante integrado
-        return {
-          ...sale,
-          invoice: {
-            invoiceNumber: `FACT-${saleNumber.split('-')[2] || saleNumber}`,
-            type: body.invoiceType || "NOTA_VENTA",
-            total: sale.total,
-          },
-        };
+        return sale;
       },
       {
         maxWait: 10000,
         timeout: 20000,
       }
     );
+
+    console.timeEnd("🚀 TOTAL_PROCESS");
+
+    const finalResponse = {
+      ...transactionResult,
+      invoice: {
+        invoiceNumber: `FACT-${saleNumber.split('-')[2] || saleNumber}`,
+        type: body.invoiceType || "NOTA_VENTA",
+        total: transactionResult.total,
+      },
+    };
+
+    // ========================================
+    // 5.5 ENVÍO ASÍNCRONO DEL RECIBO POR EMAIL
+    // ========================================
+    if (customerEmail) {
+      // Disparamos de forma segura fuera de la transacción de base de datos
+      sendEmail({
+        to: customerEmail,
+        subject: `Tu comprobante de compra ${saleNumber} - ERP POS System`,
+        html: `
+            <div style="font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto; border: 1px solid #e2e8f0; border-radius: 8px;">
+                <h2 style="color: #2563eb;">¡Gracias por tu compra, ${customerName}!</h2>
+                <p>Te adjuntamos el resumen de tu transacción realizada con éxito:</p>
+                <div style="background-color: #f8fafc; padding: 15px; border-radius: 6px; margin: 15px 0;">
+                    <p style="margin: 4px 0;"><strong>N° de Venta:</strong> ${saleNumber}</p>
+                    <p style="margin: 4px 0;"><strong>Comprobante:</strong> ${finalResponse.invoice.type} (${finalResponse.invoice.invoiceNumber})</p>
+                </div>
+                <h3>Productos adquiridos:</h3>
+                <ul>
+                  ${body.details.map(item => `<li>Producto ID: ${item.productId} - Cantidad: ${item.quantity} x Price: $${item.price}</li>`).join('')}
+                </ul>
+                <h3 style="text-align: right; color: #1e293b; margin-top: 20px;">Total: <span style="color: #2563eb;">$${finalResponse.invoice.total}</span></h3>
+                <br>
+                <hr style="border: 0; border-top: 1px solid #e2e8f0;">
+                <small style="color: #64748b;">ERP POS System - Comprobante electrónico automatizado.</small>
+            </div>
+        `
+      }).catch(emailError => {
+        console.error("⚠️ Falló el envío de correo informativo al cliente:", emailError.message || emailError);
+      });
+    }
+
+    return finalResponse;
   },
 };

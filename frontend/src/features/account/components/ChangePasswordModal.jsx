@@ -30,6 +30,7 @@ export default function ChangePasswordModal({ open, onClose }) {
   // Resetear el formulario de forma segura al abrir o cerrar el modal
   useEffect(() => {
     if (!open) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setForm({ currentPassword: "", newPassword: "", confirmPassword: "" });
       setLocalErrors({});
     }

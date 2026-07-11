@@ -8,6 +8,30 @@ const userRepository = require("../repositories/user.repository");
 const companyRepository = require("../repositories/company.repository");
 const { registerTenant } = require("../repositories/register.repository");
 
+const { sendEmail } = require("../../../config/email.config");
+
+
+/* ======================================
+ * PLANTILLA: ENVIAR CORREO DE BIENVENIDA
+ * ==================================== */
+const sendWelcomeEmail = async ({ email, name, companyName }) => {
+    return await sendEmail({
+        to: email,
+        subject: "¡Bienvenido a ERP POS System! - Registro Exitoso",
+        html: `
+            <div style="font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto; border: 1px solid #e2e8f0; border-radius: 8px;">
+                <h2 style="color: #2563eb;">¡Bienvenido a la plataforma, ${name}!</h2>
+                <p>Nos complace informarte que tu empresa <strong>${companyName}</strong> ha sido registrada exitosamente en nuestro ecosistema SaaS.</p>
+                <p>Tu cuenta de Administrador ya se encuentra activa bajo el periodo de prueba Freemium / Trial de 30 días.</p>
+                <p>Ya puedes iniciar sesión para comenzar a gestionar tus sucursales y puntos de venta.</p>
+                <br>
+                <hr style="border: 0; border-top: 1px solid #e2e8f0;">
+                <small style="color: #64748b;">Este es un mensaje generado automáticamente, por favor no respondas directamente a él.</small>
+            </div>
+        `,
+    });
+};
+
 /**
  * REGISTRO DE UN NUEVO TENANT (EMPRESA, SUCURSAL, USUARIO ADMINISTRADOR Y SUSCRIPCIÓN SaaS)
  * Flujo Freemium / Trial de 30 días sin requerir tarjeta al inicio.
@@ -91,6 +115,21 @@ const register = async ({ body }) => {
         },
         subscriptionTier: tier
     });
+
+    // ======================================
+    // 5.5 ENVÍO AUTOMÁTICO DE CORREO DE BIENVENIDA
+    // ======================================
+    try {
+        // Llamamos a la función local definida arriba utilizando los datos que retornó la base de datos
+        await sendWelcomeEmail({
+            email: result.user.email,
+            name: result.user.name,
+            companyName: result.company.name
+        });
+    } catch (emailError) {
+        // Bloque aislado: Evita que un fallo en Brevo cancele una base de datos exitosa
+        console.error("⚠️ Error asíncrono enviando correo de bienvenida:", emailError.message || emailError);
+    }
 
     // ======================================
     // 6. Retorno estructurado con las nuevas entidades del SaaS incluidas

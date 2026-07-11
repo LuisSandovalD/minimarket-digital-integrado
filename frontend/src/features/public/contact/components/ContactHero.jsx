@@ -1,130 +1,160 @@
-import {
-  defaultViewport,
-  fadeUp,
-  smoothTransition,
-  staggerContainer,
-} from "@/components/effects";
+import { defaultViewport } from "@/components/effects";
 import { motion } from "framer-motion";
-import { ArrowUpRight, Mail } from "lucide-react";
+import { Clock3, Headphones, Mail, MessageSquare } from "lucide-react";
 
+const fastFadeUp = {
+  hidden: { opacity: 0, y: 15 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      type: "spring",
+      stiffness: 400,
+      damping: 30,
+    },
+  },
+};
+
+const fastStagger = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.05,
+    },
+  },
+};
+
+const CONTACT_FEATURES = [
+  {
+    icon: MessageSquare,
+    label: "Asesoría Personalizada",
+  },
+  {
+    icon: Mail,
+    label: "Respuesta Rápida",
+  },
+  {
+    icon: Clock3,
+    label: "Menos de 24 Horas",
+  },
+  {
+    icon: Headphones,
+    label: "Soporte Especializado",
+  },
+];
 
 export default function ContactHero() {
   return (
-    <section className="relative isolate flex justify-center items-center w-full p-4 lg:h-[92vh] md:h-screen">
+    <section className="relative isolate flex items-center justify-center overflow-hidden px-4 py-14 sm:px-6 md:px-8 lg:h-[75vh] lg:px-10 lg:py-0">
       {/* Background */}
       <div className="absolute inset-0 -z-20">
         <motion.img
-          initial={{ scale: 1.1, opacity: 0 }}
+          initial={{ scale: 1.05, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
-          src="https://res.cloudinary.com/dgaq5afjl/image/upload/v1783568982/contact-hero-bg_io0sdi.svg"
-          alt="ERP POS"
+          transition={{
+            duration: 1.2,
+            ease: [0.16, 1, 0.3, 1],
+          }}
+          src="https://res.cloudinary.com/dgaq5afjl/image/upload/v1783568892/hero-section_jnbdp8.svg"
+          alt="Contact Background"
           className="h-full w-full object-cover"
         />
+
         <div className="absolute inset-0 bg-gradient-to-br from-[#f8fbfd]/95 via-[#eef4f8]/90 to-[#dbeafe]/85 dark:from-[#0f172a]/95 dark:via-[#0f172a]/85 dark:to-[#274c77]/80" />
+
         <div className="absolute inset-0 bg-white/20 dark:bg-black/30" />
       </div>
 
-      {/* Glow effects */}
-      <motion.div
-        animate={{ opacity: [0.4, 0.7, 0.4], scale: [1, 1.05, 1] }}
-        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute left-0 top-0 -z-10 h-96 w-96 rounded-full bg-[#6096ba]/15 blur-3xl"
-      />
-      <motion.div
-        animate={{ opacity: [0.3, 0.6, 0.3], scale: [1, 1.08, 1] }}
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute bottom-0 right-0 -z-10 h-96 w-96 rounded-full bg-[#274c77]/10 blur-3xl dark:bg-[#274c77]/30"
-      />
+      {/* Ambient Light */}
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute left-1/4 top-1/4 h-96 w-96 rounded-full bg-[#6096ba]/10 blur-[120px] dark:bg-[#6096ba]/5" />
+      </div>
 
-      <div className="relative mx-auto grid max-w-7xl items-center gap-20 lg:grid-cols-2">
+      <div className="relative z-10 grid w-full max-w-7xl items-center gap-10 lg:grid-cols-12">
         {/* Left */}
         <motion.div
-          variants={staggerContainer}
+          variants={fastStagger}
           initial="hidden"
-          animate="show"
-          className="relative z-10"
+          whileInView="show"
+          viewport={{ ...defaultViewport, once: true }}
+          className="relative z-20 flex flex-col items-start text-left lg:col-span-7"
         >
           <motion.div
-            variants={fadeUp}
-            transition={smoothTransition}
-            className="inline-flex items-center gap-2 rounded-full border border-[#d7e0e7] bg-white/70 px-4 py-2 text-sm font-semibold text-[#274c77] shadow-lg backdrop-blur-xl dark:border-white/10 dark:bg-white/10 dark:text-[#dbeafe]"
+            variants={fastFadeUp}
+            className="inline-flex items-center gap-2 rounded-full border border-[#274c77]/10 bg-[#274c77]/5 px-3 py-1 text-xs font-semibold tracking-wider text-[#274c77] dark:border-white/10 dark:bg-white/5 dark:text-[#a3cef1]"
           >
-            <Mail size={15} />
-            Contacto Empresarial
+            • Contacto y Asesoría
           </motion.div>
 
           <motion.h1
-            variants={fadeUp}
-            transition={smoothTransition}
-            className="mt-8 text-5xl font-black leading-[1.05] tracking-tight text-[#0f172a] dark:text-white lg:text-7xl"
+            variants={fastFadeUp}
+            className="mt-4 text-4xl font-black leading-[1.1] tracking-tight text-[#0f172a] dark:text-white sm:text-5xl xl:text-6xl"
           >
-            Hablemos sobre
-            <span className="mt-3 block bg-gradient-to-r from-[#274c77] via-[#6096ba] to-[#a3cef1] bg-clip-text text-transparent">
-              tu empresa
+            Hablemos de cómo hacer crecer
+            <span className="mt-1 block bg-gradient-to-r from-[#274c77] to-[#6096ba] bg-clip-text text-transparent dark:from-[#a3cef1] dark:to-[#6096ba]">
+              tu negocio
             </span>
           </motion.h1>
 
           <motion.p
-            variants={fadeUp}
-            transition={smoothTransition}
-            className="mt-8 max-w-2xl text-lg leading-relaxed text-[#475569] dark:text-[#cbd5e1]"
+            variants={fastFadeUp}
+            className="mt-5 max-w-xl text-base leading-relaxed text-[#4a5568] dark:text-[#cbd5e1] sm:text-lg"
           >
-            Nuestro equipo está listo para ayudarte a implementar soluciones
-            empresariales modernas, optimizar procesos y llevar la gestión de tu
-            negocio al siguiente nivel.
+            Nuestro equipo está listo para ayudarte a implementar Nexora ERP en
+            tu empresa. Cuéntanos tus necesidades y descubre cómo optimizar
+            ventas, inventario, compras y operaciones desde una sola plataforma.
           </motion.p>
 
-          {/* Buttons */}
           <motion.div
-            variants={fadeUp}
-            transition={smoothTransition}
-            className="mt-10 flex flex-wrap items-center gap-5"
+            variants={fastFadeUp}
+            className="mt-8 flex flex-wrap gap-3"
           >
-            <motion.button
-              whileHover={{ y: -4 }}
-              transition={{ duration: 0.25 }}
-              className="inline-flex items-center gap-2 rounded-2xl bg-[#0f172a] px-7 py-4 text-sm font-bold text-white shadow-xl transition-shadow duration-300 hover:shadow-[0_20px_40px_rgba(15,23,42,0.25)] dark:bg-white dark:text-[#020617]"
-            >
-              Contactar ahora
-              <ArrowUpRight size={18} />
-            </motion.button>
+            {CONTACT_FEATURES.map((item) => {
+              const Icon = item.icon;
 
-            <motion.button
-              whileHover={{ y: -4 }}
-              transition={{ duration: 0.25 }}
-              className="rounded-2xl border border-[#d7e0e7] bg-white/70 px-7 py-4 text-sm font-bold text-[#0f172a] backdrop-blur-xl transition-colors duration-300 hover:bg-white dark:border-white/10 dark:bg-white/10 dark:text-white dark:hover:bg-white/15"
-            >
-              Agendar demo
-            </motion.button>
+              return (
+                <div
+                  key={item.label}
+                  className="flex items-center gap-2 rounded-xl border border-[#274c77]/10 bg-white/60 px-4 py-3 backdrop-blur-md dark:bg-[#0f172a]/60"
+                >
+                  <Icon className="h-4 w-4 text-[#274c77] dark:text-[#a3cef1]" />
+                  <span className="text-sm font-medium text-[#0f172a] dark:text-white">
+                    {item.label}
+                  </span>
+                </div>
+              );
+            })}
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            variants={fadeUp}
-            transition={smoothTransition}
-            className="mt-8 max-w-md rounded-3xl border border-white/10 bg-white/10 p-6 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.15)]"
+            variants={fastFadeUp}
+            className="mt-8 flex flex-wrap gap-8"
           >
-            <h3 className="text-2xl font-black text-white">
-              Atención personalizada
-            </h3>
-
-            <p className="mt-3 text-sm leading-relaxed text-[#dbe4ee]">
-              Nuestro equipo responde rápidamente para ayudarte con
-              implementación, soporte y soluciones empresariales.
-            </p>
-
-            <div className="mt-6 flex items-center gap-6">
-              <div>
-                <p className="text-3xl font-black text-white">24/7</p>
-                <span className="text-xs text-[#dbe4ee]">Soporte</span>
+            <div>
+              <div className="text-2xl font-black text-[#274c77] dark:text-[#a3cef1]">
+                &lt; 24h
               </div>
+              <div className="text-sm text-[#4a5568] dark:text-[#cbd5e1]">
+                Tiempo de respuesta
+              </div>
+            </div>
 
-              <div className="h-10 w-px bg-white/10" />
+            <div>
+              <div className="text-2xl font-black text-[#274c77] dark:text-[#a3cef1]">
+                100%
+              </div>
+              <div className="text-sm text-[#4a5568] dark:text-[#cbd5e1]">
+                Atención personalizada
+              </div>
+            </div>
 
-              <div>
-                <p className="text-3xl font-black text-white">+500</p>
-                <span className="text-xs text-[#dbe4ee]">Empresas</span>
+            <div>
+              <div className="text-2xl font-black text-[#274c77] dark:text-[#a3cef1]">
+                24/7
+              </div>
+              <div className="text-sm text-[#4a5568] dark:text-[#cbd5e1]">
+                Plataforma disponible
               </div>
             </div>
           </motion.div>
@@ -132,17 +162,23 @@ export default function ContactHero() {
 
         {/* Right */}
         <motion.div
-          initial={{ opacity: 0, x: 70, scale: 0.9 }}
-          whileInView={{ opacity: 1, x: 0, scale: 1 }}
-          viewport={defaultViewport}
-          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+          initial={{ opacity: 0, scale: 0.97 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ ...defaultViewport, once: true }}
+          transition={{
+            type: "spring",
+            stiffness: 320,
+            damping: 26,
+          }}
+          className="relative z-10 flex w-full justify-center lg:col-span-5 lg:justify-end"
         >
-          <motion.img
-            whileHover={{ scale: 1.05 }}
-            transition={{ duration: 0.7 }}
-            src="https://res.cloudinary.com/dgaq5afjl/image/upload/v1783568892/contact-hero-image_hfly9c.svg"
-            alt="Contacto empresarial"
-            className="w-full object-cover"
+          <div className="pointer-events-none absolute inset-0 -z-10 bg-[#6096ba]/5 blur-3xl dark:bg-[#6096ba]/10" />
+
+          <img
+            src="https://res.cloudinary.com/dgaq5afjl/image/upload/v1783568893/hero_banner_vtnpo2.svg"
+            alt="Contacto Nexora ERP"
+            className="h-auto w-full max-w-md select-none object-contain drop-shadow-[0_20px_50px_rgba(39,76,119,0.15)] transform-gpu dark:drop-shadow-[0_20px_50px_rgba(0,0,0,0.4)] lg:max-w-none"
+            loading="eager"
           />
         </motion.div>
       </div>

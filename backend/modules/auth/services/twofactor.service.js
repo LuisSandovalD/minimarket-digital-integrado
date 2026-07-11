@@ -13,6 +13,9 @@ const sessionRepository = require("../repositories/session.repository");
 
 const tokenService = require("./token.service");
 
+// CONFIGURACIÓN CENTRALIZADA DE ENVÍO DE CORREOS (BREVO API)
+const { sendEmail } = require("../../../config/email.config");
+
 /* ======================================
  * GENERAR SECRETO 2FA (TOTP para App Móvil)
  * ==================================== */
@@ -75,6 +78,24 @@ const verifyAndEnableTwoFactor = async (userId, password, token) => {
     // 4. Activar formalmente el flag en la BD
     await user2FARepository.enableTwoFactorAuth(userId);
 
+    // 📬 Notificación asíncrona de confirmación de activación
+    if (user.email) {
+        sendEmail({
+            to: user.email,
+            subject: "🔒 Verificación en Dos Pasos Activada con Éxito",
+            html: `
+                <div style="font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto; border: 1px solid #cbd5e1; border-radius: 8px;">
+                    <h2 style="color: #16a34a;">¡Cuenta Protegida!</h2>
+                    <p>Hola, ${user.name}. Te confirmamos que has enlazado correctamente tu cuenta con una aplicación autenticadora (Google Authenticator / Authy).</p>
+                    <p>A partir de ahora, tu acceso requerirá tanto tu contraseña como el código dinámico generado por tu dispositivo móvil.</p>
+                    <br>
+                    <hr style="border: 0; border-top: 1px solid #e2e8f0;">
+                    <small style="color: #94a3b8;">Seguridad de Accesos • ERP POS System</small>
+                </div>
+            `
+        }).catch(err => console.error("⚠️ Error notificando activación de QR 2FA:", err.message));
+    }
+
     return {
         success: true,
         message: "Verificación en dos pasos activada correctamente"
@@ -97,18 +118,38 @@ const disableTwoFactor = async (userId, password) => {
 
     await user2FARepository.disableTwoFactorAuth(userId);
 
+    // 📬 Alerta de seguridad asíncrona por desactivación
+    if (user.email) {
+        sendEmail({
+            to: user.email,
+            subject: "⚠️ ADVERTENCIA: Verificación en Dos Pasos Desactivada",
+            html: `
+                <div style="font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto; border: 1px solid #cbd5e1; border-radius: 8px;">
+                    <h2 style="color: #dc2626;">Aviso de Seguridad Crítico</h2>
+                    <p>Hola, ${user.name}. Te informamos que la verificación en dos pasos (2FA) ha sido **desactivada** en tu cuenta.</p>
+                    
+                    <div style="background-color: #fef2f2; padding: 15px; border-radius: 6px; margin: 15px 0; border-left: 4px solid #dc2626;">
+                        <p style="margin: 0; color: #991b1b; font-weight: bold;">¿No fuiste tú?</p>
+                        <p style="margin: 4px 0 0 0; color: #7f1d1d; font-size: 14px;">Si un tercero realizó esta acción, tu cuenta está en peligro. Ingresa inmediatamente al sistema, cambia tu clave y vuelve a habilitar el segundo factor.</p>
+                    </div>
+                    <br>
+                    <hr style="border: 0; border-top: 1px solid #e2e8f0;">
+                    <small style="color: #94a3b8;">Seguridad de Accesos • ERP POS System</small>
+                </div>
+            `
+        }).catch(err => console.error("⚠️ Error notificando desactivación de 2FA:", err.message));
+    }
+
     return {
         success: true,
         message: "Verificación en dos pasos desactivada correctamente"
     };
 };
 
-// ========================================
-// services/auth/twofactor.service.js (CORREGIDO HÍBRIDO)
-// ========================================
-
+/* ======================================
+ * VALIDAR SEGUNDO PASO EN EL LOGIN (Mecanismo Híbrido)
+ * ==================================== */
 const loginStepTwoFA = async (userId, token, ipAddress = null, userAgent = null) => {
-    // Buscamos al usuario de forma directa con sus relaciones comerciales
     const user = await userRepository.findUserById(userId);
     if (!user) {
         throw new Error("Usuario no encontrado");
@@ -117,12 +158,10 @@ const loginStepTwoFA = async (userId, token, ipAddress = null, userAgent = null)
     let isVerified = false;
 
     // 📬 INTENTO 1: Verificar si coincide con el código enviado por CORREO ELECTRÓNICO
-    // Buscamos si hay un registro de código de email activo y no expirado en la BD
     const validEmailUser = await user2FARepository.findValidTwoFactorCode(userId, token);
 
     if (validEmailUser) {
         isVerified = true;
-        // Limpiamos el código del correo para que no se pueda reutilizar (Seguridad)
         await user2FARepository.clearTwoFactorCode(userId);
     }
 
@@ -132,7 +171,7 @@ const loginStepTwoFA = async (userId, token, ipAddress = null, userAgent = null)
             secret: user.twoFactorSecret,
             encoding: "base32",
             token: token,
-            window: 1 // Ventana de desfase segura
+            window: 1
         });
 
         if (verifiedTOTP) {
@@ -146,7 +185,7 @@ const loginStepTwoFA = async (userId, token, ipAddress = null, userAgent = null)
     }
 
     // ========================================================
-    // LOG LÓGICA AUTOMÁTICA DE ESTADO Y PERSISTENCIA DE SESIÓN (Queda intacto)
+    // LOG LÓGICA AUTOMÁTICA DE ESTADO Y PERSISTENCIA DE SESIÓN
     // ========================================================
     await userRepository.handleSuccessfulLoginState(user.id);
     const tokens = tokenService.generateTokens(user);

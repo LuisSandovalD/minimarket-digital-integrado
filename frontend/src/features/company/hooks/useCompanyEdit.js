@@ -32,6 +32,7 @@ export default function useCompanyEdit({
    * ====================================== */
   useEffect(() => {
     if (!open || !companyId) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setFormData(INITIAL_STATE);
       return;
     }

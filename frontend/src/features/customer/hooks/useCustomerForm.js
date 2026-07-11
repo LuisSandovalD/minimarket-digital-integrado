@@ -51,6 +51,7 @@ export function useCustomerForm(fetchCustomers) {
     setModalOpen(true);
   }
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   function closeModal() {
     setModalOpen(false);
     resetForm();
@@ -92,7 +93,22 @@ export function useCustomerForm(fetchCustomers) {
     } finally {
       setSaving(false);
     }
-  }, [form, fetchCustomers]);
+  }, [
+    form.name,
+    form.documentType,
+    form.documentNumber,
+    form.email,
+    form.phone,
+    form.address,
+    form.city,
+    form.notes,
+    form.creditLimit,
+    form.currentDebt,
+    form.isActive,
+    form.id,
+    closeModal,
+    fetchCustomers,
+  ]);
 
   const remove = useCallback(
     async (id) => {

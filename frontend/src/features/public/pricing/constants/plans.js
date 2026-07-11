@@ -1,5 +1,12 @@
 // plans.config.js o dentro de tu componente de Pricing
-import { Cpu, LayoutDashboard, Store } from "lucide-react";
+import {
+  Archive,
+  Cpu,
+  FileBarChart,
+  LayoutDashboard,
+  ScanLine,
+  Store,
+} from "lucide-react";
 
 export const plans = [
   {
@@ -61,5 +68,32 @@ export const plans = [
     ],
     buttonText: "Obtener Todo el Poder",
     isPopular: false,
+  },
+];
+
+export const modules = [
+  {
+    icon: Store,
+    title: "Soporte Multisucursales Real",
+    description:
+      "Crea, edita y supervisa el inventario de todas tus tiendas o bodegas desde una misma cuenta.",
+  },
+  {
+    icon: Archive,
+    title: "Historial de Kárdex Completo",
+    description:
+      "Audita quién modificó el stock, cuándo ocurrió y cuál fue el motivo para evitar pérdidas.",
+  },
+  {
+    icon: FileBarChart,
+    title: "Reportes y Exportación",
+    description:
+      "Exporta ventas e inventarios a Excel y analiza métricas mediante gráficos interactivos.",
+  },
+  {
+    icon: ScanLine,
+    title: "Generador de Códigos de Barras",
+    description:
+      "Genera etiquetas para productos sin código de fábrica y acelera el proceso de venta.",
   },
 ];

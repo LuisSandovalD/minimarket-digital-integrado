@@ -61,11 +61,16 @@ export default function TwoFactorModal({ open, onClose }) {
     if (!password || token.length !== 6) return;
 
     const res = await confirm2FA({ token, password });
+
     if (res) {
-      if (res.backupCodes || res.data?.backupCodes) {
-        setBackupCodes(res.backupCodes || res.data?.backupCodes);
+      // Extraemos de forma segura los códigos de respaldo sin importar la estructura de la respuesta
+      const codes = res.backupCodes || res.data?.backupCodes || res.data;
+
+      if (Array.isArray(codes)) {
+        setBackupCodes(codes);
         setStep(3);
       } else {
+        // Si no devuelve códigos pero fue exitoso, simplemente cerramos el modal
         onClose();
       }
     }
@@ -112,8 +117,7 @@ export default function TwoFactorModal({ open, onClose }) {
                 <li>Abre tu aplicación autenticadora en tu teléfono móvil.</li>
                 <li>Escanea el código QR que se muestra a continuación.</li>
                 <li>Ingresa tu contraseña y el token temporal de 6 dígitos.</li>
-              </ol>{" "}
-              {/* 👈 Corregido el tag roto aquí */}
+              </ol>
             </div>
 
             <div className="bg-white p-3.5 w-48 h-48 mx-auto rounded-3xl border flex items-center justify-center shadow-inner">
@@ -194,7 +198,7 @@ export default function TwoFactorModal({ open, onClose }) {
         </form>
       ) : (
         /* ========================================
-         * ENTORNO DE PASOS 1 Y 3 (CON FORMULARIO DE DESACTIVACIÓN CONFIGURADO NATIVAMENTE)
+         * ENTORNO DE PASOS 1 Y 3 (FORMULARIO GENERAL)
          * ======================================== */
         <form
           onSubmit={
@@ -299,7 +303,10 @@ export default function TwoFactorModal({ open, onClose }) {
                 </>
               )}
 
-              {step === 3 && backupCodes && (
+              {/* ========================================
+               * PROTECCIÓN CRÍTICA EN PASO 3: CÓDIGOS DE RESPALDO
+               * ======================================== */}
+              {step === 3 && (
                 <div className="space-y-4 text-center">
                   <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-100 dark:bg-emerald-950/40 text-emerald-600">
                     <ShieldCheck size={28} />
@@ -315,14 +322,20 @@ export default function TwoFactorModal({ open, onClose }) {
                   </div>
 
                   <div className="bg-slate-100 dark:bg-slate-900 p-4 rounded-2xl grid grid-cols-2 gap-2.5 font-mono text-xs border dark:border-slate-800 text-slate-800 dark:text-slate-200 shadow-inner font-bold tracking-wider">
-                    {backupCodes.map((code, idx) => (
-                      <span
-                        key={idx}
-                        className="bg-white dark:bg-slate-950 py-1.5 px-2 rounded-lg border dark:border-slate-800/60 shadow-sm"
-                      >
-                        {code}
-                      </span>
-                    ))}
+                    {Array.isArray(backupCodes) ? (
+                      backupCodes.map((code, idx) => (
+                        <span
+                          key={idx}
+                          className="bg-white dark:bg-slate-950 py-1.5 px-2 rounded-lg border dark:border-slate-800/60 shadow-sm"
+                        >
+                          {code}
+                        </span>
+                      ))
+                    ) : (
+                      <p className="col-span-2 text-center text-xs font-sans py-2 font-normal text-slate-500">
+                        Generando identificadores de respaldo...
+                      </p>
+                    )}
                   </div>
                 </div>
               )}
@@ -351,8 +364,8 @@ export default function TwoFactorModal({ open, onClose }) {
                         : "Configurar 2FA"
                   }
                   icon={Lock}
-                  type={enabled ? "submit" : "button"} // 🚀 Si está habilitado, envía el form de desactivación por Enter/Clic
-                  onClick={!enabled ? handleStartSetup : undefined} // Si está deshabilitado, inicia el flujo de setup
+                  type={enabled ? "submit" : "button"}
+                  onClick={!enabled ? handleStartSetup : undefined}
                   disabled={twoFactorLoading || (enabled && !password)}
                   variant={enabled ? "danger" : "default"}
                 />

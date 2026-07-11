@@ -12,7 +12,9 @@ const sessionRepository = require("../repositories/session.repository");
 
 // Otros servicios requeridos
 const tokenService = require("./token.service");
-const emailService = require("./email.service");
+
+// CONFIGURACIÓN CENTRALIZADA DE ENVÍO DE CORREOS (BREVO API)
+const { sendEmail } = require("../../../config/email.config");
 
 const {
     MAX_LOGIN_ATTEMPTS,
@@ -78,13 +80,42 @@ const login = async (email, password, ipAddress = null, userAgent = null) => {
         // Guardamos el código OTP temporal utilizando el repositorio específico de 2FA
         await user2FARepository.saveTwoFactorCode(user.id, code, expiresAt);
 
-        console.log(`2FA CODE (${user.email}): ${code}`);
+        console.log(`🔒 [2FA GENERATED] (${user.email}): ${code}`);
 
-        // Despachamos el correo electrónico de forma asíncrona
-        await emailService.sendTwoFactorCode(user.email, code);
+        // Despachamos el correo electrónico de forma asíncrona usando Brevo API
+        sendEmail({
+            to: user.email,
+            subject: `🔑 ${code} es tu código de verificación de seguridad`,
+            html: `
+                <div style="font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto; border: 1px solid #cbd5e1; border-radius: 8px;">
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <h2 style="color: #2563eb; margin: 0;">Verificación de Seguridad (2FA)</h2>
+                        <p style="color: #64748b; font-size: 14px;">Inicios de sesión protegidos - ERP POS System</p>
+                    </div>
+                    
+                    <p>Hola. Se ha solicitado un código de acceso para ingresar a tu cuenta de usuario.</p>
+                    <p>Introduce el siguiente código temporal en la pantalla de verificación de tu navegador:</p>
+                    
+                    <div style="background-color: #f8fafc; padding: 20px; text-align: center; border-radius: 8px; margin: 20px 0; border: 1px dashed #cbd5e1;">
+                        <span style="font-size: 32px; font-weight: bold; letter-spacing: 6px; color: #1e293b;">${code}</span>
+                    </div>
+
+                    <p style="font-size: 13px; color: #ef4444; font-weight: bold;">⚠️ Este código expirará en 10 minutos y solo puede ser utilizado una vez.</p>
+                    
+                    <div style="background-color: #fffbeb; padding: 12px; border-left: 4px solid #f59e0b; border-radius: 4px; margin-top: 15px; font-size: 13px; color: #78350f;">
+                        <strong>¿No fuiste tú?</strong> Si no estabas intentando iniciar sesión en este momento, ignora este mensaje y te sugerimos cambiar tu contraseña de inmediato.
+                    </div>
+
+                    <br>
+                    <hr style="border: 0; border-top: 1px solid #e2e8f0;">
+                    <small style="color: #94a3b8;">Seguridad de Accesos • ERP POS System</small>
+                </div>
+            `
+        }).catch(emailError => {
+            console.error("⚠️ Falló el envío de la clave OTP 2FA vía Brevo:", emailError.message || emailError);
+        });
 
         // Retornamos control al cliente avisando que el flujo está incompleto (A la espera del token)
-        // IMPORTANTE: Aquí no se crea sesión ni se cambia a isOnline: true todavía.
         return {
             success: true,
             requires2FA: true,
@@ -116,6 +147,37 @@ const login = async (email, password, ipAddress = null, userAgent = null) => {
         expiresAt: accessExpiresIn,
         refreshExpiresAt: refreshExpiresIn
     });
+
+    // 📬 ALERTA DE NUEVO INICIO DE SESIÓN EXITOSO (SIN AWAIT)
+    if (user.email) {
+        sendEmail({
+            to: user.email,
+            subject: "ℹ️ Notificación de seguridad: Nuevo inicio de sesión detectado",
+            html: `
+                <div style="font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto; border: 1px solid #cbd5e1; border-radius: 8px;">
+                    <h2 style="color: #1e293b; margin-top: 0;">Nuevo inicio de sesión</h2>
+                    <p>Hola, <strong>${user.name || 'Usuario'}</strong>.</p>
+                    <p>Te informamos que se acaba de registrar un acceso exitoso a tu cuenta en la plataforma **ERP POS System**.</p>
+                    
+                    <div style="background-color: #f8fafc; padding: 15px; border-radius: 6px; margin: 15px 0; border-left: 4px solid #cbd5e1; font-size: 14px; color: #334155;">
+                        <p style="margin: 4px 0;"><strong>Fecha y Hora:</strong> ${new Date().toLocaleString()}</p>
+                        <p style="margin: 4px 0;"><strong>Dirección IP:</strong> ${ipAddress || 'No detectada'}</p>
+                        <p style="margin: 4px 0;"><strong>Dispositivo / Agente:</strong> <span style="font-size: 12px; color: #64748b;">${userAgent || 'Desconocido'}</span></p>
+                    </div>
+
+                    <div style="background-color: #fffbeb; padding: 12px; border-left: 4px solid #f59e0b; border-radius: 4px; margin-top: 15px; font-size: 13px; color: #78350f;">
+                        <strong>¿Fuiste tú?</strong> Si reconoces esta actividad, puedes ignorar este correo de forma segura. Si sospechas que alguien más ha ingresado a tu cuenta, te recomendamos cambiar tu contraseña inmediatamente desde tu perfil.
+                    </div>
+
+                    <br>
+                    <hr style="border: 0; border-top: 1px solid #e2e8f0;">
+                    <small style="color: #94a3b8;">Seguridad de Accesos • ERP POS System</small>
+                </div>
+            `
+        }).catch(emailError => {
+            console.error("⚠️ Falló el envío de la notificación de login vía Brevo:", emailError.message || emailError);
+        });
+    }
 
     return {
         success: true,

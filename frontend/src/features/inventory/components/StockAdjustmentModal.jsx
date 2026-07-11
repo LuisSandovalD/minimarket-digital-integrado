@@ -2,13 +2,7 @@
 // features/inventory/components/StockAdjustmentModal.jsx
 // ========================================
 
-import {
-  Box,
-  FileText,
-  Layers,
-  Store,
-  X
-} from "lucide-react";
+import { Box, FileText, Layers, Store, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { ModernButton, SubmitButton } from "@/components/buttons";

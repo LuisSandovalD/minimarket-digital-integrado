@@ -1,3 +1,6 @@
+// ========================================
+// layout/app-layout/aside/components/AsideHeader.jsx
+// ========================================
 import { AsideHeaderSkeleton } from "@/components/skeletons";
 import { ShieldCheck } from "lucide-react";
 
@@ -9,6 +12,7 @@ export default function AsideHeader({
   const companyName = company?.name || "Empresa";
   const companyEmail = company?.email || "contacto@empresa.com";
   const tagLabel = company?.tag || "Sede Central";
+  const companyLogo = company?.logo || null; // 🚀 1. Capturamos la propiedad del logo
 
   const companyInitials =
     companyName
@@ -25,14 +29,32 @@ export default function AsideHeader({
   const statusSize = isCollapsed ? "w-3 h-3" : "w-3.5 h-3.5";
 
   // ==========================================
-  // RENDER DE SKELETON (Pasando prop de estado)
+  // OBTENER URL DEL LOGO EVITANDO CACHÉ RESIDUAL
+  // ==========================================
+  const getLogoUrl = () => {
+    if (!companyLogo || typeof companyLogo !== "string") return null;
+
+    // Si es local/preview o base64 va directo
+    if (companyLogo.startsWith("data:") || companyLogo.startsWith("blob:")) {
+      return companyLogo;
+    }
+
+    // Si viene del servidor, forzamos refresco dinámico
+    const separator = companyLogo.includes("?") ? "&" : "?";
+    return `${companyLogo}${separator}t=${new Date().getTime()}`;
+  };
+
+  const logoUrl = getLogoUrl();
+
+  // ==========================================
+  // RENDER DE SKELETON
   // ==========================================
   if (isLoading) {
     return <AsideHeaderSkeleton isCollapsed={isCollapsed} />;
   }
 
   // ==========================================
-  // RENDER COMPONENTE COMPLETO (CON DATOS)
+  // RENDER COMPONENTE COMPLETO
   // ==========================================
   return (
     <div className="relative border-b border-slate-200 dark:border-slate-800 overflow-hidden">
@@ -42,13 +64,23 @@ export default function AsideHeader({
       <div
         className={`relative flex items-center justify-start text-left gap-2.5 transition-all duration-300 ${isCollapsed ? "justify-center px-2 py-5" : "px-5 py-6"}`}
       >
-        {/* LOGO DE LA EMPRESA */}
+        {/* LOGO O INICIALES DE LA EMPRESA */}
         <div className="relative flex-shrink-0">
-          <div
-            className={`flex items-center justify-center font-semibold text-white bg-gradient-to-br from-slate-900 to-slate-700 dark:from-slate-700 dark:to-slate-900 transition-all duration-300 ${logoSize}`}
-          >
-            {companyInitials}
-          </div>
+          {logoUrl ? (
+            // 🚀 2. Si existe logo válido, renderizamos la imagen de forma limpia
+            <img
+              src={logoUrl}
+              alt={companyName}
+              className={`${logoSize} object-cover border border-slate-200 dark:border-slate-800 bg-white`}
+            />
+          ) : (
+            // Fallback original: Iniciales en degradado corporativo
+            <div
+              className={`flex items-center justify-center font-semibold text-white bg-gradient-to-br from-slate-900 to-slate-700 dark:from-slate-700 dark:to-slate-900 transition-all duration-300 ${logoSize}`}
+            >
+              {companyInitials}
+            </div>
+          )}
 
           {/* Indicador de Estado */}
           <span

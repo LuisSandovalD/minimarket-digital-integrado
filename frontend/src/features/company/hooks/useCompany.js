@@ -45,6 +45,7 @@ export default function useCompany() {
 
   // CONTROL DE APARICIÓN DE DATOS (Se ejecuta una sola vez al montar)
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchCompany();
   }, [fetchCompany]);
 
