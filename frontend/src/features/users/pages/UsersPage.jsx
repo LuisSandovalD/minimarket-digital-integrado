@@ -1,6 +1,6 @@
 // ============================================================================
 // features/users/pages/UsersPage.jsx
-// CORREGIDO: Permisos para dar acceso a MANAGER y limitar acciones críticas
+// CORREGIDO: Solucionado error de orden de Hooks (Rules of Hooks)
 // ============================================================================
 
 import UserFilters from "../components/UserFilters";
@@ -18,21 +18,20 @@ import { useUsersPageData } from "../hooks/useUsersPageData";
 import { getUser } from "@/features/auth/services/session.service";
 
 export default function UsersPage() {
+  // 1. 🛡️ OBTENER SESIÓN DE USUARIO
   const user = getUser();
 
-  // 🛡️ Definición de permisos por Roles
+  // 2. 🛡️ DEFINICIÓN DE PERMISOS POR ROLES
   const isAdmin = user?.role === "ADMIN";
   const isManager = user?.role === "MANAGER";
-
-  // Ambos pueden gestionar (Crear, Editar, Activar/Desactivar)
   const canManage = isAdmin || isManager;
 
+  // 3. 🌟 TODOS LOS HOOKS SE LLAMAN PRIMERO (Sin interrupción)
   const {
     branches,
     users,
     allUsersRaw,
     pagination,
-    expandedUsers,
     loading,
     loadingBranches,
     openModal,
@@ -40,7 +39,6 @@ export default function UsersPage() {
     userForAction,
     openStatusAlert,
     openDeleteAlert,
-    toggleExpand,
     toggleUserStatus,
     setOpenModal,
     setOpenStatusAlert,
@@ -57,10 +55,12 @@ export default function UsersPage() {
     handleSuccess,
   } = useUsersPageData();
 
+  // 4. ⏳ RETORNOS CONDICIONALES DESPUÉS DE LOS HOOKS
   if (loading && (!users || users.length === 0)) {
     return <UsersLoading />;
   }
 
+  // 5. 🖥️ RENDERIZADO PRINCIPAL
   return (
     <div className="space-y-6">
       {/* 🛡️ Permitir crear si es Admin o Gerente */}
@@ -76,10 +76,7 @@ export default function UsersPage() {
       {Array.isArray(users) && users.length > 0 ? (
         <UsersTable
           users={users}
-          expandedUsers={expandedUsers}
-          onToggleExpand={toggleExpand}
           onEdit={handleEdit}
-          // 🛡️ Ambos pueden cambiar estado, pero solo Admin puede eliminar físicamente
           onToggleStatusTrigger={canManage ? handleToggleStatusTrigger : undefined}
           onDeleteTrigger={isAdmin ? handleDeleteTrigger : undefined}
           loading={loading}
@@ -89,7 +86,6 @@ export default function UsersPage() {
           onNextPage={handleNextPage}
         />
       ) : (
-        // 🛡️ Mostrar botón de creación vacío según permisos
         <UsersTableEmpty onCreate={canManage ? handleCreate : undefined} />
       )}
 
@@ -97,7 +93,6 @@ export default function UsersPage() {
           MODALES DE ACCIÓN CON ACCESOS SEGMENTADOS
          ========================================== */}
 
-      {/* El Modal de Creación/Edición se monta para Admins y Gerentes */}
       {canManage && (
         <UserModal
           open={openModal}
@@ -109,7 +104,6 @@ export default function UsersPage() {
         />
       )}
 
-      {/* El cambio de estado (Inactivar/Activar) se monta para ambos */}
       {canManage && (
         <UserStatusModal
           open={openStatusAlert}

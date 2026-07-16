@@ -1,20 +1,23 @@
-// ========================================
+// ============================================================================
 // prisma/seeds/unit.seed.js
-// ========================================
+// Carga de catálogo de unidades de consumo exclusiva para Don Lucho
+// ============================================================================
 
 const prisma = require("../client");
 
 async function unitSeed() {
-  console.log("🌱 Iniciando la siembra multi-tenant de unidades para Minimarkets...");
+  console.log("🌱 Iniciando la siembra de unidades para Minimarket Don Lucho...");
 
-  // 1. Obtener las empresas registradas en el sistema
-  const companies = await prisma.company.findMany();
+  // 1. Obtener la empresa única registrada mediante su slug
+  const company = await prisma.company.findFirst({
+    where: { slug: "minimarket-don-lucho" },
+  });
 
-  if (!companies || companies.length === 0) {
-    throw new Error("❌ Error: No existe ninguna empresa en la base de datos. Ejecuta admin.seed primero.");
+  if (!company) {
+    throw new Error("❌ Error: No se encontró la empresa 'Minimarket Don Lucho' en la base de datos. Ejecuta admin.seed primero.");
   }
 
-  console.log(`🏢 Se encontraron ${companies.length} empresas. Procesando catálogo de unidades de consumo...`);
+  console.log(`🏢 Empresa encontrada: ${company.name}. Procesando catálogo de unidades de consumo...`);
 
   // 2. Banco de unidades estandarizado estrictamente bajo el enum UnitType para Minimarkets
   const minimarketUnits = [
@@ -42,31 +45,22 @@ async function unitSeed() {
     { name: "Lata Conserva", abbreviation: "lt", type: "UNIT", conversionFactor: 1.0 },
   ];
 
-  let totalInserted = 0;
+  // 3. Estructurar el payload inyectando el id de Don Lucho
+  const payload = minimarketUnits.map(unit => ({
+    ...unit,
+    companyId: company.id,
+  }));
 
-  // 3. Iteración multi-tenant controlada
-  for (const company of companies) {
-    console.log(`\n📦 Asignando inventario de unidades para: ${company.name}...`);
-
-    // Estructuramos el payload inyectando dinámicamente el companyId correspondiente
-    const payload = minimarketUnits.map(unit => ({
-      ...unit,
-      companyId: company.id,
-    }));
-
-    // Inserción masiva optimizada por cada tenant (utilizando skipDuplicates para ejecuciones seguras)
-    const result = await prisma.unit.createMany({
-      data: payload,
-      skipDuplicates: true,
-    });
-
-    totalInserted += result.count;
-    console.log(`✅ ${result.count} unidades mapeadas con éxito para la empresa.`);
-  }
+  // 4. Inserción masiva optimizada (utilizando skipDuplicates para evitar errores si se ejecuta de nuevo)
+  const result = await prisma.unit.createMany({
+    data: payload,
+    skipDuplicates: true,
+  });
 
   console.log("\n====================================");
-  console.log(`⭐ SEED DE UNIDADES COMPLETADO: ${totalInserted} registros inyectados globalmente.`);
+  console.log(`⭐ SEED DE UNIDADES COMPLETADO: Se cargaron ${result.count} registros de manera segura.`);
   console.log("====================================\n");
 }
 
+// Para mantener consistencia con los llamados de tus otros scripts indexados
 module.exports = { unitSeed };

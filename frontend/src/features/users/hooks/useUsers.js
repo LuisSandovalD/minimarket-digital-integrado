@@ -1,3 +1,8 @@
+// ============================================================================
+// hooks/useUsers.js
+// CORREGIDO: Adaptado para alimentar la tabla con la jerarquía estructurada
+// ============================================================================
+
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { getHierarchy, getUsers, toggleUserStatus } from "../services/users.service";
@@ -16,13 +21,12 @@ export default function useUsers(initialFilters = {}) {
     ...initialFilters,
   });
 
-  const [expandedUsers, setExpandedUsers] = useState({});
-
   const invalidateCache = async () => {
     await queryClient.invalidateQueries({ queryKey: ["users"] });
     await queryClient.invalidateQueries({ queryKey: ["users-hierarchy"] });
   };
 
+  // 1. Consulta para la lista plana (Útil para buscadores, selectores o modales)
   const usersQuery = useQuery({
     queryKey: ["users", filters],
     queryFn: async () => {
@@ -51,6 +55,7 @@ export default function useUsers(initialFilters = {}) {
     placeholderData: (previousData) => previousData,
   });
 
+  // 2. Consulta de Jerarquía (🌟 Esta alimentará nuestra tabla por niveles)
   const hierarchyQuery = useQuery({
     queryKey: ["users-hierarchy"],
     queryFn: async () => {
@@ -66,29 +71,26 @@ export default function useUsers(initialFilters = {}) {
     onError: (err) => console.error(err),
   });
 
-  const toggleExpand = (userId) => {
-    setExpandedUsers((prev) => ({
-      ...prev,
-      [userId]: !prev[userId],
-    }));
-  };
-
   return {
-    users: usersQuery.data?.data || [],
+    // 🌟 IMPORTANTE: Mapeamos el retorno de la jerarquía directa al prop "users"
+    // para que la tabla consuma directamente la estructura de árbol sin desfasar páginas.
+    users: hierarchyQuery.data || [],
+
+    // Lista plana para modales o asignaciones de managers (anteriormente users)
+    allUsersRaw: usersQuery.data?.data || [],
+
     pagination: usersQuery.data?.pagination || {},
-    loading: usersQuery.isLoading,
-    error: usersQuery.error ? usersQuery.error.message : "",
+    loading: hierarchyQuery.isLoading || usersQuery.isLoading, // Carga si cualquiera está activo
+    error: hierarchyQuery.error ? hierarchyQuery.error.message : usersQuery.error ? usersQuery.error.message : "",
 
     hierarchy: hierarchyQuery.data || [],
     loadingHierarchy: hierarchyQuery.isLoading,
 
     filters,
     setFilters,
-    expandedUsers,
 
     fetchUsers: usersQuery.refetch,
     fetchHierarchy: hierarchyQuery.refetch,
-    toggleExpand,
     toggleUserStatus: async (id) => toggleStatusMutation.mutateAsync(id),
 
     togglingStatus: toggleStatusMutation.isPending,

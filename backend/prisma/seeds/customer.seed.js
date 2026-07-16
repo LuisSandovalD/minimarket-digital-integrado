@@ -1,6 +1,7 @@
-// ========================================
+// ============================================================================
 // prisma/seeds/customer.seed.js
-// ========================================
+// OPTIMIZADO: Exclusivo para "Minimarket Don Lucho"
+// ============================================================================
 
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
@@ -14,84 +15,80 @@ function randomHistoricalDate() {
 }
 
 async function customerSeed() {
-  console.log("🚀 Iniciando carga masiva de Clientes optimizada para las 4 empresas...");
+  console.log("🚀 Iniciando carga masiva de Clientes exclusiva para Minimarket Don Lucho...");
 
-  // 1. Listas base de nombres y apellidos peruanos para combinaciones dinámicas
+  // 1. Buscar la empresa en la base de datos por su slug único
+  const company = await prisma.company.findFirst({
+    where: { slug: "minimarket-don-lucho" },
+  });
+
+  if (!company) {
+    throw new Error(
+      "❌ No se encontró la empresa con slug 'minimarket-don-lucho' en la base de datos. Ejecuta tu admin/company seed primero.",
+    );
+  }
+
+  // 2. Datos de nombres, apellidos y calles reales de San Juan de Lurigancho (SJL)
   const names = ["Carlos", "María", "José", "Ana", "Luis", "Rosa", "Miguel", "Carmen", "Pedro", "Daniela", "Jorge", "Patricia", "Fernando", "Lucía", "Sonia", "Julio", "Elena", "Héctor", "Verónica", "Alejandro", "Diana", "Renzo", "Gabriela", "Walter"];
   const lastNames = ["Mendoza", "López", "Torres", "Salazar", "Ramírez", "Castillo", "Vargas", "Gutiérrez", "Paredes", "Navarro", "Herrera", "Salinas", "Gómez", "Villanueva", "Palomino", "Flores", "Benítez", "Tello", "Ortiz", "Meza", "Farfán", "Pasquel", "Miranda", "Quispe"];
 
-  // 2. Mapa de ubicación real y exclusivo para las 4 empresas principales
-  const companyLocations = {
-    "minimarket-don-lucho": { city: "San Juan de Lurigancho", streets: ["Av. Los Próceres", "Av. Fernando Wiesse", "Jr. Las Lomas", "Av. Próceres de la Independencia"] },
-    "corp-tecnologica-vega": { city: "San Borja", streets: ["Jr. Las Flores", "Av. San Luis", "Av. Aviación", "Jr. Las Magnolias"] },
-    "inversiones-medicas-san-jose": { city: "Jesús María", streets: ["Av. Salaverry", "Av. Brasil", "Jr. Whymper", "Av. Gral. Garzón"] },
-    "distribuidora-alimentos-sur": { city: "Arequipa", streets: ["Av. Alfonso Ugarte", "Av. Ejército", "Calle Mercaderes", "Av. Goyeneche"] },
-  };
-
-  // 3. Traer las empresas reales de la base de datos
-  const companies = await prisma.company.findMany();
-  if (companies.length === 0) {
-    throw new Error("❌ No existen empresas en la base de datos. Ejecuta admin.seed primero.");
-  }
+  const sjlStreets = [
+    "Av. Los Próceres",
+    "Av. Fernando Wiesse",
+    "Jr. Las Lomas",
+    "Av. Próceres de la Independencia",
+    "Av. Flores de Primavera",
+    "Av. Canto Grande",
+  ];
 
   const customersData = [];
 
-  for (const company of companies) {
-    const location = companyLocations[company.slug];
+  // Al ser la única empresa, podemos ampliar un poco más la base de clientes iniciales (ej. entre 45 y 60)
+  const totalCustomers = Math.floor(Math.random() * 16) + 45;
 
-    // Manejo seguro por si hay un slug inesperado en la BD
-    if (!location) {
-      console.log(`⚠️ Saltando: No se definió ubicación para el slug: ${company.slug}`);
-      continue;
-    }
+  for (let i = 0; i < totalCustomers; i++) {
+    // Combinaciones usando residuos para asegurar variedad sin duplicar nombres completos exactos
+    const firstName = names[i % names.length];
+    const secondName = names[(i * 3) % names.length];
+    const lastName = lastNames[i % lastNames.length];
+    const secondLastName = lastNames[(i + 7) % lastNames.length];
+    const street = sjlStreets[i % sjlStreets.length];
 
-    // Rango de entre 20 y 30 clientes exclusivos por cada una de las 4 empresas
-    const totalCustomers = Math.floor(Math.random() * 11) + 20;
+    const fullName = `${firstName} ${secondName} ${lastName} ${secondLastName}`;
 
-    for (let i = 0; i < totalCustomers; i++) {
-      // Combinaciones usando residuos para evitar nombres duplicados exactos
-      const firstName = names[(i + company.id) % names.length];
-      const secondName = names[(i * 3) % names.length];
-      const lastName = lastNames[i % lastNames.length];
-      const secondLastName = lastNames[(i + company.id) % lastNames.length];
-      const street = location.streets[i % location.streets.length];
+    // Generación de DNI de 8 dígitos único y correlativo
+    const docNumber = String(72000000 + (i * 189)).substring(0, 8);
 
-      const fullName = `${firstName} ${secondName} ${lastName} ${secondLastName}`;
+    // Correo electrónico único
+    const email = `${firstName.toLowerCase()}.${lastName.toLowerCase()}${i}@donlucho.pe`;
 
-      // Generación de DNI de 8 dígitos único por bloque correlativo
-      const docNumber = String(70000000 + (company.id * 30000) + (i * 157)).substring(0, 8);
+    // Teléfono móvil de 9 dígitos que empieza con 9
+    const phone = String(987000000 + (i * 641)).substring(0, 9);
 
-      // Correo electrónico único
-      const email = `${firstName.toLowerCase()}.${lastName.toLowerCase()}${i}@empresa${company.id}.pe`;
+    // Límites de crédito realistas para un minimarket de barrio (en Soles - PEN)
+    const creditLimit = parseFloat(([100, 150, 200, 300, 400, 500, 800])[i % 7]);
 
-      // Teléfono móvil de 9 dígitos iniciado en 9
-      const phone = String(900000000 + (company.id * 1100000) + (i * 543)).substring(0, 9);
+    const historicalDate = randomHistoricalDate();
 
-      // Límites de crédito realistas en Soles (PEN)
-      const creditLimit = parseFloat(([300, 400, 500, 600, 800, 1000, 1500, 2000])[i % 8]);
-
-      const historicalDate = randomHistoricalDate();
-
-      customersData.push({
-        name: fullName,
-        documentType: "DNI",
-        documentNumber: docNumber,
-        email: email,
-        phone: phone,
-        city: location.city,
-        address: `${street} N° ${100 + (i * 4)}`,
-        notes: i % 6 === 0 ? "Cliente frecuente de la zona" : null,
-        creditLimit: creditLimit,
-        currentDebt: 0.0,
-        isActive: i % 25 !== 0, // 96% de la cartera activa
-        companyId: company.id,
-        createdAt: historicalDate,
-        updatedAt: historicalDate,
-      });
-    }
+    customersData.push({
+      name: fullName,
+      documentType: "DNI",
+      documentNumber: docNumber,
+      email: email,
+      phone: phone,
+      city: "San Juan de Lurigancho",
+      address: `${street} N° ${100 + (i * 6)}`,
+      notes: i % 5 === 0 ? "Vecino recurrente - Pago puntual" : null,
+      creditLimit: creditLimit,
+      currentDebt: 0.0,
+      isActive: i % 30 !== 0, // ~97% de la cartera activa
+      companyId: company.id,
+      createdAt: historicalDate,
+      updatedAt: historicalDate,
+    });
   }
 
-  // 4. Inserción masiva limpia con skipDuplicates activo
+  // 3. Inserción masiva limpia con skipDuplicates activo
   await prisma.customer.createMany({
     data: customersData,
     skipDuplicates: true,
@@ -99,8 +96,8 @@ async function customerSeed() {
 
   console.log("\n====================================");
   console.log("✅ SEED DE CLIENTES COMPLETADO");
-  console.log("📍 Regionalización aplicada de forma correcta según el distrito/ciudad de cada tenant.");
-  console.log(`📊 Total inyectado con éxito: ${customersData.length} clientes distribuidos en las ${companies.length} empresas.`);
+  console.log("📍 Ubicaciones localizadas en: San Juan de Lurigancho");
+  console.log(`📊 Total de clientes inyectados para Don Lucho: ${customersData.length}`);
   console.log("====================================\n");
 }
 

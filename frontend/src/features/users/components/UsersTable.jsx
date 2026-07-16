@@ -21,15 +21,12 @@ export default function UsersTable({
   onPrevPage,
   onNextPage,
 }) {
-  // Guardamos solo los IDs para evitar referencias obsoletas y mantener reactividad
   const [navigationStack, setNavigationStack] = useState([]);
-
   const currentLevel = navigationStack.length; // 0 = Managers, 1 = Supervisors, 2 = Employees
 
   // ========================================
   // BÚSQUEDA RECURSIVA DE USUARIOS
   // ========================================
-  // Esta función busca a un usuario por ID en cualquier nivel del árbol de datos
   const findUserById = (list, id) => {
     for (const u of list) {
       if (u.id === id) return u;
@@ -41,7 +38,7 @@ export default function UsersTable({
     return null;
   };
 
-  // Resolvemos de forma dinámica y fresca el usuario actual en el que estamos parados
+  // Resolvemos de forma dinámica el usuario actual en el que estamos parados
   const currentTarget = useMemo(() => {
     if (navigationStack.length === 0) return null;
     const activeId = navigationStack[navigationStack.length - 1];
@@ -54,12 +51,12 @@ export default function UsersTable({
   const displayedUsers = useMemo(() => {
     const cleanUsers = users.filter((user) => user.role !== "ADMIN");
 
-    // Nivel 0: Mostramos estrictamente los MANAGERS de la raíz
+    // Nivel 0: Mostramos estrictamente los MANAGERS de la raíz (Página 1 garantizada)
     if (currentLevel === 0) {
       return cleanUsers.filter((user) => user.role === "MANAGER");
     }
 
-    // Nivel 1 o 2: Desglosamos los subordinados directos del usuario seleccionado
+    // Nivel 1 o 2: Desglosamos los subordinados directos del supervisor o mánager activo
     if (currentTarget) {
       return (currentTarget.subordinates || []).filter((user) => user.role !== "ADMIN");
     }
@@ -219,7 +216,7 @@ export default function UsersTable({
                     {/* ACCIONES */}
                     <td className="px-6 py-5">
                       <div className="flex items-center justify-end gap-3">
-                        {/* BOTÓN DRILL-DOWN JERÁRQUICO */}
+                        {/* BOTÓN DRILL-DOWN JERÁRQUICO SEGURO */}
                         {currentLevel < 2 && user.subordinates && user.subordinates.length > 0 && (
                           <ModernButton
                             icon={ChevronRight}
@@ -249,7 +246,7 @@ export default function UsersTable({
               )}
             </tbody>
 
-            {/* SECCIÓN DE PAGINACIÓN */}
+            {/* SECCIÓN DE PAGINACIÓN: Únicamente visible en el nivel raíz */}
             {currentLevel === 0 && totalPages > 1 && (
               <tfoot>
                 <tr>

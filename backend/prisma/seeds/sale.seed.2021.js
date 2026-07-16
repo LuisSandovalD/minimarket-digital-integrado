@@ -1,16 +1,16 @@
 // ============================================================================
-// prisma/seeds/sale.seed.2021.js
-// Ventas distribuidas exclusivamente en el año 2021 - Multiempresa y Multisucursal
+// prisma/seeds/sale.seed.dynamic.js
+// Ventas distribuidas desde 2022 hasta el presente - Exclusivo Don Lucho
 // ============================================================================
 
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
+const prisma = require("../client"); // Cliente compartido para evitar problemas de concurrencia
 
-const YEAR = 2021;
+const START_YEAR = 2022;
+const CURRENT_YEAR = new Date().getFullYear(); // Evaluará dinámicamente hasta el año en curso (2026)
 
-// Volumen de ventas relativo a la cantidad de productos de cada empresa.
-const SALE_TO_PRODUCT_RATIO_MIN = 1.2;
-const SALE_TO_PRODUCT_RATIO_MAX = 2.0;
+// Volumen de ventas relativo por año para mantener un crecimiento realista sin vaciar el stock
+const SALE_TO_PRODUCT_RATIO_MIN = 1.0;
+const SALE_TO_PRODUCT_RATIO_MAX = 1.6;
 
 const poolNotes = [
   "Venta minorista de mostrador a cliente final",
@@ -27,15 +27,18 @@ const poolNotes = [
   "Pedido especial solicitado con anticipación",
 ];
 
+// Genera una fecha progresiva y realista dentro del año evaluado
 const generateDateForYear = (currentStep, totalRecords, year) => {
+  const isCurrentYear = year === CURRENT_YEAR;
   const startDate = new Date(`${year}-01-01T08:30:00`);
-  const endDate = new Date(`${year}-12-31T20:00:00`);
+  // Si es el año actual, solo generamos ventas hasta el día de hoy
+  const endDate = isCurrentYear ? new Date() : new Date(`${year}-12-31T20:00:00`);
 
   const totalTimeRange = endDate.getTime() - startDate.getTime();
   const incrementalTime = (totalTimeRange / totalRecords) * currentStep;
 
   const targetDate = new Date(startDate.getTime() + incrementalTime);
-  const randomHour = 8 + Math.floor(Math.random() * 12);
+  const randomHour = 8 + Math.floor(Math.random() * 12); // Horario comercial: 8:00 AM - 8:00 PM
   const randomMinute = Math.floor(Math.random() * 60);
   targetDate.setHours(randomHour, randomMinute, 0, 0);
 
@@ -51,72 +54,75 @@ const shuffleArray = (array) => {
   return arr;
 };
 
-async function saleJsonPayloadSeed2021() {
-  console.log(`🚀 Iniciando carga masiva de Ventas exclusivamente del año ${YEAR} para todas las empresas...`);
+async function saleJsonPayloadSeed() {
+  console.log(`🚀 Iniciando carga masiva histórica de Ventas (${START_YEAR} - ${CURRENT_YEAR}) para Minimarket Don Lucho...`);
 
-  const allCompanies = await prisma.company.findMany({ select: { id: true, name: true } });
+  // 1. Obtener la empresa por su slug
+  const company = await prisma.company.findFirst({
+    where: { slug: "minimarket-don-lucho" },
+  });
 
-  if (allCompanies.length === 0) {
-    throw new Error("❌ Asegúrate de tener registros en la tabla Company antes de ejecutar.");
+  if (!company) {
+    throw new Error("❌ Error: No se encontró la empresa 'Minimarket Don Lucho'. Ejecuta admin.seed primero.");
   }
 
-  let grandTotalVentas = 0;
-  let grandVentasOmitidas = 0;
-  let grandAlertas = 0;
+  const companyId = company.id;
 
-  for (const currentCompany of allCompanies) {
-    const companyId = currentCompany.id;
+  // 2. Traer registros relacionados requeridos
+  const allBranches = await prisma.branch.findMany({ where: { companyId }, select: { id: true } });
+  const seller = await prisma.user.findFirst({ where: { companyId }, select: { id: true } });
+  const allProducts = await prisma.product.findMany({ where: { companyId }, select: { id: true, salePrice: true } });
+  const allCustomers = await prisma.customer.findMany({ where: { companyId }, select: { id: true } });
 
-    // CORRECCIÓN CLAVE: Traemos todas las sucursales para distribuir las ventas de forma equitativa
-    const allBranches = await prisma.branch.findMany({ where: { companyId }, select: { id: true } });
-    const seller = await prisma.user.findFirst({ where: { companyId }, select: { id: true } });
-    const allProducts = await prisma.product.findMany({ where: { companyId }, select: { id: true, salePrice: true } });
-    const allCustomers = await prisma.customer.findMany({ where: { companyId }, select: { id: true } });
+  if (allBranches.length === 0 || !seller || allProducts.length === 0 || allCustomers.length === 0) {
+    console.warn("⚠️ Minimarket Don Lucho omitido: Faltan registrar sucursales, productos, clientes o usuarios.");
+    return;
+  }
 
-    // Validación estricta preventiva
-    if (allBranches.length === 0 || !seller || allProducts.length === 0 || allCustomers.length === 0) {
-      console.warn(`⚠️ Empresa "${currentCompany.name}" (ID ${companyId}) omitida: Faltan sucursales, productos, clientes o usuarios.`);
-      continue;
-    }
+  // 3. Obtener o estructurar el método de pago base
+  let paymentMethod = await prisma.paymentMethod_DB.findFirst({
+    where: { companyId, isActive: true },
+  });
 
-    let paymentMethod = await prisma.paymentMethod_DB.findFirst({
-      where: { companyId, isActive: true },
+  if (!paymentMethod) {
+    paymentMethod = await prisma.paymentMethod_DB.create({
+      data: { name: "Efectivo Caja General", type: "CASH", isActive: true, companyId },
     });
+  }
 
-    if (!paymentMethod) {
-      paymentMethod = await prisma.paymentMethod_DB.create({
-        data: { name: "Efectivo Caja General", type: "CASH", isActive: true, companyId },
-      });
-    }
+  let totalGlobalVentas = 0;
+  let totalGlobalOmitidas = 0;
+  let totalGlobalAlertas = 0;
 
+  // 4. Bucle temporal año por año
+  for (let year = START_YEAR; year <= CURRENT_YEAR; year++) {
     const ratio = SALE_TO_PRODUCT_RATIO_MIN + Math.random() * (SALE_TO_PRODUCT_RATIO_MAX - SALE_TO_PRODUCT_RATIO_MIN);
-    const totalRecords = Math.max(60, Math.floor(allProducts.length * ratio));
+    const totalRecords = Math.max(50, Math.floor(allProducts.length * ratio));
 
-    console.log(`🏢 Empresa: "${currentCompany.name}" → Generando ${totalRecords} ventas distribuidas en sus sucursales...`);
+    console.log(`📅 Año ${year} → Generando ${totalRecords} transacciones comerciales...`);
 
     let companyCounter = 1;
     let ventasOmitidas = 0;
     let alertasGeneradas = 0;
+    let ventasAnioCreadas = 0;
     const seedBatchId = Math.random().toString(36).substring(2, 6).toUpperCase();
 
     for (let i = 0; i < totalRecords; i++) {
-      const historicalDate = generateDateForYear(companyCounter, totalRecords, YEAR);
+      const historicalDate = generateDateForYear(companyCounter, totalRecords, year);
       const randomCustomer = allCustomers[Math.floor(Math.random() * allCustomers.length)];
-
-      // CORRECCIÓN CLAVE: Cada venta ocurre de manera dinámica en una sucursal específica
       const targetBranch = allBranches[Math.floor(Math.random() * allBranches.length)];
 
-      const detailCount = Math.floor(Math.random() * 4) + 1;
+      const detailCount = Math.floor(Math.random() * 3) + 1; // 1 a 3 productos distintos por boleta
       const selectedProducts = shuffleArray(allProducts).slice(0, detailCount);
 
       const rawDetails = selectedProducts.map(p => {
-        const quantity = Math.floor(Math.random() * 10) + 1;
-        const variation = 1 + (Math.random() * 0.10 - 0.05);
+        const quantity = Math.floor(Math.random() * 4) + 1; // Cantidades moderadas (1 a 4 unidades) para no agotar stock rápidamente
+        const variation = 1 + (Math.random() * 0.08 - 0.04); // +/- 4% de oscilación en el precio final
         const salePrice = parseFloat((Number(p.salePrice) * variation).toFixed(2));
         return { productId: p.id, quantity, salePrice };
       });
 
-      // Validar stock ANTES de abrir la transacción apuntando específicamente a la sucursal destino
+      // Validar stock antes de persistir
       let todosConStock = true;
       for (const detail of rawDetails) {
         const inv = await prisma.inventory.findUnique({
@@ -130,11 +136,12 @@ async function saleJsonPayloadSeed2021() {
 
       if (!todosConStock) {
         ventasOmitidas++;
-        grandVentasOmitidas++;
+        totalGlobalOmitidas++;
         companyCounter++;
         continue;
       }
 
+      // Procesamiento de transacción atómica
       await prisma.$transaction(async (tx) => {
         let cabeceraSubtotal = 0;
         let cabeceraTax = 0;
@@ -162,43 +169,42 @@ async function saleJsonPayloadSeed2021() {
         cabeceraSubtotal = parseFloat(cabeceraSubtotal.toFixed(2));
         cabeceraTax = parseFloat(cabeceraTax.toFixed(2));
         cabeceraTotal = parseFloat(cabeceraTotal.toFixed(2));
-        const discount = 0.00;
 
-        const saleNumber = `VEN-${YEAR}-${String(companyId).padStart(2, "0")}-${seedBatchId}-${String(companyCounter).padStart(4, "0")}`;
-        const esCredito = Math.random() < 0.30;
+        const saleNumber = `VEN-${year}-${String(companyId).padStart(2, "0")}-${seedBatchId}-${String(companyCounter).padStart(4, "0")}`;
+        const esCredito = Math.random() < 0.15; // Un porcentaje menor para mantener liquidez saludable
         const status = esCredito ? "PENDING" : "COMPLETED";
-        const porcentaje = esCredito ? (0.20 + Math.random() * 0.30) : 1.0;
+        const porcentaje = esCredito ? (0.30 + Math.random() * 0.30) : 1.0;
         const initialPayment = parseFloat((cabeceraTotal * porcentaje).toFixed(2));
         const note = poolNotes[i % poolNotes.length];
 
-        // 1. Registro de la Venta Cabecera
+        // A. Crear Venta Cabecera
         const newSale = await tx.sale.create({
           data: {
             saleNumber,
             subtotal: cabeceraSubtotal,
             tax: cabeceraTax,
-            discount,
+            discount: 0.00,
             total: cabeceraTotal,
             status,
-            notes: `${note} | Sucursal Origen: ID ${targetBranch.id}`,
+            notes: `${note} | Sucursal: ID ${targetBranch.id}`,
             createdAt: historicalDate,
             updatedAt: historicalDate,
             sellerId: seller.id,
-            branchId: targetBranch.id, // Asignación dinámica
+            branchId: targetBranch.id,
             companyId,
             customerId: randomCustomer.id,
           },
         });
 
-        // 2. Registro del Flujo de Pago
+        // B. Crear Pago
         await tx.payment.create({
           data: {
             amount: initialPayment,
             status: "COMPLETED",
             paymentMethod: paymentMethod.id,
             reference: esCredito ? `INICIAL-${saleNumber}` : `COBRO-${saleNumber}`,
-            transactionId: `TX-${YEAR}-${Math.floor(100000 + Math.random() * 900000)}`,
-            notes: esCredito ? "Amortización parcial inicial." : "Liquidación total en punto de venta.",
+            transactionId: `TX-${year}-${Math.floor(100000 + Math.random() * 900000)}`,
+            notes: esCredito ? "Pago parcial inicial registrado." : "Pago completo en punto de venta.",
             paidAt: historicalDate,
             createdAt: historicalDate,
             updatedAt: historicalDate,
@@ -206,7 +212,7 @@ async function saleJsonPayloadSeed2021() {
           },
         });
 
-        // 3. Detalles de Venta e Impacto de Inventario
+        // C. Registrar Detalle, Lotes e Historial
         for (const detail of computedDetails) {
           const availableBatch = await tx.productBatch.findFirst({
             where: { productId: detail.productId, branchId: targetBranch.id, currentQuantity: { gte: detail.quantity } },
@@ -221,7 +227,7 @@ async function saleJsonPayloadSeed2021() {
               price: detail.price,
               subtotal: detail.subtotal,
               tax: detail.tax,
-              discount: detail.discount,
+              discount: 0.00,
               batchId: availableBatch ? availableBatch.id : null,
             },
           });
@@ -246,14 +252,13 @@ async function saleJsonPayloadSeed2021() {
               data: { stock: newStock, lastUpdated: historicalDate },
             });
 
-            // Movimiento del Kárdex de la Sucursal correspondinte
             await tx.inventoryHistory.create({
               data: {
                 type: "SALE",
                 quantity: detail.quantity,
                 previousStock,
                 newStock,
-                reason: `Salida de inventario ${YEAR}: venta ${saleNumber} en sucursal ${targetBranch.id}`,
+                reason: `Salida de inventario ${year}: venta ${saleNumber} en sucursal ${targetBranch.id}`,
                 reference: saleNumber,
                 productId: detail.productId,
                 inventoryId: currentInventory.id,
@@ -263,14 +268,13 @@ async function saleJsonPayloadSeed2021() {
               },
             });
 
-            // Gestión de alertas por Stock Crítico
-            if (newStock < 20) {
+            if (newStock < 15) { // Límite de alerta preventiva
               alertasGeneradas++;
-              grandAlertas++;
+              totalGlobalAlertas++;
               await tx.notification.create({
                 data: {
-                  title: "⚠️ Stock Crítico en Almacén",
-                  message: `Producto ID: ${detail.productId} bajó del límite en Sucursal ${targetBranch.id}. Stock remanente: ${newStock} unidades.`,
+                  title: "⚠️ Stock Crítico",
+                  message: `Producto ID: ${detail.productId} bajó de la reserva de seguridad en Sucursal ${targetBranch.id}. Stock actual: ${newStock} unidades.`,
                   type: "LOW_STOCK",
                   isRead: true,
                   userId: seller.id,
@@ -285,25 +289,26 @@ async function saleJsonPayloadSeed2021() {
       });
 
       companyCounter++;
-      grandTotalVentas++;
+      ventasAnioCreadas++;
+      totalGlobalVentas++;
     }
 
-    console.log(`   ✅ Empresa ID ${companyId}: ${companyCounter - 1 - ventasOmitidas} ventas creadas, ${ventasOmitidas} omitidas por falta de stock.`);
+    console.log(`   └─ ✅ Año ${year} completado: ${ventasAnioCreadas} creadas | ${ventasOmitidas} omitidas por stock.`);
   }
 
   console.log("\n======================================================");
-  console.log(`✅ [${YEAR}] SEED COMPLETADO: ventas inyectadas con IGV reconciliado en todas las empresas.`);
-  console.log(`📊 Total global de ventas creadas: ${grandTotalVentas}`);
-  console.log(`⏭️  Total de ventas omitidas por stock insuficiente: ${grandVentasOmitidas}`);
-  console.log(`🔔 Total de alertas de inventario registradas: ${grandAlertas}`);
+  console.log("⭐ SEED INTEGRAL HISTÓRICO DE VENTAS COMPLETADO");
+  console.log(`📊 Período evaluado: [${START_YEAR} - ${CURRENT_YEAR}]`);
+  console.log(`📊 Total transacciones procesadas con éxito: ${totalGlobalVentas}`);
+  console.log(`⏭️  Total transacciones omitidas temporalmente: ${totalGlobalOmitidas}`);
+  console.log(`🔔 Total alertas críticas enviadas: ${totalGlobalAlertas}`);
   console.log("======================================================");
 }
 
-// Bloque de ejecución segura e independiente
 if (require.main === module) {
-  saleJsonPayloadSeed2021()
+  saleJsonPayloadSeed()
     .catch((e) => {
-      console.error("❌ Error detectado en el proceso de seed de ventas [2021]:", e);
+      console.error("❌ Error detectado en el proceso de seed histórico de ventas:", e);
       process.exit(1);
     })
     .finally(async () => {
@@ -311,4 +316,4 @@ if (require.main === module) {
     });
 }
 
-module.exports = { saleJsonPayloadSeed2021 };
+module.exports = { saleJsonPayloadSeed };

@@ -13,6 +13,13 @@ const { adminSeed } = require("./seeds/admin.seed");
 const { commentsSeed } = require("./seeds/comments.seed");
 
 const { unitSeed } = require("./seeds/unit.seed");
+
+const { branchManagerSeed } = require("./seeds/branch-manager.seed");
+const { branchSupervisorSeed } = require("./seeds/branch-supervisor.seed");
+const { employeeSeed } = require("./seeds/employee.seed");
+const { employeeProfileSeed } = require("./seeds/employee-profile.seed");
+const { linkEmployeesToSupervisors } = require("./seeds/link-employees.seed");
+
 const { categorySeed } = require("./seeds/category.seed");
 const { productSeed } = require("./seeds/product.seed");
 const { customerSeed } = require("./seeds/customer.seed");
@@ -26,12 +33,7 @@ const { purchaseJsonPayloadSeed } = require("./seeds/purchase.seed");
 // ============================================================================
 // FASE 3 - HISTÓRICO DE VENTAS
 // ============================================================================
-const { saleJsonPayloadSeed2021 } = require("./seeds/sale.seed.2021");
-const { saleJsonPayloadSeed2022 } = require("./seeds/sale.seed.2022");
-const { saleJsonPayloadSeed2023 } = require("./seeds/sale.seed.2023");
-const { saleJsonPayloadSeed2024 } = require("./seeds/sale.seed.2024");
-const { saleJsonPayloadSeed2025 } = require("./seeds/sale.seed.2025");
-const { saleJsonPayloadSeed2026 } = require("./seeds/sale.seed.2026");
+const { saleJsonPayloadSeed } = require("./seeds/sale.seed.2021");
 
 /**
  * Ejecuta cualquier módulo seed con logs homogéneos
@@ -76,6 +78,11 @@ async function main() {
     // await executeSeed(commentsSeed, "2. Comments for Administrators");
     // await executeSeed(unitSeed, "2. Measurement Units");
     // await executeSeed(categorySeed, "3. Product Categories");
+    // await executeSeed(branchManagerSeed, "4. branchManagerSeed");
+    // await executeSeed(branchSupervisorSeed, "5. branchSupervisorSeed");
+    // await executeSeed(employeeSeed, "6. employeeSeed");
+    // await executeSeed(employeeProfileSeed, "7. employeeProfileSeed");
+    // await executeSeed(linkEmployeesToSupervisors, "8. linkEmployeesToSupervisors");
 
     // await executeSeed(productSeed, "4. Product Catalog");
     // await executeSeed(customerSeed, "5. Customers");
@@ -87,13 +94,13 @@ async function main() {
 
     // await executeSeed(
     //   purchaseJsonPayloadSeed,
-    //   "7. Historical Purchases & Initial Stock"
+    //   "7. Historical Purchases & Initial Stock",
     // );
 
-    // await executeSeed(
-    //   saleJsonPayloadSeed2021,
-    //   "8. Historic Sales Ledger Year 2021"
-    // );
+    await executeSeed(
+      saleJsonPayloadSeed,
+      "8. Historic Sales Ledger Year 2021",
+    );
 
     // await executeSeed(
     //   saleJsonPayloadSeed2022,
@@ -115,10 +122,10 @@ async function main() {
     //   "12. Historic Sales Ledger Year 2025"
     // );
 
-    await executeSeed(
-      saleJsonPayloadSeed2026,
-      "13. Historic Sales Ledger Year 2026",
-    );
+    // await executeSeed(
+    //   saleJsonPayloadSeed2026,
+    //   "13. Historic Sales Ledger Year 2026",
+    // );
 
     console.log("\n====================================================================");
     console.log("🎉 BASE DE DATOS INYECTADA CORRECTAMENTE");

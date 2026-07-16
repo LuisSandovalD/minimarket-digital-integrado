@@ -1,62 +1,51 @@
-// ========================================
+// ============================================================================
 // prisma/seeds/comments.seed.js
-// ========================================
+// Carga de Reviews (calificaciones y comentarios) exclusiva para Don Lucho
+// ============================================================================
 
 const prisma = require("../client");
 
 async function commentsSeed() {
-  console.log("🚀 Iniciando carga masiva de Reviews (calificaciones y comentarios) para los 4 administradores...");
+  console.log("🚀 Iniciando carga masiva de Reviews para el administrador de Minimarket Don Lucho...");
 
-  // 1. Mapeo exclusivo de los correos de los 4 administradores creados en admin.seed.js
-  const adminEmails = [
-    "luissandovalcarbonel@gmail.com",
-    "jimmysandoval@gmail.com",
-    "maria.lopez@sanjosemed.pe",
-    "pedro.ramirez@alimentosdelsur.pe",
-  ];
+  // 1. Mapeo exclusivo del único administrador real (Don Lucho)
+  const adminEmail = "luissandovalcarbonel@gmail.com";
 
-  // 2. Banco de datos optimizado únicamente para los 4 administradores reales
-  const reviewsFeed = {
-    "luissandovalcarbonel@gmail.com": { rating: 5, comment: "Excelente plataforma para la gestión de inventario de nuestro minimarket." },
-    "jimmysandoval@gmail.com": { rating: 4, comment: "Muy buen soporte técnico y el módulo de facturación es rápido. Recomendado." },
-    "maria.lopez@sanjosemed.pe": { rating: 5, comment: "La interfaz es limpia y nos ayuda a mantener el orden de la administración médica." },
-    "pedro.ramirez@alimentosdelsur.pe": { rating: 4, comment: "Nos facilita bastante la distribución, se adapta bien al flujo de provincias." },
+  // 2. Banco de datos optimizado para Luis Enrique Sandoval Carbonel
+  const reviewData = {
+    rating: 5,
+    comment: "Excelente plataforma para la gestión de inventario de nuestro minimarket en las sedes de Cañete.",
   };
 
   let totalCreated = 0;
 
-  for (const email of adminEmails) {
-    // Buscar al usuario administrador para obtener su id y el companyId asignado
-    const adminUser = await prisma.user.findFirst({
-      where: { email },
-    });
+  // Buscar al usuario administrador para obtener su id y el companyId asignado
+  const adminUser = await prisma.user.findFirst({
+    where: { email: adminEmail },
+  });
 
-    if (!adminUser) {
-      console.warn(`⚠️ No se encontró al administrador con email: ${email}. Saltando...`);
-      continue;
-    }
+  if (!adminUser) {
+    console.warn(`⚠️ No se encontró al administrador con email: ${adminEmail}. Asegúrate de ejecutar primero admin.seed.js.`);
+    return;
+  }
 
-    const reviewData = reviewsFeed[email];
+  // Evitar duplicados si el seed se vuelve a ejecutar
+  const existingReview = await prisma.review.findFirst({
+    where: {
+      userId: adminUser.id,
+      companyId: adminUser.companyId,
+    },
+  });
 
-    // Evitar duplicados si el seed se vuelve a ejecutar
-    const existingReview = await prisma.review.findFirst({
-      where: {
-        userId: adminUser.id,
-        companyId: adminUser.companyId,
-      },
-    });
-
-    if (existingReview) {
-      console.log(`⏩ El administrador ${email} ya tiene una reseña registrada. Saltando...`);
-      continue;
-    }
-
+  if (existingReview) {
+    console.log(`⏩ El administrador ${adminEmail} ya tiene una reseña registrada. Saltando...`);
+  } else {
     // 3. Inserción directa en la tabla Review usando sus columnas exactas
     await prisma.review.create({
       data: {
         rating: reviewData.rating,
         comment: reviewData.comment,
-        userId: adminUser.id,        // Relación requerida NOT NULL (INTEGER)
+        userId: adminUser.id,           // Relación requerida NOT NULL (INTEGER)
         companyId: adminUser.companyId, // Relación requerida NOT NULL (INTEGER)
       },
     });
@@ -65,7 +54,7 @@ async function commentsSeed() {
   }
 
   console.log("\n====================================");
-  console.log(`✅ SEED COMPLETADO: Se cargaron con éxito ${totalCreated} reseñas en la tabla 'Review'.`);
+  console.log(`✅ SEED COMPLETADO: Se cargó con éxito ${totalCreated} reseña en la tabla 'Review'.`);
   console.log("====================================\n");
 }
 

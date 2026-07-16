@@ -1,6 +1,6 @@
 // ============================================================================
 // prisma/seeds/admin.seed.js
-// Carga masiva de empresas raíz, suscripciones y administradores globales
+// Carga de empresa raíz, suscripción y administrador global (Don Lucho)
 // ============================================================================
 
 const prisma = require("../client");
@@ -12,17 +12,17 @@ async function adminSeed() {
     10,
   );
 
-  console.log("🚀 Iniciando carga masiva de empresas y sus administradores...");
+  console.log("🚀 Iniciando carga masiva del ecosistema para Minimarket Don Lucho...");
 
   const companiesToSeed = [
     {
       company: {
         name: "Minimarket Don Lucho SAC",
-        slug: "minimarket-don-lucho", // <- ESTE slug debe existir en customer y supplier seeds
+        slug: "minimarket-don-lucho",
         ruc: "20612345678",
         taxId: "20612345678",
-        email: "contacto@donlucho.pe",
-        phone: "014567890",
+        email: "luissandovalcarbonel@gmail.com",
+        phone: "934049272",
         address: "Av. Mariscal Benavides 450, San Vicente de Cañete",
         website: "https://donlucho.pe",
         legalRepresentative: "Luis Enrique Sandoval Carbonel",
@@ -33,85 +33,39 @@ async function adminSeed() {
         email: "luissandovalcarbonel@gmail.com",
         phone: "934049272",
       },
-      // Sucursales modernas distribuidas estratégicamente en la provincia de Cañete
+      // Sucursales distribuidas estratégicamente en San Luis, La Quebrada, San Benito e Imperial
       customBranches: [
-        { name: "Minimarket Don Lucho - Sede Central", city: "San Vicente de Cañete", state: "Lima", code: "HQ-SVC", address: "Av. Mariscal Benavides 450" },
-        { name: "Minimarket Don Lucho - Express Imperial", city: "Imperial", state: "Lima", code: "EXP-IMP", address: "Av. Ramos Larrea 320" },
-        { name: "Minimarket Don Lucho - Urban Mala", city: "Mala", state: "Lima", code: "URB-MAL", address: "Av. Marchand 560" },
-        { name: "Minimarket Don Lucho - Market & Deli Asia", city: "Asia", state: "Lima", code: "MD-ASA", address: "Panamericana Sur Km 97.5 (Boulevard)" },
+        {
+          name: "Minimarket Don Lucho - San Luis",
+          city: "San Luis",
+          state: "Lima",
+          code: "SL-HQ",
+          address: "Av. 28 de Julio 120",
+        },
+        {
+          name: "Minimarket Don Lucho - La Quebrada",
+          city: "San Luis",
+          state: "Lima",
+          code: "LQ-BR",
+          address: "C.P. La Quebrada S/N (Zona Centro)",
+        },
+        {
+          name: "Minimarket Don Lucho - San Benito",
+          city: "Imperial",
+          state: "Lima",
+          code: "SB-BR",
+          address: "Jr. San Benito Mza. F Lote 12",
+        },
+        {
+          name: "Minimarket Don Lucho - Imperial",
+          city: "Imperial",
+          state: "Lima",
+          code: "IMP-BR",
+          address: "Av. Ramos Larrea 320",
+        },
       ],
     },
-    {
-      company: {
-        name: "Corporación Tecnológica Vega E.I.R.L.",
-        slug: "corp-tecnologica-vega",
-        ruc: "20798765432",
-        taxId: "20798765432",
-        email: "gerencia@tecnologicavega.com",
-        phone: "017894561",
-        address: "Jr. Las Flores 456, San Borja",
-        website: "https://tecnologicavega.com",
-        legalRepresentative: "Jimmy Sandoval Vega",
-        subscriptionTier: "PREMIUM",
-      },
-      admin: {
-        name: "Jimmy Sandoval Vega",
-        email: "jimmysandoval@gmail.com",
-        phone: "987999879",
-      },
-    },
-    {
-      company: {
-        name: "Inversiones Médicas San José",
-        slug: "inversiones-medicas-san-jose",
-        ruc: "20555666777",
-        taxId: "20555666777",
-        email: "administracion@sanjosemed.pe",
-        phone: "013216549",
-        address: "Av. Salaverry 789, Jesús María",
-        website: "https://sanjosemed.pe",
-        legalRepresentative: "María Fernanda López",
-        subscriptionTier: "PREMIUM",
-      },
-      admin: {
-        name: "María Fernanda López",
-        email: "maria.lopez@sanjosemed.pe",
-        phone: "945678123",
-      },
-    },
-    {
-      company: {
-        name: "Distribuidora Alimentos del Sur",
-        slug: "distribuidora-alimentos-sur",
-        ruc: "20444333222",
-        taxId: "20444333222",
-        email: "ventas@alimentosdelsur.pe",
-        phone: "054223344",
-        address: "Av. Alfonso Ugarte 512, Arequipa",
-        website: "https://alimentosdelsur.pe",
-        legalRepresentative: "Pedro Ramírez Soto",
-        subscriptionTier: "BASIC",
-      },
-      admin: {
-        name: "Pedro Ramírez Soto",
-        email: "pedro.ramirez@alimentosdelsur.pe",
-        phone: "912345678",
-      },
-    },
   ];
-
-  // Pool de regiones para el resto de empresas automáticas
-  const regionesPeru = [
-    { city: "Lima", state: "Lima", code: "LIM", address: "Av. Javier Prado Este 1550, San Isidro" },
-    { city: "Huancayo", state: "Junín", code: "HYO", address: "Av. Real 1045" },
-    { city: "Arequipa", state: "Arequipa", code: "AQP", address: "Calle Mercaderes 402" },
-    { city: "Trujillo", state: "La Libertad", code: "TRU", address: "Av. Larco 789" },
-    { city: "Chiclayo", state: "Lambayeque", code: "CIX", address: "Av. Balta 345" },
-    { city: "Piura", state: "Piura", code: "PIU", address: "Av. Grau 1420" },
-    { city: "Cusco", state: "Cusco", code: "CUZ", address: "Av. El Sol 612" },
-  ];
-
-  let companyIndex = 0;
 
   for (const item of companiesToSeed) {
     console.log(`\n🏢 Creando ecosistema autónomo para: ${item.company.name}...`);
@@ -141,7 +95,7 @@ async function adminSeed() {
     // 3. Crear Historial de Facturación
     const lastMonth = new Date(now);
     lastMonth.setMonth(lastMonth.getMonth() - 1);
-    const amount = company.subscriptionTier === "PREMIUM" ? 99.90 : 49.90;
+    const amount = 99.90; // Don Lucho es PREMIUM
 
     await prisma.billingHistory.createMany({
       data: [
@@ -171,64 +125,28 @@ async function adminSeed() {
       data: { companyId: company.id },
     });
 
-    // 5. Manejo de Sucursales
+    // 5. Manejo de Sucursales en Cañete (San Luis, La Quebrada, San Benito, Imperial)
     let mainBranch;
     const sucursalesData = [];
 
-    if (item.customBranches && item.customBranches.length > 0) {
-      // Caso 1: Estructura geolocalizada en Cañete para Minimarket Don Lucho
-      for (let i = 0; i < item.customBranches.length; i++) {
-        const cBranch = item.customBranches[i];
-        const branchPayload = {
-          name: cBranch.name,
-          code: `${company.slug.substring(0, 5).toUpperCase()}-${cBranch.code}`,
-          address: cBranch.address,
-          city: cBranch.city,
-          state: cBranch.state,
-          country: "Perú",
-          phone: company.phone,
-          email: `sucursal.${cBranch.code.toLowerCase()}@donlucho.pe`,
-          companyId: company.id,
-        };
+    for (let i = 0; i < item.customBranches.length; i++) {
+      const cBranch = item.customBranches[i];
+      const branchPayload = {
+        name: cBranch.name,
+        code: `${company.slug.substring(0, 5).toUpperCase()}-${cBranch.code}`,
+        address: cBranch.address,
+        city: cBranch.city,
+        state: cBranch.state,
+        country: "Perú",
+        phone: company.phone,
+        email: `sucursal.${cBranch.code.toLowerCase()}@donlucho.pe`,
+        companyId: company.id,
+      };
 
-        if (i === 0) {
-          mainBranch = await prisma.branch.create({ data: branchPayload });
-        } else {
-          sucursalesData.push(branchPayload);
-        }
-      }
-    } else {
-      // Caso 2: Resto de empresas (Generador dinámico corporativo)
-      mainBranch = await prisma.branch.create({
-        data: {
-          name: "Sede Central Corporativa",
-          code: `${company.slug.substring(0, 5).toUpperCase()}-HQ`,
-          address: company.address,
-          city: "Lima",
-          state: "Lima",
-          country: "Perú",
-          phone: company.phone,
-          email: company.email,
-          companyId: company.id,
-        },
-      });
-
-      const numSucursalesAdicionales = (companyIndex % 2 === 0) ? 3 : 2;
-      for (let i = 0; i < numSucursalesAdicionales; i++) {
-        const regionIndex = (companyIndex + i) % regionesPeru.length;
-        const region = regionesPeru[regionIndex];
-
-        sucursalesData.push({
-          name: `Centro de Distribución ${region.city}`,
-          code: `${company.slug.substring(0, 5).toUpperCase()}-${region.code}-${i + 1}`,
-          address: region.address,
-          city: region.city,
-          state: region.state,
-          country: "Perú",
-          phone: company.phone,
-          email: `contacto.${region.city.toLowerCase()}@${company.slug}.com`,
-          companyId: company.id,
-        });
+      if (i === 0) {
+        mainBranch = await prisma.branch.create({ data: branchPayload });
+      } else {
+        sucursalesData.push(branchPayload);
       }
     }
 
@@ -240,7 +158,7 @@ async function adminSeed() {
       });
     }
 
-    // 6. Crear ÚNICO Usuario Administrador enlazado a la Sede Central y la Empresa
+    // 6. Crear Usuario Administrador Único enlazado a la Sede Central (San Luis)
     const admin = await prisma.user.create({
       data: {
         name: item.admin.name,
@@ -255,11 +173,10 @@ async function adminSeed() {
 
     console.log(`✅ Registro exitoso para ${company.name}`);
     console.log(`   🔑 ADMIN: ${admin.email}`);
-    companyIndex++;
   }
 
   console.log("\n====================================");
-  console.log("⭐ PROCESO COMPLETADO: EMPRESAS E INVITADOS INSERTADOS");
+  console.log("⭐ PROCESO COMPLETADO: EMPRESA DON LUCHO INSTALADA");
   console.log("🔑 PASSWORD COMÚN DE ACCESO:", process.env.SEED_PASSWORD || "admin123");
   console.log("====================================\n");
 }

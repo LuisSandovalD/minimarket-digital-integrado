@@ -1,4 +1,7 @@
+// ============================================================================
 // hooks/useUsersPageData.js
+// CORREGIDO: Removido el estado de expansión obsoleto para delegarlo a la tabla
+// ============================================================================
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
@@ -9,7 +12,7 @@ import useUsers from "./useUsers";
 export function useUsersPageData() {
   const queryClient = useQueryClient();
 
-  // CORE HOKS (Data fetching & state queries)
+  // CORE HOOKS (Data fetching & state queries)
   const { branches = [], loading: loadingBranches } = useBranches({
     page: 1,
     limit: 100,
@@ -22,11 +25,9 @@ export function useUsersPageData() {
     filters,
     setFilters,
     loading: loadingUsers,
-    expandedUsers,
-    toggleExpand,
     toggleUserStatus,
     fetchUsers,
-  } = useUsers();
+  } = useUsers(); // 🌟 Removidos expandedUsers y toggleExpand de la destrucción
 
   // LOCAL STATES (Modals and action triggers)
   const [openModal, setOpenModal] = useState(false);
@@ -35,7 +36,7 @@ export function useUsersPageData() {
   const [openStatusAlert, setOpenStatusAlert] = useState(false);
   const [openDeleteAlert, setOpenDeleteAlert] = useState(false);
 
-  // TRANSTACK MUTATIONS
+  // TANSTACK MUTATIONS
   const deleteMutation = useMutation({
     mutationFn: deleteUser,
     onSuccess: async () => {
@@ -121,7 +122,6 @@ export function useUsersPageData() {
     users,
     allUsersRaw,
     pagination,
-    expandedUsers,
     loading: loadingUsers,
     loadingBranches,
     openModal,
@@ -131,8 +131,7 @@ export function useUsersPageData() {
     openDeleteAlert,
 
     // Core Actions
-    toggleExpand,
-    toggleUserStatus,
+    toggleUserStatus, // 🌟 Removido toggleExpand del retorno
     setOpenModal,
     setOpenStatusAlert,
     setOpenDeleteAlert,
