@@ -21,7 +21,7 @@ exports.addStock = async (req, res) => {
       Number(req.params.id),
       Number(req.body.quantity),
       req.user.id,
-      req.body.reason
+      req.body.reason,
     );
 
     res.json({
@@ -53,7 +53,7 @@ exports.removeStock = async (req, res) => {
       Number(req.params.id),
       Number(req.body.quantity),
       req.user.id,
-      req.body.reason
+      req.body.reason,
     );
 
     res.json({
@@ -83,7 +83,7 @@ exports.reserveStock = async (req, res) => {
 
     const inventory = await service.reserveStock(
       Number(req.params.id),
-      Number(req.body.quantity)
+      Number(req.body.quantity),
     );
 
     res.json({
@@ -113,7 +113,7 @@ exports.releaseReservedStock = async (req, res) => {
 
     const inventory = await service.releaseReservedStock(
       Number(req.params.id),
-      Number(req.body.quantity)
+      Number(req.body.quantity),
     );
 
     res.json({
@@ -145,7 +145,7 @@ exports.addDamagedStock = async (req, res) => {
       Number(req.params.id),
       Number(req.body.quantity),
       req.user.id,
-      req.body.reason
+      req.body.reason,
     );
 
     res.json({

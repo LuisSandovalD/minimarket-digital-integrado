@@ -19,7 +19,7 @@ const webhookCtrl = require("./modules/auth/controllers/webhook.controller");
 app.post(
   "/api/webhooks/stripe",
   express.raw({ type: "application/json" }),
-  webhookCtrl.handleWebhook
+  webhookCtrl.handleWebhook,
 );
 
 /* =========================================================================

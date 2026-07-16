@@ -12,7 +12,7 @@ const repository =
 exports.validateProductCreate =
   async (
     body,
-    companyId
+    companyId,
   ) => {
 
     // ====================================
@@ -22,7 +22,7 @@ exports.validateProductCreate =
     if (!body.name) {
 
       throw new Error(
-        "El nombre es obligatorio"
+        "El nombre es obligatorio",
       );
 
     }
@@ -30,7 +30,7 @@ exports.validateProductCreate =
     if (!body.categoryId) {
 
       throw new Error(
-        "La categoría es obligatoria"
+        "La categoría es obligatoria",
       );
 
     }
@@ -38,7 +38,7 @@ exports.validateProductCreate =
     if (!body.unitId) {
 
       throw new Error(
-        "La unidad es obligatoria"
+        "La unidad es obligatoria",
       );
 
     }
@@ -66,7 +66,7 @@ exports.validateProductCreate =
     if (purchasePrice <= 0) {
 
       throw new Error(
-        "El precio de compra debe ser mayor a 0"
+        "El precio de compra debe ser mayor a 0",
       );
 
     }
@@ -78,7 +78,7 @@ exports.validateProductCreate =
     if (profitMargin < 0) {
 
       throw new Error(
-        "El margen de ganancia no puede ser negativo"
+        "El margen de ganancia no puede ser negativo",
       );
 
     }
@@ -90,7 +90,7 @@ exports.validateProductCreate =
     if (salePrice < purchasePrice) {
 
       throw new Error(
-        "El precio de venta no puede ser menor al costo"
+        "El precio de venta no puede ser menor al costo",
       );
 
     }
@@ -102,7 +102,7 @@ exports.validateProductCreate =
     if (profitAmount < 0) {
 
       throw new Error(
-        "La ganancia no puede ser negativa"
+        "La ganancia no puede ser negativa",
       );
 
     }
@@ -131,7 +131,7 @@ exports.validateProductCreate =
 
     const round = (num) =>
       Number(
-        Number(num).toFixed(2)
+        Number(num).toFixed(2),
       );
 
     // ====================================
@@ -146,7 +146,7 @@ exports.validateProductCreate =
     ) {
 
       throw new Error(
-        "El precio de venta no coincide con el margen calculado"
+        "El precio de venta no coincide con el margen calculado",
       );
 
     }
@@ -163,7 +163,7 @@ exports.validateProductCreate =
     ) {
 
       throw new Error(
-        "La ganancia calculada es inválida"
+        "La ganancia calculada es inválida",
       );
 
     }
@@ -184,7 +184,7 @@ exports.validateProductCreate =
     if (stock < 0) {
 
       throw new Error(
-        "El stock no puede ser negativo"
+        "El stock no puede ser negativo",
       );
 
     }
@@ -192,7 +192,7 @@ exports.validateProductCreate =
     if (minStock < 0) {
 
       throw new Error(
-        "El stock mínimo no puede ser negativo"
+        "El stock mínimo no puede ser negativo",
       );
 
     }
@@ -203,7 +203,7 @@ exports.validateProductCreate =
     ) {
 
       throw new Error(
-        "El stock máximo no puede ser menor al mínimo"
+        "El stock máximo no puede ser menor al mínimo",
       );
 
     }
@@ -219,14 +219,14 @@ exports.validateProductCreate =
 
           body.sku,
 
-          companyId
+          companyId,
 
         );
 
       if (existingSku) {
 
         throw new Error(
-          "El SKU ya existe"
+          "El SKU ya existe",
         );
 
       }
@@ -244,14 +244,14 @@ exports.validateProductCreate =
 
           body.barcode,
 
-          companyId
+          companyId,
 
         );
 
       if (existingBarcode) {
 
         throw new Error(
-          "El código de barras ya existe"
+          "El código de barras ya existe",
         );
 
       }

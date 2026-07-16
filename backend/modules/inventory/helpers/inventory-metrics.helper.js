@@ -9,7 +9,7 @@
 exports.calculateInventoryValue =
   (
     stock,
-    costPrice
+    costPrice,
   ) => {
 
     return (
@@ -25,7 +25,7 @@ exports.calculateInventoryValue =
 exports.calculateProfitMargin =
   (
     costPrice,
-    salePrice
+    salePrice,
   ) => {
 
     if (costPrice <= 0) {
@@ -50,7 +50,7 @@ exports.calculateProfitMargin =
 exports.calculateStockPercentage =
   (
     stock,
-    maxStock
+    maxStock,
   ) => {
 
     if (!maxStock) {

@@ -1,7 +1,5 @@
 export default function AsideHeaderSkeleton({ isCollapsed }) {
-  const logoSize = isCollapsed
-    ? "w-11 h-11 rounded-xl"
-    : "w-12 h-12 rounded-xl";
+  const logoSize = isCollapsed ? "w-11 h-11 rounded-xl" : "w-12 h-12 rounded-xl";
   const statusSize = isCollapsed ? "w-3 h-3" : "w-3.5 h-3.5";
 
   return (

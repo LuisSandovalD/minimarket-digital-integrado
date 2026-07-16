@@ -10,9 +10,7 @@ export default function SupportSidebar({
   search,
 }) {
   const totalOpen = tickets.filter((t) => t.status === "OPEN").length;
-  const totalInProgress = tickets.filter(
-    (t) => t.status === "IN_PROGRESS",
-  ).length;
+  const totalInProgress = tickets.filter((t) => t.status === "IN_PROGRESS").length;
   const totalResolved = tickets.filter((t) => t.status === "RESOLVED").length;
 
   return (
@@ -22,16 +20,11 @@ export default function SupportSidebar({
       ========================= */}
       <div className="flex flex-col justify-between gap-4 border-b border-slate-800/60 pb-5 sm:flex-row sm:items-center">
         <div>
-          <h3 className="text-sm font-semibold text-slate-200">
-            Listado de Solicitudes
-          </h3>
+          <h3 className="text-sm font-semibold text-slate-200">Listado de Solicitudes</h3>
 
           <p className="mt-0.5 text-xs text-slate-400">
-            Mostrando{" "}
-            <span className="font-medium text-blue-400">
-              {filteredTickets.length}
-            </span>{" "}
-            resultados de {tickets.length}
+            Mostrando <span className="font-medium text-blue-400">{filteredTickets.length}</span> resultados de{" "}
+            {tickets.length}
           </p>
         </div>
 
@@ -63,14 +56,10 @@ export default function SupportSidebar({
             </div>
 
             <div className="space-y-1.5">
-              <p className="text-sm font-semibold text-slate-200">
-                {search ? "Sin coincidencias" : "Sin tickets"}
-              </p>
+              <p className="text-sm font-semibold text-slate-200">{search ? "Sin coincidencias" : "Sin tickets"}</p>
 
               <p className="text-xs text-slate-400 leading-relaxed">
-                {search
-                  ? `No hay resultados para "${search}".`
-                  : "Aún no tienes tickets registrados."}
+                {search ? `No hay resultados para "${search}".` : "Aún no tienes tickets registrados."}
               </p>
             </div>
           </div>
@@ -116,9 +105,7 @@ function Stat({ label, value, color }) {
   };
 
   return (
-    <div
-      className={`flex items-center gap-1.5 rounded-lg border px-2.5 py-1 text-[11px] font-medium ${colors[color]}`}
-    >
+    <div className={`flex items-center gap-1.5 rounded-lg border px-2.5 py-1 text-[11px] font-medium ${colors[color]}`}>
       <span>{label}:</span>
       <strong className="text-white">{value}</strong>
     </div>
@@ -132,10 +119,7 @@ function SidebarSkeleton() {
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 animate-pulse">
       {Array.from({ length: 8 }).map((_, i) => (
-        <div
-          key={i}
-          className="h-24 rounded-xl border border-slate-800/50 bg-slate-900/40"
-        />
+        <div key={i} className="h-24 rounded-xl border border-slate-800/50 bg-slate-900/40" />
       ))}
     </div>
   );

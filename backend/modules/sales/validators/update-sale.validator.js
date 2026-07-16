@@ -15,7 +15,7 @@ const updateSaleSchema = Joi.object({
         productId: Joi.number().integer().positive().required(),
         quantity: Joi.number().positive().required(),
         price: Joi.number().min(0).required(),
-      })
+      }),
     )
     .min(1)
     .required(),

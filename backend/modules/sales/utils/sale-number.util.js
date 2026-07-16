@@ -8,7 +8,7 @@
 
 exports.generateSaleNumber =
   (
-    prefix = "SALE"
+    prefix = "SALE",
   ) => {
 
     const date =
@@ -19,18 +19,18 @@ exports.generateSaleNumber =
 
     const month =
       String(
-        date.getMonth() + 1
+        date.getMonth() + 1,
       ).padStart(2, "0");
 
     const day =
       String(
-        date.getDate()
+        date.getDate(),
       ).padStart(2, "0");
 
     const random =
       Math.floor(
         1000 +
-        Math.random() * 9000
+        Math.random() * 9000,
       );
 
     return `${prefix}-${year}${month}${day}-${random}`;
@@ -44,11 +44,11 @@ exports.generateSaleNumber =
 exports.generateInvoiceNumber =
   (
     series = "F001",
-    correlative = 1
+    correlative = 1,
   ) => {
 
     return `${series}-${String(
-      correlative
+      correlative,
     ).padStart(6, "0")}`;
 
   };

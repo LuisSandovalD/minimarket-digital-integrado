@@ -32,14 +32,9 @@ export default function CartModal({
         {details.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center py-20">
             <div className="h-16 w-16 rounded-2xl flex items-center justify-center bg-white dark:bg-slate-900 shadow-sm border border-slate-100 dark:border-slate-800">
-              <ShoppingCart
-                size={26}
-                className="text-blue-500 dark:text-blue-400"
-              />
+              <ShoppingCart size={26} className="text-blue-500 dark:text-blue-400" />
             </div>
-            <h3 className="mt-4 text-base font-bold text-slate-800 dark:text-slate-200">
-              El carrito está vacío
-            </h3>
+            <h3 className="mt-4 text-base font-bold text-slate-800 dark:text-slate-200">El carrito está vacío</h3>
             <p className="mt-1 text-sm text-slate-400 dark:text-slate-500 max-w-xs mx-auto">
               Selecciona productos del catálogo para agregarlos aquí.
             </p>
@@ -52,24 +47,12 @@ export default function CartModal({
 
               // ── MATEMÁTICA INTEGRAL POR FILA: VALOR CON IGV ADICIONADO ──
               const itemPriceWithTax = itemPriceNet * 1.18;
-              const itemSubtotalWithTax = Number(
-                item.quantity * itemPriceWithTax,
-              );
+              const itemSubtotalWithTax = Number(item.quantity * itemPriceWithTax);
 
               // Buscamos el nombre en el catálogo local en caso de purga reactiva
-              const catalogoMatch = products.find(
-                (p) => Number(p.id) === Number(item.productId),
-              );
-              const nombreAMostrar =
-                item.productName ||
-                item.name ||
-                catalogoMatch?.name ||
-                "Producto seleccionado";
-              const stockMaximo =
-                item.stock ||
-                catalogoMatch?.totalStock ||
-                catalogoMatch?.stock ||
-                999;
+              const catalogoMatch = products.find((p) => Number(p.id) === Number(item.productId));
+              const nombreAMostrar = item.productName || item.name || catalogoMatch?.name || "Producto seleccionado";
+              const stockMaximo = item.stock || catalogoMatch?.totalStock || catalogoMatch?.stock || 999;
 
               return (
                 <div
@@ -154,11 +137,7 @@ export default function CartModal({
               {fmt(totalAmount)}
             </p>
           </div>
-          <ModernButton
-            text="Confirmar y Cerrar"
-            variant="primary"
-            onClick={onClose}
-          />
+          <ModernButton text="Confirmar y Cerrar" variant="primary" onClick={onClose} />
         </div>
       </FooterModal>
     </Modal>

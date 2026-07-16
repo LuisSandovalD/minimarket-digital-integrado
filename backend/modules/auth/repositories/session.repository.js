@@ -22,8 +22,8 @@ const createSession = async (data, tx = null) => {
       userAgent: data.userAgent || null,
       expiresAt: data.expiresAt,
       refreshExpiresAt: data.refreshExpiresAt,
-      isActive: data.isActive !== undefined ? data.isActive : true
-    }
+      isActive: data.isActive !== undefined ? data.isActive : true,
+    },
   });
 };
 
@@ -35,8 +35,8 @@ const findSessionByToken = async (token, tx = null) => {
   return client.userSession.findFirst({
     where: {
       token,
-      isActive: true
-    }
+      isActive: true,
+    },
   });
 };
 
@@ -44,7 +44,7 @@ const findSessionByToken = async (token, tx = null) => {
  * FIND SESSION BY REFRESH TOKEN
  * ==================================== */
 /**
- * Utilizado por el flujo de rotación de tokens (/refresh) para validar 
+ * Utilizado por el flujo de rotación de tokens (/refresh) para validar
  * la autenticidad y el estado del Refresh Token.
  */
 const findSessionByRefreshToken = async (refreshToken, tx = null) => {
@@ -52,8 +52,8 @@ const findSessionByRefreshToken = async (refreshToken, tx = null) => {
   return client.userSession.findFirst({
     where: {
       refreshToken,
-      isActive: true
-    }
+      isActive: true,
+    },
   });
 };
 
@@ -63,7 +63,7 @@ const findSessionByRefreshToken = async (refreshToken, tx = null) => {
 const findSessionById = async (id, tx = null) => {
   const client = tx || prisma;
   return client.userSession.findUnique({
-    where: { id }
+    where: { id },
   });
 };
 
@@ -75,10 +75,10 @@ const findAllActiveSessions = async (userId, tx = null) => {
   return client.userSession.findMany({
     where: {
       userId,
-      isActive: true
+      isActive: true,
     },
     orderBy: {
-      createdAt: "desc"
+      createdAt: "desc",
     },
   });
 };
@@ -91,10 +91,10 @@ const deactivateSessionByToken = async (token, tx = null) => {
   return client.userSession.updateMany({
     where: {
       token,
-      isActive: true
+      isActive: true,
     },
     data: {
-      isActive: false
+      isActive: false,
     },
   });
 };
@@ -107,7 +107,7 @@ const deactivateSessionById = async (id, tx = null) => {
   return client.userSession.update({
     where: { id },
     data: {
-      isActive: false
+      isActive: false,
     },
   });
 };
@@ -120,10 +120,10 @@ const deactivateAllSessions = async (userId, tx = null) => {
   return client.userSession.updateMany({
     where: {
       userId,
-      isActive: true
+      isActive: true,
     },
     data: {
-      isActive: false
+      isActive: false,
     },
   });
 };
@@ -132,7 +132,7 @@ const deactivateAllSessions = async (userId, tx = null) => {
  * UPDATE SESSION TOKEN (ROTACIÓN DE REFRESH)
  * ==================================== */
 /**
- * Al renovar los tokens, este método actualiza atómicamente el par de llaves 
+ * Al renovar los tokens, este método actualiza atómicamente el par de llaves
  * en la fila correspondiente de la sesión junto con sus nuevas expiraciones.
  */
 const updateSessionToken = async ({ id, newToken, newRefreshToken, newExpiresAt, newRefreshExpiresAt }, tx = null) => {
@@ -143,8 +143,8 @@ const updateSessionToken = async ({ id, newToken, newRefreshToken, newExpiresAt,
       token: newToken,
       refreshToken: newRefreshToken,
       expiresAt: newExpiresAt,
-      refreshExpiresAt: newRefreshExpiresAt
-    }
+      refreshExpiresAt: newRefreshExpiresAt,
+    },
   });
 };
 
@@ -158,5 +158,5 @@ module.exports = {
   deactivateSessionByToken,
   deactivateSessionById,
   deactivateAllSessions,
-  updateSessionToken
+  updateSessionToken,
 };

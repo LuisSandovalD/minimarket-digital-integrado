@@ -4,21 +4,15 @@
 
 import { useCallback, useEffect } from "react";
 import { useDispatch } from "react-redux";
+
 import { BrowserRouter, useRoutes } from "react-router-dom";
 
 import { routes } from "./routes";
 
 import { meService } from "./features/auth/services/auth.service";
-import {
-  clearSession,
-  getToken,
-} from "./features/auth/services/session.service";
+import { clearSession, getToken } from "./features/auth/services/session.service";
 
-import {
-  loginSuccess,
-  logout,
-  setLoading,
-} from "./features/auth/store/authSlice";
+import { loginSuccess, logout, setLoading } from "./features/auth/store/authSlice";
 
 export default function App() {
   const dispatch = useDispatch();

@@ -1,7 +1,3 @@
-// ========================================
-// features/purchase/components/PurchaseProductsModal.jsx
-// ========================================
-
 import { Barcode, Boxes, DollarSign, Package, X } from "lucide-react";
 
 import { ModernButton } from "@/components/buttons";
@@ -132,9 +128,7 @@ export default function PurchaseProductsModal({ open, onClose, purchase }) {
                       text-blue-600
                     "
                   >
-                    {formatPrice(
-                      Number(detail.quantity || 0) * Number(detail.price || 0),
-                    )}
+                    {formatPrice(Number(detail.quantity || 0) * Number(detail.price || 0))}
                   </p>
                 </div>
               </div>
@@ -276,12 +270,7 @@ export default function PurchaseProductsModal({ open, onClose, purchase }) {
 
       <FooterModal>
         <div className="flex justify-end w-full">
-          <ModernButton
-            type="button"
-            text="Cerrar"
-            icon={X}
-            onClick={onClose}
-          />
+          <ModernButton type="button" text="Cerrar" icon={X} onClick={onClose} />
         </div>
       </FooterModal>
     </Modal>

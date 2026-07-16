@@ -3,17 +3,9 @@ import { useState } from "react";
 import { SubmitButton } from "@/components/buttons";
 import { FormError } from "@/components/forms";
 
-import {
-  sendRecoveryEmailService,
-  verifyRecoveryCodeService,
-} from "../../services/auth.service";
+import { sendRecoveryEmailService, verifyRecoveryCodeService } from "../../services/auth.service";
 
-export default function ForgotPasswordStepCode({
-  email,
-  code,
-  setCode,
-  onNext,
-}) {
+export default function ForgotPasswordStepCode({ email, code, setCode, onNext }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [resending, setResending] = useState(false);
@@ -34,9 +26,7 @@ export default function ForgotPasswordStepCode({
 
       onNext();
     } catch (err) {
-      setError(
-        err?.message || "Código incorrecto o expirado. Intenta de nuevo.",
-      );
+      setError(err?.message || "Código incorrecto o expirado. Intenta de nuevo.");
     } finally {
       setLoading(false);
     }
@@ -62,9 +52,7 @@ export default function ForgotPasswordStepCode({
         {email && (
           <>
             {" "}
-            <span className="font-semibold text-[#274c77] dark:text-white">
-              {email}
-            </span>
+            <span className="font-semibold text-[#274c77] dark:text-white">{email}</span>
           </>
         )}
         .

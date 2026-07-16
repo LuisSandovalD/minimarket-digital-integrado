@@ -9,13 +9,7 @@ import { SearchInput } from "@/components/forms";
 
 import { RefreshCw, Search } from "lucide-react";
 
-export default function BarcodeFilters({
-  value = "",
-  onChange,
-  onSearch,
-  onClear,
-  loading = false,
-}) {
+export default function BarcodeFilters({ value = "", onChange, onSearch, onClear, loading = false }) {
   const [localSearch, setLocalSearch] = useState(value);
 
   const handleSubmit = (e) => {

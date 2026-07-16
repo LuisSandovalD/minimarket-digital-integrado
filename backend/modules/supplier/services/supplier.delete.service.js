@@ -13,7 +13,7 @@ exports.deleteSupplier = async (id, companyId) => {
     success: true,
     message: "Supplier deleted successfully",
   };
-}
+};
 
 exports.restoreSupplier = async (id, companyId) => {
   await supplierRepository.restore(id, companyId);
@@ -22,5 +22,5 @@ exports.restoreSupplier = async (id, companyId) => {
     success: true,
     message: "Supplier restored successfully",
   };
-}
+};
 

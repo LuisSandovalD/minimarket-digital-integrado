@@ -23,11 +23,7 @@ const fastFadeUp = {
 export default function AIFeatures() {
   // Extraemos los bloques de analítica predictiva e IA empresarial para poblar la grilla de 4 elementos
   const aiFeatures = PURCHASE_FEATURES.filter(
-    (group) =>
-      group.id === "ai" ||
-      group.id === "purchase" ||
-      group.id === "expenses" ||
-      group.id === "supply-chain",
+    (group) => group.id === "ai" || group.id === "purchase" || group.id === "expenses" || group.id === "supply-chain",
   );
 
   return (
@@ -67,9 +63,8 @@ export default function AIFeatures() {
             variants={fastFadeUp}
             className="text-pretty text-base leading-relaxed text-slate-600 dark:text-[#cbd5e1] max-w-2xl"
           >
-            Deja que algoritmos avanzados analicen tus históricos de ventas,
-            optimicen tu cadena de suministro, detecten anomalías y automaticen
-            tus flujos financieros.
+            Deja que algoritmos avanzados analicen tus históricos de ventas, optimicen tu cadena de suministro, detecten
+            anomalías y automaticen tus flujos financieros.
           </motion.p>
         </motion.div>
 
@@ -107,12 +102,8 @@ export default function AIFeatures() {
 
                   {/* Textos descriptivos */}
                   <div className="space-y-2 mb-6 flex-1">
-                    <h3 className="text-lg font-black tracking-tight text-slate-900 dark:text-white">
-                      {group.title}
-                    </h3>
-                    <p className="text-sm leading-relaxed text-slate-500 dark:text-[#cbd5e1]/70">
-                      {group.description}
-                    </p>
+                    <h3 className="text-lg font-black tracking-tight text-slate-900 dark:text-white">{group.title}</h3>
+                    <p className="text-sm leading-relaxed text-slate-500 dark:text-[#cbd5e1]/70">{group.description}</p>
                   </div>
 
                   {/* Listado de sub-ítems inferiores */}
@@ -127,12 +118,8 @@ export default function AIFeatures() {
                             </div>
                           )}
                           <div className="space-y-0.5">
-                            <h4 className="text-xs font-bold text-slate-800 dark:text-slate-200">
-                              {item.title}
-                            </h4>
-                            <p className="text-[11px] leading-normal text-slate-400 dark:text-slate-400">
-                              {item.text}
-                            </p>
+                            <h4 className="text-xs font-bold text-slate-800 dark:text-slate-200">{item.title}</h4>
+                            <p className="text-[11px] leading-normal text-slate-400 dark:text-slate-400">{item.text}</p>
                           </div>
                         </div>
                       );

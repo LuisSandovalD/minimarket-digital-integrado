@@ -1,11 +1,11 @@
 // modules/database/prisma/prisma-queries.js
 
 const prisma = require(
-    "../../../config/prisma.config"
+  "../../../config/prisma.config",
 );
 
 const safeQuery = require(
-    "../utils/safe-query"
+  "../utils/safe-query",
 );
 
 /*
@@ -15,22 +15,22 @@ const safeQuery = require(
 */
 
 async function executeSafeQuery(
-    query
+  query,
 ) {
 
-    const isSafe =
+  const isSafe =
         safeQuery(query);
 
-    if (!isSafe) {
+  if (!isSafe) {
 
-        throw new Error(
-            "Dangerous query detected"
-        );
-    }
-
-    return prisma.$queryRawUnsafe(
-        query
+    throw new Error(
+      "Dangerous query detected",
     );
+  }
+
+  return prisma.$queryRawUnsafe(
+    query,
+  );
 }
 
 /*
@@ -40,17 +40,17 @@ async function executeSafeQuery(
 */
 
 async function executeTransaction(
-    callback
+  callback,
 ) {
 
-    return prisma.$transaction(
-        callback
-    );
+  return prisma.$transaction(
+    callback,
+  );
 }
 
 module.exports = {
 
-    executeSafeQuery,
+  executeSafeQuery,
 
-    executeTransaction,
+  executeTransaction,
 };

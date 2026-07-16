@@ -72,5 +72,5 @@ const validateRegister = async (body) => {
 // EXPORTACIÓN UNIFICADA: Garantiza que no devuelva un objeto vacío o undefined
 module.exports = {
   validateLogin,
-  validateRegister
+  validateRegister,
 };

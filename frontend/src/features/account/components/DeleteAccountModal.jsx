@@ -12,8 +12,7 @@ import useAccountProfile from "../hooks/useAccountProfile";
 
 export default function DeleteAccountModal({ open, onClose }) {
   // Sincronizamos con los estados de carga, errores y acciones de tu Zustand Store
-  const { handleDeleteAccount, deleteLoading, serverError, validationErrors } =
-    useAccountProfile();
+  const { handleDeleteAccount, deleteLoading, serverError, validationErrors } = useAccountProfile();
 
   const [password, setPassword] = useState("");
   const [localError, setLocalError] = useState("");
@@ -59,18 +58,12 @@ export default function DeleteAccountModal({ open, onClose }) {
       <div className="px-6 py-6 space-y-5">
         {/* Warning Alert - Diseño de Zona de Riesgo */}
         <div className="flex gap-3 rounded-2xl border border-red-200 dark:border-red-900/40 bg-red-50/70 dark:bg-red-900/10 p-4">
-          <AlertTriangle
-            size={20}
-            className="mt-0.5 text-red-600 dark:text-red-400 flex-shrink-0"
-          />
+          <AlertTriangle size={20} className="mt-0.5 text-red-600 dark:text-red-400 flex-shrink-0" />
           <div>
-            <p className="text-sm font-semibold text-red-700 dark:text-red-400">
-              Acción Altamente Crítica
-            </p>
+            <p className="text-sm font-semibold text-red-700 dark:text-red-400">Acción Altamente Crítica</p>
             <p className="mt-1 text-xs leading-relaxed text-red-600/90 dark:text-red-300">
-              Tu cuenta será eliminada permanentemente de la base de datos del
-              sistema. Se revocarán de inmediato todas las sesiones activas en
-              otros dispositivos de forma irreversible.
+              Tu cuenta será eliminada permanentemente de la base de datos del sistema. Se revocarán de inmediato todas
+              las sesiones activas en otros dispositivos de forma irreversible.
             </p>
           </div>
         </div>
@@ -96,26 +89,17 @@ export default function DeleteAccountModal({ open, onClose }) {
         {(localError || serverError || validationErrors?.deletePassword) && (
           <div className="p-3.5 text-xs font-semibold rounded-xl bg-red-50 dark:bg-red-950/20 text-red-600 dark:text-red-400 border border-red-100 dark:border-red-950/30 flex items-center gap-2">
             <AlertCircle size={16} className="shrink-0" />
-            <span>
-              {localError || serverError || validationErrors?.deletePassword}
-            </span>
+            <span>{localError || serverError || validationErrors?.deletePassword}</span>
           </div>
         )}
       </div>
 
       <FooterModal>
         <div className="flex justify-end gap-3 w-full">
-          <ModernButton
-            text="Cancelar"
-            variant="outline"
-            onClick={onClose}
-            disabled={deleteLoading}
-          />
+          <ModernButton text="Cancelar" variant="outline" onClick={onClose} disabled={deleteLoading} />
 
           <ModernButton
-            text={
-              deleteLoading ? "Borrando Cuenta..." : "Eliminar Definitivamente"
-            }
+            text={deleteLoading ? "Borrando Cuenta..." : "Eliminar Definitivamente"}
             icon={Trash2}
             onClick={handleDelete}
             disabled={deleteLoading || !password}

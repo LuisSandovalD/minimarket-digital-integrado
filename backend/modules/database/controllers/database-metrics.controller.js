@@ -1,59 +1,59 @@
 // modules/database/controllers/database-metrics.controller.js
 
 const databaseMetricsService = require(
-    "../services/database-metrics.service"
+  "../services/database-metrics.service",
 );
 
 const databaseResponse = require(
-    "../utils/database-response"
+  "../utils/database-response",
 );
 
 class DatabaseMetricsController {
 
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Get Metrics
     |--------------------------------------------------------------------------
     */
 
-    async getMetrics(req, res) {
+  async getMetrics(req, res) {
 
-        try {
+    try {
 
-            const data =
+      const data =
                 await databaseMetricsService
-                    .getMetrics();
+                  .getMetrics();
 
-            return res.status(200).json(
+      return res.status(200).json(
 
-                databaseResponse({
+        databaseResponse({
 
-                    success: true,
+          success: true,
 
-                    message:
+          message:
                         "Database metrics retrieved successfully",
 
-                    data,
-                })
-            );
+          data,
+        }),
+      );
 
-        } catch (error) {
+    } catch (error) {
 
-            return res.status(500).json(
+      return res.status(500).json(
 
-                databaseResponse({
+        databaseResponse({
 
-                    success: false,
+          success: false,
 
-                    message:
+          message:
                         error.message,
 
-                    error:
+          error:
                         "DATABASE_METRICS_ERROR",
-                })
-            );
-        }
+        }),
+      );
     }
+  }
 }
 
 module.exports =

@@ -1,5 +1,5 @@
 function purchaseResponseDto(
-  purchase
+  purchase,
 ) {
 
   return {
@@ -35,12 +35,12 @@ function purchaseResponseDto(
       purchase.details,
 
     createdAt:
-      purchase.createdAt
+      purchase.createdAt,
 
   };
 
 }
 
 module.exports = {
-  purchaseResponseDto
+  purchaseResponseDto,
 };

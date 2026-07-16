@@ -8,12 +8,7 @@ import { Trash2 } from "lucide-react";
 import { useState } from "react";
 import { deleteUnit } from "../services/unit.service";
 
-export default function UnitDeleteModal({
-  open,
-  onClose,
-  reload,
-  selectedUnit,
-}) {
+export default function UnitDeleteModal({ open, onClose, reload, selectedUnit }) {
   const [isDeleting, setIsDeleting] = useState(false);
 
   if (!open || !selectedUnit) {
@@ -43,13 +38,7 @@ export default function UnitDeleteModal({
     >
       {/* Botonera elegante inyectada directamente como children */}
       <div className="flex items-center justify-end gap-2.5 border-t border-slate-100 dark:border-slate-800/60 pt-4 mt-2">
-        <ModernButton
-          type="button"
-          variant="outline"
-          text="Cancelar"
-          disabled={isDeleting}
-          onClick={onClose}
-        />
+        <ModernButton type="button" variant="outline" text="Cancelar" disabled={isDeleting} onClick={onClose} />
 
         <ModernButton
           type="button"

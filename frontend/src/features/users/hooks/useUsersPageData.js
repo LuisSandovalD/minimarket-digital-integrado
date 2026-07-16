@@ -1,6 +1,4 @@
-// ========================================
 // hooks/useUsersPageData.js
-// ========================================
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
@@ -11,9 +9,7 @@ import useUsers from "./useUsers";
 export function useUsersPageData() {
   const queryClient = useQueryClient();
 
-  // ========================================
   // CORE HOKS (Data fetching & state queries)
-  // ========================================
   const { branches = [], loading: loadingBranches } = useBranches({
     page: 1,
     limit: 100,
@@ -32,18 +28,14 @@ export function useUsersPageData() {
     fetchUsers,
   } = useUsers();
 
-  // ========================================
   // LOCAL STATES (Modals and action triggers)
-  // ========================================
   const [openModal, setOpenModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [userForAction, setUserForAction] = useState(null);
   const [openStatusAlert, setOpenStatusAlert] = useState(false);
   const [openDeleteAlert, setOpenDeleteAlert] = useState(false);
 
-  // ========================================
   // TRANSTACK MUTATIONS
-  // ========================================
   const deleteMutation = useMutation({
     mutationFn: deleteUser,
     onSuccess: async () => {
@@ -56,16 +48,15 @@ export function useUsersPageData() {
     },
   });
 
-  // 🌟 Sincronización reactiva con los filtros del hook de usuarios
+  // Sincronización reactiva con los filtros del hook de usuarios
   useEffect(() => {
     if (fetchUsers) {
       fetchUsers();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters]);
 
-  // ========================================
   // FILTERS & PAGINATION HANDLERS
-  // ========================================
   const handleSearch = (newFilters) => {
     setFilters((prev) => ({
       ...prev,
@@ -98,9 +89,7 @@ export function useUsersPageData() {
     }
   };
 
-  // ========================================
   // ACTION DISPATCHERS (CRUD Modals UI)
-  // ========================================
   const handleCreate = () => {
     setSelectedUser(null);
     setOpenModal(true);

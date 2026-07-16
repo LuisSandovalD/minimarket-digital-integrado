@@ -1,29 +1,11 @@
-// ============================================================================
-// features/purchase/components/steps/SummaryStep.jsx
-// FIX: flex-1 + overflow-y-auto para ocupar altura correctamente
-// ============================================================================
-
-import {
-  Building2,
-  CheckCircle2,
-  DollarSign,
-  Mail,
-  Package,
-  Phone,
-} from "lucide-react";
+import { Building2, CheckCircle2, DollarSign, Mail, Package, Phone } from "lucide-react";
 
 export default function SummaryStep({ form, suppliers = [] }) {
   const details = Array.isArray(form?.details) ? form.details : [];
 
-  const supplier = suppliers.find(
-    (s) => String(s.id) === String(form?.supplierId),
-  );
+  const supplier = suppliers.find((s) => String(s.id) === String(form?.supplierId));
 
-  const subtotal = details.reduce(
-    (acc, item) =>
-      acc + Number(item.quantity || 0) * Number(item.costPrice || 0),
-    0,
-  );
+  const subtotal = details.reduce((acc, item) => acc + Number(item.quantity || 0) * Number(item.costPrice || 0), 0);
 
   const tax = subtotal * 0.18;
   const total = subtotal + tax;
@@ -38,8 +20,7 @@ export default function SummaryStep({ form, suppliers = [] }) {
             Resumen de la Compra
           </h2>
           <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-            Verifica la información del proveedor, los insumos y los montos
-            antes de procesar la orden.
+            Verifica la información del proveedor, los insumos y los montos antes de procesar la orden.
           </p>
         </div>
 
@@ -54,21 +35,14 @@ export default function SummaryStep({ form, suppliers = [] }) {
 
           <div className="p-5 grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
             <div className="space-y-0.5">
-              <span className="text-xs font-medium text-slate-400 dark:text-slate-500">
-                Razon Social / Nombre
-              </span>
+              <span className="text-xs font-medium text-slate-400 dark:text-slate-500">Razon Social / Nombre</span>
               <p className="font-semibold text-slate-800 dark:text-slate-200">
-                {supplier?.companyName ||
-                  supplier?.name ||
-                  supplier?.razonSocial ||
-                  "-"}
+                {supplier?.companyName || supplier?.name || supplier?.razonSocial || "-"}
               </p>
             </div>
 
             <div className="space-y-0.5">
-              <span className="text-xs font-medium text-slate-400 dark:text-slate-500">
-                RUC
-              </span>
+              <span className="text-xs font-medium text-slate-400 dark:text-slate-500">RUC</span>
               <p className="font-medium text-slate-700 dark:text-slate-300">
                 {supplier?.ruc || supplier?.documentId || "-"}
               </p>
@@ -77,24 +51,16 @@ export default function SummaryStep({ form, suppliers = [] }) {
             <div className="space-y-0.5 flex items-center gap-2 pt-1 sm:pt-0">
               <Phone size={14} className="text-slate-400" />
               <div>
-                <span className="text-xs font-medium text-slate-400 dark:text-slate-500 block">
-                  Teléfono
-                </span>
-                <p className="text-slate-700 dark:text-slate-300">
-                  {supplier?.phone || supplier?.telephone || "-"}
-                </p>
+                <span className="text-xs font-medium text-slate-400 dark:text-slate-500 block">Teléfono</span>
+                <p className="text-slate-700 dark:text-slate-300">{supplier?.phone || supplier?.telephone || "-"}</p>
               </div>
             </div>
 
             <div className="space-y-0.5 flex items-center gap-2 pt-1 sm:pt-0">
               <Mail size={14} className="text-slate-400" />
               <div>
-                <span className="text-xs font-medium text-slate-400 dark:text-slate-500 block">
-                  Correo Electrónico
-                </span>
-                <p className="text-slate-700 dark:text-slate-300 truncate max-w-[220px]">
-                  {supplier?.email || "-"}
-                </p>
+                <span className="text-xs font-medium text-slate-400 dark:text-slate-500 block">Correo Electrónico</span>
+                <p className="text-slate-700 dark:text-slate-300 truncate max-w-[220px]">{supplier?.email || "-"}</p>
               </div>
             </div>
           </div>
@@ -120,9 +86,7 @@ export default function SummaryStep({ form, suppliers = [] }) {
                     <h4 className="font-medium text-sm text-slate-900 dark:text-slate-100 truncate">
                       {item.productName || item.name}
                     </h4>
-                    <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">
-                      SKU: {item.sku || "Sin código"}
-                    </p>
+                    <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">SKU: {item.sku || "Sin código"}</p>
                   </div>
 
                   <div className="text-right shrink-0">
@@ -133,10 +97,7 @@ export default function SummaryStep({ form, suppliers = [] }) {
                       </span>
                     </p>
                     <p className="font-semibold text-sm text-slate-900 dark:text-slate-100 mt-0.5">
-                      S/{" "}
-                      {(
-                        Number(item.quantity || 0) * Number(item.costPrice || 0)
-                      ).toFixed(2)}
+                      S/ {(Number(item.quantity || 0) * Number(item.costPrice || 0)).toFixed(2)}
                     </p>
                   </div>
                 </div>
@@ -154,32 +115,23 @@ export default function SummaryStep({ form, suppliers = [] }) {
          * ====================================== */}
         <div className="bg-white dark:bg-slate-950 rounded-2xl border border-slate-200/80 dark:border-slate-800/80 p-5 shadow-sm space-y-3.5">
           <div className="flex items-center gap-2.5 text-slate-800 dark:text-slate-200 border-b border-slate-100 dark:border-slate-900 pb-2.5">
-            <DollarSign
-              size={18}
-              className="text-blue-600 dark:text-blue-400"
-            />
+            <DollarSign size={18} className="text-blue-600 dark:text-blue-400" />
             <h3 className="font-semibold text-sm">Resumen Financiero</h3>
           </div>
 
           <div className="space-y-2.5 text-sm">
             <div className="flex justify-between items-center text-slate-500 dark:text-slate-400">
               <span>Subtotal afecto</span>
-              <span className="font-medium text-slate-800 dark:text-slate-200">
-                S/ {subtotal.toFixed(2)}
-              </span>
+              <span className="font-medium text-slate-800 dark:text-slate-200">S/ {subtotal.toFixed(2)}</span>
             </div>
 
             <div className="flex justify-between items-center text-slate-500 dark:text-slate-400">
               <span>IGV (18%)</span>
-              <span className="font-medium text-slate-800 dark:text-slate-200">
-                S/ {tax.toFixed(2)}
-              </span>
+              <span className="font-medium text-slate-800 dark:text-slate-200">S/ {tax.toFixed(2)}</span>
             </div>
 
             <div className="border-t border-slate-100 dark:border-slate-900 pt-3.5 flex justify-between items-center">
-              <span className="font-semibold text-slate-900 dark:text-slate-100">
-                Total a Pagar
-              </span>
+              <span className="font-semibold text-slate-900 dark:text-slate-100">Total a Pagar</span>
               <span className="text-2xl font-black text-blue-600 dark:text-blue-400 tracking-tight">
                 S/ {total.toFixed(2)}
               </span>
@@ -191,18 +143,14 @@ export default function SummaryStep({ form, suppliers = [] }) {
          * SYSTEM CONFIRMATION NOTIFICATION
          * ====================================== */}
         <div className="rounded-2xl border border-emerald-200/60 dark:border-emerald-500/10 p-5 bg-emerald-50/50 dark:bg-emerald-500/5 flex items-start gap-3.5">
-          <CheckCircle2
-            size={20}
-            className="text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5"
-          />
+          <CheckCircle2 size={20} className="text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
           <div>
             <h3 className="font-semibold text-sm text-emerald-800 dark:text-emerald-400">
               Efecto en el Sistema de Inventarios
             </h3>
             <p className="mt-1 text-xs text-emerald-700/90 dark:text-emerald-500/80 leading-relaxed">
-              Al procesar esta acción, se generará la orden de compra y se
-              registrará de inmediato el ingreso físico de mercancía a los
-              almacenes del sistema.
+              Al procesar esta acción, se generará la orden de compra y se registrará de inmediato el ingreso físico de
+              mercancía a los almacenes del sistema.
             </p>
           </div>
         </div>

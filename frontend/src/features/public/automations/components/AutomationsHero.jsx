@@ -34,9 +34,7 @@ export default function AutomationsHero() {
 
   // Función para formatear las claves de los tags (ej: "disparadores_y_triggers" -> "Disparadores Y Triggers")
   const formatTagLabel = (text) => {
-    return text
-      .replace(/_/g, " ")
-      .replace(/\b\w/g, (char) => char.toUpperCase());
+    return text.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
   };
 
   return (
@@ -104,10 +102,7 @@ export default function AutomationsHero() {
           </motion.p>
 
           {/* Automation Tags (Mapeados desde las categorías del objeto features) */}
-          <motion.div
-            variants={fastFadeUp}
-            className="mt-8 flex flex-wrap gap-3"
-          >
+          <motion.div variants={fastFadeUp} className="mt-8 flex flex-wrap gap-3">
             {Object.keys(AUTOMATIONS_FLOW.features || {}).map((categoryKey) => (
               <div
                 key={categoryKey}
@@ -122,19 +117,12 @@ export default function AutomationsHero() {
           </motion.div>
 
           {/* Stats */}
-          <motion.div
-            variants={fastFadeUp}
-            className="mt-8 flex flex-wrap gap-6"
-          >
+          <motion.div variants={fastFadeUp} className="mt-8 flex flex-wrap gap-6">
             {/* Si prefieres usar los datos dinámicos de stats configurados en las constantes: */}
             {AUTOMATIONS_FLOW.stats?.map((stat) => (
               <div key={stat.label}>
-                <div className="text-2xl font-black text-[#274c77] dark:text-[#a3cef1]">
-                  {stat.value}
-                </div>
-                <div className="text-sm text-[#4a5568] dark:text-[#cbd5e1]">
-                  {stat.label}
-                </div>
+                <div className="text-2xl font-black text-[#274c77] dark:text-[#a3cef1]">{stat.value}</div>
+                <div className="text-sm text-[#4a5568] dark:text-[#cbd5e1]">{stat.label}</div>
               </div>
             ))}
           </motion.div>

@@ -11,7 +11,7 @@ module.exports = {
   calculateSale:
     (
       details = [],
-      discount = 0
+      discount = 0,
     ) => {
 
       // ========================================
@@ -31,7 +31,7 @@ module.exports = {
             );
 
           },
-          0
+          0,
         );
 
       // ========================================
@@ -66,22 +66,22 @@ module.exports = {
 
         subtotal:
           Number(
-            subtotal.toFixed(2)
+            subtotal.toFixed(2),
           ),
 
         discount:
           Number(
-            discountAmount.toFixed(2)
+            discountAmount.toFixed(2),
           ),
 
         tax:
           Number(
-            tax.toFixed(2)
+            tax.toFixed(2),
           ),
 
         total:
           Number(
-            total.toFixed(2)
+            total.toFixed(2),
           ),
 
       };

@@ -3,47 +3,47 @@
 const { z } = require("zod");
 
 const messageTypes = [
-    "TEXT",
-    "IMAGE",
-    "FILE",
-    "AUDIO",
-    "VIDEO",
+  "TEXT",
+  "IMAGE",
+  "FILE",
+  "AUDIO",
+  "VIDEO",
 ];
 
 const createCommentSchema =
     z.object({
-        message: z
-            .string({
-                required_error:
+      message: z
+        .string({
+          required_error:
                     "El mensaje es obligatorio",
-            })
-            .trim()
-            .min(
-                1,
-                "El mensaje no puede estar vacío"
-            )
-            .max(
-                5000,
-                "El mensaje es demasiado largo"
-            ),
+        })
+        .trim()
+        .min(
+          1,
+          "El mensaje no puede estar vacío",
+        )
+        .max(
+          5000,
+          "El mensaje es demasiado largo",
+        ),
 
-        messageType: z
-            .enum(
-                messageTypes,
-                {
-                    errorMap:
+      messageType: z
+        .enum(
+          messageTypes,
+          {
+            errorMap:
                         () => ({
-                            message:
+                          message:
                                 "Tipo de mensaje inválido",
                         }),
-                }
-            )
-            .default("TEXT"),
+          },
+        )
+        .default("TEXT"),
 
-        attachments:
+      attachments:
             z.string().optional(),
     });
 
 module.exports = {
-    createCommentSchema,
+  createCommentSchema,
 };

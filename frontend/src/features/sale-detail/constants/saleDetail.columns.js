@@ -1,13 +1,7 @@
 // ========================================
 // constants/saleDetail.columns.js
 // ========================================
-import {
-  DollarSign,
-  Package,
-  Receipt,
-  Settings2,
-  ShoppingCart,
-} from "lucide-react";
+import { DollarSign, Package, Receipt, Settings2, ShoppingCart } from "lucide-react";
 
 export const saleDetailColumns = [
   { key: "sale", text: "Venta", Icon: Receipt },

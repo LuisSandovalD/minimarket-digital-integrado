@@ -1,2 +1,2 @@
 module.exports =
-  require('./routes/inventory.routes');
+  require("./routes/inventory.routes");

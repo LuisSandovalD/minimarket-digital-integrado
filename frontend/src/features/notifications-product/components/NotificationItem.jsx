@@ -2,20 +2,9 @@
 // features/notifications/components/NotificationItem.jsx
 // ========================================
 
-import {
-  AlertTriangle,
-  Package,
-  TrendingDown,
-  Clock,
-  Check,
-  X,
-} from "lucide-react";
+import { AlertTriangle, Package, TrendingDown, Clock, Check, X } from "lucide-react";
 
-export default function NotificationItem({
-  notification,
-  onToggleRead,
-  onRemove,
-}) {
+export default function NotificationItem({ notification, onToggleRead, onRemove }) {
   // ========================================
   // ICON AND COLOR MAPPING
   // ========================================

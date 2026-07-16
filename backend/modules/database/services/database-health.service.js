@@ -1,67 +1,67 @@
 // modules/database/services/database-health.service.js
 
 const databaseRepository = require(
-    "../repositories/database.repository"
+  "../repositories/database.repository",
 );
 
 const calculateLatency = require(
-    "../utils/calculate-latency"
+  "../utils/calculate-latency",
 );
 
 const databaseStatus = require(
-    "../utils/database-status"
+  "../utils/database-status",
 );
 
 class DatabaseHealthService {
 
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Get Database Health
     |--------------------------------------------------------------------------
     */
 
-    async getHealth() {
+  async getHealth() {
 
-        const latency =
+    const latency =
             await calculateLatency(
-                async () => {
+              async () => {
 
-                    await databaseRepository
-                        .checkConnection();
-                }
+                await databaseRepository
+                  .checkConnection();
+              },
             );
 
-        const version =
+    const version =
             await databaseRepository
-                .getDatabaseVersion();
+              .getDatabaseVersion();
 
-        const status =
+    const status =
             databaseStatus(latency);
 
-        return {
+    return {
 
-            success: true,
+      success: true,
 
-            database: "PostgreSQL",
+      database: "PostgreSQL",
 
-            provider: "Neon",
+      provider: "Neon",
 
-            latency:
+      latency:
                 `${latency}ms`,
 
-            status:
+      status:
                 status.status,
 
-            color:
+      color:
                 status.color,
 
-            version:
+      version:
                 version[0]?.version || null,
 
-            timestamp:
+      timestamp:
                 new Date(),
-        };
-    }
+    };
+  }
 }
 
 module.exports =

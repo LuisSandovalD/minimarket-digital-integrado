@@ -1,18 +1,8 @@
 // ========================================
 // features/account/components/AccountProfileCard.jsx
 // ========================================
-import {
-  Building2,
-  CalendarClock,
-  MapPin,
-  ShieldAlert,
-  User2,
-} from "lucide-react";
-import {
-  formatAccountDateTime,
-  getRoleLabel,
-  getStatusLabel,
-} from "../utils/account.helpers";
+import { Building2, CalendarClock, MapPin, ShieldAlert, User2 } from "lucide-react";
+import { formatAccountDateTime, getRoleLabel, getStatusLabel } from "../utils/account.helpers";
 // CONECTADO: Acoplamiento modular con el estado global de tu feature
 import useAccountProfile from "../hooks/useAccountProfile";
 
@@ -26,9 +16,7 @@ function InfoItem({ icon: Icon, label, value, badgeColor }) {
         </div>
       )}
       <div className="min-w-0 flex-1">
-        <p className="text-[11px] font-medium tracking-wider uppercase text-slate-400 dark:text-slate-500">
-          {label}
-        </p>
+        <p className="text-[11px] font-medium tracking-wider uppercase text-slate-400 dark:text-slate-500">{label}</p>
         {badgeColor ? (
           <span
             className={`inline-flex items-center mt-0.5 px-2 py-0.5 text-xs font-semibold rounded-full ${badgeColor}`}
@@ -50,10 +38,8 @@ export default function AccountProfileCard() {
   const { user } = useAccountProfile();
 
   // NORMALIZACIÓN: Soporta tanto strings planos (EditProfileModal) como sub-objetos comerciales
-  const companyName =
-    typeof user?.company === "object" ? user?.company?.name : user?.company;
-  const branchName =
-    typeof user?.branch === "object" ? user?.branch?.name : user?.branch;
+  const companyName = typeof user?.company === "object" ? user?.company?.name : user?.company;
+  const branchName = typeof user?.branch === "object" ? user?.branch?.name : user?.branch;
 
   // Definición dinámica de estilos para el estado activo/inactivo
   const statusBadgeColor = user?.isActive
@@ -66,11 +52,7 @@ export default function AccountProfileCard() {
         {/* Contenedor de Avatar */}
         <div className="relative flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-800/50 border border-slate-200/60 dark:border-slate-700">
           {user?.avatar ? (
-            <img
-              src={user.avatar}
-              alt={user.name}
-              className="h-full w-full rounded-2xl object-cover"
-            />
+            <img src={user.avatar} alt={user.name} className="h-full w-full rounded-2xl object-cover" />
           ) : (
             <User2 className="h-9 w-9 text-slate-400 dark:text-slate-500" />
           )}
@@ -92,25 +74,13 @@ export default function AccountProfileCard() {
 
           {/* Grilla de Atributos del Perfil */}
           <div className="mt-5 grid gap-3 grid-cols-1 md:grid-cols-2">
-            <InfoItem
-              icon={ShieldAlert}
-              label="Rol del Sistema"
-              value={getRoleLabel(user?.role)}
-            />
+            <InfoItem icon={ShieldAlert} label="Rol del Sistema" value={getRoleLabel(user?.role)} />
 
             <InfoItem icon={Building2} label="Empresa" value={companyName} />
 
-            <InfoItem
-              icon={MapPin}
-              label="Sucursal Asignada"
-              value={branchName}
-            />
+            <InfoItem icon={MapPin} label="Sucursal Asignada" value={branchName} />
 
-            <InfoItem
-              label="Estado de Cuenta"
-              value={getStatusLabel(user?.isActive)}
-              badgeColor={statusBadgeColor}
-            />
+            <InfoItem label="Estado de Cuenta" value={getStatusLabel(user?.isActive)} badgeColor={statusBadgeColor} />
           </div>
 
           {/* Sección de Auditoría (Última vez en el sistema) */}

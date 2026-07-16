@@ -9,7 +9,7 @@ const SYSTEM_ROLES = Object.freeze([
   "SUPERVISOR",
   "EMPLOYEE",
   "VIEWER",
-  "SUPPORT"
+  "SUPPORT",
 ]);
 
 module.exports = (...roles) => {
@@ -19,7 +19,7 @@ module.exports = (...roles) => {
   const invalidRoles = roles.filter(role => !SYSTEM_ROLES.includes(role));
   if (invalidRoles.length > 0) {
     throw new Error(
-      `[CRITICAL SECURITY CONFIG] Se detectaron roles inválidos en las rutas: [${invalidRoles.join(", ")}]`
+      `[CRITICAL SECURITY CONFIG] Se detectaron roles inválidos en las rutas: [${invalidRoles.join(", ")}]`,
     );
   }
 
@@ -29,19 +29,19 @@ module.exports = (...roles) => {
       if (!req.user || !req.user.role) {
         return res.status(401).json({
           success: false,
-          message: "Acceso denegado: Autenticación requerida."
+          message: "Acceso denegado: Autenticación requerida.",
         });
       }
 
       // 🛡️ CAPA 3: Verificar rol (Ofuscación de respuestas)
       if (!roles.includes(req.user.role)) {
         // Log interno para el administrador del servidor (Auditoría)
-        console.warn(`[SECURITY WARN] Usuario ${req.user.id || 'Anónimo'} intentó acceder sin permisos a: ${req.originalUrl}`);
+        console.warn(`[SECURITY WARN] Usuario ${req.user.id || "Anónimo"} intentó acceder sin permisos a: ${req.originalUrl}`);
 
         // Mensaje genérico para no darle pistas al atacante de qué roles sí funcionan
         return res.status(403).json({
           success: false,
-          message: "Acceso denegado: No tienes los permisos necesarios."
+          message: "Acceso denegado: No tienes los permisos necesarios.",
         });
       }
 
@@ -49,14 +49,14 @@ module.exports = (...roles) => {
 
     } catch (error) {
       // Log interno del error real (para ti en consola)
-      console.error(`[INTERNAL SECURITY ERROR]`, error);
+      console.error("[INTERNAL SECURITY ERROR]", error);
 
       // 🛡️ CAPA 4: Ocultar información sensible del sistema (Information Disclosure)
-      // Jamás mandamos 'error.message' al cliente en un 500, ya que podría exponer 
+      // Jamás mandamos 'error.message' al cliente en un 500, ya que podría exponer
       // estructuras de carpetas o nombres internos de variables.
       return res.status(500).json({
         success: false,
-        message: "Ocurrió un error interno de seguridad."
+        message: "Ocurrió un error interno de seguridad.",
       });
     }
   };

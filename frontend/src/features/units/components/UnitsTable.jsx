@@ -18,15 +18,7 @@ import {
 } from "lucide-react";
 import { UNIT_OPTIONS } from "../utils/unitTypes";
 
-export default function UnitsTable({
-  units = [],
-  onEdit,
-  onDelete,
-  page = 1,
-  totalPages = 1,
-  onPrevPage,
-  onNextPage,
-}) {
+export default function UnitsTable({ units = [], onEdit, onDelete, page = 1, totalPages = 1, onPrevPage, onNextPage }) {
   const columns = [
     {
       key: "name",
@@ -94,12 +86,8 @@ export default function UnitsTable({
     <div className="space-y-5">
       {/* HEADER */}
       <div>
-        <h2 className="text-xl font-semibold tracking-tight text-slate-900 dark:text-white">
-          Gestión de Unidades
-        </h2>
-        <p className="mt-1 text-sm text-slate-500">
-          Administra las unidades de medida del sistema.
-        </p>
+        <h2 className="text-xl font-semibold tracking-tight text-slate-900 dark:text-white">Gestión de Unidades</h2>
+        <p className="mt-1 text-sm text-slate-500">Administra las unidades de medida del sistema.</p>
       </div>
 
       {/* TABLE */}
@@ -120,12 +108,8 @@ export default function UnitsTable({
                       <Scale className="h-5 w-5" />
                     </div>
                     <div>
-                      <h3 className="text-sm font-semibold text-slate-800 dark:text-white">
-                        {unit.name}
-                      </h3>
-                      <p className="text-xs text-slate-400 dark:text-slate-500">
-                        Unidad registrada
-                      </p>
+                      <h3 className="text-sm font-semibold text-slate-800 dark:text-white">{unit.name}</h3>
+                      <p className="text-xs text-slate-400 dark:text-slate-500">Unidad registrada</p>
                     </div>
                   </div>
                 </td>
@@ -139,17 +123,13 @@ export default function UnitsTable({
 
                 {/* TYPE */}
                 <td className="px-6 py-5">
-                  <span className="text-sm text-slate-600 dark:text-slate-300">
-                    {getTypeLabel(unit.type)}
-                  </span>
+                  <span className="text-sm text-slate-600 dark:text-slate-300">{getTypeLabel(unit.type)}</span>
                 </td>
 
                 {/* CONVERSION */}
                 <td className="px-6 py-5">
                   <span className="text-sm font-medium text-slate-600 dark:text-slate-300">
-                    {Number(
-                      unit.conversion || unit.conversionFactor || 0,
-                    ).toFixed(4)}
+                    {Number(unit.conversion || unit.conversionFactor || 0).toFixed(4)}
                   </span>
                 </td>
 
@@ -169,13 +149,7 @@ export default function UnitsTable({
                 {/* ACTIONS */}
                 <td className="px-6 py-5">
                   <div className="flex items-center justify-end gap-2">
-                    <ModernButton
-                      size="sm"
-                      variant="ghost"
-                      icon={Pencil}
-                      text="Editar"
-                      onClick={() => onEdit(unit)}
-                    />
+                    <ModernButton size="sm" variant="ghost" icon={Pencil} text="Editar" onClick={() => onEdit(unit)} />
                     <ModernButton
                       size="sm"
                       variant="danger"
@@ -198,9 +172,7 @@ export default function UnitsTable({
                   <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200">
                     No hay unidades registradas
                   </h3>
-                  <p className="mt-1 text-sm text-slate-500">
-                    Empieza creando tu primera unidad de medida.
-                  </p>
+                  <p className="mt-1 text-sm text-slate-500">Empieza creando tu primera unidad de medida.</p>
                 </div>
               </td>
             </tr>
@@ -209,12 +181,7 @@ export default function UnitsTable({
 
         {/* CONTROLES DE PAGINACIÓN */}
         {safeUnits.length > 0 && (
-          <TFooter
-            page={page}
-            totalPages={totalPages}
-            onPrev={onPrevPage}
-            onNext={onNextPage}
-          />
+          <TFooter page={page} totalPages={totalPages} onPrev={onPrevPage} onNext={onNextPage} />
         )}
       </Table>
     </div>

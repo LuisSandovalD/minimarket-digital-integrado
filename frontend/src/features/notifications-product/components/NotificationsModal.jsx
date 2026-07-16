@@ -19,13 +19,7 @@ import NotificationsEmpty from "./NotificationsEmpty";
 export default function NotificationsModal() {
   const [open, setOpen] = useState(false);
 
-  const {
-    notifications,
-    loading,
-    unreadCount,
-    toggleRead,
-    removeNotification,
-  } = useNotifications();
+  const { notifications, loading, unreadCount, toggleRead, removeNotification } = useNotifications();
 
   // ========================================
   // CLEAR ALL
@@ -138,11 +132,7 @@ export default function NotificationsModal() {
             <NotificationsEmpty />
           ) : (
             notifications.map((notification) => (
-              <NotificationItem
-                key={notification.id}
-                notification={notification}
-                onToggleRead={toggleRead}
-              />
+              <NotificationItem key={notification.id} notification={notification} onToggleRead={toggleRead} />
             ))
           )}
         </div>

@@ -10,6 +10,7 @@ import { MetricCard } from "@/components/card";
 import MyReviewsList from "../components/MyReviewsList";
 import ReviewFormModal from "../components/ReviewFormModal";
 import ReviewHeader from "../components/ReviewHeader";
+import ReviewsLoading from "../components/ReviewsLoading";
 
 import { AlertTriangle, BarChart3, Star } from "lucide-react";
 
@@ -31,12 +32,10 @@ export default function ReviewPage() {
     handleDelete,
   } = useReviewForm(refreshStatistics);
 
-  // 3. Estado de interfaz para el Modal
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // ========================================
-  // ACCIONES / ACCIONES DE INTERFAZ
-  // ========================================
+  // Unificamos los estados de carga para determinar si la página entera está inicializándose
+  const isPageLoading = loadingStats || loadingForm;
 
   const handleOpenForm = () => {
     setIsModalOpen(true);
@@ -50,33 +49,27 @@ export default function ReviewPage() {
   };
 
   const handleConfirmDelete = async () => {
-    if (
-      window.confirm(
-        "¿Estás seguro de que deseas eliminar tu reseña definitivamente?",
-      )
-    ) {
+    if (window.confirm("¿Estás seguro de que deseas eliminar tu reseña definitivamente?")) {
       await handleDelete();
     }
   };
 
-  const isPageLoading = loadingStats || loadingForm;
+  // Si toda la pantalla está en su carga inicial, mostramos el esqueleto completo
+  if (isPageLoading) {
+    return <ReviewsLoading />;
+  }
+
   const userReviewsArray = review ? [review] : [];
 
   return (
     <div className="space-y-6 transition-all duration-300 ease-in-out">
-      {/* ========================================
-       * HEADER PRINCIPAL DE SECCIÓN
-       * ====================================== */}
+      {/* Header con métricas generales */}
       <ReviewHeader
         total={statistics?.total || 0}
         averageRating={statistics?.average || 0}
         pendingResponse={statistics?.pendingResponse || 0}
-        onCreate={handleOpenForm}
       />
 
-      {/* ========================================
-       * NOTIFICACIÓN DE ERROR ESTILIZADA
-       * ====================================== */}
       {error && (
         <div className="flex items-center gap-3 p-4 bg-red-50/80 border border-red-200/60 text-red-700 rounded-2xl text-sm backdrop-blur-sm dark:bg-red-950/30 dark:border-red-900/40 dark:text-red-400 animate-in fade-in duration-200">
           <AlertTriangle size={18} className="shrink-0 text-red-500" />
@@ -84,21 +77,13 @@ export default function ReviewPage() {
         </div>
       )}
 
-      {/* ========================================
-       * GRID DE CONTENIDO PRINCIPAL (ASYMMETRIC)
-       * ====================================== */}
       <div className="grid gap-6 lg:grid-cols-12 items-start">
-        {/* COLUMNA IZQUIERDA/CENTRO: LISTADO DE MIS RESEÑAS (66% del ancho) */}
+        {/* Sección Izquierda: Listado de reseñas del usuario */}
         <div className="lg:col-span-8 space-y-6">
-          <MyReviewsList
-            reviews={userReviewsArray}
-            loading={isPageLoading}
-            onEdit={handleOpenForm}
-            onDelete={handleConfirmDelete}
-          />
+          <MyReviewsList reviews={userReviewsArray} onEdit={handleOpenForm} onDelete={handleConfirmDelete} />
         </div>
 
-        {/* COLUMNA DERECHA: DISTRIBUCIÓN DE CALIFICACIONES (33% del ancho) */}
+        {/* Sección Derecha: Distribución de estrellas */}
         <div className="lg:col-span-4 space-y-6">
           <MetricCard
             icon={BarChart3}
@@ -115,10 +100,7 @@ export default function ReviewPage() {
                 const percentage = Math.min((count / total) * 100, 100);
 
                 return (
-                  <div
-                    key={star}
-                    className="flex items-center gap-3 text-sm group"
-                  >
+                  <div key={star} className="flex items-center gap-3 text-sm group">
                     {/* Indicador numérico e Icono */}
                     <div className="flex items-center gap-1 w-10 shrink-0 select-none">
                       <span className="font-semibold text-slate-600 dark:text-slate-400 group-hover:text-amber-500 transition-colors">
@@ -150,9 +132,7 @@ export default function ReviewPage() {
         </div>
       </div>
 
-      {/* ========================================
-       * MODAL DINÁMICO DE CREACIÓN / EDICIÓN
-       * ====================================== */}
+      {/* Modal para crear o editar la reseña */}
       <ReviewFormModal
         open={isModalOpen}
         onClose={() => setIsModalOpen(false)}

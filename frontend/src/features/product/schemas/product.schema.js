@@ -9,9 +9,7 @@ export const productSchema = z.object({
 
   description: z.string().optional().nullable(),
 
-  purchasePrice: z.coerce
-    .number()
-    .min(0, "El precio de compra no puede ser negativo"),
+  purchasePrice: z.coerce.number().min(0, "El precio de compra no puede ser negativo"),
 
   costPrice: z.coerce.number().min(0),
 

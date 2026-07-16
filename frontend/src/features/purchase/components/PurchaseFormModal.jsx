@@ -35,9 +35,7 @@ export default function PurchaseFormModal({
   return (
     <Modal open={open} onClose={onClose} size="full">
       <HeaderModal
-        title={
-          initialFormState ? "Editar Orden de Compra" : "Nueva Orden de Compra"
-        }
+        title={initialFormState ? "Editar Orden de Compra" : "Nueva Orden de Compra"}
         subtitle="Proceso guiado para el reabastecimiento y recepción de inventario"
         onClose={onClose}
       />
@@ -49,13 +47,9 @@ export default function PurchaseFormModal({
         <PurchaseStepper currentStep={step} />
 
         <div className="w-full flex-1 flex flex-col">
-          {step === 1 && (
-            <SupplierStep suppliers={suppliers} form={form} setForm={setForm} />
-          )}
+          {step === 1 && <SupplierStep suppliers={suppliers} form={form} setForm={setForm} />}
 
-          {step === 2 && (
-            <ProductsStep products={products} form={form} setForm={setForm} />
-          )}
+          {step === 2 && <ProductsStep products={products} form={form} setForm={setForm} />}
 
           {step === 3 && (
             <SummaryStep

@@ -37,44 +37,44 @@ const {
 router.post(
   "/",
   auth,
-  createPurchaseController
+  createPurchaseController,
 );
 
 router.get(
   "/",
   auth,
-  getPurchasesController
+  getPurchasesController,
 );
 
 router.get(
   "/:id",
   auth,
-  getPurchaseByIdController
+  getPurchaseByIdController,
 );
 
 router.patch(
   "/:id/status",
   auth,
-  updatePurchaseStatusController
+  updatePurchaseStatusController,
 );
 
 router.patch(
   "/:id/cancel",
   auth,
-  cancelPurchaseController
+  cancelPurchaseController,
 );
 
 // REPORTS
 router.get(
   "/reports/daily/pdf",
   auth,
-  downloadDailyPurchasesPDFController
+  downloadDailyPurchasesPDFController,
 );
 
 router.get(
   "/reports/daily/excel",
   auth,
-  downloadDailyPurchasesExcelController
+  downloadDailyPurchasesExcelController,
 );
 
 module.exports = router;

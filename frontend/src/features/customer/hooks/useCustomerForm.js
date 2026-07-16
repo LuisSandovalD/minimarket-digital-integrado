@@ -1,7 +1,3 @@
-// ========================================
-// features/customers/hooks/useCustomerForm.js
-// ========================================
-
 import { useCallback, useState } from "react";
 
 import customerService from "../services/customer.service";
@@ -10,12 +6,10 @@ import { initialCustomerForm } from "../utils/customerForm";
 export function useCustomerForm(fetchCustomers) {
   const [modalOpen, setModalOpen] = useState(false);
   const [saving, setSaving] = useState(false);
-
   const [form, setForm] = useState(initialCustomerForm);
 
   function handleChange(e) {
     const { name, value } = e.target;
-
     setForm((prev) => ({
       ...prev,
       [name]: value,
@@ -42,16 +36,16 @@ export function useCustomerForm(fetchCustomers) {
       address: customer.address || "",
       city: customer.city || "",
       notes: customer.notes || "",
-      // Nuevos campos mapeados desde el backend
-      creditLimit: customer.creditLimit ?? "",
-      currentDebt: customer.currentDebt ?? 0,
+      creditLimit:
+        customer.creditLimit !== undefined && customer.creditLimit !== null ? Number(customer.creditLimit) : 0,
+      currentDebt:
+        customer.currentDebt !== undefined && customer.currentDebt !== null ? Number(customer.currentDebt) : 0,
       isActive: customer.isActive ?? true,
     });
 
     setModalOpen(true);
   }
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   function closeModal() {
     setModalOpen(false);
     resetForm();
@@ -72,9 +66,8 @@ export function useCustomerForm(fetchCustomers) {
         address: form.address || null,
         city: form.city || null,
         notes: form.notes || null,
-        // Procesamos los valores antes de enviarlos a la base de datos
-        creditLimit: form.creditLimit !== "" ? Number(form.creditLimit) : null,
-        currentDebt: Number(form.currentDebt) || 0,
+        creditLimit: form.creditLimit !== "" && form.creditLimit !== null ? Number(form.creditLimit) : 0,
+        currentDebt: form.currentDebt !== "" && form.currentDebt !== null ? Number(form.currentDebt) : 0,
         isActive: form.isActive === true || form.isActive === "true",
       };
 
@@ -85,8 +78,6 @@ export function useCustomerForm(fetchCustomers) {
       }
 
       closeModal();
-
-      // Mantiene filtros, búsqueda y página actual
       await fetchCustomers();
     } catch (error) {
       console.error("Error saving customer:", error);
@@ -114,8 +105,6 @@ export function useCustomerForm(fetchCustomers) {
     async (id) => {
       try {
         await customerService.remove(id);
-
-        // Mantiene filtros, búsqueda y página actual
         await fetchCustomers();
       } catch (error) {
         console.error("Error deleting customer:", error);
@@ -127,21 +116,15 @@ export function useCustomerForm(fetchCustomers) {
   return {
     form,
     setForm,
-
     saving,
-
     modalOpen,
     setModalOpen,
-
     handleChange,
-
     openCreate,
     openEdit,
     closeModal,
-
     save,
     remove,
-
     resetForm,
   };
 }

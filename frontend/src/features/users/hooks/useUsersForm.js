@@ -93,17 +93,14 @@ export default function useUserForm({ user, onClose, onSuccess }) {
   const validateForm = () => {
     if (!formData.name.trim()) throw new Error("El nombre es obligatorio");
     if (!formData.email.trim()) throw new Error("El email es obligatorio");
-    if (!isEdit && !formData.password)
-      throw new Error("La contraseña es obligatoria");
+    if (!isEdit && !formData.password) throw new Error("La contraseña es obligatoria");
   };
 
   // ========================================
   // CLEAN DATA (BUILD PAYLOAD)
   // ========================================
   const buildPayload = () => {
-    const strictActive =
-      formData.isActive === true ||
-      String(formData.isActive).toLowerCase() === "true";
+    const strictActive = formData.isActive === true || String(formData.isActive).toLowerCase() === "true";
 
     const payload = {
       name: formData.name.trim(),

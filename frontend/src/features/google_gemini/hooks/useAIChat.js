@@ -40,9 +40,7 @@ export default function useAIChat({ conversationId, companyId }) {
         ...prev,
         {
           role: "model",
-          content:
-            error.message ||
-            "Ocurrió un error al procesar la solicitud con el director corporativo.",
+          content: error.message || "Ocurrió un error al procesar la solicitud con el director corporativo.",
         },
       ]);
     } finally {

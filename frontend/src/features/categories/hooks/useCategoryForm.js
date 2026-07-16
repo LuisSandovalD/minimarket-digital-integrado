@@ -78,10 +78,7 @@ export default function useCategoryForm({ category, onClose, onSuccess }) {
       const payload = {
         ...formData,
         slug: formData.slug?.trim()?.toLowerCase()?.replaceAll(" ", "-"),
-        parentId:
-          formData.parentId && !formData.isParent
-            ? Number(formData.parentId)
-            : null,
+        parentId: formData.parentId && !formData.isParent ? Number(formData.parentId) : null,
       };
 
       // ========================================

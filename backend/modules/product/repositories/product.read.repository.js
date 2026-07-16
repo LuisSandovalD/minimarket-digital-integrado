@@ -5,49 +5,49 @@
 const prisma = require("../../../prisma/client");
 
 const baseInclude = {
-    category: true,
-    unit: true,
-    inventory: true,
+  category: true,
+  unit: true,
+  inventory: true,
 };
 
 const baseWhere = (companyId) => ({
-    companyId,
-    isDeleted: false,
+  companyId,
+  isDeleted: false,
 });
 // ========================================
 // GET ALL (CON PAGINACIÓN Y FILTROS EN PRISMA)
 // ========================================
 
 exports.getAll = async (companyId, options = {}) => {
-    const { page, limit, search, categoryId, status, sortBy, sortOrder } = options;
+  const { page, limit, search, categoryId, status, sortBy, sortOrder } = options;
 
-    // 1. Construcción dinámica de filtros sobre el baseWhere
-    const where = {
-        ...baseWhere(companyId),
-        ...(categoryId && { categoryId }),
-        ...(status && { isActive: status === "active" }), // Ajusta según manejes tu enum o boolean de estado
-        ...(search && {
-            OR: [
-                { name: { contains: search, mode: "insensitive" } },
-                { sku: { contains: search, mode: "insensitive" } },
-                { barcode: { contains: search, mode: "insensitive" } },
-            ],
-        }),
-    };
+  // 1. Construcción dinámica de filtros sobre el baseWhere
+  const where = {
+    ...baseWhere(companyId),
+    ...(categoryId && { categoryId }),
+    ...(status && { isActive: status === "active" }), // Ajusta según manejes tu enum o boolean de estado
+    ...(search && {
+      OR: [
+        { name: { contains: search, mode: "insensitive" } },
+        { sku: { contains: search, mode: "insensitive" } },
+        { barcode: { contains: search, mode: "insensitive" } },
+      ],
+    }),
+  };
 
-    // 2. Ejecución en paralelo con una transacción de Prisma (Rápido y eficiente)
-    const [data, total] = await prisma.$transaction([
-        prisma.product.findMany({
-            where,
-            include: baseInclude,
-            skip: (page - 1) * limit,
-            take: limit,
-            orderBy: { [sortBy]: sortOrder },
-        }),
-        prisma.product.count({ where }),
-    ]);
+  // 2. Ejecución en paralelo con una transacción de Prisma (Rápido y eficiente)
+  const [data, total] = await prisma.$transaction([
+    prisma.product.findMany({
+      where,
+      include: baseInclude,
+      skip: (page - 1) * limit,
+      take: limit,
+      orderBy: { [sortBy]: sortOrder },
+    }),
+    prisma.product.count({ where }),
+  ]);
 
-    return { data, total };
+  return { data, total };
 };
 
 // ========================================
@@ -55,16 +55,16 @@ exports.getAll = async (companyId, options = {}) => {
 // ========================================
 
 exports.getById = async (id, companyId) => {
-    return prisma.product.findFirst({
-        where: {
-            ...baseWhere(companyId),
-            id,
-        },
-        include: {
-            ...baseInclude,
-            notifications: true,
-        },
-    });
+  return prisma.product.findFirst({
+    where: {
+      ...baseWhere(companyId),
+      id,
+    },
+    include: {
+      ...baseInclude,
+      notifications: true,
+    },
+  });
 };
 
 // ========================================
@@ -72,12 +72,12 @@ exports.getById = async (id, companyId) => {
 // ========================================
 
 exports.getFeatured = async (companyId) => {
-    return prisma.product.findMany({
-        where: {
-            ...baseWhere(companyId),
-            isFeatured: true,
-        },
-    });
+  return prisma.product.findMany({
+    where: {
+      ...baseWhere(companyId),
+      isFeatured: true,
+    },
+  });
 };
 
 // ========================================
@@ -85,12 +85,12 @@ exports.getFeatured = async (companyId) => {
 // ========================================
 
 exports.findBySku = async (sku, companyId) => {
-    return prisma.product.findFirst({
-        where: {
-            sku,
-            companyId,
-        },
-    });
+  return prisma.product.findFirst({
+    where: {
+      sku,
+      companyId,
+    },
+  });
 };
 
 // ========================================
@@ -98,16 +98,16 @@ exports.findBySku = async (sku, companyId) => {
 // ========================================
 
 exports.findByBarcode = async (
-    barcode,
-    companyId
+  barcode,
+  companyId,
 ) => {
-    return prisma.product.findFirst({
-        where: {
-            barcode,
-            companyId,
-            isDeleted: false,
-        },
-    });
+  return prisma.product.findFirst({
+    where: {
+      barcode,
+      companyId,
+      isDeleted: false,
+    },
+  });
 };
 
 // ========================================
@@ -115,22 +115,22 @@ exports.findByBarcode = async (
 // ========================================
 
 exports.getLowStock = async (companyId) => {
-    return prisma.inventory.findMany({
-        where: {
-            companyId,
-            product: {
-                isDeleted: false,
-                isActive: true,
-            },
-        },
+  return prisma.inventory.findMany({
+    where: {
+      companyId,
+      product: {
+        isDeleted: false,
+        isActive: true,
+      },
+    },
+    include: {
+      product: {
         include: {
-            product: {
-                include: {
-                    category: true,
-                    unit: true,
-                },
-            },
-            branch: true,
+          category: true,
+          unit: true,
         },
-    });
+      },
+      branch: true,
+    },
+  });
 };

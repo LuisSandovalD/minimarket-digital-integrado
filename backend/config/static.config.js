@@ -15,10 +15,10 @@ module.exports = (app) => {
       path.join(
         __dirname,
         "..",
-        "uploads"
-      )
+        "uploads",
+      ),
 
-    )
+    ),
 
   );
 

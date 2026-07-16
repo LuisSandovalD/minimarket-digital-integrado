@@ -2,14 +2,14 @@ function validateCreateSupplier(req, res, next) {
   try {
     const {
       name,
-      email
-    } = req.body
+      email,
+    } = req.body;
 
     if (!name) {
       return res.status(400).json({
         success: false,
-        message: 'Name is required'
-      })
+        message: "Name is required",
+      });
     }
 
     if (
@@ -18,16 +18,16 @@ function validateCreateSupplier(req, res, next) {
     ) {
       return res.status(400).json({
         success: false,
-        message: 'Invalid email'
-      })
+        message: "Invalid email",
+      });
     }
 
-    next()
+    next();
   } catch (error) {
-    next(error)
+    next(error);
   }
 }
 
 module.exports = {
-  validateCreateSupplier
-}
+  validateCreateSupplier,
+};

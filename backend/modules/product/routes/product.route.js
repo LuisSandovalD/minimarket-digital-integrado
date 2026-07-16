@@ -27,35 +27,35 @@ router.get(
   "/",
   auth,
   checkSubscription,
-  controller.getProducts
+  controller.getProducts,
 );
 
 router.get(
   "/featured",
   auth,
   checkSubscription,
-  controller.getFeaturedProducts
+  controller.getFeaturedProducts,
 );
 
 router.get(
   "/expiring",
   auth,
   checkSubscription,
-  controller.getExpiringProducts
+  controller.getExpiringProducts,
 );
 
 router.get(
   "/low-stock",
   auth,
   checkSubscription,
-  controller.getLowStockProducts
+  controller.getLowStockProducts,
 );
 
 router.get(
   "/:id",
   auth,
   checkSubscription,
-  controller.getProductById
+  controller.getProductById,
 );
 
 router.post(
@@ -64,9 +64,9 @@ router.post(
   checkSubscription, // Blinda la creación para que solo usen el ERP si pagaron
   roleCheck(
     "ADMIN",
-    "MANAGER"
+    "MANAGER",
   ),
-  controller.createProduct
+  controller.createProduct,
 );
 
 router.put(
@@ -75,9 +75,9 @@ router.put(
   checkSubscription,
   roleCheck(
     "ADMIN",
-    "MANAGER"
+    "MANAGER",
   ),
-  controller.updateProduct
+  controller.updateProduct,
 );
 
 router.delete(
@@ -85,9 +85,9 @@ router.delete(
   auth,
   checkSubscription,
   roleCheck(
-    "ADMIN"
+    "ADMIN",
   ),
-  controller.deleteProduct
+  controller.deleteProduct,
 );
 
 router.patch(
@@ -95,9 +95,9 @@ router.patch(
   auth,
   checkSubscription,
   roleCheck(
-    "ADMIN"
+    "ADMIN",
   ),
-  controller.restoreProduct
+  controller.restoreProduct,
 );
 
 module.exports = router;

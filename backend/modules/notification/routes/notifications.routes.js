@@ -16,7 +16,7 @@ router.get(
   "/",
   auth,
   roleCheck("ADMIN", "MANAGER", "SUPERVISOR", "EMPLOYEE"),
-  controller.getAll.bind(controller)
+  controller.getAll.bind(controller),
 );
 
 module.exports = router;

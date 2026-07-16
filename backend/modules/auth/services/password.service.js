@@ -20,42 +20,42 @@ const { sendEmail } = require("../../../config/email.config");
  * ==================================== */
 const requestPasswordReset = async (email) => {
 
-    const user = await userRepository.findUserByEmail(email);
+  const user = await userRepository.findUserByEmail(email);
 
-    // Mitigación de Enumeración de Usuarios (Seguridad): Respondemos lo mismo exista o no el correo
-    if (!user) {
-        return {
-            success: true,
-            message: "Si el correo coincide con nuestros registros, recibirá un código de verificación"
-        };
-    }
+  // Mitigación de Enumeración de Usuarios (Seguridad): Respondemos lo mismo exista o no el correo
+  if (!user) {
+    return {
+      success: true,
+      message: "Si el correo coincide con nuestros registros, recibirá un código de verificación",
+    };
+  }
 
-    const resetCode = Math.floor(
-        100000 + Math.random() * 900000
-    ).toString();
+  const resetCode = Math.floor(
+    100000 + Math.random() * 900000,
+  ).toString();
 
-    const expiresAt = new Date(
-        Date.now() + (15 * 60 * 1000) // 15 Minutos de vida útil
-    );
+  const expiresAt = new Date(
+    Date.now() + (15 * 60 * 1000), // 15 Minutos de vida útil
+  );
 
-    await userCryptoRepository.savePasswordResetCode(
-        user.id,
-        resetCode,
-        expiresAt
-    );
+  await userCryptoRepository.savePasswordResetCode(
+    user.id,
+    resetCode,
+    expiresAt,
+  );
 
-    // 🚀 SIN AWAIT: El proceso se delega en segundo plano inmediatamente sin retrasar el frontend
-    sendEmail({
-        to: user.email,
-        subject: `🔄 Código de recuperación de contraseña: ${resetCode}`,
-        html: `
+  // 🚀 SIN AWAIT: El proceso se delega en segundo plano inmediatamente sin retrasar el frontend
+  sendEmail({
+    to: user.email,
+    subject: `🔄 Código de recuperación de contraseña: ${resetCode}`,
+    html: `
             <div style="font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto; border: 1px solid #cbd5e1; border-radius: 8px;">
                 <div style="text-align: center; margin-bottom: 20px;">
                     <h2 style="color: #2563eb; margin: 0;">Restablecer Contraseña</h2>
-                    <p style="color: #64748b; font-size: 14px;">Solicitud de seguridad - ERP POS System</p>
+                    <p style="color: #64748b; font-size: 14px;">Solicitud de seguridad - Minimarket Digital Integrado</p>
                 </div>
                 
-                <p>Hola, <strong>${user.name || 'Usuario'}</strong>. Recibimos una solicitud para restablecer la contraseña de tu cuenta de acceso.</p>
+                <p>Hola, <strong>${user.name || "Usuario"}</strong>. Recibimos una solicitud para restablecer la contraseña de tu cuenta de acceso.</p>
                 <p>Ingresa el siguiente código de verificación en el formulario del sistema para proceder con el cambio:</p>
                 
                 <div style="background-color: #f8fafc; padding: 20px; text-align: center; border-radius: 8px; margin: 20px 0; border: 1px dashed #cbd5e1;">
@@ -70,17 +70,17 @@ const requestPasswordReset = async (email) => {
 
                 <br>
                 <hr style="border: 0; border-top: 1px solid #e2e8f0;">
-                <small style="color: #94a3b8;">Centro de Autenticación • ERP POS System</small>
+                <small style="color: #94a3b8;">Centro de Autenticación • Minimarket Digital Integrado</small>
             </div>
-        `
-    }).catch(error => {
-        console.error("⚠️ Error en segundo plano al enviar código de recuperación vía Brevo:", error.message || error);
-    });
+        `,
+  }).catch(error => {
+    console.error("⚠️ Error en segundo plano al enviar código de recuperación vía Brevo:", error.message || error);
+  });
 
-    return {
-        success: true,
-        message: "Si el correo coincide con nuestros registros, recibirá un código de verificación"
-    };
+  return {
+    success: true,
+    message: "Si el correo coincide con nuestros registros, recibirá un código de verificación",
+  };
 };
 
 /* ======================================
@@ -88,16 +88,16 @@ const requestPasswordReset = async (email) => {
  * ==================================== */
 const validateResetCode = async (code) => {
 
-    const user = await userCryptoRepository.findResetCode(code);
+  const user = await userCryptoRepository.findResetCode(code);
 
-    if (!user) {
-        throw new Error("El código es inválido o ha expirado");
-    }
+  if (!user) {
+    throw new Error("El código es inválido o ha expirado");
+  }
 
-    return {
-        success: true,
-        message: "Código validado con éxito"
-    };
+  return {
+    success: true,
+    message: "Código validado con éxito",
+  };
 };
 
 /* ======================================
@@ -105,29 +105,29 @@ const validateResetCode = async (code) => {
  * ==================================== */
 const resetPasswordWithCode = async ({ code, newPassword }) => {
 
-    const user = await userCryptoRepository.findResetCode(code);
+  const user = await userCryptoRepository.findResetCode(code);
 
-    if (!user) {
-        throw new Error("Operación inválida: El código expiró");
-    }
+  if (!user) {
+    throw new Error("Operación inválida: El código expiró");
+  }
 
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-    // Actualiza la contraseña mediante el repositorio de autenticación/seguridad
-    await userAuthRepository.updatePassword(user.id, hashedPassword);
+  // Actualiza la contraseña mediante el repositorio de autenticación/seguridad
+  await userAuthRepository.updatePassword(user.id, hashedPassword);
 
-    // Limpia el código usado mediante el repositorio criptográfico
-    await userCryptoRepository.markResetCodeAsUsed(user.id);
+  // Limpia el código usado mediante el repositorio criptográfico
+  await userCryptoRepository.markResetCodeAsUsed(user.id);
 
-    // Cierra todas las sesiones mediante el repositorio de sesiones dedicado (Seguridad absoluta)
-    await sessionRepository.deactivateAllSessions(user.id);
+  // Cierra todas las sesiones mediante el repositorio de sesiones dedicado (Seguridad absoluta)
+  await sessionRepository.deactivateAllSessions(user.id);
 
-    // 📬 Alerta de confirmación exitosa
-    if (user.email) {
-        sendEmail({
-            to: user.email,
-            subject: "✅ Tu contraseña ha sido restablecida con éxito",
-            html: `
+  // 📬 Alerta de confirmación exitosa
+  if (user.email) {
+    sendEmail({
+      to: user.email,
+      subject: "✅ Tu contraseña ha sido restablecida con éxito",
+      html: `
                 <div style="font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto; border: 1px solid #cbd5e1; border-radius: 8px;">
                     <h2 style="color: #16a34a;">Contraseña Actualizada</h2>
                     <p>Hola, ${user.name}. Te informamos que tu contraseña ha sido modificada mediante el proceso de recuperación.</p>
@@ -136,16 +136,16 @@ const resetPasswordWithCode = async ({ code, newPassword }) => {
                     <p>Ya puedes iniciar sesión nuevamente en tu panel de control utilizando tus nuevas credenciales.</p>
                     <br>
                     <hr style="border: 0; border-top: 1px solid #e2e8f0;">
-                    <small style="color: #94a3b8;">Centro de Autenticación • ERP POS System</small>
+                    <small style="color: #94a3b8;">Centro de Autenticación • Minimarket Digital Integrado</small>
                 </div>
-            `
-        }).catch(err => console.error("⚠️ Error notificando éxito de recuperación:", err.message));
-    }
+            `,
+    }).catch(err => console.error("⚠️ Error notificando éxito de recuperación:", err.message));
+  }
 
-    return {
-        success: true,
-        message: "Contraseña restablecida exitosamente. Inicie sesión con sus nuevas credenciales"
-    };
+  return {
+    success: true,
+    message: "Contraseña restablecida exitosamente. Inicie sesión con sus nuevas credenciales",
+  };
 };
 
 /* ======================================
@@ -153,49 +153,49 @@ const resetPasswordWithCode = async ({ code, newPassword }) => {
  * ==================================== */
 const changeUserPassword = async ({ userId, currentPassword, newPassword }) => {
 
-    const user = await userRepository.findUserById(userId);
+  const user = await userRepository.findUserById(userId);
 
-    if (!user) {
-        throw new Error("Usuario no localizado");
-    }
+  if (!user) {
+    throw new Error("Usuario no localizado");
+  }
 
-    const isMatch = await bcrypt.compare(currentPassword, user.password);
+  const isMatch = await bcrypt.compare(currentPassword, user.password);
 
-    if (!isMatch) {
-        throw new Error("La contraseña actual ingresada es incorrecta");
-    }
+  if (!isMatch) {
+    throw new Error("La contraseña actual ingresada es incorrecta");
+  }
 
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-    await userAuthRepository.updatePassword(userId, hashedPassword);
+  await userAuthRepository.updatePassword(userId, hashedPassword);
 
-    // 📬 Alerta de seguridad por cambio manual
-    if (user.email) {
-        sendEmail({
-            to: user.email,
-            subject: "🔒 Tu contraseña de seguridad fue modificada",
-            html: `
+  // 📬 Alerta de seguridad por cambio manual
+  if (user.email) {
+    sendEmail({
+      to: user.email,
+      subject: "🔒 Tu contraseña de seguridad fue modificada",
+      html: `
                 <div style="font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto; border: 1px solid #cbd5e1; border-radius: 8px;">
                     <h2 style="color: #1e293b;">Confirmación de Cambio</h2>
-                    <p>Hola, ${user.name}. Te notificamos que tu contraseña de acceso para **ERP POS System** se ha cambiado manualmente desde las configuraciones internas de tu perfil.</p>
+                    <p>Hola, ${user.name}. Te notificamos que tu contraseña de acceso para **Minimarket Digital Integrado** se ha cambiado manualmente desde las configuraciones internas de tu perfil.</p>
                     <p>Si realizaste este cambio, no debes hacer nada más.</p>
                     <br>
                     <hr style="border: 0; border-top: 1px solid #e2e8f0;">
-                    <small style="color: #94a3b8;">Centro de Autenticación • ERP POS System</small>
+                    <small style="color: #94a3b8;">Centro de Autenticación • Minimarket Digital Integrado</small>
                 </div>
-            `
-        }).catch(err => console.error("⚠️ Error notificando cambio manual de clave:", err.message));
-    }
+            `,
+    }).catch(err => console.error("⚠️ Error notificando cambio manual de clave:", err.message));
+  }
 
-    return {
-        success: true,
-        message: "Contraseña cambiada exitosamente"
-    };
+  return {
+    success: true,
+    message: "Contraseña cambiada exitosamente",
+  };
 };
 
 module.exports = {
-    requestPasswordReset,
-    validateResetCode,
-    resetPasswordWithCode,
-    changeUserPassword
+  requestPasswordReset,
+  validateResetCode,
+  resetPasswordWithCode,
+  changeUserPassword,
 };

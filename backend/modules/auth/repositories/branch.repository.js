@@ -13,5 +13,5 @@ const createBranch = async (data, tx = null) => {
 
 // EXPORTACIÓN UNIFICADA BLINDADA: Cero objetos vacíos o fallos de destructuración
 module.exports = {
-  createBranch
+  createBranch,
 };

@@ -18,9 +18,7 @@ export default function SubscriptionGuard({ requiredTier, children }) {
 
   if (!hasAccess) {
     // Si la empresa tiene un slug asignado redirige a su dashboard, de lo contrario al home base
-    const redirectPath = company?.slug
-      ? `/${company.slug}/dashboard`
-      : "/dashboard";
+    const redirectPath = company?.slug ? `/${company.slug}/dashboard` : "/dashboard";
 
     return <Navigate to={redirectPath} replace />;
   }

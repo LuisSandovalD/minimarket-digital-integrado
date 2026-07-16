@@ -1,20 +1,9 @@
 import { MetricCard } from "@/components/card/";
 import { AreaChart } from "@/components/data-display";
-import {
-  Calendar,
-  CreditCard,
-  FileSearch,
-  ShoppingBag,
-  TrendingUp,
-  Trophy,
-} from "lucide-react";
+import { Calendar, CreditCard, FileSearch, ShoppingBag, TrendingUp, Trophy } from "lucide-react";
 import { useMemo } from "react";
 
-export default function PurchasesOverview({
-  purchases = [],
-  totalPurchases = 0,
-  totalOrders = 0,
-}) {
+export default function PurchasesOverview({ purchases = [], totalPurchases = 0, totalOrders = 0 }) {
   // ⚡ OPTIMIZACIÓN: Cálculos y agrupaciones agrupados en un único contenedor memorizado
   const analytics = useMemo(() => {
     // 1. Agrupación cronológica para el gráfico de área
@@ -55,9 +44,7 @@ export default function PurchasesOverview({
           highestPurchase = currentTotal;
         }
         // Determinar la orden más reciente
-        if (
-          new Date(purchases[i].createdAt) > new Date(lastPurchase.createdAt)
-        ) {
+        if (new Date(purchases[i].createdAt) > new Date(lastPurchase.createdAt)) {
           lastPurchase = purchases[i];
         }
       }
@@ -76,12 +63,9 @@ export default function PurchasesOverview({
       {/* 📋 ENCABEZADO */}
       <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
-          <h2 className="text-lg font-bold tracking-tight text-slate-900 dark:text-white">
-            Resumen de Compras
-          </h2>
+          <h2 className="text-lg font-bold tracking-tight text-slate-900 dark:text-white">Resumen de Compras</h2>
           <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-            Evolución de egresos, adquisiciones y reabastecimiento según el
-            período seleccionado.
+            Evolución de egresos, adquisiciones y reabastecimiento según el período seleccionado.
           </p>
         </div>
       </div>
@@ -121,13 +105,7 @@ export default function PurchasesOverview({
         <MetricCard
           icon={Calendar}
           subtitle="Última Compra"
-          value={
-            analytics.lastPurchase
-              ? new Date(analytics.lastPurchase.createdAt).toLocaleDateString(
-                  "es-PE",
-                )
-              : "-"
-          }
+          value={analytics.lastPurchase ? new Date(analytics.lastPurchase.createdAt).toLocaleDateString("es-PE") : "-"}
           description="Fecha del registro más reciente"
           variant="default"
         />

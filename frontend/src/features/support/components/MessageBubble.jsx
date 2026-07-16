@@ -43,9 +43,7 @@ export default function MessageBubble({ message, isMine }) {
         </div>
 
         {/* CUERPO DEL MENSAJE */}
-        <p className="break-words text-sm leading-relaxed whitespace-pre-wrap">
-          {message.message}
-        </p>
+        <p className="break-words text-sm leading-relaxed whitespace-pre-wrap">{message.message}</p>
 
         {/* METADATOS INFERIORES: Hora de envío */}
         <div

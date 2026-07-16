@@ -1,10 +1,10 @@
 const {
-  getPurchaseByIdService
+  getPurchaseByIdService,
 } = require("../services/get-purchase-by-id.service");
 
 async function getPurchaseByIdController(
   req,
-  res
+  res,
 ) {
 
   try {
@@ -22,7 +22,7 @@ async function getPurchaseByIdController(
         ok: false,
 
         message:
-          "Compra no encontrada"
+          "Compra no encontrada",
 
       });
 
@@ -32,7 +32,7 @@ async function getPurchaseByIdController(
 
       ok: true,
 
-      data: purchase
+      data: purchase,
 
     });
 
@@ -42,7 +42,7 @@ async function getPurchaseByIdController(
 
       ok: false,
 
-      message: error.message
+      message: error.message,
 
     });
 
@@ -51,5 +51,5 @@ async function getPurchaseByIdController(
 }
 
 module.exports = {
-  getPurchaseByIdController
+  getPurchaseByIdController,
 };

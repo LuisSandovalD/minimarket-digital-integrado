@@ -4,14 +4,7 @@
 
 import { ModernButton } from "@/components/buttons";
 import { SearchInput, Select } from "@/components/forms";
-import {
-  Building2,
-  CheckCircle2,
-  HelpCircle,
-  RefreshCw,
-  Search,
-  XCircle,
-} from "lucide-react";
+import { Building2, CheckCircle2, HelpCircle, RefreshCw, Search, XCircle } from "lucide-react";
 import { useState } from "react";
 
 export default function UserFilters({

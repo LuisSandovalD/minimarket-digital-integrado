@@ -83,5 +83,5 @@ module.exports = {
   /* ======================================
    * REGISTER MULTI-TENANT
    * ==================================== */
-  registerTenant
+  registerTenant,
 };

@@ -1,58 +1,58 @@
 // modules/database/services/database-monitoring.service.js
 
 const monitoringRepository = require(
-    "../repositories/monitoring.repository"
+  "../repositories/monitoring.repository",
 );
 
 class DatabaseMonitoringService {
 
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Get Monitoring Data
     |--------------------------------------------------------------------------
     */
 
-    async getMonitoring() {
+  async getMonitoring() {
 
-        const connections =
+    const connections =
             await monitoringRepository
-                .getActiveConnections();
+              .getActiveConnections();
 
-        const locks =
+    const locks =
             await monitoringRepository
-                .getLocks();
+              .getLocks();
 
-        const slowQueries =
+    const slowQueries =
             await monitoringRepository
-                .getSlowQueries();
+              .getSlowQueries();
 
-        return {
+    return {
 
-            success: true,
+      success: true,
 
-            uptime:
+      uptime:
                 process.uptime(),
 
-            memoryUsage:
+      memoryUsage:
                 process.memoryUsage(),
 
-            cpuUsage:
+      cpuUsage:
                 process.cpuUsage(),
 
-            activeConnections:
+      activeConnections:
                 connections,
 
-            locks,
+      locks,
 
-            slowQueries,
+      slowQueries,
 
-            nodeVersion:
+      nodeVersion:
                 process.version,
 
-            timestamp:
+      timestamp:
                 new Date(),
-        };
-    }
+    };
+  }
 }
 
 module.exports =

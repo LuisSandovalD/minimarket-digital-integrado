@@ -35,11 +35,7 @@ export default function useProductForm() {
 
     let finalValue = type === "checkbox" ? checked : value;
 
-    if (
-      name === "isActive" ||
-      name === "isFeatured" ||
-      name === "requiresExpiration"
-    ) {
+    if (name === "isActive" || name === "isFeatured" || name === "requiresExpiration") {
       finalValue = value === "true";
     }
 

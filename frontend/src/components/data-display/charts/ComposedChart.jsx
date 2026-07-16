@@ -10,10 +10,7 @@ import {
   YAxis,
 } from "recharts";
 
-export default function ComposedChart({
-  title = "Ventas vs Compras",
-  data = [],
-}) {
+export default function ComposedChart({ title = "Ventas vs Compras", data = [] }) {
   return (
     <div className="rounded-3xl border border-slate-200/70 dark:border-slate-800/70 bg-white/70 dark:bg-slate-900/70 p-6 shadow-sm backdrop-blur-xl">
       <h2 className="mb-5 text-lg font-semibold">{title}</h2>

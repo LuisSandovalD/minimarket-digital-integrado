@@ -2,13 +2,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { AlertCircle } from "lucide-react";
 import { BranchStep, CompanyStep, UserStep } from "../../components/register";
 
-export default function RegisterForm({
-  step,
-  form,
-  error,
-  handleChange,
-  handleSubmit,
-}) {
+export default function RegisterForm({ step, form, error, handleChange, handleSubmit }) {
   const StepComponents = { 1: UserStep, 2: CompanyStep, 3: BranchStep };
 
   const StepHeaders = {
@@ -30,11 +24,7 @@ export default function RegisterForm({
   const currentHeader = StepHeaders[step] || StepHeaders[1];
 
   return (
-    <form
-      id="register-form"
-      onSubmit={handleSubmit}
-      className="w-full max-w-2xl mx-auto flex flex-col gap-6"
-    >
+    <form id="register-form" onSubmit={handleSubmit} className="w-full max-w-2xl mx-auto flex flex-col gap-6">
       {/* SECCIÓN DE ERROR CON ANIMACIÓN INTEGRADA OPTIMIZADA */}
       <AnimatePresence mode="wait">
         {error && (
@@ -48,9 +38,7 @@ export default function RegisterForm({
             className="flex items-start gap-3 rounded-2xl border border-red-200 bg-red-50 p-4 dark:border-red-500/20 dark:bg-red-500/10"
           >
             <AlertCircle size={18} className="mt-0.5 shrink-0 text-red-500" />
-            <span className="text-sm font-medium text-red-600 dark:text-red-400">
-              {error}
-            </span>
+            <span className="text-sm font-medium text-red-600 dark:text-red-400">{error}</span>
           </motion.div>
         )}
       </AnimatePresence>
@@ -70,9 +58,7 @@ export default function RegisterForm({
             <h2 className="text-2xl font-bold tracking-tight text-slate-950 dark:text-slate-50">
               {currentHeader.title}
             </h2>
-            <p className="text-sm text-slate-500 dark:text-slate-400">
-              {currentHeader.description}
-            </p>
+            <p className="text-sm text-slate-500 dark:text-slate-400">{currentHeader.description}</p>
           </div>
 
           {/* RENDERIZADO DEL PASO */}

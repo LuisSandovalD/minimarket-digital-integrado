@@ -9,56 +9,56 @@ router.get(
   "/hierarchy",
   auth,
   roleCheck("ADMIN", "MANAGER"),
-  controller.getHierarchy
+  controller.getHierarchy,
 );
 
 router.get(
   "/",
   auth,
   roleCheck("ADMIN", "MANAGER"),
-  controller.getUsers
+  controller.getUsers,
 );
 
 router.get(
   "/:id",
   auth,
   roleCheck("ADMIN", "MANAGER", "SUPERVISOR"),
-  controller.getUserById
+  controller.getUserById,
 );
 
 router.post(
   "/",
   auth,
   roleCheck("ADMIN"),
-  controller.createUser
+  controller.createUser,
 );
 
 router.put(
   "/:id",
   auth,
   roleCheck("ADMIN"),
-  controller.updateUser
+  controller.updateUser,
 );
 
 router.patch(
   "/:id/status",
   auth,
   roleCheck("ADMIN"),
-  controller.toggleUserStatus
+  controller.toggleUserStatus,
 );
 
 router.patch(
   "/:id/restore",
   auth,
   roleCheck("ADMIN"),
-  controller.restoreUser
+  controller.restoreUser,
 );
 
 router.delete(
   "/:id",
   auth,
   roleCheck("ADMIN"),
-  controller.deleteUser
+  controller.deleteUser,
 );
 
 module.exports = router;

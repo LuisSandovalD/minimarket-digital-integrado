@@ -30,26 +30,19 @@ export default function useSupportPage() {
 
   // --- Queries ---
   const { tickets = [], loading: loadingTickets } = useSupportTickets();
-  const { messages, loading: loadingMessages } = useTicketMessages(
-    selectedTicket?.id,
-  );
+  const { messages, loading: loadingMessages } = useTicketMessages(selectedTicket?.id);
 
   // --- Mutations ---
-  const { sendMessageMutation, updateStatusMutation, createTicketMutation } =
-    useSupportMutations();
+  const { sendMessageMutation, updateStatusMutation, createTicketMutation } = useSupportMutations();
 
   // --- Lógica de Filtrado ---
   const filteredTickets = useMemo(() => {
     if (!tickets) return [];
     return tickets.filter((ticket) => {
-      const matchesSearch = ticket.title
-        ?.toLowerCase()
-        .includes(search.toLowerCase());
+      const matchesSearch = ticket.title?.toLowerCase().includes(search.toLowerCase());
       if (!matchesSearch) return false;
-      if (filters.status !== "ALL" && ticket.status !== filters.status)
-        return false;
-      if (filters.priority !== "ALL" && ticket.priority !== filters.priority)
-        return false;
+      if (filters.status !== "ALL" && ticket.status !== filters.status) return false;
+      if (filters.priority !== "ALL" && ticket.priority !== filters.priority) return false;
       return true;
     });
   }, [tickets, search, filters]);
@@ -57,11 +50,8 @@ export default function useSupportPage() {
   // --- Estadísticas ---
   const stats = useMemo(() => {
     const total = tickets?.length || 0;
-    const pending =
-      tickets?.filter((t) => t.status === "OPEN" || t.status === "IN_PROGRESS")
-        .length || 0;
-    const resolved =
-      tickets?.filter((t) => t.status === "RESOLVED").length || 0;
+    const pending = tickets?.filter((t) => t.status === "OPEN" || t.status === "IN_PROGRESS").length || 0;
+    const resolved = tickets?.filter((t) => t.status === "RESOLVED").length || 0;
     return { total, pending, resolved };
   }, [tickets]);
 

@@ -7,12 +7,7 @@ import { AlertModal } from "@/components/overlays";
 import { AlertTriangle, CheckCircle, X } from "lucide-react";
 import { useState } from "react";
 
-export default function UserStatusModal({
-  open,
-  onClose,
-  user,
-  onToggleStatus,
-}) {
+export default function UserStatusModal({ open, onClose, user, onToggleStatus }) {
   const [loading, setLoading] = useState(false);
   const isActive = user?.isActive;
 
@@ -34,11 +29,7 @@ export default function UserStatusModal({
       open={open}
       onClose={onClose}
       type={isActive ? "error" : "success"} // Rojo si va a desactivar, Verde si va a activar
-      title={
-        isActive
-          ? "¿Desactivar Cuenta de Usuario?"
-          : "¿Reactivar Cuenta de Usuario?"
-      }
+      title={isActive ? "¿Desactivar Cuenta de Usuario?" : "¿Reactivar Cuenta de Usuario?"}
       message={
         isActive
           ? `¿Estás seguro de suspender a "${user?.name || ""}"? Perderá de inmediato la capacidad de iniciar sesión y operar en la plataforma.`
@@ -59,13 +50,7 @@ export default function UserStatusModal({
 
         <ModernButton
           type="button"
-          text={
-            loading
-              ? "Procesando..."
-              : isActive
-                ? "Desactivar Acceso"
-                : "Activar Acceso"
-          }
+          text={loading ? "Procesando..." : isActive ? "Desactivar Acceso" : "Activar Acceso"}
           variant={isActive ? "danger" : "success"}
           icon={isActive ? AlertTriangle : CheckCircle}
           onClick={handleToggle}

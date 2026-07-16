@@ -37,10 +37,7 @@ export default function SaleStepper({ currentStep }) {
           const Icon = step.icon;
 
           return (
-            <div
-              key={step.label}
-              className="flex items-center flex-1 last:flex-none"
-            >
+            <div key={step.label} className="flex items-center flex-1 last:flex-none">
               <div className="flex flex-col items-center">
                 {/* STEP CIRCLE */}
 
@@ -136,11 +133,7 @@ export default function SaleStepper({ currentStep }) {
                       transition-all
                       duration-300
 
-                      ${
-                        isCompleted
-                          ? "bg-emerald-500/40"
-                          : "bg-slate-200 dark:bg-slate-800"
-                      }
+                      ${isCompleted ? "bg-emerald-500/40" : "bg-slate-200 dark:bg-slate-800"}
                     `}
                   />
                 </div>

@@ -58,19 +58,14 @@ export default function useDatabase() {
         backup: false,
       });
 
-      const [
-        healthResponse,
-        metricsResponse,
-        monitoringResponse,
-        branchesResponse,
-        backupsResponse,
-      ] = await Promise.all([
-        getDatabaseHealth(),
-        getDatabaseMetrics(),
-        getDatabaseMonitoring(),
-        getDatabaseBranches(),
-        getDatabaseBackups(),
-      ]);
+      const [healthResponse, metricsResponse, monitoringResponse, branchesResponse, backupsResponse] =
+        await Promise.all([
+          getDatabaseHealth(),
+          getDatabaseMetrics(),
+          getDatabaseMonitoring(),
+          getDatabaseBranches(),
+          getDatabaseBackups(),
+        ]);
 
       setHealth(healthResponse?.data);
       setMetrics(metricsResponse?.data);
@@ -80,9 +75,7 @@ export default function useDatabase() {
     } catch (err) {
       console.error(err);
       // Opcional: No abrumar con modales de error si falla un refresco silencioso automático
-      setError(
-        err?.response?.data?.message || err?.message || "Database Error",
-      );
+      setError(err?.response?.data?.message || err?.message || "Database Error");
     } finally {
       setLoading({
         fetch: false,
@@ -131,9 +124,7 @@ export default function useDatabase() {
       return response;
     } catch (err) {
       console.error(err);
-      setError(
-        err?.response?.data?.message || err?.message || "Error creando backup",
-      );
+      setError(err?.response?.data?.message || err?.message || "Error creando backup");
       throw err;
     } finally {
       setLoading((prev) => ({ ...prev, backup: false }));

@@ -16,7 +16,7 @@ exports.getLowStockProducts =
 
       const products =
         await service.getLowStock(
-          req.user.companyId
+          req.user.companyId,
         );
 
       res.json({
@@ -46,7 +46,7 @@ exports.getExpiringProducts =
 
       const products =
         await service.getExpiring(
-          req.user.companyId
+          req.user.companyId,
         );
 
       res.json({

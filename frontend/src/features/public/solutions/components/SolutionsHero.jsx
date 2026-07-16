@@ -1,11 +1,6 @@
 import { defaultViewport } from "@/components/effects";
 import { motion } from "framer-motion";
-import {
-  Building2,
-  ShoppingCart,
-  Store,
-  Warehouse
-} from "lucide-react";
+import { Building2, ShoppingCart, Store, Warehouse } from "lucide-react";
 
 const fastFadeUp = {
   hidden: { opacity: 0, y: 15 },
@@ -106,15 +101,11 @@ export default function SolutionsHero() {
             variants={fastFadeUp}
             className="mt-5 max-w-xl text-base leading-relaxed text-[#4a5568] dark:text-[#cbd5e1] sm:text-lg"
           >
-            Desde pequeños comercios hasta cadenas con múltiples sucursales.
-            Nexora ERP centraliza operaciones, automatiza procesos y proporciona
-            información en tiempo real para ayudarte a tomar mejores decisiones.
+            Desde pequeños comercios hasta cadenas con múltiples sucursales. Nexora ERP centraliza operaciones,
+            automatiza procesos y proporciona información en tiempo real para ayudarte a tomar mejores decisiones.
           </motion.p>
 
-          <motion.div
-            variants={fastFadeUp}
-            className="mt-8 flex flex-wrap gap-3"
-          >
+          <motion.div variants={fastFadeUp} className="mt-8 flex flex-wrap gap-3">
             {BUSINESS_TYPES.map((item) => {
               const Icon = item.icon;
 

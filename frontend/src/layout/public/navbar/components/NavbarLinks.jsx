@@ -6,8 +6,7 @@ export default function NavbarLinks({ links }) {
   const baseClasses =
     "group relative overflow-hidden rounded-2xl px-5 py-3 text-sm font-semibold tracking-wide transition-all duration-300 hover:-translate-y-0.5";
 
-  const activeClasses =
-    "bg-[#e7ecef] text-[#1f3c5d] dark:bg-[#365d86]/20 dark:text-white";
+  const activeClasses = "bg-[#e7ecef] text-[#1f3c5d] dark:bg-[#365d86]/20 dark:text-white";
 
   const inactiveClasses =
     "text-[#274c77] hover:bg-[#e7ecef] hover:text-[#1f3c5d] dark:text-[#dbe7f0] dark:hover:bg-[#365d86]/20 dark:hover:text-white";
@@ -18,13 +17,7 @@ export default function NavbarLinks({ links }) {
         const isActive = location.pathname === link.href;
 
         return (
-          <Link
-            key={index}
-            to={link.href}
-            className={`${baseClasses} ${
-              isActive ? activeClasses : inactiveClasses
-            }`}
-          >
+          <Link key={index} to={link.href} className={`${baseClasses} ${isActive ? activeClasses : inactiveClasses}`}>
             <span
               className={`absolute inset-0 bg-gradient-to-r from-[#a3cef1]/0 via-[#a3cef1]/10 to-[#a3cef1]/0 transition-opacity duration-300 dark:via-[#6096ba]/10 ${
                 isActive ? "opacity-100" : "opacity-0 group-hover:opacity-100"

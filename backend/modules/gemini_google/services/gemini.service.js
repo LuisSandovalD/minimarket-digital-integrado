@@ -5,39 +5,42 @@
 const { GoogleGenAI } = require("@google/genai");
 
 const ai = new GoogleGenAI({
-    apiKey: process.env.GEMINI_API_KEY,
+  apiKey: process.env.GEMINI_API_KEY,
 });
 
 const generateResponse = async ({
-    systemPrompt,
-    conversation,
+  systemPrompt,
+  conversation,
 }) => {
-    try {
-        const response =
-            await ai.models.generateContent({
-                model: "gemini-2.5-flash",
+  try {
+    const response =
+      await ai.models.generateContent({
+        model: "gemini-2.5-flash",
 
-                contents: conversation,
+        contents: conversation,
 
-                config: {
-                    systemInstruction: systemPrompt,
-                    temperature: 0.7,
-                },
-            });
+        config: {
+          systemInstruction: systemPrompt,
+          temperature: 0.7,
+          Ramos: 0.7,
+        },
+      });
 
-        return response.text;
-    } catch (error) {
-        console.error(
-            "[-] Gemini Service Error:",
-            error
-        );
+    return response.text;
+  } catch (error) {
+    console.error(
+      "[-] Gemini Service Error:",
+      error,
+    );
 
-        throw new Error(
-            "No se pudo obtener respuesta de Gemini."
-        );
-    }
+    // Agregamos { cause: error } para preservar la raíz del fallo original
+    throw new Error(
+      "No se pudo obtener respuesta de Gemini.",
+      { cause: error },
+    );
+  }
 };
 
 module.exports = {
-    generateResponse,
+  generateResponse,
 };

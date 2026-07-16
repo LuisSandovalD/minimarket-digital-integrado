@@ -37,12 +37,7 @@ export default function SaleFormModal({
       {/* ========================================
        * HEADER
        * ====================================== */}
-      <HeaderModal
-        icon={Sheet}
-        title="Nueva Venta"
-        subtitle="Proceso de venta paso a paso"
-        onClose={onClose}
-      />
+      <HeaderModal icon={Sheet} title="Nueva Venta" subtitle="Proceso de venta paso a paso" onClose={onClose} />
 
       {/* ========================================
        * STEPPER
@@ -55,23 +50,11 @@ export default function SaleFormModal({
        * CONTENT (Renderizado condicional optimizado)
        * ====================================== */}
       <div className="flex-1 overflow-hidden">
-        {step === 1 && (
-          <CustomerStep customers={customers} form={form} setForm={setForm} />
-        )}
+        {step === 1 && <CustomerStep customers={customers} form={form} setForm={setForm} />}
 
-        {step === 2 && (
-          <ProductsStep products={products} form={form} setForm={setForm} />
-        )}
+        {step === 2 && <ProductsStep products={products} form={form} setForm={setForm} />}
 
-        {step === 3 && (
-          <PaymentStep
-            form={form}
-            setForm={setForm}
-            subtotal={subtotal}
-            tax={tax}
-            total={total}
-          />
-        )}
+        {step === 3 && <PaymentStep form={form} setForm={setForm} subtotal={subtotal} tax={tax} total={total} />}
 
         {step === 4 && (
           <SummaryStep
@@ -93,14 +76,7 @@ export default function SaleFormModal({
       <FooterModal>
         <div className="flex items-center justify-between w-full">
           {/* LEFT: Botón de escape */}
-          <ModernButton
-            type="button"
-            variant="secondary"
-            text="Cerrar"
-            icon={X}
-            disabled={loading}
-            onClick={onClose}
-          />
+          <ModernButton type="button" variant="secondary" text="Cerrar" icon={X} disabled={loading} onClick={onClose} />
 
           {/* RIGHT: Botones de transición de estado */}
           <div className="flex gap-3">
@@ -116,13 +92,7 @@ export default function SaleFormModal({
             )}
 
             {step < 4 ? (
-              <ModernButton
-                type="button"
-                variant="primary"
-                text="Siguiente"
-                icon={ChevronRight}
-                onClick={handleNext}
-              />
+              <ModernButton type="button" variant="primary" text="Siguiente" icon={ChevronRight} onClick={handleNext} />
             ) : (
               <SubmitButton
                 variant="primary"

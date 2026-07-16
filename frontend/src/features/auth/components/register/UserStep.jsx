@@ -41,6 +41,7 @@ export default function UserStep({ form, handleChange }) {
         onChange={handleChange}
         icon={LockKeyhole}
         required
+        requireStrength={true}
       />
     </div>
   );

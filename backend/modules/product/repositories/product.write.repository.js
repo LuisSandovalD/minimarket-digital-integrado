@@ -5,7 +5,7 @@
 const prisma = require("../../../prisma/client");
 
 function getDb(tx) {
-    return tx || prisma;
+  return tx || prisma;
 }
 
 // ========================================
@@ -13,11 +13,11 @@ function getDb(tx) {
 // ========================================
 
 exports.create = async (data, tx) => {
-    const db = getDb(tx);
+  const db = getDb(tx);
 
-    return db.product.create({
-        data,
-    });
+  return db.product.create({
+    data,
+  });
 };
 
 // ========================================
@@ -25,11 +25,11 @@ exports.create = async (data, tx) => {
 // ========================================
 
 exports.createMany = async (data, tx) => {
-    const db = getDb(tx);
+  const db = getDb(tx);
 
-    return db.product.createMany({
-        data,
-    });
+  return db.product.createMany({
+    data,
+  });
 };
 
 // ========================================
@@ -37,14 +37,14 @@ exports.createMany = async (data, tx) => {
 // ========================================
 
 exports.update = async (id, data, tx) => {
-    const db = getDb(tx);
+  const db = getDb(tx);
 
-    return db.product.update({
-        where: {
-            id,
-        },
-        data,
-    });
+  return db.product.update({
+    where: {
+      id,
+    },
+    data,
+  });
 };
 
 // ========================================
@@ -52,16 +52,16 @@ exports.update = async (id, data, tx) => {
 // ========================================
 
 exports.updateMany = async (
+  where,
+  data,
+  tx,
+) => {
+  const db = getDb(tx);
+
+  return db.product.updateMany({
     where,
     data,
-    tx
-) => {
-    const db = getDb(tx);
-
-    return db.product.updateMany({
-        where,
-        data,
-    });
+  });
 };
 
 // ========================================
@@ -69,17 +69,17 @@ exports.updateMany = async (
 // ========================================
 
 exports.softDelete = async (id, tx) => {
-    const db = getDb(tx);
+  const db = getDb(tx);
 
-    return db.product.update({
-        where: {
-            id,
-        },
-        data: {
-            isDeleted: true,
-            deletedAt: new Date(),
-        },
-    });
+  return db.product.update({
+    where: {
+      id,
+    },
+    data: {
+      isDeleted: true,
+      deletedAt: new Date(),
+    },
+  });
 };
 
 // ========================================
@@ -87,17 +87,17 @@ exports.softDelete = async (id, tx) => {
 // ========================================
 
 exports.restore = async (id, tx) => {
-    const db = getDb(tx);
+  const db = getDb(tx);
 
-    return db.product.update({
-        where: {
-            id,
-        },
-        data: {
-            isDeleted: false,
-            deletedAt: null,
-        },
-    });
+  return db.product.update({
+    where: {
+      id,
+    },
+    data: {
+      isDeleted: false,
+      deletedAt: null,
+    },
+  });
 };
 
 // ========================================
@@ -105,11 +105,11 @@ exports.restore = async (id, tx) => {
 // ========================================
 
 exports.delete = async (id, tx) => {
-    const db = getDb(tx);
+  const db = getDb(tx);
 
-    return db.product.delete({
-        where: {
-            id,
-        },
-    });
+  return db.product.delete({
+    where: {
+      id,
+    },
+  });
 };

@@ -1,10 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import {
-  createTicket,
-  sendTicketMessage,
-  updateTicketStatus,
-} from "../services/support.service";
+import { createTicket, sendTicketMessage, updateTicketStatus } from "../services/support.service";
 
 export default function useSupportMutations() {
   const queryClient = useQueryClient();
@@ -54,41 +50,31 @@ export default function useSupportMutations() {
       await queryClient.cancelQueries({
         queryKey: ["ticket-messages", ticketId],
       });
-      const previousMessages = queryClient.getQueryData([
-        "ticket-messages",
-        ticketId,
-      ]);
+      const previousMessages = queryClient.getQueryData(["ticket-messages", ticketId]);
 
       // Normalizamos el texto también para la burbuja local instantánea
       let localText = "";
       if (typeof data === "string") localText = data;
-      else if (data)
-        localText = data.message?.text || data.message || data.text || "";
+      else if (data) localText = data.message?.text || data.message || data.text || "";
 
-      queryClient.setQueryData(
-        ["ticket-messages", ticketId],
-        (oldMessages = []) => [
-          ...oldMessages,
-          {
-            id: `temp-${Date.now()}`,
-            message: String(localText).trim(), // Texto limpio para <p> en MessageBubble
-            createdAt: new Date().toISOString(),
-            user: { name: "Tú" },
-            isMine: true,
-            sending: true,
-          },
-        ],
-      );
+      queryClient.setQueryData(["ticket-messages", ticketId], (oldMessages = []) => [
+        ...oldMessages,
+        {
+          id: `temp-${Date.now()}`,
+          message: String(localText).trim(), // Texto limpio para <p> en MessageBubble
+          createdAt: new Date().toISOString(),
+          user: { name: "Tú" },
+          isMine: true,
+          sending: true,
+        },
+      ]);
 
       return { previousMessages };
     },
 
     onError: (err, variables, context) => {
       if (context?.previousMessages) {
-        queryClient.setQueryData(
-          ["ticket-messages", variables.ticketId],
-          context.previousMessages,
-        );
+        queryClient.setQueryData(["ticket-messages", variables.ticketId], context.previousMessages);
       }
     },
 

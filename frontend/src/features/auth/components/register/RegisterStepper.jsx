@@ -17,10 +17,7 @@ export default function RegisterStepper({ step }) {
           const isLast = index === steps.length - 1;
 
           return (
-            <div
-              key={item.id}
-              className={`flex items-center ${isLast ? "flex-none" : "flex-1"}`}
-            >
+            <div key={item.id} className={`flex items-center ${isLast ? "flex-none" : "flex-1"}`}>
               {/* CONTENEDOR VÉRTICE (Ícono + Texto) */}
               <div className="relative flex flex-col items-center">
                 <div

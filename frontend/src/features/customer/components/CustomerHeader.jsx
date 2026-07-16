@@ -6,12 +6,7 @@ import { Plus, UserCheck, UserPlus, Users } from "lucide-react";
 
 import { PageHeader } from "@/components/data-display/";
 
-export default function CustomerHeader({
-  total = 0,
-  active = 0,
-  newCustomers = 0,
-  onCreate,
-}) {
+export default function CustomerHeader({ total = 0, active = 0, newCustomers = 0, onCreate }) {
   return (
     <PageHeader
       icon={Users}

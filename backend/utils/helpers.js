@@ -12,7 +12,7 @@ exports.generatePurchaseNumber = () => {
 
 exports.calculateTax = (
   subtotal,
-  taxRate = 18
+  taxRate = 18,
 ) => {
 
   return (subtotal * taxRate) / 100;
@@ -21,7 +21,7 @@ exports.calculateTax = (
 
 exports.calculateDiscount = (
   subtotal,
-  discount
+  discount,
 ) => {
 
   return subtotal - discount;

@@ -2,18 +2,7 @@
 // features/supplier/components/SupplierFormModal.jsx
 // ========================================
 
-import {
-  Building2,
-  FileText,
-  Globe,
-  Mail,
-  MapPin,
-  Phone,
-  ShieldCheck,
-  Truck,
-  User,
-  X,
-} from "lucide-react";
+import { Building2, FileText, Globe, Mail, MapPin, Phone, ShieldCheck, Truck, User, X } from "lucide-react";
 
 import { FooterModal, HeaderModal, Modal } from "@/components/overlays/";
 
@@ -418,22 +407,10 @@ export default function SupplierFormModal({
                 items-center gap-3
               "
             >
-              <ModernButton
-                type="button"
-                text="Cancelar"
-                variant="outline"
-                icon={X}
-                onClick={onClose}
-              />
+              <ModernButton type="button" text="Cancelar" variant="outline" icon={X} onClick={onClose} />
 
               <SubmitButton
-                text={
-                  loading
-                    ? "Guardando..."
-                    : isEdit
-                      ? "Actualizar Proveedor"
-                      : "Guardar Proveedor"
-                }
+                text={loading ? "Guardando..." : isEdit ? "Actualizar Proveedor" : "Guardar Proveedor"}
                 loading={loading}
               />
             </div>

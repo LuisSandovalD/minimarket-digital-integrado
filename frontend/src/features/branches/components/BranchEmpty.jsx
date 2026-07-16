@@ -10,9 +10,7 @@ export default function BranchEmpty() {
         <MapPinOff size={28} strokeWidth={1.5} />
       </div>
 
-      <h3 className="text-base font-semibold text-slate-700 dark:text-slate-200">
-        No hay sucursales encontradas
-      </h3>
+      <h3 className="text-base font-semibold text-slate-700 dark:text-slate-200">No hay sucursales encontradas</h3>
 
       <p className="mt-1 max-w-xs text-sm text-slate-400 dark:text-slate-500">
         Intenta cambiando los términos de búsqueda o los filtros seleccionados.

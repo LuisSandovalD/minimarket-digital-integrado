@@ -4,9 +4,7 @@ import { Database, Download } from "lucide-react";
 export default function DatabaseBackups({ backups = [] }) {
   return (
     <div className="space-y-5">
-      <h2 className="text-xl font-semibold text-foreground">
-        Copias de Seguridad
-      </h2>
+      <h2 className="text-xl font-semibold text-foreground">Copias de Seguridad</h2>
 
       {/* Estado Vacío */}
       {backups.length === 0 && (
@@ -29,9 +27,7 @@ export default function DatabaseBackups({ backups = [] }) {
               icon={Database}
               title={backup.name}
               value={`${(backup.size / 1024).toFixed(2)} KB`}
-              description={new Date(
-                backup.createdAt || backup.date,
-              ).toLocaleString()}
+              description={new Date(backup.createdAt || backup.date).toLocaleString()}
               variant="success"
               className="border border-neutral-200 dark:border-neutral-800 bg-background"
             />

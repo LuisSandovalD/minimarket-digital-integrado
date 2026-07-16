@@ -48,12 +48,7 @@ export default function AIChatPage() {
         messagesEndRef={messagesEndRef}
       />
 
-      <AIChatFooter
-        message={message}
-        setMessage={setMessage}
-        loading={loading}
-        onSend={handleSend}
-      />
+      <AIChatFooter message={message} setMessage={setMessage} loading={loading} onSend={handleSend} />
     </div>
   );
 }

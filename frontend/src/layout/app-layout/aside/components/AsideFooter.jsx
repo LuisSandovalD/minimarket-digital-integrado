@@ -44,9 +44,7 @@ export default function AsideFooter({
         {!isCollapsed && (
           <div className="min-w-0 flex-1 text-left">
             <div className="truncate text-sm font-semibold">Cerrar sesión</div>
-            <div className="truncate text-xs text-slate-400">
-              Salir del sistema
-            </div>
+            <div className="truncate text-xs text-slate-400">Salir del sistema</div>
           </div>
         )}
       </button>

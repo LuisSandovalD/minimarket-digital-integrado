@@ -4,13 +4,7 @@
 
 import { useMemo } from "react";
 
-export function useUserModalData({
-  formData,
-  allUsers,
-  isEdit,
-  user,
-  handleChange,
-}) {
+export function useUserModalData({ formData, allUsers, isEdit, user, handleChange }) {
   // ========================================
   // FILTRADO DINÁMICO DE RESPONSABLES (Jerarquía Corporativa)
   // ========================================
@@ -52,8 +46,7 @@ export function useUserModalData({
   };
 
   // Condición lógica para bloquear y heredar la sucursal de manera reactiva
-  const isBranchInherited =
-    formData.role === "SUPERVISOR" || formData.role === "EMPLOYEE";
+  const isBranchInherited = formData.role === "SUPERVISOR" || formData.role === "EMPLOYEE";
 
   return {
     availableManagers,

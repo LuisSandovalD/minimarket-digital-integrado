@@ -82,16 +82,12 @@ export default function MetricCard({
                 <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white sm:text-3xl">
                   {value}
                 </h2>
-                {trend !== undefined && (
-                  <Trend value={trend} label={trendLabel} />
-                )}
+                {trend !== undefined && <Trend value={trend} label={trendLabel} />}
               </div>
             )}
 
             {title && (
-              <CardTitle className="mb-1 text-base font-black text-slate-900 dark:text-white">
-                {title}
-              </CardTitle>
+              <CardTitle className="mb-1 text-base font-black text-slate-900 dark:text-white">{title}</CardTitle>
             )}
 
             {description && (

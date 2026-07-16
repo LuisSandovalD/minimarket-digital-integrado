@@ -1,34 +1,34 @@
 // modules/database/services/database-connections.service.js
 
 const databaseRepository = require(
-    "../repositories/database.repository"
+  "../repositories/database.repository",
 );
 
 class DatabaseConnectionsService {
 
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Get Active Connections
     |--------------------------------------------------------------------------
     */
 
-    async getConnections() {
+  async getConnections() {
 
-        const connections =
+    const connections =
             await databaseRepository
-                .getConnections();
+              .getConnections();
 
-        return {
+    return {
 
-            success: true,
+      success: true,
 
-            activeConnections:
+      activeConnections:
                 connections[0]?.total || 0,
 
-            timestamp:
+      timestamp:
                 new Date(),
-        };
-    }
+    };
+  }
 }
 
 module.exports =

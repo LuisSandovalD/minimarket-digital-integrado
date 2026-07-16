@@ -4,12 +4,7 @@
 
 import { Loader2 } from "lucide-react";
 
-export default function LoadingSpinner({
-  size = "md",
-  text = "Cargando...",
-  fullScreen = false,
-  variant = "primary",
-}) {
+export default function LoadingSpinner({ size = "md", text = "Cargando...", fullScreen = false, variant = "primary" }) {
   const sizeClasses = {
     sm: "w-5 h-5",
     md: "w-8 h-8",

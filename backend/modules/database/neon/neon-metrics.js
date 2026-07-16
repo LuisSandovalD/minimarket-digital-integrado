@@ -1,11 +1,11 @@
 // modules/database/neon/neon-metrics.js
 
 const {
-    neonApi,
+  neonApi,
 } = require("./neon-api");
 
 const databaseConfig = require(
-    "../../../config/database.config"
+  "../../../config/database.config",
 );
 
 /*
@@ -16,16 +16,16 @@ const databaseConfig = require(
 
 async function getProjectMetrics() {
 
-    const response =
+  const response =
         await neonApi.get(
 
-            `/projects/${databaseConfig.neon.projectId}`
+          `/projects/${databaseConfig.neon.projectId}`,
         );
 
-    return response.data;
+  return response.data;
 }
 
 module.exports = {
 
-    getProjectMetrics,
+  getProjectMetrics,
 };

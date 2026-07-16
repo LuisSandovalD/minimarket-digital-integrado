@@ -1,65 +1,65 @@
 const prisma = require("../../../prisma/client");
 
 const getLowStockProducts = async (
-    companyId
+  companyId,
 ) => {
 
-    return prisma.inventory.findMany({
-        where: {
-            companyId,
-            stock: {
-                lte: 5
-            }
-        },
+  return prisma.inventory.findMany({
+    where: {
+      companyId,
+      stock: {
+        lte: 5,
+      },
+    },
 
-        include: {
-            product: true,
-            branch: true
-        }
-    });
+    include: {
+      product: true,
+      branch: true,
+    },
+  });
 };
 
 const getInventoryValue = async (
-    companyId
+  companyId,
 ) => {
 
-    const inventory =
+  const inventory =
         await prisma.inventory.findMany({
-            where: {
-                companyId
-            },
+          where: {
+            companyId,
+          },
 
-            include: {
-                product: true
-            }
+          include: {
+            product: true,
+          },
         });
 
-    return inventory;
+  return inventory;
 };
 
 const getInventoryMovements = async (
-    companyId,
-    dateFilter
+  companyId,
+  dateFilter,
 ) => {
 
-    return prisma.inventoryHistory.findMany({
-        where: {
-            companyId,
-            createdAt: dateFilter
-        },
+  return prisma.inventoryHistory.findMany({
+    where: {
+      companyId,
+      createdAt: dateFilter,
+    },
 
-        include: {
-            product: true
-        },
+    include: {
+      product: true,
+    },
 
-        orderBy: {
-            createdAt: "desc"
-        }
-    });
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
 };
 
 module.exports = {
-    getLowStockProducts,
-    getInventoryValue,
-    getInventoryMovements
+  getLowStockProducts,
+  getInventoryValue,
+  getInventoryMovements,
 };

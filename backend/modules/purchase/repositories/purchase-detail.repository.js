@@ -5,12 +5,12 @@ async function createPurchaseDetailsRepository(details = []) {
 
   return prisma.purchaseDetail.createMany({
 
-    data: details
+    data: details,
 
   });
 
 }
 
 module.exports = {
-  createPurchaseDetailsRepository
+  createPurchaseDetailsRepository,
 };

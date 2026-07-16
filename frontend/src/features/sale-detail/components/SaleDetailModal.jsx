@@ -33,10 +33,7 @@ export default function SaleDetailModal({ open, onClose, detail }) {
 
   if (detail.subtotal !== undefined && detail.subtotal !== null) {
     subtotalAmount = Number(detail.subtotal || 0);
-    taxAmount =
-      detail.tax !== undefined
-        ? Number(detail.tax || 0)
-        : subtotalAmount * 0.18;
+    taxAmount = detail.tax !== undefined ? Number(detail.tax || 0) : subtotalAmount * 0.18;
     lineTotal = subtotalAmount + taxAmount;
   } else {
     // Si la propiedad subtotal no viene del backend, desglosamos igual que en tu tabla
@@ -49,9 +46,7 @@ export default function SaleDetailModal({ open, onClose, detail }) {
     <Modal open={open} onClose={onClose} size="xl">
       <HeaderModal
         title="Detalle de venta"
-        subtitle={
-          sale.saleNumber || sale.invoiceNumber || "Información completa"
-        }
+        subtitle={sale.saleNumber || sale.invoiceNumber || "Información completa"}
         onClose={onClose}
       />
 
@@ -61,25 +56,17 @@ export default function SaleDetailModal({ open, onClose, detail }) {
           {[
             {
               label: "Número de Comprobante",
-              value:
-                sale.saleNumber || sale.invoiceNumber || `TRX-${sale.id || ""}`,
+              value: sale.saleNumber || sale.invoiceNumber || `TRX-${sale.id || ""}`,
             },
             { label: "Estado", value: sale.status },
             {
               label: "Fecha",
-              value: sale.createdAt
-                ? new Date(sale.createdAt).toLocaleString("es-PE")
-                : "-",
+              value: sale.createdAt ? new Date(sale.createdAt).toLocaleString("es-PE") : "-",
             },
           ].map(({ label, value }) => (
-            <div
-              key={label}
-              className="bg-slate-50 dark:bg-slate-800/50 rounded-lg px-3 py-2"
-            >
+            <div key={label} className="bg-slate-50 dark:bg-slate-800/50 rounded-lg px-3 py-2">
               <p className="text-[11px] text-slate-500 mb-0.5">{label}</p>
-              <p className="text-sm font-medium text-slate-900 dark:text-white truncate">
-                {value ?? "-"}
-              </p>
+              <p className="text-sm font-medium text-slate-900 dark:text-white truncate">{value ?? "-"}</p>
             </div>
           ))}
         </div>
@@ -99,9 +86,7 @@ export default function SaleDetailModal({ open, onClose, detail }) {
             ].map(({ label, value }) => (
               <div key={label} className="px-3 py-2">
                 <p className="text-[11px] text-slate-500 mb-0.5">{label}</p>
-                <p className="text-sm font-medium text-slate-900 dark:text-white break-words">
-                  {value ?? "-"}
-                </p>
+                <p className="text-sm font-medium text-slate-900 dark:text-white break-words">{value ?? "-"}</p>
               </div>
             ))}
           </div>
@@ -139,14 +124,9 @@ export default function SaleDetailModal({ open, onClose, detail }) {
                     value: `${Number(product.profitMargin || 0).toFixed(2)}%`,
                   },
                 ].map(({ label, value }) => (
-                  <tr
-                    key={label}
-                    className="border-b border-slate-100 dark:border-slate-800 last:border-0"
-                  >
+                  <tr key={label} className="border-b border-slate-100 dark:border-slate-800 last:border-0">
                     <td className="px-3 py-2 text-slate-500">{label}</td>
-                    <td className="px-3 py-2 text-right font-medium text-slate-900 dark:text-white">
-                      {value}
-                    </td>
+                    <td className="px-3 py-2 text-right font-medium text-slate-900 dark:text-white">{value}</td>
                   </tr>
                 ))}
               </tbody>
@@ -157,42 +137,32 @@ export default function SaleDetailModal({ open, onClose, detail }) {
           <div className="rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden">
             <div className="flex items-center gap-2 px-3 py-2 border-b border-slate-200 dark:border-slate-800">
               <DollarSign size={14} className="text-indigo-500" />
-              <span className="text-xs font-medium">
-                Desglose Económico de esta Partida
-              </span>
+              <span className="text-xs font-medium">Desglose Económico de esta Partida</span>
             </div>
             <table className="w-full text-sm">
               <tbody>
                 <tr>
-                  <td className="px-3 py-2 text-slate-500">
-                    Subtotal Neto (Línea)
-                  </td>
+                  <td className="px-3 py-2 text-slate-500">Subtotal Neto (Línea)</td>
                   <td className="px-3 py-2 text-right font-medium text-slate-900 dark:text-white">
                     {formatPrice(subtotalAmount)}
                   </td>
                 </tr>
                 <tr>
-                  <td className="px-3 py-2 text-slate-500">
-                    IGV Asignado (18%)
-                  </td>
+                  <td className="px-3 py-2 text-slate-500">IGV Asignado (18%)</td>
                   <td className="px-3 py-2 text-right font-medium text-slate-600 dark:text-slate-400">
                     {formatPrice(taxAmount)}
                   </td>
                 </tr>
                 {discountAmount > 0 && (
                   <tr>
-                    <td className="px-3 py-2 text-emerald-600 font-medium">
-                      Descuento aplicado
-                    </td>
+                    <td className="px-3 py-2 text-emerald-600 font-medium">Descuento aplicado</td>
                     <td className="px-3 py-2 text-right font-medium text-emerald-600">
                       -{formatPrice(discountAmount)}
                     </td>
                   </tr>
                 )}
                 <tr className="bg-slate-50 dark:bg-slate-800/50 border-t border-slate-200 dark:border-slate-700">
-                  <td className="px-3 py-2.5 font-semibold text-slate-900 dark:text-white">
-                    Total Línea
-                  </td>
+                  <td className="px-3 py-2.5 font-semibold text-slate-900 dark:text-white">Total Línea</td>
                   <td className="px-3 py-2.5 text-right font-bold text-slate-900 dark:text-white text-base">
                     {formatPrice(lineTotal)}
                   </td>

@@ -78,8 +78,7 @@ const useAccountStore = create((set, get) => ({
     } catch (error) {
       set({
         passwordLoading: false,
-        error:
-          error?.response?.data?.message || "Error actualizando contraseña",
+        error: error?.response?.data?.message || "Error actualizando contraseña",
       });
       throw error;
     }
@@ -95,9 +94,7 @@ const useAccountStore = create((set, get) => ({
       const rawSessions = await getSessions();
 
       // Procesa cada sesión transformando el User-Agent crudo en texto amigable para la UI
-      const normalizedSessions = Array.isArray(rawSessions)
-        ? rawSessions.map(mapUserSession)
-        : [];
+      const normalizedSessions = Array.isArray(rawSessions) ? rawSessions.map(mapUserSession) : [];
 
       set({
         sessions: normalizedSessions,
@@ -117,9 +114,7 @@ const useAccountStore = create((set, get) => ({
 
       // Remoción reactiva optimista filtrando el ID entero de la sesión revocada
       set({
-        sessions: get().sessions.filter(
-          (s) => s.id !== sessionId && s.sessionId !== sessionId,
-        ),
+        sessions: get().sessions.filter((s) => s.id !== sessionId && s.sessionId !== sessionId),
       });
     } catch (error) {
       set({
@@ -142,9 +137,7 @@ const useAccountStore = create((set, get) => ({
     } catch (error) {
       set({
         twoFactorLoading: false,
-        error:
-          error?.response?.data?.message ||
-          "Error al iniciar configuración 2FA",
+        error: error?.response?.data?.message || "Error al iniciar configuración 2FA",
       });
       throw error;
     }

@@ -1,53 +1,53 @@
 exports.calculatePercentage = (
-    value,
-    total
+  value,
+  total,
 ) => {
 
-    if (!total) return 0;
+  if (!total) return 0;
 
-    return Number(
-        ((value / total) * 100).toFixed(2)
-    );
+  return Number(
+    ((value / total) * 100).toFixed(2),
+  );
 };
 
 exports.calculateGrowth = (
-    current,
-    previous
+  current,
+  previous,
 ) => {
 
-    if (!previous) return 100;
+  if (!previous) return 100;
 
-    return Number(
-        (
-            ((current - previous) /
+  return Number(
+    (
+      ((current - previous) /
                 previous) *
             100
-        ).toFixed(2)
-    );
+    ).toFixed(2),
+  );
 };
 
 exports.groupByMonth = data => {
 
-    const grouped = {};
+  const grouped = {};
 
-    data.forEach(item => {
+  data.forEach(item => {
 
-        const month =
+    const month =
             new Date(
-                item.createdAt
+              item.createdAt,
             ).toLocaleDateString(
-                "es-PE",
-                {
-                    month: "short",
-                    year: "numeric"
-                }
+              "es-PE",
+              {
+                month: "short",
+                year: "numeric",
+              },
             );
 
-        grouped[month] =
+    grouped[month] =
             (grouped[month] || 0) +
             Number(item.total || 0);
 
-    });
+  });
 
-    return grouped;
+  return grouped;
 };

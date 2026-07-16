@@ -6,10 +6,7 @@ import { Download, Eye, MessageSquare, Receipt } from "lucide-react";
 import { ModernButton } from "@/components/buttons";
 import { FooterModal, HeaderModal, Modal } from "@/components/overlays/";
 
-const fPrice = (v) =>
-  new Intl.NumberFormat("es-PE", { style: "currency", currency: "PEN" }).format(
-    Number(v || 0),
-  );
+const fPrice = (v) => new Intl.NumberFormat("es-PE", { style: "currency", currency: "PEN" }).format(Number(v || 0));
 
 // Incluye fecha y hora. Si no llega "d" (createdAt undefined), usa la fecha/hora actual.
 const fDate = (d) => {
@@ -23,12 +20,7 @@ const fDate = (d) => {
   });
 };
 
-export default function BillingModal({
-  open,
-  onClose,
-  sale,
-  onConfirmBilling,
-}) {
+export default function BillingModal({ open, onClose, sale, onConfirmBilling }) {
   if (!open || !sale) return null;
 
   const items = sale.details || [];
@@ -159,9 +151,7 @@ export default function BillingModal({
           >
             <div className="text-center pb-2 border-b border-dashed border-slate-300">
               <h4 className="font-bold uppercase">NUESTRO ALMACÉN S.A.C.</h4>
-              <p style={{ fontSize: "10px", color: "#666" }}>
-                RUC: 20123456789
-              </p>
+              <p style={{ fontSize: "10px", color: "#666" }}>RUC: 20123456789</p>
               <p style={{ fontSize: "9px", color: "#999" }}>Lima, Perú</p>
             </div>
 
@@ -176,15 +166,11 @@ export default function BillingModal({
               </div>
               <div className="flex justify-between gap-2">
                 <span className="text-slate-500 shrink-0">Cliente</span>
-                <span className="truncate text-right">
-                  {sale.customer?.name || "Cliente General"}
-                </span>
+                <span className="truncate text-right">{sale.customer?.name || "Cliente General"}</span>
               </div>
               {sale.customer?.documentNumber && (
                 <div className="flex justify-between">
-                  <span className="text-slate-500">
-                    {sale.customer.documentType || "RUC"}
-                  </span>
+                  <span className="text-slate-500">{sale.customer.documentType || "RUC"}</span>
                   <span>{sale.customer.documentNumber}</span>
                 </div>
               )}
@@ -197,17 +183,10 @@ export default function BillingModal({
                 <span className="w-1/3 text-right">TOTAL</span>
               </div>
               {items.map((item, idx) => (
-                <div
-                  key={item.id || idx}
-                  className="flex justify-between items-start"
-                >
-                  <span className="w-1/2 truncate font-medium">
-                    {item.product?.name || "Producto"}
-                  </span>
+                <div key={item.id || idx} className="flex justify-between items-start">
+                  <span className="w-1/2 truncate font-medium">{item.product?.name || "Producto"}</span>
                   <span className="w-1/6 text-center">x{item.quantity}</span>
-                  <span className="w-1/3 text-right font-bold">
-                    {fPrice(item.subtotal)}
-                  </span>
+                  <span className="w-1/3 text-right font-bold">{fPrice(item.subtotal)}</span>
                 </div>
               ))}
             </div>

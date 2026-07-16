@@ -25,7 +25,7 @@ const register = async (req, res) => {
     // ======================================
     const cleanBody = {
       ...req.body,
-      role: "ADMIN"
+      role: "ADMIN",
     };
 
     const device = getDeviceInfo(req);
@@ -51,12 +51,12 @@ const register = async (req, res) => {
       message = `¡Bienvenido! Tu cuenta ha sido creada con éxito. Has iniciado tu periodo de prueba de 30 días para el plan ${tier}.`;
     }
 
-    // 🌟 Enviamos 'redirectTo: null' para que tu Hook de React sepa 
+    // 🌟 Enviamos 'redirectTo: null' para que tu Hook de React sepa
     // que debe procesar el auto-login con los tokens en lugar de ir a Stripe.
     const responseData = {
       ...result,
       redirectTo: null,
-      message
+      message,
     };
 
     return successResponse(res, responseData, 201);
@@ -67,7 +67,7 @@ const register = async (req, res) => {
       console.error("❌ [Database Timeout] Error detectado en el flujo transaccional:", error.message);
       return res.status(503).json({
         status: "error",
-        message: "La base de datos en la nube tardó demasiado en responder y la transacción expiró. Por favor, vuelve a intentarlo."
+        message: "La base de datos en la nube tardó demasiado en responder y la transacción expiró. Por favor, vuelve a intentarlo.",
       });
     }
 
@@ -76,5 +76,5 @@ const register = async (req, res) => {
 };
 
 module.exports = {
-  register
+  register,
 };

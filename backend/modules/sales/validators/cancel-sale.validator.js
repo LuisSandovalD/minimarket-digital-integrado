@@ -22,7 +22,7 @@ const validateCancelSale =
     const {
       error,
     } = schema.validate(
-      req.params
+      req.params,
     );
 
     if (error) {

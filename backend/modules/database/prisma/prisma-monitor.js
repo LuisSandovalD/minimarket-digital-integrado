@@ -1,7 +1,7 @@
 // modules/database/prisma/prisma-monitor.js
 
 const prisma = require(
-    "../../../config/prisma.config"
+  "../../../config/prisma.config",
 );
 
 /*
@@ -12,37 +12,37 @@ const prisma = require(
 
 async function prismaMonitoring() {
 
-    const start = Date.now();
+  const start = Date.now();
 
-    await prisma.$queryRaw`
+  await prisma.$queryRaw`
         SELECT NOW();
     `;
 
-    const latency =
+  const latency =
         Date.now() - start;
 
-    return {
+  return {
 
-        success: true,
+    success: true,
 
-        latency:
+    latency:
             `${latency}ms`,
 
-        memoryUsage:
+    memoryUsage:
             process.memoryUsage(),
 
-        cpuUsage:
+    cpuUsage:
             process.cpuUsage(),
 
-        uptime:
+    uptime:
             process.uptime(),
 
-        timestamp:
+    timestamp:
             new Date(),
-    };
+  };
 }
 
 module.exports = {
 
-    prismaMonitoring,
+  prismaMonitoring,
 };

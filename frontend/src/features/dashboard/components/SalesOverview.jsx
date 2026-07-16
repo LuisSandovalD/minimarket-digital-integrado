@@ -1,19 +1,9 @@
 import { MetricCard } from "@/components/card/";
 import { AreaChart } from "@/components/data-display";
-import {
-  Calendar,
-  Receipt,
-  ShoppingCart,
-  TrendingUp,
-  Trophy,
-} from "lucide-react";
+import { Calendar, Receipt, ShoppingCart, TrendingUp, Trophy } from "lucide-react";
 import { useMemo } from "react";
 
-export default function SalesOverview({
-  sales = [],
-  totalSales = 0,
-  totalOrders = 0,
-}) {
+export default function SalesOverview({ sales = [], totalSales = 0, totalOrders = 0 }) {
   // ⚡ OPTIMIZACIÓN: Unificar todos los cálculos analíticos pesados en un solo hilo memorizado
   const analytics = useMemo(() => {
     // 1. Agrupación y mapeo para el gráfico
@@ -75,12 +65,9 @@ export default function SalesOverview({
     <div className="rounded-3xl border border-slate-200/60 bg-white/60 p-6 shadow-xl shadow-slate-200/5 backdrop-blur-xl transition-shadow duration-300 dark:border-slate-800/40 dark:bg-slate-900/60 dark:shadow-none">
       {/* 📋 ENCABEZADO */}
       <div className="mb-6">
-        <h2 className="text-lg font-bold tracking-tight text-slate-900 dark:text-white">
-          Resumen de Ventas
-        </h2>
+        <h2 className="text-lg font-bold tracking-tight text-slate-900 dark:text-white">Resumen de Ventas</h2>
         <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-          Evolución de ingresos y comportamiento comercial según el período
-          seleccionado.
+          Evolución de ingresos y comportamiento comercial según el período seleccionado.
         </p>
       </div>
 
@@ -119,13 +106,7 @@ export default function SalesOverview({
         <MetricCard
           icon={Calendar}
           subtitle="Última Venta"
-          value={
-            analytics.lastSale
-              ? new Date(analytics.lastSale.createdAt).toLocaleDateString(
-                  "es-PE",
-                )
-              : "-"
-          }
+          value={analytics.lastSale ? new Date(analytics.lastSale.createdAt).toLocaleDateString("es-PE") : "-"}
           description="Registro más reciente"
           variant="default"
         />

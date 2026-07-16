@@ -8,307 +8,307 @@ const path =
 
 class BackupRepository {
 
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Backup Directory
     |--------------------------------------------------------------------------
     */
 
-    BACKUP_DIR =
-        path.join(
+  BACKUP_DIR =
+    path.join(
 
-            process.cwd(),
+      process.cwd(),
 
-            "storage",
+      "storage",
 
-            "backups",
-        );
+      "backups",
+    );
 
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Ensure Backup Directory
     |--------------------------------------------------------------------------
     */
 
-    ensureDirectory() {
+  ensureDirectory() {
 
-        if (
-            !fs.existsSync(
-                this.BACKUP_DIR
-            )
-        ) {
+    if (
+      !fs.existsSync(
+        this.BACKUP_DIR,
+      )
+    ) {
 
-            fs.mkdirSync(
+      fs.mkdirSync(
 
-                this.BACKUP_DIR,
+        this.BACKUP_DIR,
 
-                {
-                    recursive: true,
-                }
-            );
-        }
+        {
+          recursive: true,
+        },
+      );
     }
+  }
 
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Create Backup File
     |--------------------------------------------------------------------------
     */
 
-    async createBackup(data = {}) {
+  async createBackup(data = {}) {
 
-        this.ensureDirectory();
+    this.ensureDirectory();
 
-        const timestamp =
+    const timestamp =
             new Date()
 
-                .toISOString()
+              .toISOString()
 
-                .replace(
-                    /[:.]/g,
-                    "-"
-                );
+              .replace(
+                /[:.]/g,
+                "-",
+              );
 
-        const filename =
+    const filename =
             `backup-${timestamp}.json`;
 
-        const filepath =
+    const filepath =
             path.join(
 
-                this.BACKUP_DIR,
+              this.BACKUP_DIR,
 
-                filename
+              filename,
             );
 
-        const backupContent = {
+    const backupContent = {
 
-            createdAt:
+      createdAt:
                 new Date(),
 
-            data,
-        };
+      data,
+    };
 
-        fs.writeFileSync(
+    fs.writeFileSync(
 
-            filepath,
+      filepath,
 
-            JSON.stringify(
-                backupContent,
-                null,
-                2
-            )
-        );
+      JSON.stringify(
+        backupContent,
+        null,
+        2,
+      ),
+    );
 
-        const stats =
+    const stats =
             fs.statSync(
-                filepath
+              filepath,
             );
 
-        return {
+    return {
 
-            success: true,
+      success: true,
 
-            action:
+      action:
                 "backup_created",
 
-            filename,
+      filename,
 
-            filepath,
+      filepath,
 
-            size:
+      size:
                 stats.size,
 
-            sizeMB:
+      sizeMB:
                 (
-                    stats.size /
+                  stats.size /
                     1024 /
                     1024
                 ).toFixed(2),
 
-            createdAt:
+      createdAt:
                 new Date(),
-        };
-    }
+    };
+  }
 
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Restore Backup File
     |--------------------------------------------------------------------------
     */
 
-    async restoreBackup(data = {}) {
+  async restoreBackup(data = {}) {
 
-        this.ensureDirectory();
+    this.ensureDirectory();
 
-        const {
-            filename,
-        } = data;
+    const {
+      filename,
+    } = data;
 
-        if (!filename) {
+    if (!filename) {
 
-            throw new Error(
-                "El nombre del archivo es requerido"
-            );
-        }
-
-        const filepath =
-            path.join(
-
-                this.BACKUP_DIR,
-
-                filename
-            );
-
-        if (
-            !fs.existsSync(
-                filepath
-            )
-        ) {
-
-            throw new Error(
-                "El archivo backup no existe"
-            );
-        }
-
-        const content =
-            fs.readFileSync(
-                filepath,
-                "utf-8"
-            );
-
-        const parsed =
-            JSON.parse(
-                content
-            );
-
-        return {
-
-            success: true,
-
-            action:
-                "backup_restored",
-
-            filename,
-
-            restoredAt:
-                new Date(),
-
-            data:
-                parsed,
-        };
+      throw new Error(
+        "El nombre del archivo es requerido",
+      );
     }
 
-    /*
+    const filepath =
+            path.join(
+
+              this.BACKUP_DIR,
+
+              filename,
+            );
+
+    if (
+      !fs.existsSync(
+        filepath,
+      )
+    ) {
+
+      throw new Error(
+        "El archivo backup no existe",
+      );
+    }
+
+    const content =
+            fs.readFileSync(
+              filepath,
+              "utf-8",
+            );
+
+    const parsed =
+            JSON.parse(
+              content,
+            );
+
+    return {
+
+      success: true,
+
+      action:
+                "backup_restored",
+
+      filename,
+
+      restoredAt:
+                new Date(),
+
+      data:
+                parsed,
+    };
+  }
+
+  /*
     |--------------------------------------------------------------------------
     | Get Backups
     |--------------------------------------------------------------------------
     */
 
-    async getBackups() {
+  async getBackups() {
 
-        this.ensureDirectory();
+    this.ensureDirectory();
 
-        const files =
+    const files =
             fs.readdirSync(
-                this.BACKUP_DIR
+              this.BACKUP_DIR,
             );
 
-        return files.map(
+    return files.map(
 
-            (file) => {
+      (file) => {
 
-                const filePath =
+        const filePath =
                     path.join(
 
-                        this.BACKUP_DIR,
+                      this.BACKUP_DIR,
 
-                        file
+                      file,
                     );
 
-                const stats =
+        const stats =
                     fs.statSync(
-                        filePath
+                      filePath,
                     );
 
-                return {
+        return {
 
-                    name: file,
+          name: file,
 
-                    path: filePath,
+          path: filePath,
 
-                    size:
+          size:
                         stats.size,
 
-                    sizeMB:
+          sizeMB:
                         (
-                            stats.size /
+                          stats.size /
                             1024 /
                             1024
                         ).toFixed(2),
 
-                    createdAt:
+          createdAt:
                         stats.birthtime,
 
-                    updatedAt:
+          updatedAt:
                         stats.mtime,
-                };
-            }
-        );
-    }
+        };
+      },
+    );
+  }
 
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Delete Backup
     |--------------------------------------------------------------------------
     */
 
-    async deleteBackup(filename) {
+  async deleteBackup(filename) {
 
-        this.ensureDirectory();
+    this.ensureDirectory();
 
-        if (!filename) {
+    if (!filename) {
 
-            throw new Error(
-                "El nombre del archivo es requerido"
-            );
-        }
+      throw new Error(
+        "El nombre del archivo es requerido",
+      );
+    }
 
-        const filepath =
+    const filepath =
             path.join(
 
-                this.BACKUP_DIR,
+              this.BACKUP_DIR,
 
-                filename
+              filename,
             );
 
-        if (
-            !fs.existsSync(
-                filepath
-            )
-        ) {
+    if (
+      !fs.existsSync(
+        filepath,
+      )
+    ) {
 
-            throw new Error(
-                "El backup no existe"
-            );
-        }
+      throw new Error(
+        "El backup no existe",
+      );
+    }
 
-        fs.unlinkSync(
-            filepath
-        );
+    fs.unlinkSync(
+      filepath,
+    );
 
-        return {
+    return {
 
-            success: true,
+      success: true,
 
-            action:
+      action:
                 "backup_deleted",
 
-            filename,
+      filename,
 
-            deletedAt:
+      deletedAt:
                 new Date(),
-        };
-    }
+    };
+  }
 }
 
 module.exports =

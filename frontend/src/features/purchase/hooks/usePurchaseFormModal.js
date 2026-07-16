@@ -5,12 +5,7 @@
 
 import { useEffect, useState } from "react";
 
-export function usePurchaseFormModal({
-  open,
-  initialData,
-  onSubmit,
-  totalSteps = 3,
-}) {
+export function usePurchaseFormModal({ open, initialData, onSubmit, totalSteps = 3 }) {
   const [step, setStep] = useState(1);
   const [errorMessage, setErrorMessage] = useState("");
   const [form, setForm] = useState({
@@ -48,19 +43,12 @@ export function usePurchaseFormModal({
 
   const validateCurrentStep = () => {
     if (step === 1 && !form.supplierId) {
-      setErrorMessage(
-        "Por favor, seleccione un proveedor calificado para continuar.",
-      );
+      setErrorMessage("Por favor, seleccione un proveedor calificado para continuar.");
       return false;
     }
 
-    if (
-      step === 2 &&
-      (!Array.isArray(form.details) || form.details.length === 0)
-    ) {
-      setErrorMessage(
-        "El carrito está vacío. Agregue al menos un artículo a la orden.",
-      );
+    if (step === 2 && (!Array.isArray(form.details) || form.details.length === 0)) {
+      setErrorMessage("El carrito está vacío. Agregue al menos un artículo a la orden.");
       return false;
     }
 

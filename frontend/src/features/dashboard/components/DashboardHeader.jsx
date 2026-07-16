@@ -134,13 +134,7 @@ export default function DashboardHeader({
         badge="Dashboard"
         title="Panel de control"
         description="Visualiza indicadores, ventas, inventario, clientes y alertas en tiempo real."
-        headerActions={
-          <ModernButton
-            icon={RefreshCw}
-            text="Actualizar"
-            onClick={onRefresh}
-          />
-        }
+        headerActions={<ModernButton icon={RefreshCw} text="Actualizar" onClick={onRefresh} />}
         stats={visibleStats}
       />
 
@@ -162,11 +156,7 @@ export default function DashboardHeader({
                 key={p.value}
                 text={p.label}
                 onClick={() => setPeriod(p.value)}
-                className={
-                  isActive
-                    ? "bg-blue-600 text-white hover:bg-blue-700 border-blue-600"
-                    : ""
-                }
+                className={isActive ? "bg-blue-600 text-white hover:bg-blue-700 border-blue-600" : ""}
                 variant={isActive ? "default" : "outline"}
               />
             );
@@ -177,9 +167,7 @@ export default function DashboardHeader({
         {isElevatedRole && (
           <div className="flex flex-wrap items-end gap-3">
             <div>
-              <label className="block mb-1 text-xs text-slate-500">
-                Fecha inicio
-              </label>
+              <label className="block mb-1 text-xs text-slate-500">Fecha inicio</label>
               <input
                 type="date"
                 value={draftStartDate}
@@ -192,9 +180,7 @@ export default function DashboardHeader({
             </div>
 
             <div>
-              <label className="block mb-1 text-xs text-slate-500">
-                Fecha fin
-              </label>
+              <label className="block mb-1 text-xs text-slate-500">Fecha fin</label>
               <input
                 type="date"
                 value={draftEndDate}

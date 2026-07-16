@@ -57,7 +57,7 @@ module.exports = {
     }));
 
     return tx.saleDetail.createMany({
-      data: formattedDetails
+      data: formattedDetails,
     });
   },
 
@@ -82,7 +82,7 @@ module.exports = {
     });
 
     return tx.payment.createMany({
-      data: formattedPayments
+      data: formattedPayments,
     });
   },
 

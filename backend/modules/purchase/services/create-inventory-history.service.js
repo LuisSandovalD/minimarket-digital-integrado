@@ -4,11 +4,11 @@ const prisma =
 async function createInventoryHistoryService(data) {
 
   return prisma.inventoryHistory.create({
-    data
+    data,
   });
 
 }
 
 module.exports = {
-  createInventoryHistoryService
+  createInventoryHistoryService,
 };

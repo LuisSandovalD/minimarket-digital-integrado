@@ -56,28 +56,20 @@ export default function SalesReportsModal({ open, onClose, companyId }) {
           </span>
           <div className="grid grid-cols-2 gap-2">
             <div>
-              <label className="block text-[10px] text-slate-400 mb-1">
-                Desde:
-              </label>
+              <label className="block text-[10px] text-slate-400 mb-1">Desde:</label>
               <input
                 type="date"
                 value={dates.startDate}
-                onChange={(e) =>
-                  setDates((p) => ({ ...p, startDate: e.target.value }))
-                }
+                onChange={(e) => setDates((p) => ({ ...p, startDate: e.target.value }))}
                 className="w-full bg-white dark:bg-slate-950 border dark:border-slate-800 rounded-lg p-2 font-mono text-xs text-slate-800 dark:text-slate-100"
               />
             </div>
             <div>
-              <label className="block text-[10px] text-slate-400 mb-1">
-                Hasta:
-              </label>
+              <label className="block text-[10px] text-slate-400 mb-1">Hasta:</label>
               <input
                 type="date"
                 value={dates.endDate}
-                onChange={(e) =>
-                  setDates((p) => ({ ...p, endDate: e.target.value }))
-                }
+                onChange={(e) => setDates((p) => ({ ...p, endDate: e.target.value }))}
                 className="w-full bg-white dark:bg-slate-950 border dark:border-slate-800 rounded-lg p-2 font-mono text-xs text-slate-800 dark:text-slate-100"
               />
             </div>
@@ -86,9 +78,7 @@ export default function SalesReportsModal({ open, onClose, companyId }) {
 
         {/* Sección 1: Cierre Diario */}
         <div className="space-y-2">
-          <h4 className="font-semibold text-slate-700 dark:text-slate-200">
-            1. Reporte de Ventas Diarias
-          </h4>
+          <h4 className="font-semibold text-slate-700 dark:text-slate-200">1. Reporte de Ventas Diarias</h4>
           <div className="grid grid-cols-2 gap-2">
             <ModernButton
               fullWidth
@@ -97,12 +87,7 @@ export default function SalesReportsModal({ open, onClose, companyId }) {
               variant="outline"
               text="Cierre Diario (PDF)"
               className="justify-start text-red-600 dark:text-red-400"
-              onClick={() =>
-                triggerDownload(
-                  downloadDailySalesPDF,
-                  `Cierre_Ventas_${dates.startDate}.pdf`,
-                )
-              }
+              onClick={() => triggerDownload(downloadDailySalesPDF, `Cierre_Ventas_${dates.startDate}.pdf`)}
             />
             <ModernButton
               fullWidth
@@ -111,12 +96,7 @@ export default function SalesReportsModal({ open, onClose, companyId }) {
               variant="outline"
               text="Cierre Diario (Excel)"
               className="justify-start text-emerald-600 dark:text-emerald-400"
-              onClick={() =>
-                triggerDownload(
-                  downloadDailySalesExcel,
-                  `Cierre_Ventas_${dates.startDate}.xlsx`,
-                )
-              }
+              onClick={() => triggerDownload(downloadDailySalesExcel, `Cierre_Ventas_${dates.startDate}.xlsx`)}
             />
           </div>
         </div>
@@ -134,12 +114,7 @@ export default function SalesReportsModal({ open, onClose, companyId }) {
               variant="outline"
               text="Top Productos (PDF)"
               className="justify-start text-red-600 dark:text-red-400"
-              onClick={() =>
-                triggerDownload(
-                  downloadTopProductsPDF,
-                  "Top_Productos_Rotacion.pdf",
-                )
-              }
+              onClick={() => triggerDownload(downloadTopProductsPDF, "Top_Productos_Rotacion.pdf")}
             />
             <ModernButton
               fullWidth
@@ -148,12 +123,7 @@ export default function SalesReportsModal({ open, onClose, companyId }) {
               variant="outline"
               text="Top Productos (Excel)"
               className="justify-start text-emerald-600 dark:text-emerald-400"
-              onClick={() =>
-                triggerDownload(
-                  downloadTopProductsExcel,
-                  "Top_Productos_Rotacion.xlsx",
-                )
-              }
+              onClick={() => triggerDownload(downloadTopProductsExcel, "Top_Productos_Rotacion.xlsx")}
             />
           </div>
         </div>

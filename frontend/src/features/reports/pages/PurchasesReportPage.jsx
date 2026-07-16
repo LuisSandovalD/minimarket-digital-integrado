@@ -29,21 +29,14 @@ export default function PurchasesReportPage({ filters }) {
       }
 
       // Solicitamos el binario (Blob) del PDF de compras
-      const blobData = await getDailyPurchasesReport(
-        company.id,
-        filters.startDate,
-        filters.endDate,
-      );
+      const blobData = await getDailyPurchasesReport(company.id, filters.startDate, filters.endDate);
 
       // Validación de integridad del archivo recibido
       if (!blobData || blobData.size === 0) {
         throw new Error("El archivo PDF se recibió vacío.");
       }
 
-      const blob =
-        blobData instanceof Blob
-          ? blobData
-          : new Blob([blobData], { type: "application/pdf" });
+      const blob = blobData instanceof Blob ? blobData : new Blob([blobData], { type: "application/pdf" });
       const url = URL.createObjectURL(blob);
 
       // Limpieza preventiva de memoria en estados anteriores
@@ -60,6 +53,7 @@ export default function PurchasesReportPage({ filters }) {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchPdf();
 
     // Limpieza de memoria (Clean-up) al desmontar o cambiar filtros
@@ -69,6 +63,7 @@ export default function PurchasesReportPage({ filters }) {
         return null;
       });
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters]);
 
   const hasFilters = filters?.startDate && filters?.endDate;
@@ -83,8 +78,8 @@ export default function PurchasesReportPage({ filters }) {
             Reporte de Compras Diarias
           </h1>
           <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-            Visualiza de manera oficial el balance de compras y egresos
-            correspondientes al rango de fechas seleccionado.
+            Visualiza de manera oficial el balance de compras y egresos correspondientes al rango de fechas
+            seleccionado.
           </p>
         </div>
 
@@ -114,12 +109,8 @@ export default function PurchasesReportPage({ filters }) {
               <AlertTriangle className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="text-lg font-medium text-slate-900 dark:text-slate-50">
-                No se pudo cargar el reporte
-              </h3>
-              <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-                {error}
-              </p>
+              <h3 className="text-lg font-medium text-slate-900 dark:text-slate-50">No se pudo cargar el reporte</h3>
+              <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">{error}</p>
             </div>
             <button
               onClick={fetchPdf}
@@ -136,12 +127,10 @@ export default function PurchasesReportPage({ filters }) {
               <Calendar className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="text-sm font-medium text-slate-900 dark:text-slate-200">
-                Rango de fechas requerido
-              </h3>
+              <h3 className="text-sm font-medium text-slate-900 dark:text-slate-200">Rango de fechas requerido</h3>
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                Por favor, selecciona una fecha de inicio y de fin en el panel
-                de filtros para generar el reporte de compras.
+                Por favor, selecciona una fecha de inicio y de fin en el panel de filtros para generar el reporte de
+                compras.
               </p>
             </div>
           </div>
@@ -152,9 +141,7 @@ export default function PurchasesReportPage({ filters }) {
             title="Reporte Oficial de Compras Diarias"
           />
         ) : (
-          <p className="text-slate-400 dark:text-slate-500 text-sm">
-            No hay datos disponibles.
-          </p>
+          <p className="text-slate-400 dark:text-slate-500 text-sm">No hay datos disponibles.</p>
         )}
       </div>
     </div>

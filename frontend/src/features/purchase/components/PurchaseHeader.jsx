@@ -2,13 +2,7 @@
 // features/purchase/components/PurchaseHeader.jsx
 // ========================================
 
-import {
-  Activity,
-  ClipboardList,
-  DollarSign,
-  Plus,
-  Receipt,
-} from "lucide-react";
+import { Activity, ClipboardList, DollarSign, Plus, Receipt } from "lucide-react";
 
 import { PageHeader } from "@/components/data-display/";
 
@@ -26,40 +20,12 @@ export default function PurchaseHeader({
       icon={Receipt}
       badge="Compras"
       title="Gestión de Compras"
-      description="
-        Administra órdenes,
-        proveedores, pagos y
-        registros de compras
-        del sistema.
-      "
-      // ========================================
-      // MAIN ACTION
-      // ========================================
-
+      description="Administra órdenes, proveedores, pagos y registros de comprasdel sistema."
       action={{
         label: "Nueva Compra",
         icon: Plus,
         onClick: onCreate,
       }}
-      // ========================================
-      // EXTRA ACTIONS
-      // ========================================
-
-      headerActions={
-        <div
-          className="
-            flex
-            items-center
-            gap-3
-          "
-        >
-          {/* EXTRA ACTIONS */}
-        </div>
-      }
-      // ========================================
-      // STATS
-      // ========================================
-
       stats={[
         {
           icon: ClipboardList,

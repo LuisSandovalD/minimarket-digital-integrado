@@ -21,5 +21,5 @@ const errorResponse = (res, error, status = 500) => {
 // EXPORTACIÓN UNIFICADA: Garantiza consistencia total en tus controladores
 module.exports = {
   successResponse,
-  errorResponse
+  errorResponse,
 };

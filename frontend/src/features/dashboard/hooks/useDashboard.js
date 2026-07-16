@@ -70,9 +70,7 @@ export default function useDashboard() {
   const activity = dashboard?.activity || {};
 
   const totalAlerts =
-    (alerts?.lowStock?.length || 0) +
-    (alerts?.expiringProducts?.length || 0) +
-    (alerts?.notifications?.length || 0);
+    (alerts?.lowStock?.length || 0) + (alerts?.expiringProducts?.length || 0) + (alerts?.notifications?.length || 0);
 
   return {
     loading,

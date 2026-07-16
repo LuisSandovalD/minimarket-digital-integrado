@@ -3,6 +3,7 @@ generator client {
   binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
+
 datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL")
@@ -584,7 +585,7 @@ model Configuration {
   id                    Int      @id @default(autoincrement())
   companyName           String?  @db.VarChar(255)
   logo                  String?  @db.VarChar(500)
-  theme                 String   @default("light") @db.VarChar(50)
+  theme                 String   @default("system") @db.VarChar(50)
   language              String   @default("es") @db.VarChar(10)
   taxRate               Decimal  @default(0) @db.Decimal(5, 2)
   currency              String   @default("PEN") @db.VarChar(10)

@@ -29,9 +29,10 @@ export const useUnits = () => {
     } finally {
       setLoading(false);
     }
-  }, [JSON.stringify(filters)]); // <--- Truco maestro para evitar bucles con objetos
+  }, [filters]); // <--- Truco maestro para evitar bucles con objetos
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadUnits();
   }, [loadUnits]);
 

@@ -59,9 +59,8 @@ export default function SolutionsGrid() {
             variants={fastFadeUp}
             className="text-pretty text-base leading-relaxed text-slate-600 dark:text-[#cbd5e1] max-w-2xl"
           >
-            No importa el tamaño o sector de tu empresa. Nuestra plataforma se
-            moldea para optimizar tus flujos de trabajo, automatizar el control
-            y acelerar tus ventas.
+            No importa el tamaño o sector de tu empresa. Nuestra plataforma se moldea para optimizar tus flujos de
+            trabajo, automatizar el control y acelerar tus ventas.
           </motion.p>
         </motion.div>
 
@@ -103,9 +102,7 @@ export default function SolutionsGrid() {
                         <div className="text-[#6096ba] dark:text-[#a3cef1] shrink-0 p-0.5 rounded-md bg-slate-100 dark:bg-white/5">
                           <Check size={12} strokeWidth={3} />
                         </div>
-                        <span className="text-xs font-bold text-slate-700 dark:text-slate-300">
-                          {point}
-                        </span>
+                        <span className="text-xs font-bold text-slate-700 dark:text-slate-300">{point}</span>
                       </div>
                     ))}
                   </div>

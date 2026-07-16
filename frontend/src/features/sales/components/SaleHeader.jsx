@@ -3,13 +3,7 @@
 // SaleHeader.jsx
 // ========================================
 
-import {
-  DollarSign,
-  Plus,
-  Receipt,
-  ShoppingCart,
-  TrendingUp,
-} from "lucide-react";
+import { DollarSign, Plus, Receipt, ShoppingCart, TrendingUp } from "lucide-react";
 
 import { PageHeader } from "@/components/data-display";
 
@@ -17,13 +11,7 @@ import { PageHeader } from "@/components/data-display";
 // COMPONENT
 // ========================================
 
-export default function SaleHeader({
-  totalSales = 0,
-  totalRevenue = 0,
-  totalOrders = 0,
-  averageTicket = 0,
-  onCreate,
-}) {
+export default function SaleHeader({ totalSales = 0, totalRevenue = 0, totalOrders = 0, averageTicket = 0, onCreate }) {
   return (
     <PageHeader
       // ====================================

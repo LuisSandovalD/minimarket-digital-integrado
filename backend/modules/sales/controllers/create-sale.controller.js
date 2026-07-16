@@ -18,7 +18,7 @@ const createSaleController =
   async (
     req,
     res,
-    next
+    next,
   ) => {
 
     try {
@@ -26,7 +26,7 @@ const createSaleController =
       const sale =
         await createSaleService(
           req.body,
-          req.user
+          req.user,
         );
 
       return res.status(201).json({
@@ -46,7 +46,6 @@ const createSaleController =
     }
 
   };
-
 
 module.exports = {
 

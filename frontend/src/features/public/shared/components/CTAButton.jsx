@@ -1,10 +1,8 @@
 import { Link } from "react-router-dom";
 
 const VARIANTS = {
-  primary:
-    "bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm shadow-primary/20",
-  secondary:
-    "bg-transparent text-foreground border border-border hover:bg-muted",
+  primary: "bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm shadow-primary/20",
+  secondary: "bg-transparent text-foreground border border-border hover:bg-muted",
   dark: "bg-dark text-dark-foreground hover:bg-dark/90",
   accent: "bg-accent text-accent-foreground hover:bg-accent/90",
   ghost: "bg-transparent text-primary hover:bg-primary/5",

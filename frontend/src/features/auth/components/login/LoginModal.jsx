@@ -4,8 +4,7 @@ import LoginBadge from "./LoginBadge";
 import LoginForm from "./LoginForm";
 import LoginHeader from "./LoginHeader";
 
-const OFFICE_IMAGE =
-  "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2069&auto=format&fit=crop";
+const OFFICE_IMAGE = "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2069&auto=format&fit=crop";
 
 export default function LoginModal({ open, onClose, onSwitchToRegister }) {
   if (!open) return null;
@@ -31,9 +30,7 @@ export default function LoginModal({ open, onClose, onSwitchToRegister }) {
           <div className="absolute inset-0 flex flex-col justify-between p-10 bg-gradient-to-t from-slate-950/20 via-transparent to-transparent">
             <div className="inline-flex items-center gap-2 self-start rounded-full border border-white/25 bg-white/15 px-4 py-2 backdrop-blur-xl">
               <div className="h-2 w-2 rounded-full bg-[#a3cef1]" />
-              <span className="text-sm font-semibold text-white tracking-wide">
-                ERP Empresarial
-              </span>
+              <span className="text-sm font-semibold text-white tracking-wide">ERP Empresarial</span>
             </div>
           </div>
         </motion.div>

@@ -101,15 +101,11 @@ export default function ContactHero() {
             variants={fastFadeUp}
             className="mt-5 max-w-xl text-base leading-relaxed text-[#4a5568] dark:text-[#cbd5e1] sm:text-lg"
           >
-            Nuestro equipo está listo para ayudarte a implementar Nexora ERP en
-            tu empresa. Cuéntanos tus necesidades y descubre cómo optimizar
-            ventas, inventario, compras y operaciones desde una sola plataforma.
+            Nuestro equipo está listo para ayudarte a implementar Nexora ERP en tu empresa. Cuéntanos tus necesidades y
+            descubre cómo optimizar ventas, inventario, compras y operaciones desde una sola plataforma.
           </motion.p>
 
-          <motion.div
-            variants={fastFadeUp}
-            className="mt-8 flex flex-wrap gap-3"
-          >
+          <motion.div variants={fastFadeUp} className="mt-8 flex flex-wrap gap-3">
             {CONTACT_FEATURES.map((item) => {
               const Icon = item.icon;
 
@@ -119,43 +115,26 @@ export default function ContactHero() {
                   className="flex items-center gap-2 rounded-xl border border-[#274c77]/10 bg-white/60 px-4 py-3 backdrop-blur-md dark:bg-[#0f172a]/60"
                 >
                   <Icon className="h-4 w-4 text-[#274c77] dark:text-[#a3cef1]" />
-                  <span className="text-sm font-medium text-[#0f172a] dark:text-white">
-                    {item.label}
-                  </span>
+                  <span className="text-sm font-medium text-[#0f172a] dark:text-white">{item.label}</span>
                 </div>
               );
             })}
           </motion.div>
 
-          <motion.div
-            variants={fastFadeUp}
-            className="mt-8 flex flex-wrap gap-8"
-          >
+          <motion.div variants={fastFadeUp} className="mt-8 flex flex-wrap gap-8">
             <div>
-              <div className="text-2xl font-black text-[#274c77] dark:text-[#a3cef1]">
-                &lt; 24h
-              </div>
-              <div className="text-sm text-[#4a5568] dark:text-[#cbd5e1]">
-                Tiempo de respuesta
-              </div>
+              <div className="text-2xl font-black text-[#274c77] dark:text-[#a3cef1]">&lt; 24h</div>
+              <div className="text-sm text-[#4a5568] dark:text-[#cbd5e1]">Tiempo de respuesta</div>
             </div>
 
             <div>
-              <div className="text-2xl font-black text-[#274c77] dark:text-[#a3cef1]">
-                100%
-              </div>
-              <div className="text-sm text-[#4a5568] dark:text-[#cbd5e1]">
-                Atención personalizada
-              </div>
+              <div className="text-2xl font-black text-[#274c77] dark:text-[#a3cef1]">100%</div>
+              <div className="text-sm text-[#4a5568] dark:text-[#cbd5e1]">Atención personalizada</div>
             </div>
 
             <div>
-              <div className="text-2xl font-black text-[#274c77] dark:text-[#a3cef1]">
-                24/7
-              </div>
-              <div className="text-sm text-[#4a5568] dark:text-[#cbd5e1]">
-                Plataforma disponible
-              </div>
+              <div className="text-2xl font-black text-[#274c77] dark:text-[#a3cef1]">24/7</div>
+              <div className="text-sm text-[#4a5568] dark:text-[#cbd5e1]">Plataforma disponible</div>
             </div>
           </motion.div>
         </motion.div>

@@ -62,12 +62,7 @@ export default function ReportsPage() {
       />
 
       {currentType ? (
-        <ReportsViewer
-          reportType={currentType}
-          filters={activeFilters}
-          innerRef={reportRef}
-          isLoading={isLoading}
-        />
+        <ReportsViewer reportType={currentType} filters={activeFilters} innerRef={reportRef} isLoading={isLoading} />
       ) : (
         <div className="relative overflow-hidden rounded-3xl border border-slate-200 dark:border-white/[0.06] bg-white dark:bg-white/[0.03] backdrop-blur-xl animate-fade-in">
           {/* ... UI de bienvenida (sin cambios) ... */}
@@ -77,9 +72,7 @@ export default function ReportsPage() {
               <FileBarChart className="h-12 w-12 text-blue-500 dark:text-blue-400" />
             </div>
             {/* ... resto de elementos de UI ... */}
-            <h2 className="text-3xl font-bold text-slate-900 dark:text-white">
-              Centro de Reportes Analíticos
-            </h2>
+            <h2 className="text-3xl font-bold text-slate-900 dark:text-white">Centro de Reportes Analíticos</h2>
           </div>
         </div>
       )}

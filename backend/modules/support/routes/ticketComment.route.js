@@ -16,40 +16,40 @@ const controller =
     require("../controllers/ticketComment.controller");
 
 const {
-    createCommentSchema,
+  createCommentSchema,
 } = require(
-    "../validations/ticketComment.validation"
+  "../validations/ticketComment.validation",
 );
 
 router.get(
-    "/ticket/:ticketId",
-    auth,
-    controller.getComments
+  "/ticket/:ticketId",
+  auth,
+  controller.getComments,
 );
 
 router.post(
-    "/ticket/:ticketId",
-    auth,
-    validate(
-        createCommentSchema
-    ),
-    controller.createComment
+  "/ticket/:ticketId",
+  auth,
+  validate(
+    createCommentSchema,
+  ),
+  controller.createComment,
 );
 
 router.patch(
-    "/:id/read",
-    auth,
-    controller.markAsRead
+  "/:id/read",
+  auth,
+  controller.markAsRead,
 );
 
 router.delete(
-    "/:id",
-    auth,
-    roleCheck(
-        "ADMIN",
-        "SUPPORT"
-    ),
-    controller.deleteComment
+  "/:id",
+  auth,
+  roleCheck(
+    "ADMIN",
+    "SUPPORT",
+  ),
+  controller.deleteComment,
 );
 
 module.exports = router;

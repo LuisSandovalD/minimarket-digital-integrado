@@ -8,12 +8,7 @@ import { Trash2 } from "lucide-react";
 import { useState } from "react";
 import customerService from "../services/customer.service"; // Corregida la importación sin llaves ({})
 
-export default function CustomerDeleteModal({
-  open,
-  onClose,
-  reload,
-  selectedCustomer,
-}) {
+export default function CustomerDeleteModal({ open, onClose, reload, selectedCustomer }) {
   const [isDeleting, setIsDeleting] = useState(false);
 
   if (!open || !selectedCustomer) {
@@ -42,13 +37,7 @@ export default function CustomerDeleteModal({
       message={`¿Estás seguro de que deseas eliminar al cliente "${selectedCustomer.name}"? Esta acción no se puede deshacer.`}
     >
       <div className="flex items-center justify-end gap-2.5 border-t border-slate-100 dark:border-slate-800/60 pt-4 mt-2">
-        <ModernButton
-          type="button"
-          variant="outline"
-          text="Cancelar"
-          disabled={isDeleting}
-          onClick={onClose}
-        />
+        <ModernButton type="button" variant="outline" text="Cancelar" disabled={isDeleting} onClick={onClose} />
 
         <ModernButton
           type="button"

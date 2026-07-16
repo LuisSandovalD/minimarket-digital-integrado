@@ -11,23 +11,23 @@
 
 const forbiddenKeywords = [
 
-    "DROP",
+  "DROP",
 
-    "DELETE",
+  "DELETE",
 
-    "TRUNCATE",
+  "TRUNCATE",
 
-    "ALTER",
+  "ALTER",
 
-    "UPDATE",
+  "UPDATE",
 
-    "GRANT",
+  "GRANT",
 
-    "REVOKE",
+  "REVOKE",
 
-    "CREATE",
+  "CREATE",
 
-    "REPLACE",
+  "REPLACE",
 ];
 
 /*
@@ -38,45 +38,45 @@ const forbiddenKeywords = [
 
 function safeQuery(query) {
 
-    if (!query) {
+  if (!query) {
 
-        return false;
-    }
+    return false;
+  }
 
-    const normalized =
+  const normalized =
         query
-            .trim()
-            .toUpperCase();
+          .trim()
+          .toUpperCase();
 
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Block Dangerous Keywords
     |--------------------------------------------------------------------------
     */
 
-    const hasForbiddenKeyword =
+  const hasForbiddenKeyword =
         forbiddenKeywords.some(
-            (keyword) =>
-                normalized.includes(keyword)
+          (keyword) =>
+            normalized.includes(keyword),
         );
 
-    if (hasForbiddenKeyword) {
+  if (hasForbiddenKeyword) {
 
-        return false;
-    }
+    return false;
+  }
 
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Allow Only SELECT/WITH
     |--------------------------------------------------------------------------
     */
 
-    const allowed =
+  const allowed =
         normalized.startsWith("SELECT") ||
 
         normalized.startsWith("WITH");
 
-    return allowed;
+  return allowed;
 }
 
 module.exports =

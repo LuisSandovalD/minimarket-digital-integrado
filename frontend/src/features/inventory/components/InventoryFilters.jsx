@@ -7,14 +7,7 @@ import { useEffect, useState } from "react";
 import { ModernButton } from "@/components/buttons";
 import { Input, SearchInput, Select } from "@/components/forms";
 
-import {
-  AlertTriangle,
-  Boxes,
-  Package,
-  RefreshCw,
-  Search,
-  Store,
-} from "lucide-react";
+import { AlertTriangle, Boxes, Package, RefreshCw, Search, Store } from "lucide-react";
 
 export default function InventoryFilters({
   onSearch,
@@ -38,9 +31,7 @@ export default function InventoryFilters({
 
   // Extraemos los datos dependiendo de si vienen planos o estructurados (.data)
   const branchesList = Array.isArray(branches) ? branches : branches.data || [];
-  const categoriesList = Array.isArray(categories)
-    ? categories
-    : categories.data || [];
+  const categoriesList = Array.isArray(categories) ? categories : categories.data || [];
 
   const branchOptions = branchesList.map((branch) => ({
     value: String(branch.id),

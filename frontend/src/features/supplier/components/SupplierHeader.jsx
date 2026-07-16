@@ -6,12 +6,7 @@ import { Activity, AlertCircle, Plus, Truck, Users } from "lucide-react";
 
 import { PageHeader } from "@/components/data-display/";
 
-export default function SupplierHeader({
-  total = 0,
-  active = 0,
-  inactive = 0,
-  onCreate,
-}) {
+export default function SupplierHeader({ total = 0, active = 0, inactive = 0, onCreate }) {
   return (
     <PageHeader
       // ========================================

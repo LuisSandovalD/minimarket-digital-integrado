@@ -34,9 +34,7 @@ export default function ForgotPasswordStepReset({ code, onSuccess }) {
       onSuccess();
     } catch (err) {
       setError(
-        err?.response?.data?.message ||
-          err?.message ||
-          "No se pudo actualizar la contraseña. Intenta de nuevo.",
+        err?.response?.data?.message || err?.message || "No se pudo actualizar la contraseña. Intenta de nuevo.",
       );
     } finally {
       setLoading(false);
@@ -45,9 +43,7 @@ export default function ForgotPasswordStepReset({ code, onSuccess }) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <p className="text-sm text-[#6096ba] dark:text-[#8fb8d8]">
-        Crea una nueva contraseña segura para tu cuenta.
-      </p>
+      <p className="text-sm text-[#6096ba] dark:text-[#8fb8d8]">Crea una nueva contraseña segura para tu cuenta.</p>
 
       <PasswordInput
         label="Nueva contraseña"

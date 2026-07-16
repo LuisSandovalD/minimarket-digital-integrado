@@ -1,11 +1,11 @@
 // modules/database/neon/neon-status.js
 
 const {
-    neonApi,
+  neonApi,
 } = require("./neon-api");
 
 const databaseConfig = require(
-    "../../../config/database.config"
+  "../../../config/database.config",
 );
 
 /*
@@ -16,25 +16,25 @@ const databaseConfig = require(
 
 async function getNeonStatus() {
 
-    const response =
+  const response =
         await neonApi.get(
 
-            `/projects/${databaseConfig.neon.projectId}`
+          `/projects/${databaseConfig.neon.projectId}`,
         );
 
-    return {
+  return {
 
-        success: true,
+    success: true,
 
-        project:
+    project:
             response.data.project || null,
 
-        timestamp:
+    timestamp:
             new Date(),
-    };
+  };
 }
 
 module.exports = {
 
-    getNeonStatus,
+  getNeonStatus,
 };

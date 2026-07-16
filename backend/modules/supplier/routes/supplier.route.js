@@ -24,57 +24,57 @@ router.get(
   "/",
   roleCheck("ADMIN", "MANAGER", "SUPERVISOR", "EMPLOYEE", "VIEWER"),
   validateSupplierQuery,
-  supplierController.getSuppliers
+  supplierController.getSuppliers,
 );
 
 router.get(
   "/search",
   roleCheck("ADMIN", "MANAGER", "SUPERVISOR", "EMPLOYEE", "VIEWER"),
-  supplierController.searchSuppliers
+  supplierController.searchSuppliers,
 );
 
 router.get(
   "/:id",
   roleCheck("ADMIN", "MANAGER", "SUPERVISOR", "EMPLOYEE", "VIEWER"),
-  supplierController.getSupplierById
+  supplierController.getSupplierById,
 );
 
 router.post(
   "/",
   roleCheck("ADMIN", "MANAGER"),
   validateCreateSupplier,
-  supplierController.createSupplier
+  supplierController.createSupplier,
 );
 
 router.patch(
   "/:id",
   roleCheck("ADMIN", "MANAGER"),
   validateUpdateSupplier,
-  supplierController.updateSupplier
+  supplierController.updateSupplier,
 );
 
 router.delete(
   "/:id",
   roleCheck("ADMIN"),
-  supplierController.deleteSupplier
+  supplierController.deleteSupplier,
 );
 
 router.patch(
   "/:id/restore",
   roleCheck("ADMIN"),
-  supplierController.restoreSupplier
+  supplierController.restoreSupplier,
 );
 
 router.get(
   "/reports/suppliers/pdf",
   roleCheck("ADMIN", "MANAGER", "SUPERVISOR"),
-  reportSupplier.downloadSuppliersPDF
+  reportSupplier.downloadSuppliersPDF,
 );
 
 router.get(
   "/reports/suppliers/excel",
   roleCheck("ADMIN", "MANAGER", "SUPERVISOR"),
-  reportSupplier.downloadSuppliersExcel
+  reportSupplier.downloadSuppliersExcel,
 );
 
 module.exports = router;

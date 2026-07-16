@@ -44,7 +44,7 @@ async function executeSeed(seedModule, name) {
 
   if (typeof seedFunction !== "function") {
     throw new Error(
-      `❌ Estructura de seed inválida o función no encontrada en: ${name}`
+      `❌ Estructura de seed inválida o función no encontrada en: ${name}`,
     );
   }
 
@@ -72,7 +72,6 @@ async function main() {
     // FASE 1 - ESTRUCTURA BASE
     // ======================================================================
 
-
     // await executeSeed(adminSeed, "1. Administrator Users");
     // await executeSeed(commentsSeed, "2. Comments for Administrators");
     // await executeSeed(unitSeed, "2. Measurement Units");
@@ -90,8 +89,6 @@ async function main() {
     //   purchaseJsonPayloadSeed,
     //   "7. Historical Purchases & Initial Stock"
     // );
-
-
 
     // await executeSeed(
     //   saleJsonPayloadSeed2021,
@@ -120,7 +117,7 @@ async function main() {
 
     await executeSeed(
       saleJsonPayloadSeed2026,
-      "13. Historic Sales Ledger Year 2026"
+      "13. Historic Sales Ledger Year 2026",
     );
 
     console.log("\n====================================================================");

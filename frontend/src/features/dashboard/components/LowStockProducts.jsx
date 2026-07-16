@@ -1,11 +1,5 @@
 import { MetricCard } from "@/components/card";
-import {
-  AlertTriangle,
-  ArrowRight,
-  Package,
-  ShieldAlert,
-  TrendingDown,
-} from "lucide-react";
+import { AlertTriangle, ArrowRight, Package, ShieldAlert, TrendingDown } from "lucide-react";
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
 
@@ -45,16 +39,11 @@ export default function LowStockProducts({ products = [] }) {
       <div className="mb-6 flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-amber-500/10 bg-amber-500/10 dark:bg-amber-500/20">
-            <AlertTriangle
-              size={18}
-              className="text-amber-600 dark:text-amber-400"
-            />
+            <AlertTriangle size={18} className="text-amber-600 dark:text-amber-400" />
           </div>
 
           <div>
-            <h2 className="text-lg font-bold tracking-tight text-slate-900 dark:text-white">
-              Stock Bajo
-            </h2>
+            <h2 className="text-lg font-bold tracking-tight text-slate-900 dark:text-white">Stock Bajo</h2>
             <p className="text-xs text-slate-500 dark:text-slate-400">
               Productos e insumos que requieren reposición inmediata.
             </p>
@@ -120,9 +109,7 @@ export default function LowStockProducts({ products = [] }) {
                 >
                   <div className="mb-2.5 flex items-start justify-between gap-4">
                     <div>
-                      <h3 className="text-sm font-semibold text-slate-900 dark:text-white">
-                        {item.product?.name}
-                      </h3>
+                      <h3 className="text-sm font-semibold text-slate-900 dark:text-white">{item.product?.name}</h3>
                       <p className="text-[11px] font-medium text-slate-400 dark:text-slate-500 mt-0.5">
                         Límite mínimo requerido: {minStock} unidades
                       </p>
@@ -158,11 +145,7 @@ export default function LowStockProducts({ products = [] }) {
 
                   <div className="flex items-center justify-between text-[11px] font-medium text-slate-400 dark:text-slate-500">
                     <span>Disponible: {stock}</span>
-                    <span
-                      className={
-                        isCritical ? "text-red-500/90 font-semibold" : ""
-                      }
-                    >
+                    <span className={isCritical ? "text-red-500/90 font-semibold" : ""}>
                       Faltan {Math.max(minStock - stock, 0)} unidades
                     </span>
                   </div>

@@ -44,7 +44,7 @@ exports.updateProduct =
 
           req.body,
 
-          req.user
+          req.user,
         );
 
       // ========================================
@@ -65,7 +65,7 @@ exports.updateProduct =
 
       console.error(
         "UPDATE PRODUCT ERROR:",
-        error
+        error,
       );
 
       // ========================================

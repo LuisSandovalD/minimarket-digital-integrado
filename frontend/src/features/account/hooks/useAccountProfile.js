@@ -2,10 +2,7 @@ import { updateUser } from "@/features/auth/store/authSlice"; // 2. Importamos l
 import { useState } from "react";
 import { useDispatch } from "react-redux"; // 1. Importamos el dispatch de Redux
 import useAccountStore from "../store/account.store";
-import {
-  validatePassword,
-  validateProfile,
-} from "../validations/account.validation";
+import { validatePassword, validateProfile } from "../validations/account.validation";
 
 export default function useAccountProfile() {
   const dispatch = useDispatch(); // 3. Inicializamos el dispatch

@@ -11,29 +11,29 @@ const { z } = require("zod");
 const databaseRestoreValidation =
     z.object({
 
-        file: z
+      file: z
 
-            .string({
-                required_error:
+        .string({
+          required_error:
                     "Backup file is required",
-            })
+        })
 
-            .trim()
+        .trim()
 
-            .min(
-                1,
-                "Backup file cannot be empty"
-            )
+        .min(
+          1,
+          "Backup file cannot be empty",
+        )
 
-            .max(
-                255,
-                "Invalid backup file name"
-            )
+        .max(
+          255,
+          "Invalid backup file name",
+        )
 
-            .regex(
-                /^[a-zA-Z0-9_\-.]+$/,
-                "Invalid file format"
-            ),
+        .regex(
+          /^[a-zA-Z0-9_\-.]+$/,
+          "Invalid file format",
+        ),
     });
 
 module.exports =

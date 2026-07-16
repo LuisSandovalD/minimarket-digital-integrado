@@ -10,20 +10,9 @@ import {
   staggerContainer,
 } from "@/components/effects";
 import { motion } from "framer-motion";
-import {
-  BadgeCheck,
-  ChevronLeft,
-  ChevronRight,
-  MapPin,
-  Plus,
-  Quote,
-  Star,
-} from "lucide-react";
+import { BadgeCheck, ChevronLeft, ChevronRight, MapPin, Plus, Quote, Star } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import {
-  getLatestTestimonials,
-  getTestimonials,
-} from "../services/testimonial.service";
+import { getLatestTestimonials, getTestimonials } from "../services/testimonial.service";
 
 // Genera iniciales a partir del nombre del usuario (ej. "Claudio Rossi" -> "CR")
 const getInitials = (name = "") => {
@@ -56,6 +45,7 @@ export default function TestimonialsSection() {
     if (loading || testimonials.length === 0 || isHovered) return;
 
     const interval = setInterval(() => {
+      // eslint-disable-next-line react-hooks/immutability
       scroll("right");
     }, 4000);
 
@@ -133,17 +123,12 @@ export default function TestimonialsSection() {
             transition={smoothTransition}
             className="text-pretty text-base leading-relaxed text-slate-600 dark:text-[#cbd5e1] max-w-2xl"
           >
-            Controla inventario, ventas, reportes y múltiples sucursales desde
-            una sola plataforma.
+            Controla inventario, ventas, reportes y múltiples sucursales desde una sola plataforma.
           </motion.p>
 
           {/* BOTONES DE NAVEGACIÓN CENTRADOS ABAJO DEL ENCABEZADO */}
           {testimonials.length > 0 && (
-            <motion.div
-              variants={fadeScale}
-              transition={springTransition}
-              className="flex items-center gap-2 mt-4"
-            >
+            <motion.div variants={fadeScale} transition={springTransition} className="flex items-center gap-2 mt-4">
               <ModernButton
                 variant="outline"
                 size="md"
@@ -205,15 +190,9 @@ export default function TestimonialsSection() {
                   <div className="-mt-6 text-left">
                     {/* CALIFICACIÓN DE ESTRELLAS */}
                     <div className="mb-4 flex gap-0.5">
-                      {Array.from({ length: Number(item.rating) || 5 }).map(
-                        (_, i) => (
-                          <Star
-                            key={i}
-                            size={13}
-                            className="fill-yellow-500 text-yellow-500"
-                          />
-                        ),
-                      )}
+                      {Array.from({ length: Number(item.rating) || 5 }).map((_, i) => (
+                        <Star key={i} size={13} className="fill-yellow-500 text-yellow-500" />
+                      ))}
                     </div>
 
                     {/* TEXTO DEL COMENTARIO */}
@@ -241,10 +220,7 @@ export default function TestimonialsSection() {
                           {item.user?.name || "Usuario del Sistema"}
                         </span>
                         <div className="mt-0.5 flex items-center gap-1 text-[11px] text-slate-400 dark:text-dark-foreground/40">
-                          <MapPin
-                            size={11}
-                            className="text-[#274c77] dark:text-[#6096ba]"
-                          />
+                          <MapPin size={11} className="text-[#274c77] dark:text-[#6096ba]" />
                           <span>Verificado</span>
                         </div>
                       </div>

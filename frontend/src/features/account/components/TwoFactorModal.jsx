@@ -3,26 +3,12 @@
 // ========================================
 import { ModernButton } from "@/components/buttons";
 import { FooterModal, HeaderModal, Modal } from "@/components/overlays";
-import {
-  AlertCircle,
-  ArrowRight,
-  CheckCircle,
-  Lock,
-  QrCode,
-  ShieldCheck,
-} from "lucide-react";
+import { AlertCircle, ArrowRight, CheckCircle, Lock, QrCode, ShieldCheck } from "lucide-react";
 import { useEffect, useState } from "react";
 import useTwoFactor from "../hooks/useTwoFactor";
 
 export default function TwoFactorModal({ open, onClose }) {
-  const {
-    enabled,
-    twoFactorLoading,
-    serverError,
-    init2FA,
-    confirm2FA,
-    turnOff2FA,
-  } = useTwoFactor();
+  const { enabled, twoFactorLoading, serverError, init2FA, confirm2FA, turnOff2FA } = useTwoFactor();
 
   // Estados internos del flujo guiado
   const [step, setStep] = useState(1); // 1: Info/Estado, 2: Configurar QR, 3: Mostrar Códigos de Respaldo
@@ -201,11 +187,7 @@ export default function TwoFactorModal({ open, onClose }) {
          * ENTORNO DE PASOS 1 Y 3 (FORMULARIO GENERAL)
          * ======================================== */
         <form
-          onSubmit={
-            enabled && step === 1
-              ? handleDisableAccount
-              : (e) => e.preventDefault()
-          }
+          onSubmit={enabled && step === 1 ? handleDisableAccount : (e) => e.preventDefault()}
           className="flex flex-col flex-1"
         >
           <div className="px-6 py-6 flex-1">
@@ -222,19 +204,15 @@ export default function TwoFactorModal({ open, onClose }) {
                     <div className="rounded-2xl border border-emerald-200 dark:border-emerald-900/40 bg-emerald-50/70 dark:bg-emerald-900/10 p-5">
                       <div className="flex gap-3">
                         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-100 dark:bg-emerald-900/30">
-                          <CheckCircle
-                            size={20}
-                            className="text-emerald-600 dark:text-emerald-400"
-                          />
+                          <CheckCircle size={20} className="text-emerald-600 dark:text-emerald-400" />
                         </div>
                         <div className="flex-1">
                           <p className="text-sm font-semibold text-emerald-700 dark:text-emerald-400">
                             Protección activada correctamente
                           </p>
                           <p className="mt-1 text-sm leading-relaxed text-emerald-700/90 dark:text-emerald-300">
-                            Tu cuenta ahora se encuentra protegida. Cada inicio
-                            de sesión requerirá el token dinámico de tu
-                            dispositivo móvil.
+                            Tu cuenta ahora se encuentra protegida. Cada inicio de sesión requerirá el token dinámico de
+                            tu dispositivo móvil.
                           </p>
                         </div>
                       </div>
@@ -243,19 +221,15 @@ export default function TwoFactorModal({ open, onClose }) {
                     <div className="rounded-2xl border border-amber-200 dark:border-amber-900/40 bg-amber-50/70 dark:bg-amber-900/10 p-5">
                       <div className="flex gap-3">
                         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-100 dark:bg-amber-900/30">
-                          <AlertCircle
-                            size={20}
-                            className="text-amber-600 dark:text-amber-400"
-                          />
+                          <AlertCircle size={20} className="text-amber-600 dark:text-amber-400" />
                         </div>
                         <div className="flex-1">
                           <p className="text-sm font-semibold text-amber-700 dark:text-amber-400">
                             Protección desactivada
                           </p>
                           <p className="mt-1 text-sm leading-relaxed text-amber-700/90 dark:text-amber-300">
-                            Activa la autenticación de dos factores para blindar
-                            tus accesos frente a intentos de intrusión no
-                            autorizados.
+                            Activa la autenticación de dos factores para blindar tus accesos frente a intentos de
+                            intrusión no autorizados.
                           </p>
                         </div>
                       </div>
@@ -265,20 +239,13 @@ export default function TwoFactorModal({ open, onClose }) {
                   <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-900/40 p-4">
                     <div className="flex gap-3">
                       <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slate-200 dark:bg-slate-800">
-                        <Lock
-                          size={18}
-                          className="text-slate-600 dark:text-slate-300"
-                        />
+                        <Lock size={18} className="text-slate-600 dark:text-slate-300" />
                       </div>
                       <div>
-                        <p className="text-sm font-medium text-slate-900 dark:text-white">
-                          ¿Cómo funciona?
-                        </p>
+                        <p className="text-sm font-medium text-slate-900 dark:text-white">¿Cómo funciona?</p>
                         <p className="mt-1 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-                          Vincularás una app de autenticación (Google
-                          Authenticator, Authy, Microsoft Authenticator)
-                          escaneando un código QR único generado de forma
-                          segura.
+                          Vincularás una app de autenticación (Google Authenticator, Authy, Microsoft Authenticator)
+                          escaneando un código QR único generado de forma segura.
                         </p>
                       </div>
                     </div>
@@ -287,8 +254,7 @@ export default function TwoFactorModal({ open, onClose }) {
                   {enabled && (
                     <div className="pt-2 space-y-3">
                       <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
-                        Para deshabilitar la protección, confirma tu contraseña
-                        actual:
+                        Para deshabilitar la protección, confirma tu contraseña actual:
                       </label>
                       <input
                         type="password"
@@ -316,8 +282,7 @@ export default function TwoFactorModal({ open, onClose }) {
                       ¡Doble factor configurado con éxito!
                     </h4>
                     <p className="mt-1 text-xs text-slate-500 leading-relaxed">
-                      Guarda estos códigos de recuperación en un lugar seguro.
-                      No volverán a mostrarse:
+                      Guarda estos códigos de recuperación en un lugar seguro. No volverán a mostrarse:
                     </p>
                   </div>
 
@@ -356,13 +321,7 @@ export default function TwoFactorModal({ open, onClose }) {
 
               {step === 1 && (
                 <ModernButton
-                  text={
-                    twoFactorLoading
-                      ? "Procesando..."
-                      : enabled
-                        ? "Desactivar Protección"
-                        : "Configurar 2FA"
-                  }
+                  text={twoFactorLoading ? "Procesando..." : enabled ? "Desactivar Protección" : "Configurar 2FA"}
                   icon={Lock}
                   type={enabled ? "submit" : "button"}
                   onClick={!enabled ? handleStartSetup : undefined}

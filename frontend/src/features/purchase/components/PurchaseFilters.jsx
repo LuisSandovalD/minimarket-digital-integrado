@@ -1,15 +1,7 @@
 import { ModernButton } from "@/components/buttons";
 import { Input, SearchInput, Select } from "@/components/forms";
 
-import {
-  Calendar,
-  CheckCircle2,
-  RefreshCw,
-  Search,
-  Store,
-  Truck,
-  User,
-} from "lucide-react";
+import { Calendar, CheckCircle2, RefreshCw, Search, Store, Truck, User } from "lucide-react";
 
 import { useState } from "react";
 
@@ -130,13 +122,7 @@ export default function PurchaseFilters({
           onChange={(e) => setStartDate(e.target.value)}
         />
 
-        <Input
-          type="date"
-          label="Hasta"
-          icon={Calendar}
-          value={endDate}
-          onChange={(e) => setEndDate(e.target.value)}
-        />
+        <Input type="date" label="Hasta" icon={Calendar} value={endDate} onChange={(e) => setEndDate(e.target.value)} />
       </div>
 
       <div className="mt-5 flex justify-end gap-2">

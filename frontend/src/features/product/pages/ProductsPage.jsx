@@ -53,19 +53,12 @@ export default function ProductsPage() {
         setLoadingData(true);
         setError(null);
 
-        const [categoriesData, unitsData] = await Promise.all([
-          getCategories(),
-          getUnits(),
-        ]);
+        const [categoriesData, unitsData] = await Promise.all([getCategories(), getUnits()]);
 
         console.log("CATEGORIES:", categoriesData);
         console.log("UNITS:", unitsData);
 
-        setCategories(
-          Array.isArray(categoriesData)
-            ? categoriesData
-            : categoriesData?.data || [],
-        );
+        setCategories(Array.isArray(categoriesData) ? categoriesData : categoriesData?.data || []);
 
         setUnits(Array.isArray(unitsData) ? unitsData : unitsData?.data || []);
       } catch (err) {
@@ -195,12 +188,7 @@ export default function ProductsPage() {
         onNotifications={() => setOpenNotifications(true)}
       />
 
-      <ProductFilters
-        onSearch={handleSearch}
-        onClear={handleClear}
-        categories={categories}
-        loading={productsLoading}
-      />
+      <ProductFilters onSearch={handleSearch} onClear={handleClear} categories={categories} loading={productsLoading} />
 
       <ProductsTable
         products={products}

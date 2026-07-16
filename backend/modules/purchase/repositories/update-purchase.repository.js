@@ -6,15 +6,15 @@ async function updatePurchaseRepository(id, data) {
   return prisma.purchase.update({
 
     where: {
-      id
+      id,
     },
 
-    data
+    data,
 
   });
 
 }
 
 module.exports = {
-  updatePurchaseRepository
+  updatePurchaseRepository,
 };

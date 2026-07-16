@@ -7,9 +7,7 @@ import { Activity, Check } from "lucide-react";
 
 export default function DatabaseStatus({ health, loading }) {
   if (!loading && !health) {
-    return (
-      <p className="text-sm text-muted-foreground p-2">Sin datos disponibles</p>
-    );
+    return <p className="text-sm text-muted-foreground p-2">Sin datos disponibles</p>;
   }
 
   const isGood = health?.status === "good";
@@ -27,9 +25,7 @@ export default function DatabaseStatus({ health, loading }) {
       <div className="grid grid-cols-2 gap-4 text-sm border-t border-slate-100 dark:border-slate-800/60 pt-4 mt-2">
         <div>
           <p className="text-muted-foreground text-xs mb-0.5">Latencia</p>
-          <p className="text-slate-900 dark:text-slate-100 font-medium">
-            {health?.latency}
-          </p>
+          <p className="text-slate-900 dark:text-slate-100 font-medium">{health?.latency}</p>
         </div>
         <div>
           <p className="text-muted-foreground text-xs mb-0.5">Versión</p>

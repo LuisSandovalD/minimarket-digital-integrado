@@ -87,21 +87,13 @@ export default function ModernImageUpload({
   const isFlexChild = height.includes("h-full") || height.includes("flex-1");
 
   return (
-    <div
-      className={`w-full space-y-3 flex flex-col ${
-        isFlexChild ? "h-full flex-1" : ""
-      }`}
-    >
+    <div className={`w-full space-y-3 flex flex-col ${isFlexChild ? "h-full flex-1" : ""}`}>
       {/* HEADER */}
       <div className="flex items-start justify-between gap-4 flex-shrink-0">
         <div>
-          <label className="text-sm font-semibold text-slate-800 dark:text-slate-100">
-            {label}
-          </label>
+          <label className="text-sm font-semibold text-slate-800 dark:text-slate-100">{label}</label>
 
-          <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-            {description}
-          </p>
+          <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">{description}</p>
         </div>
 
         {preview && (
@@ -142,9 +134,7 @@ export default function ModernImageUpload({
               <div className="absolute inset-0 z-30 flex flex-col items-center justify-center gap-4 bg-blue-500/20 backdrop-blur-sm">
                 <Upload size={42} className="text-white" />
 
-                <p className="text-lg font-semibold text-white">
-                  Suelta la imagen aquí
-                </p>
+                <p className="text-lg font-semibold text-white">Suelta la imagen aquí</p>
               </div>
             )}
 
@@ -153,14 +143,10 @@ export default function ModernImageUpload({
                 <div className="inline-flex items-center gap-2 rounded-2xl border border-white/15 bg-white/10 px-4 py-2 backdrop-blur-md">
                   <ImageIcon size={16} className="text-white/80" />
 
-                  <span className="text-sm font-medium text-white">
-                    Imagen cargada
-                  </span>
+                  <span className="text-sm font-medium text-white">Imagen cargada</span>
                 </div>
 
-                <p className="mt-3 text-sm text-white/70">
-                  Haz clic o arrastra una nueva imagen para reemplazarla.
-                </p>
+                <p className="mt-3 text-sm text-white/70">Haz clic o arrastra una nueva imagen para reemplazarla.</p>
               </div>
 
               <button
@@ -190,10 +176,7 @@ export default function ModernImageUpload({
                 {dragging ? (
                   <Upload size={40} className="text-blue-500" />
                 ) : (
-                  <ImagePlus
-                    size={40}
-                    className="text-slate-500 dark:text-slate-400"
-                  />
+                  <ImagePlus size={40} className="text-slate-500 dark:text-slate-400" />
                 )}
               </div>
 

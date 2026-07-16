@@ -40,14 +40,12 @@ export default function StockAdjustmentModal({
       },
       REMOVE: {
         title: "Remover Stock",
-        subtitle:
-          "Descuenta unidades del inventario por ajuste manual o merma.",
+        subtitle: "Descuenta unidades del inventario por ajuste manual o merma.",
         submitLabel: "Descontar Stock",
       },
       DAMAGED: {
         title: "Registrar Stock Dañado",
-        subtitle:
-          "Mueve unidades del stock disponible al registro de mermas/daños.",
+        subtitle: "Mueve unidades del stock disponible al registro de mermas/daños.",
         submitLabel: "Reportar Daño",
       },
     }[type] || {};
@@ -65,33 +63,17 @@ export default function StockAdjustmentModal({
   return (
     <Modal open={isOpen} onClose={onClose} size="md">
       {/* HEADER DEL MODAL COMPARTIDO (Limbo) */}
-      <HeaderModal
-        title={config.title}
-        subtitle={config.subtitle}
-        onClose={onClose}
-      />
+      <HeaderModal title={config.title} subtitle={config.subtitle} onClose={onClose} />
 
       <form onSubmit={handleSubmit} className="flex flex-col">
         <div className="max-h-[72vh] overflow-y-auto px-6 py-6">
           <div className="space-y-6">
             {/* INFORMACIÓN DEL ITEM (Sin contenedor visual, patrón lineal) */}
             <div className="space-y-5">
-              <Input
-                label="Producto Afectado"
-                value={inventoryItem.product?.name || ""}
-                readOnly
-                disabled
-                icon={Box}
-              />
+              <Input label="Producto Afectado" value={inventoryItem.product?.name || ""} readOnly disabled icon={Box} />
 
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-                <Input
-                  label="Sucursal"
-                  value={inventoryItem.branch?.name || ""}
-                  readOnly
-                  disabled
-                  icon={Store}
-                />
+                <Input label="Sucursal" value={inventoryItem.branch?.name || ""} readOnly disabled icon={Store} />
 
                 <Input
                   label="Stock Actual Físico"
@@ -166,11 +148,7 @@ export default function StockAdjustmentModal({
                 disabled={actionLoading}
               />
 
-              <SubmitButton
-                text={config.submitLabel}
-                loading={actionLoading}
-                disabled={quantity <= 0}
-              />
+              <SubmitButton text={config.submitLabel} loading={actionLoading} disabled={quantity <= 0} />
             </div>
           </div>
         </FooterModal>

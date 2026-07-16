@@ -12,7 +12,7 @@ exports.addStock = async (
   inventoryId,
   quantity,
   userId,
-  reason = "Ingreso manual"
+  reason = "Ingreso manual",
 ) => {
   return prisma.$transaction(async (tx) => {
     const inventory = await tx.inventory.findUnique({
@@ -65,7 +65,7 @@ exports.removeStock = async (
   inventoryId,
   quantity,
   userId,
-  reason = "Salida manual"
+  reason = "Salida manual",
 ) => {
   return prisma.$transaction(async (tx) => {
     const inventory = await tx.inventory.findUnique({
@@ -136,7 +136,7 @@ exports.addDamagedStock = async (
   inventoryId,
   quantity,
   userId,
-  reason = "Producto dañado"
+  reason = "Producto dañado",
 ) => {
   return prisma.$transaction(async (tx) => {
     const inventory = await tx.inventory.findUnique({

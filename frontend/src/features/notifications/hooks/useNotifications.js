@@ -54,8 +54,7 @@ export function useNotifications() {
 
   const filteredNotifications = notifications.filter((notif) => {
     // CAMBIO CLAVE: Comparamos contra notif.type (el valor enviado por el select)
-    const matchesPriority =
-      filterPriority === "all" || notif.type === filterPriority;
+    const matchesPriority = filterPriority === "all" || notif.type === filterPriority;
 
     const matchesSearch =
       notif.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -67,10 +66,7 @@ export function useNotifications() {
 
   // Mapeo inteligente de contadores basado en la naturaleza del Enum
   const highPriorityCount = notifications.filter(
-    (n) =>
-      n.type === "LOW_STOCK" ||
-      n.type === "INVENTORY_MISMATCH" ||
-      n.type === "PAYMENT_OVERDUE",
+    (n) => n.type === "LOW_STOCK" || n.type === "INVENTORY_MISMATCH" || n.type === "PAYMENT_OVERDUE",
   ).length;
 
   const mediumPriorityCount = notifications.filter(
@@ -82,14 +78,10 @@ export function useNotifications() {
   ).length;
 
   // Segmentación para la paginación de la tabla
-  const totalPages =
-    Math.ceil(filteredNotifications.length / itemsPerPage) || 1;
+  const totalPages = Math.ceil(filteredNotifications.length / itemsPerPage) || 1;
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentNotifications = filteredNotifications.slice(
-    indexOfFirstItem,
-    indexOfLastItem,
-  );
+  const currentNotifications = filteredNotifications.slice(indexOfFirstItem, indexOfLastItem);
 
   return {
     // Datos procesados
@@ -116,8 +108,7 @@ export function useNotifications() {
     currentPage,
     totalPages,
     goToPrevPage: () => setCurrentPage((prev) => Math.max(prev - 1, 1)),
-    goToNextPage: () =>
-      setCurrentPage((prev) => Math.min(prev + 1, totalPages)),
+    goToNextPage: () => setCurrentPage((prev) => Math.min(prev + 1, totalPages)),
 
     // Acciones globales
     refresh: fetchAlerts,

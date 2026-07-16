@@ -1,23 +1,13 @@
 // ========================================
 // features/sales/components/SaleDetailModal.jsx
 // ========================================
-import {
-  Banknote,
-  Calendar,
-  FileText,
-  Package,
-  Receipt,
-  User,
-} from "lucide-react";
+import { Banknote, Calendar, FileText, Package, Receipt, User } from "lucide-react";
 
 import { ModernButton } from "@/components/buttons";
 import { FooterModal, HeaderModal, Modal } from "@/components/overlays/";
 
 // Formateadores de ayuda locales
-const fPrice = (v) =>
-  new Intl.NumberFormat("es-PE", { style: "currency", currency: "PEN" }).format(
-    Number(v || 0),
-  );
+const fPrice = (v) => new Intl.NumberFormat("es-PE", { style: "currency", currency: "PEN" }).format(Number(v || 0));
 
 const fDate = (d) =>
   d
@@ -38,8 +28,7 @@ const STATUS_MAP = {
   PENDING: {
     label: "Pendiente",
     dot: "bg-blue-500",
-    style:
-      "text-blue-700 bg-blue-50 border-blue-200 dark:text-blue-400 dark:bg-blue-950/30 dark:border-blue-900/50",
+    style: "text-blue-700 bg-blue-50 border-blue-200 dark:text-blue-400 dark:bg-blue-950/30 dark:border-blue-900/50",
   },
   CREDIT_PENDING: {
     label: "Crédito Pendiente",
@@ -50,8 +39,7 @@ const STATUS_MAP = {
   CANCELED: {
     label: "Anulada",
     dot: "bg-rose-500",
-    style:
-      "text-rose-600 bg-rose-50 border-rose-200 dark:text-rose-400 dark:bg-rose-950/30 dark:border-rose-900/50",
+    style: "text-rose-600 bg-rose-50 border-rose-200 dark:text-rose-400 dark:bg-rose-950/30 dark:border-rose-900/50",
   },
   RETURNED: {
     label: "Devuelta",
@@ -62,8 +50,7 @@ const STATUS_MAP = {
   ARCHIVED: {
     label: "Archivada",
     dot: "bg-zinc-400",
-    style:
-      "text-zinc-600 bg-zinc-50 border-zinc-200 dark:text-zinc-400 dark:bg-zinc-950/30 dark:border-zinc-900/50",
+    style: "text-zinc-600 bg-zinc-50 border-zinc-200 dark:text-zinc-400 dark:bg-zinc-950/30 dark:border-zinc-900/50",
   },
   DRAFT: {
     label: "Borrador",
@@ -86,10 +73,7 @@ export default function SaleDetailModal({ open, onClose, sale }) {
   const payments = sale.payments || [];
 
   // Cálculos de Caja Reales para lectura
-  const totalPagado = payments.reduce(
-    (sum, p) => sum + Number(p.amount || 0),
-    0,
-  );
+  const totalPagado = payments.reduce((sum, p) => sum + Number(p.amount || 0), 0);
   const totalVenta = Number(sale.total || 0);
   const saldoPendiente = totalVenta - totalPagado;
 
@@ -116,9 +100,7 @@ export default function SaleDetailModal({ open, onClose, sale }) {
             {currentStatus.label.toUpperCase()}
           </span>
 
-          <span className="text-slate-300 dark:text-slate-700 font-light">
-            |
-          </span>
+          <span className="text-slate-300 dark:text-slate-700 font-light">|</span>
 
           <span
             className={`inline-flex items-center px-2.5 py-1 rounded-md font-bold text-[11px] border shadow-sm ${
@@ -146,9 +128,7 @@ export default function SaleDetailModal({ open, onClose, sale }) {
             </div>
             <div className="flex justify-between">
               <span>Emisión:</span>
-              <span className="font-medium text-slate-800 dark:text-slate-200">
-                {fDate(sale.createdAt)}
-              </span>
+              <span className="font-medium text-slate-800 dark:text-slate-200">{fDate(sale.createdAt)}</span>
             </div>
             <div className="flex justify-between">
               <span>Sucursal:</span>
@@ -174,8 +154,7 @@ export default function SaleDetailModal({ open, onClose, sale }) {
             </p>
             {sale.customer?.documentNumber && (
               <p className="font-mono text-slate-400 text-[11px]">
-                {sale.customer.documentType || "DOC"}:{" "}
-                {sale.customer.documentNumber}
+                {sale.customer.documentType || "DOC"}: {sale.customer.documentNumber}
               </p>
             )}
             {Number(sale.customer?.currentDebt || 0) > 0 && (
@@ -194,23 +173,16 @@ export default function SaleDetailModal({ open, onClose, sale }) {
           </div>
           <div className="divide-y dark:divide-slate-800 px-3 bg-white dark:bg-slate-900/20">
             {items.length === 0 ? (
-              <p className="py-4 text-center text-slate-400 italic">
-                Sin productos en el desglose de venta.
-              </p>
+              <p className="py-4 text-center text-slate-400 italic">Sin productos en el desglose de venta.</p>
             ) : (
               items.map((item, idx) => (
-                <div
-                  key={item.id || idx}
-                  className="py-2.5 flex justify-between items-center gap-4"
-                >
+                <div key={item.id || idx} className="py-2.5 flex justify-between items-center gap-4">
                   <div className="min-w-0 flex-1">
                     <p className="font-semibold truncate text-slate-800 dark:text-slate-200">
                       {item.product?.name || "Producto desconocido"}
                     </p>
                     {item.product?.sku && (
-                      <span className="font-mono text-[10px] text-slate-400">
-                        {item.product.sku}
-                      </span>
+                      <span className="font-mono text-[10px] text-slate-400">{item.product.sku}</span>
                     )}
                   </div>
                   <div className="flex items-center gap-5 text-right shrink-0">
@@ -245,15 +217,10 @@ export default function SaleDetailModal({ open, onClose, sale }) {
                     className="flex justify-between text-slate-500 py-1 border-b border-dashed dark:border-slate-800 last:border-0"
                   >
                     <span className="font-medium text-slate-600 dark:text-slate-300">
-                      Método: {p.paymentMethod}{" "}
-                      {p.reference && `(${p.reference})`}
+                      Método: {p.paymentMethod} {p.reference && `(${p.reference})`}
                     </span>
-                    <span className="text-slate-400">
-                      {fDate(p.paidAt || p.createdAt)}
-                    </span>
-                    <span className="font-bold text-slate-700 dark:text-slate-200">
-                      {fPrice(p.amount)}
-                    </span>
+                    <span className="text-slate-400">{fDate(p.paidAt || p.createdAt)}</span>
+                    <span className="font-bold text-slate-700 dark:text-slate-200">{fPrice(p.amount)}</span>
                   </div>
                 ))}
               </div>
@@ -265,15 +232,11 @@ export default function SaleDetailModal({ open, onClose, sale }) {
             <div className="space-y-1.5 text-[11px] text-slate-400 font-mono">
               <div className="flex justify-between">
                 <span>Subtotal:</span>
-                <span className="text-white font-medium">
-                  {fPrice(sale.subtotal)}
-                </span>
+                <span className="text-white font-medium">{fPrice(sale.subtotal)}</span>
               </div>
               <div className="flex justify-between">
                 <span>Impuesto (18%):</span>
-                <span className="text-white font-medium">
-                  {fPrice(sale.tax)}
-                </span>
+                <span className="text-white font-medium">{fPrice(sale.tax)}</span>
               </div>
               {Number(sale.discount) > 0 && (
                 <div className="flex justify-between text-rose-400 font-medium">
@@ -289,12 +252,8 @@ export default function SaleDetailModal({ open, onClose, sale }) {
               )}
             </div>
             <div className="border-t border-slate-800/60 pt-2">
-              <p className="text-[9px] uppercase tracking-wider text-slate-500 font-bold">
-                Importe Total Venta
-              </p>
-              <p className="text-2xl font-black font-mono tracking-tight text-emerald-400">
-                {fPrice(totalVenta)}
-              </p>
+              <p className="text-[9px] uppercase tracking-wider text-slate-500 font-bold">Importe Total Venta</p>
+              <p className="text-2xl font-black font-mono tracking-tight text-emerald-400">{fPrice(totalVenta)}</p>
             </div>
           </div>
         </div>

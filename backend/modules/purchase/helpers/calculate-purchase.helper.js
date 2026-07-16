@@ -1,5 +1,5 @@
 const {
-  calculateTax
+  calculateTax,
 } = require("./calculate-tax.helper");
 
 function calculatePurchase(details = []) {
@@ -28,8 +28,8 @@ function calculatePurchase(details = []) {
       costPrice,
 
       subtotal: Number(
-        itemSubtotal.toFixed(2)
-      )
+        itemSubtotal.toFixed(2),
+      ),
 
     };
 
@@ -44,21 +44,21 @@ function calculatePurchase(details = []) {
   return {
 
     subtotal: Number(
-      subtotal.toFixed(2)
+      subtotal.toFixed(2),
     ),
 
     tax,
 
     total: Number(
-      total.toFixed(2)
+      total.toFixed(2),
     ),
 
-    items
+    items,
 
   };
 
 }
 
 module.exports = {
-  calculatePurchase
+  calculatePurchase,
 };

@@ -1,37 +1,37 @@
 // modules/database/services/database-storage.service.js
 
 const databaseRepository = require(
-    "../repositories/database.repository"
+  "../repositories/database.repository",
 );
 
 class DatabaseStorageService {
 
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Get Database Storage
     |--------------------------------------------------------------------------
     */
 
-    async getStorage() {
+  async getStorage() {
 
-        const size =
+    const size =
             await databaseRepository
-                .getDatabaseSize();
+              .getDatabaseSize();
 
-        return {
+    return {
 
-            success: true,
+      success: true,
 
-            databaseSize:
+      databaseSize:
                 size[0]?.size || "0 MB",
 
-            databaseBytes:
+      databaseBytes:
                 size[0]?.bytes || 0,
 
-            timestamp:
+      timestamp:
                 new Date(),
-        };
-    }
+    };
+  }
 }
 
 module.exports =

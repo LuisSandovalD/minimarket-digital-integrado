@@ -3,12 +3,7 @@
 // ============================================
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
-export default function TFooter({
-  page = 1,
-  totalPages = 1,
-  onPrev = () => {},
-  onNext = () => {},
-}) {
+export default function TFooter({ page = 1, totalPages = 1, onPrev = () => {}, onNext = () => {} }) {
   // Aseguramos que si no hay páginas, el total visual sea al menos 1
   const displayTotalPages = totalPages < 1 ? 1 : totalPages;
 

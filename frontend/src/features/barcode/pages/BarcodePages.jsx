@@ -1,9 +1,9 @@
 import { useMemo, useState } from "react";
 
+import BarcodeFilters from "../components/BarcodeFilters";
 import BarcodeGrid from "../components/BarcodeGrid";
 import BarcodeHeader from "../components/BarcodeHeader";
 import BarcodeLoading from "../components/BarcodeLoading";
-import BarcodeFilters from "../components/BarcodeFilters";
 
 import { TFooter } from "@/components/data-display";
 
@@ -45,7 +45,7 @@ export default function BarcodePages() {
   }
 
   return (
-    <div className="space-y-6 p-6">
+    <div className="space-y-6">
       <BarcodeHeader
         products={products}
         selectedProducts={selectedProducts}
@@ -56,18 +56,10 @@ export default function BarcodePages() {
 
       <BarcodeFilters value={search} onChange={handleSearchChange} />
 
-      <BarcodeGrid
-        products={paginatedProducts}
-        selectedProducts={selectedProducts}
-        onToggle={toggleProduct}
-      />
+      <BarcodeGrid products={paginatedProducts} selectedProducts={selectedProducts} onToggle={toggleProduct} />
 
       {products.length > ITEMS_PER_PAGE && (
-        <TFooter
-          page={currentPage}
-          totalPages={totalPages}
-          onPageChange={setCurrentPage}
-        />
+        <TFooter page={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
       )}
     </div>
   );

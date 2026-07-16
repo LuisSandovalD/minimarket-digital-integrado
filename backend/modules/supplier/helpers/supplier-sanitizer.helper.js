@@ -14,10 +14,10 @@ function sanitizeSupplierData(data) {
 
     website: data.website?.trim(),
 
-    notes: data.notes?.trim()
-  }
+    notes: data.notes?.trim(),
+  };
 }
 
 module.exports = {
-  sanitizeSupplierData
-}
+  sanitizeSupplierData,
+};

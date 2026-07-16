@@ -33,11 +33,7 @@ export const usePayments = (initialLimit = 10) => {
 
       // REGRESA LOS FILTROS LIMPIOS: Evita enviar cadenas vacías "" al backend
       Object.keys(queryParams).forEach((key) => {
-        if (
-          queryParams[key] === "" ||
-          queryParams[key] === null ||
-          queryParams[key] === undefined
-        ) {
+        if (queryParams[key] === "" || queryParams[key] === null || queryParams[key] === undefined) {
           delete queryParams[key];
         }
       });

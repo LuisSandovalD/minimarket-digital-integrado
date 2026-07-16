@@ -12,14 +12,14 @@ const service =
 exports.getInventoryMetrics =
   async (
     req,
-    res
+    res,
   ) => {
 
     try {
 
       const metrics =
         await service.getInventoryMetrics(
-          req.user.companyId
+          req.user.companyId,
         );
 
       res.json({

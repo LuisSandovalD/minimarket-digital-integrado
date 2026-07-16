@@ -1,12 +1,7 @@
 import { ModerButton } from "@/component/buttons";
 import { Layers, Minus, Plus, Trash2 } from "lucide-react";
 
-export default function SaleCartItem({
-  item,
-  onIncrease,
-  onDecrease,
-  onRemove,
-}) {
+export default function SaleCartItem({ item, onIncrease, onDecrease, onRemove }) {
   const fmt = (value) =>
     new Intl.NumberFormat("es-PE", {
       style: "currency",

@@ -4,18 +4,8 @@ import { usePayments } from "./usePayments";
 
 export const usePaymentsPage = (initialLimit = 10) => {
   // 1. Extraemos TODO lo necesario de usePayments
-  const {
-    payments,
-    loading,
-    page,
-    totalPages,
-    totalItems,
-    filters,
-    updateFilters,
-    onNextPage,
-    onPrevPage,
-    reload,
-  } = usePayments(initialLimit);
+  const { payments, loading, page, totalPages, totalItems, filters, updateFilters, onNextPage, onPrevPage, reload } =
+    usePayments(initialLimit);
 
   // 2. Calculamos las métricas usando los pagos obtenidos
   const metrics = usePaymentMetrics(payments);

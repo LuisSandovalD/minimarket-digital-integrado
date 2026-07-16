@@ -1,24 +1,24 @@
 exports.mapKPIs = data => ({
-    products: data.products,
-    customers: data.customers,
-    suppliers: data.suppliers,
-    branches: data.branches,
-    sales: data.totalSales,
-    purchases: data.totalPurchases,
-    lowStockProducts:
-        data.lowStockProducts
+  products: data.products,
+  customers: data.customers,
+  suppliers: data.suppliers,
+  branches: data.branches,
+  sales: data.totalSales,
+  purchases: data.totalPurchases,
+  lowStockProducts:
+        data.lowStockProducts,
 });
 
 exports.mapAlerts = alerts => ({
-    lowStock:
+  lowStock:
         alerts.lowStock.length,
-    expiring:
+  expiring:
         alerts.expiringProducts.length,
-    notifications:
-        alerts.notifications.length
+  notifications:
+        alerts.notifications.length,
 });
 
 exports.mapActivity = activity => ({
-    logs: activity.logs,
-    sessions: activity.sessions
+  logs: activity.logs,
+  sessions: activity.sessions,
 });

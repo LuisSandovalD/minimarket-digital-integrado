@@ -14,12 +14,13 @@ export default function PublicLayout() {
   const isLogged = isAuthenticated();
 
   return (
-    <div className="relative min-h-screen w-full overflow-x-hidden bg-gradient-to-b from-[#f8fbfd] via-white to-[#eef4f8] text-[#0f172a] transition-colors duration-300 transform-gpu dark:from-[#020617] dark:via-[#07111f] dark:to-[#0f172a] dark:text-[#e7ecef]">
+    // 1. Cambiado a flex, flex-col y usando min-h-[100dvh] (Dynamic VH) para móviles
+    <div className="relative flex min-h-[100dvh] w-full flex-col overflow-x-hidden bg-gradient-to-b from-[#f8fbfd] via-white to-[#eef4f8] text-[#0f172a] transition-colors duration-300 transform-gpu dark:from-[#020617] dark:via-[#07111f] dark:to-[#0f172a] dark:text-[#e7ecef]">
       {/* NAVBAR */}
       <Navbar setOpenLogin={setOpenLogin} setOpenRegister={setOpenRegister} />
 
-      {/* MAIN CONTENT - Mantiene la consistencia de altura y posicionamiento relativo */}
-      <main className="relative w-full overflow-hidden">
+      {/* MAIN CONTENT - flex-1 empuja el footer al fondo si hay poco contenido */}
+      <main className="relative flex-1 w-full overflow-hidden">
         <Outlet context={{ setOpenLogin, setOpenRegister }} />
       </main>
 

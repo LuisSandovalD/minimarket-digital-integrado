@@ -49,10 +49,8 @@ export default function AccountModal({ open, onClose }) {
     }
   }, [open]);
 
-  const companyName =
-    typeof user?.company === "object" ? user?.company?.name : user?.company;
-  const branchName =
-    typeof user?.branch === "object" ? user?.branch?.name : user?.branch;
+  const companyName = typeof user?.company === "object" ? user?.company?.name : user?.company;
+  const branchName = typeof user?.branch === "object" ? user?.branch?.name : user?.branch;
 
   return (
     <>
@@ -73,16 +71,9 @@ export default function AccountModal({ open, onClose }) {
                 <div className="flex justify-center">
                   <div className="relative flex h-24 w-24 items-center justify-center overflow-hidden rounded-2xl bg-slate-100 dark:bg-slate-800 border shadow-inner">
                     {user?.avatar ? (
-                      <img
-                        src={user.avatar}
-                        alt={user.name}
-                        className="h-full w-full object-cover"
-                      />
+                      <img src={user.avatar} alt={user.name} className="h-full w-full object-cover" />
                     ) : (
-                      <User2
-                        size={36}
-                        className="text-slate-400 dark:text-slate-500"
-                      />
+                      <User2 size={36} className="text-slate-400 dark:text-slate-500" />
                     )}
                   </div>
                 </div>
@@ -98,33 +89,25 @@ export default function AccountModal({ open, onClose }) {
 
                 <div className="divide-y divide-slate-100 dark:divide-slate-800/60 border-t border-b border-slate-100 dark:border-slate-800/80 text-left">
                   <div className="flex items-center justify-between gap-4 py-2.5">
-                    <span className="text-xs font-medium text-slate-400 dark:text-slate-500">
-                      Rol
-                    </span>
+                    <span className="text-xs font-medium text-slate-400 dark:text-slate-500">Rol</span>
                     <span className="text-xs font-semibold text-slate-700 dark:text-slate-300 truncate max-w-[170px]">
                       {ROLE_LABELS[user?.role] || user?.role || "—"}
                     </span>
                   </div>
                   <div className="flex items-center justify-between gap-4 py-2.5">
-                    <span className="text-xs font-medium text-slate-400 dark:text-slate-500">
-                      Empresa
-                    </span>
+                    <span className="text-xs font-medium text-slate-400 dark:text-slate-500">Empresa</span>
                     <span className="text-xs font-semibold text-slate-700 dark:text-slate-300 truncate max-w-[170px]">
                       {companyName || "—"}
                     </span>
                   </div>
                   <div className="flex items-center justify-between gap-4 py-2.5">
-                    <span className="text-xs font-medium text-slate-400 dark:text-slate-500">
-                      Sucursal
-                    </span>
+                    <span className="text-xs font-medium text-slate-400 dark:text-slate-500">Sucursal</span>
                     <span className="text-xs font-semibold text-slate-700 dark:text-slate-300 truncate max-w-[170px]">
                       {branchName || "—"}
                     </span>
                   </div>
                   <div className="flex items-center justify-between gap-4 py-2.5">
-                    <span className="text-xs font-medium text-slate-400 dark:text-slate-500">
-                      Estado
-                    </span>
+                    <span className="text-xs font-medium text-slate-400 dark:text-slate-500">Estado</span>
                     <span className="text-[11px] font-bold px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-900/20">
                       {user?.isActive ? "Activo" : "Inactivo"}
                     </span>
@@ -143,19 +126,12 @@ export default function AccountModal({ open, onClose }) {
               <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm overflow-hidden divide-y divide-slate-100 dark:divide-slate-800/80">
                 <div className="p-5 space-y-4">
                   <div className="flex items-center gap-3">
-                    <BarChart3
-                      size={18}
-                      className="text-slate-400 dark:text-slate-500"
-                    />
-                    <h3 className="text-sm font-bold text-slate-900 dark:text-white">
-                      Resumen de Actividad
-                    </h3>
+                    <BarChart3 size={18} className="text-slate-400 dark:text-slate-500" />
+                    <h3 className="text-sm font-bold text-slate-900 dark:text-white">Resumen de Actividad</h3>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 rounded-xl border border-slate-100 dark:border-slate-800/60 bg-slate-50/50 dark:bg-slate-950/30">
                     <div>
-                      <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
-                        Ventas concretadas
-                      </span>
+                      <span className="text-xs font-medium text-slate-500 dark:text-slate-400">Ventas concretadas</span>
                       <p className="text-2xl font-black text-slate-900 dark:text-white mt-0.5">
                         {user?.stats?.sales || 0}
                       </p>
@@ -166,10 +142,7 @@ export default function AccountModal({ open, onClose }) {
                       </span>
                       <p className="text-sm font-bold text-slate-800 dark:text-slate-200 mt-1">
                         {user?.lastLogin
-                          ? new Date(user.lastLogin).toLocaleDateString(
-                              "es-PE",
-                              { dateStyle: "long" },
-                            )
+                          ? new Date(user.lastLogin).toLocaleDateString("es-PE", { dateStyle: "long" })
                           : "—"}
                       </p>
                     </div>
@@ -178,13 +151,8 @@ export default function AccountModal({ open, onClose }) {
 
                 <div className="p-5 space-y-4">
                   <div className="flex items-center gap-3">
-                    <Shield
-                      size={18}
-                      className="text-slate-400 dark:text-slate-500"
-                    />
-                    <h3 className="text-sm font-bold text-slate-900 dark:text-white">
-                      Seguridad y Accesos
-                    </h3>
+                    <Shield size={18} className="text-slate-400 dark:text-slate-500" />
+                    <h3 className="text-sm font-bold text-slate-900 dark:text-white">Seguridad y Accesos</h3>
                   </div>
                   <div className="grid grid-cols-1 gap-3">
                     <ModernButton
@@ -231,9 +199,8 @@ export default function AccountModal({ open, onClose }) {
                 Zona de riesgo
               </h4>
               <p className="text-xs text-slate-500 dark:text-slate-400 max-w-xl leading-relaxed">
-                Al eliminar tu cuenta, perderás de forma inmediata el acceso
-                histórico a inventarios, auditorías y registros comerciales del
-                minimarket.
+                Al eliminar tu cuenta, perderás de forma inmediata el acceso histórico a inventarios, auditorías y
+                registros comerciales del minimarket.
               </p>
             </div>
             <ModernButton
@@ -248,26 +215,11 @@ export default function AccountModal({ open, onClose }) {
         </FooterModal>
       </Modal>
 
-      <ChangePasswordModal
-        open={openPasswordModal}
-        onClose={() => setOpenPasswordModal(false)}
-      />
-      <EditProfileModal
-        open={openEditProfileModal}
-        onClose={() => setOpenEditProfileModal(false)}
-      />
-      <TwoFactorModal
-        open={openTwoFactorModal}
-        onClose={() => setOpenTwoFactorModal(false)}
-      />
-      <SessionsModal
-        open={openSessionsModal}
-        onClose={() => setOpenSessionsModal(false)}
-      />
-      <DeleteAccountModal
-        open={openDeleteModal}
-        onClose={() => setOpenDeleteModal(false)}
-      />
+      <ChangePasswordModal open={openPasswordModal} onClose={() => setOpenPasswordModal(false)} />
+      <EditProfileModal open={openEditProfileModal} onClose={() => setOpenEditProfileModal(false)} />
+      <TwoFactorModal open={openTwoFactorModal} onClose={() => setOpenTwoFactorModal(false)} />
+      <SessionsModal open={openSessionsModal} onClose={() => setOpenSessionsModal(false)} />
+      <DeleteAccountModal open={openDeleteModal} onClose={() => setOpenDeleteModal(false)} />
     </>
   );
 }

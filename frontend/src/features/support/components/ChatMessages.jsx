@@ -23,13 +23,10 @@ export default function ChatMessages({ messages = [], currentUserId }) {
             <MessageSquarePlus size={18} />
           </div>
 
-          <p className="text-xs font-semibold text-slate-200">
-            Inicia la conversación
-          </p>
+          <p className="text-xs font-semibold text-slate-200">Inicia la conversación</p>
 
           <p className="mt-1 text-[11px] leading-relaxed text-slate-500">
-            Envía un mensaje abajo para comenzar el seguimiento en tiempo real
-            de este ticket.
+            Envía un mensaje abajo para comenzar el seguimiento en tiempo real de este ticket.
           </p>
         </div>
       </div>
@@ -42,14 +39,8 @@ export default function ChatMessages({ messages = [], currentUserId }) {
   return (
     <div className="w-full space-y-3 py-2">
       {messages.map((msg) => (
-        <div
-          key={msg.id}
-          className="animate-in fade-in slide-in-from-bottom-2 duration-200"
-        >
-          <MessageBubble
-            message={msg}
-            isMine={String(msg.userId) === String(currentUserId)}
-          />
+        <div key={msg.id} className="animate-in fade-in slide-in-from-bottom-2 duration-200">
+          <MessageBubble message={msg} isMine={String(msg.userId) === String(currentUserId)} />
         </div>
       ))}
 

@@ -1,29 +1,21 @@
 import { motion } from "framer-motion";
-import {
-  LayoutDashboard,
-  ShieldAlert,
-  ShoppingCart,
-  Warehouse,
-} from "lucide-react";
+import { LayoutDashboard, ShieldAlert, ShoppingCart, Warehouse } from "lucide-react";
 
 const features = [
   {
     icon: LayoutDashboard,
     title: "1 Sucursal Única",
-    description:
-      "Ideal para negocios que operan desde un único local físico o almacén centralizado.",
+    description: "Ideal para negocios que operan desde un único local físico o almacén centralizado.",
   },
   {
     icon: ShoppingCart,
     title: "Venta POS Esencial",
-    description:
-      "Registra ventas rápidamente mediante efectivo, tarjetas y otros métodos electrónicos.",
+    description: "Registra ventas rápidamente mediante efectivo, tarjetas y otros métodos electrónicos.",
   },
   {
     icon: Warehouse,
     title: "Stock y Catálogos",
-    description:
-      "Administra productos, categorías y recibe alertas automáticas de stock mínimo.",
+    description: "Administra productos, categorías y recibe alertas automáticas de stock mínimo.",
   },
 ];
 
@@ -66,29 +58,21 @@ export default function PlanFreeDetail() {
             <span className="inline-flex rounded-full bg-slate-100 px-4 py-1 text-xs font-bold uppercase tracking-wider text-slate-700 dark:bg-slate-800 dark:text-slate-300">
               Plan Base Perpetuo
             </span>
-            <h2 className="mt-3 text-3xl font-bold text-slate-900 dark:text-white">
-              Plan FREE
-            </h2>
+            <h2 className="mt-3 text-3xl font-bold text-slate-900 dark:text-white">Plan FREE</h2>
             <p className="mt-2 max-w-xl text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-              Diseñado para pequeños negocios que desean digitalizar sus ventas,
-              inventario y productos sin ningún costo mensual.
+              Diseñado para pequeños negocios que desean digitalizar sus ventas, inventario y productos sin ningún costo
+              mensual.
             </p>
           </div>
 
           <div className="text-left md:text-right bg-transparent">
-            <h3 className="text-5xl font-black text-slate-900 dark:text-white tracking-tight">
-              GRATIS
-            </h3>
-            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-              Para siempre • Sin tarjeta
-            </p>
+            <h3 className="text-5xl font-black text-slate-900 dark:text-white tracking-tight">GRATIS</h3>
+            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Para siempre • Sin tarjeta</p>
           </div>
         </div>
 
         <div className="mt-8 mb-5 bg-transparent">
-          <h4 className="text-sm font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">
-            Incluye
-          </h4>
+          <h4 className="text-sm font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Incluye</h4>
         </div>
 
         {/* Cards */}
@@ -127,9 +111,7 @@ export default function PlanFreeDetail() {
                     <Icon size={22} />
                   </motion.div>
 
-                  <h3 className="font-semibold text-slate-900 dark:text-white">
-                    {feature.title}
-                  </h3>
+                  <h3 className="font-semibold text-slate-900 dark:text-white">{feature.title}</h3>
 
                   <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
                     {feature.description}
@@ -154,21 +136,15 @@ export default function PlanFreeDetail() {
             transition={{ repeat: Infinity, repeatDelay: 4, duration: 0.8 }}
             className="shrink-0"
           >
-            <ShieldAlert
-              size={22}
-              className="text-amber-600 dark:text-amber-500"
-            />
+            <ShieldAlert size={22} className="text-amber-600 dark:text-amber-500" />
           </motion.div>
 
           <div>
-            <h4 className="font-semibold text-amber-800 dark:text-amber-400">
-              Límites del Plan Free
-            </h4>
+            <h4 className="font-semibold text-amber-800 dark:text-amber-400">Límites del Plan Free</h4>
             <p className="mt-2 text-sm leading-relaxed text-amber-700/90 dark:text-amber-300/80">
-              Incluye únicamente un administrador principal, una sucursal y las
-              funciones esenciales de ventas e inventario. No incorpora
-              historial Kárdex avanzado, exportaciones a Excel, reportes
-              ejecutivos ni soporte multisucursal.
+              Incluye únicamente un administrador principal, una sucursal y las funciones esenciales de ventas e
+              inventario. No incorpora historial Kárdex avanzado, exportaciones a Excel, reportes ejecutivos ni soporte
+              multisucursal.
             </p>
           </div>
         </motion.div>

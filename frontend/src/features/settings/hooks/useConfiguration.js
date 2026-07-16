@@ -2,10 +2,7 @@
 import { useEffect, useState } from "react";
 import useTheme from "../../../components/theme/useTheme";
 import { ConfigurationService } from "../services/configuration.service";
-import {
-  mapConfigurationToForm,
-  mapFormToPayload,
-} from "../utils/configuration.mapper";
+import { mapConfigurationToForm, mapFormToPayload } from "../utils/configuration.mapper";
 
 const initialForm = {
   // Datos planos para la UI de la Empresa
@@ -122,15 +119,9 @@ export function useConfiguration() {
 
       if (error.response?.status === 400 && error.response?.data?.errors) {
         setErrors(error.response.data.errors);
-        alert(
-          error.response.data.message ||
-            "Por favor, revisa los errores en el formulario.",
-        );
+        alert(error.response.data.message || "Por favor, revisa los errores en el formulario.");
       } else {
-        alert(
-          error?.response?.data?.message ||
-            "Ocurrió un error inesperado al guardar.",
-        );
+        alert(error?.response?.data?.message || "Ocurrió un error inesperado al guardar.");
       }
     } finally {
       setSaving(false);

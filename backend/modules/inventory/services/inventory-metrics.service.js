@@ -11,11 +11,11 @@ const repository =
 
 exports.getInventoryValue =
   async (
-    companyId
+    companyId,
   ) => {
 
     return repository.getInventoryValue(
-      companyId
+      companyId,
     );
 
   };
@@ -26,11 +26,11 @@ exports.getInventoryValue =
 
 exports.getTotalStock =
   async (
-    companyId
+    companyId,
   ) => {
 
     return repository.getTotalStock(
-      companyId
+      companyId,
     );
 
   };

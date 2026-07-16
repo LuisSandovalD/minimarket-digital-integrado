@@ -1,10 +1,10 @@
 const {
-  updatePurchaseStatusService
+  updatePurchaseStatusService,
 } = require("../services/update-purchase-status.service");
 
 async function updatePurchaseStatusController(
   req,
-  res
+  res,
 ) {
 
   try {
@@ -13,13 +13,13 @@ async function updatePurchaseStatusController(
       Number(req.params.id);
 
     const {
-      status
+      status,
     } = req.body;
 
     const purchase =
       await updatePurchaseStatusService(
         id,
-        status
+        status,
       );
 
     return res.status(200).json({
@@ -29,7 +29,7 @@ async function updatePurchaseStatusController(
       message:
         "Estado actualizado",
 
-      data: purchase
+      data: purchase,
 
     });
 
@@ -39,7 +39,7 @@ async function updatePurchaseStatusController(
 
       ok: false,
 
-      message: error.message
+      message: error.message,
 
     });
 
@@ -48,5 +48,5 @@ async function updatePurchaseStatusController(
 }
 
 module.exports = {
-  updatePurchaseStatusController
+  updatePurchaseStatusController,
 };

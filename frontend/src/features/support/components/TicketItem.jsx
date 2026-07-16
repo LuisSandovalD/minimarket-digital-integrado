@@ -135,9 +135,7 @@ export default function TicketItem({ ticket, active, onClick }) {
           `}
         >
           <StatusIcon size={12} className={status.color} />
-          <span className={`text-[10px] font-medium ${status.color}`}>
-            {status.label}
-          </span>
+          <span className={`text-[10px] font-medium ${status.color}`}>{status.label}</span>
         </div>
       </div>
 

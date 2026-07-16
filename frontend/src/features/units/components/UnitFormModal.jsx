@@ -80,11 +80,7 @@ export default function UnitFormModal({ open, onClose, reload, selectedUnit }) {
 
       <HeaderModal
         title={isEdit ? "Editar Unidad" : "Nueva Unidad"}
-        subtitle={
-          isEdit
-            ? "Actualiza la información de la unidad."
-            : "Registra una nueva unidad para tus productos."
-        }
+        subtitle={isEdit ? "Actualiza la información de la unidad." : "Registra una nueva unidad para tus productos."}
         onClose={onClose}
       />
 
@@ -301,8 +297,7 @@ export default function UnitFormModal({ open, onClose, reload, selectedUnit }) {
                       dark:text-slate-400
                     "
                   >
-                    El factor de conversión permite transformar cantidades entre
-                    unidades relacionadas.
+                    El factor de conversión permite transformar cantidades entre unidades relacionadas.
                   </p>
                 </div>
               </div>
@@ -345,18 +340,9 @@ export default function UnitFormModal({ open, onClose, reload, selectedUnit }) {
                 gap-3
               "
             >
-              <ModernButton
-                type="button"
-                text="Cancelar"
-                variant="outline"
-                icon={X}
-                onClick={onClose}
-              />
+              <ModernButton type="button" text="Cancelar" variant="outline" icon={X} onClick={onClose} />
 
-              <SubmitButton
-                text={isEdit ? "Guardar Cambios" : "Crear Unidad"}
-                loading={loading}
-              />
+              <SubmitButton text={isEdit ? "Guardar Cambios" : "Crear Unidad"} loading={loading} />
             </div>
           </div>
         </FooterModal>

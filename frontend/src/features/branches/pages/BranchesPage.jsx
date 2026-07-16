@@ -117,11 +117,7 @@ export default function BranchesPage() {
     <div className="space-y-6">
       <BranchHeader onCreate={handleCreate} />
 
-      <BranchFilters
-        onSearch={handleSearch}
-        onClear={handleClear}
-        loading={loading}
-      />
+      <BranchFilters onSearch={handleSearch} onClear={handleClear} loading={loading} />
 
       {branches.length === 0 ? (
         <BranchEmpty />
@@ -129,26 +125,15 @@ export default function BranchesPage() {
         <div className="space-y-6">
           <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
             {branches.map((branch) => (
-              <BranchCard
-                key={branch.id}
-                branch={branch}
-                onEdit={handleEdit}
-                onDeleteTrigger={handleDeleteTrigger}
-              />
+              <BranchCard key={branch.id} branch={branch} onEdit={handleEdit} onDeleteTrigger={handleDeleteTrigger} />
             ))}
           </div>
 
           {/* PAGINACIÓN */}
           <div className="flex items-center justify-between border-t border-slate-100 pt-4 dark:border-slate-800/60">
             <span className="text-sm text-slate-500 dark:text-slate-400">
-              Página{" "}
-              <span className="font-semibold text-slate-700 dark:text-slate-200">
-                {page}
-              </span>{" "}
-              de{" "}
-              <span className="font-semibold text-slate-700 dark:text-slate-200">
-                {totalPages}
-              </span>
+              Página <span className="font-semibold text-slate-700 dark:text-slate-200">{page}</span> de{" "}
+              <span className="font-semibold text-slate-700 dark:text-slate-200">{totalPages}</span>
             </span>
 
             <div className="flex gap-2">

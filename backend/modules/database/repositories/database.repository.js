@@ -1,7 +1,7 @@
 // modules/database/repositories/database.repository.js
 
 const prisma = require(
-  "../../../config/prisma.config"
+  "../../../config/prisma.config",
 );
 
 class DatabaseRepository {

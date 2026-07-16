@@ -51,7 +51,7 @@ exports.getInventories = async (req, res) => {
 exports.getInventoryById =
   async (
     req,
-    res
+    res,
   ) => {
 
     try {
@@ -60,10 +60,10 @@ exports.getInventoryById =
         await service.getById(
 
           Number(
-            req.params.id
+            req.params.id,
           ),
 
-          req.user.companyId
+          req.user.companyId,
         );
 
       if (!inventory) {
@@ -107,14 +107,14 @@ exports.getInventoryById =
 exports.getLowStock =
   async (
     req,
-    res
+    res,
   ) => {
 
     try {
 
       const inventories =
         await service.getLowStock(
-          req.user.companyId
+          req.user.companyId,
         );
 
       res.json({
@@ -146,14 +146,14 @@ exports.getLowStock =
 exports.getDamagedStock =
   async (
     req,
-    res
+    res,
   ) => {
 
     try {
 
       const inventories =
         await service.getDamagedStock(
-          req.user.companyId
+          req.user.companyId,
         );
 
       res.json({

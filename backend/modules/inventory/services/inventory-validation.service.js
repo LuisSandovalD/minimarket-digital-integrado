@@ -12,7 +12,7 @@ const prisma =
 exports.validateStock =
   async (
     inventoryId,
-    quantity
+    quantity,
   ) => {
 
     const inventory =
@@ -26,7 +26,7 @@ exports.validateStock =
     if (!inventory) {
 
       throw new Error(
-        "Inventario no encontrado"
+        "Inventario no encontrado",
       );
 
     }
@@ -37,7 +37,7 @@ exports.validateStock =
     ) {
 
       throw new Error(
-        "Stock insuficiente"
+        "Stock insuficiente",
       );
 
     }

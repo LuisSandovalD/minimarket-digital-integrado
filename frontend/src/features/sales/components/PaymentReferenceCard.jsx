@@ -17,12 +17,7 @@ export function PaymentReferenceCard({ icon, label, value, onChange }) {
         p-4
       "
     >
-      <Input
-        label={label}
-        icon={icon}
-        value={value || ""}
-        onChange={(e) => onChange(e.target.value)}
-      />
+      <Input label={label} icon={icon} value={value || ""} onChange={(e) => onChange(e.target.value)} />
     </div>
   );
 }

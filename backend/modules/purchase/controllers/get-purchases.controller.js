@@ -1,5 +1,5 @@
 const {
-  getPurchasesService
+  getPurchasesService,
 } = require("../services/get-purchases.service");
 
 async function getPurchasesController(req, res) {
@@ -17,7 +17,7 @@ async function getPurchasesController(req, res) {
       startDate,
       endDate,
       sortBy,
-      sortOrder
+      sortOrder,
     } = req.query;
 
     const result = await getPurchasesService({
@@ -32,14 +32,14 @@ async function getPurchasesController(req, res) {
       startDate,
       endDate,
       sortBy,
-      sortOrder
+      sortOrder,
 
     });
 
     return res.status(200).json({
 
       ok: true,
-      ...result
+      ...result,
 
     });
 
@@ -48,7 +48,7 @@ async function getPurchasesController(req, res) {
     return res.status(500).json({
 
       ok: false,
-      message: error.message
+      message: error.message,
 
     });
 
@@ -57,5 +57,5 @@ async function getPurchasesController(req, res) {
 }
 
 module.exports = {
-  getPurchasesController
+  getPurchasesController,
 };

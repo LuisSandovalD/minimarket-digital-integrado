@@ -185,12 +185,7 @@ export default function UserRow({
       {/* ACTIONS */}
 
       <td className="px-6 py-5">
-        <UserActions
-          user={user}
-          onEdit={onEdit}
-          onToggleStatus={onToggleStatus}
-          onViewChildren={onViewChildren}
-        />
+        <UserActions user={user} onEdit={onEdit} onToggleStatus={onToggleStatus} onViewChildren={onViewChildren} />
       </td>
     </tr>
   );

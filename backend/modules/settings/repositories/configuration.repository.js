@@ -17,7 +17,7 @@ const createConfiguration = async (data) => {
 
 const updateConfiguration = async (companyId, data) => {
   // =========================================================================
-  // LIMPIEZA: Extraemos 'company' para que Prisma no intente guardarlo en la 
+  // LIMPIEZA: Extraemos 'company' para que Prisma no intente guardarlo en la
   // tabla 'configuration' (rompería porque 'company' es una relación, no una columna)
   // =========================================================================
   const { company, ...configurationData } = data;

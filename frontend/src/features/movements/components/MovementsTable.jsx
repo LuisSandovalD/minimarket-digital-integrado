@@ -18,13 +18,7 @@ import {
 import { Table, TFooter, THead } from "@/components/data-display/";
 import MovementTypeBadge from "./MovementTypeBadge";
 
-export default function MovementsTable({
-  movements = [],
-  page = 1,
-  totalPages = 1,
-  onNextPage,
-  onPrevPage,
-}) {
+export default function MovementsTable({ movements = [], page = 1, totalPages = 1, onNextPage, onPrevPage }) {
   // ========================================
   // TABLE COLUMNS
   // ========================================
@@ -126,9 +120,7 @@ export default function MovementsTable({
                     <h3 className="text-sm font-semibold text-slate-800 dark:text-white">
                       {movement.product?.name || "Sin producto"}
                     </h3>
-                    <p className="mt-1 text-xs text-slate-500">
-                      SKU: {movement.product?.sku || "-"}
-                    </p>
+                    <p className="mt-1 text-xs text-slate-500">SKU: {movement.product?.sku || "-"}</p>
                   </div>
                 </td>
 
@@ -143,14 +135,10 @@ export default function MovementsTable({
                 </td>
 
                 {/* QUANTITY */}
-                <td className="px-6 py-5 text-sm font-bold text-slate-800 dark:text-slate-100">
-                  {movement.quantity}
-                </td>
+                <td className="px-6 py-5 text-sm font-bold text-slate-800 dark:text-slate-100">{movement.quantity}</td>
 
                 {/* PREVIOUS */}
-                <td className="px-6 py-5 text-sm text-slate-600 dark:text-slate-300">
-                  {movement.previousStock}
-                </td>
+                <td className="px-6 py-5 text-sm text-slate-600 dark:text-slate-300">{movement.previousStock}</td>
 
                 {/* NEW */}
                 <td className="px-6 py-5 text-sm font-semibold text-slate-800 dark:text-slate-100">
@@ -182,9 +170,7 @@ export default function MovementsTable({
                   <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200">
                     Sin movimientos registrados
                   </h3>
-                  <p className="mt-1 text-sm text-slate-500">
-                    No se encontraron movimientos de inventario.
-                  </p>
+                  <p className="mt-1 text-sm text-slate-500">No se encontraron movimientos de inventario.</p>
                 </div>
               </td>
             </tr>
@@ -193,12 +179,7 @@ export default function MovementsTable({
 
         {/* FOOTER CON PAGINACIÓN PROPIA DE LA TABLA */}
         {movements.length > 0 && (
-          <TFooter
-            page={page}
-            totalPages={totalPages}
-            onPrev={onPrevPage}
-            onNext={onNextPage}
-          />
+          <TFooter page={page} totalPages={totalPages} onPrev={onPrevPage} onNext={onNextPage} />
         )}
       </Table>
     </div>

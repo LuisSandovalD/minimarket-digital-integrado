@@ -22,21 +22,9 @@ export default function ProductActions({
         gap-2
       "
     >
-      <ModernButton
-        size="sm"
-        variant="warning"
-        icon={Pencil}
-        text="Editar"
-        onClick={() => onEdit(product)}
-      />
+      <ModernButton size="sm" variant="warning" icon={Pencil} text="Editar" onClick={() => onEdit(product)} />
 
-      <ModernButton
-        size="sm"
-        variant="danger"
-        icon={Trash2}
-        text="Eliminar"
-        onClick={() => onDelete(product)}
-      />
+      <ModernButton size="sm" variant="danger" icon={Trash2} text="Eliminar" onClick={() => onDelete(product)} />
     </div>
   );
 }

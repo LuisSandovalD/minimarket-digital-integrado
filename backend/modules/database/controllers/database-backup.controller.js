@@ -1,153 +1,153 @@
 // modules/database/controllers/database-backup.controller.js
 
 const databaseBackupService = require(
-    "../services/database-backup.service"
+  "../services/database-backup.service",
 );
 
 const databaseResponse = require(
-    "../utils/database-response"
+  "../utils/database-response",
 );
 
 class DatabaseBackupController {
 
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Create Backup
     |--------------------------------------------------------------------------
     */
 
-    async createBackup(req, res) {
+  async createBackup(req, res) {
 
-        try {
+    try {
 
-            const data =
+      const data =
                 await databaseBackupService
-                    .createBackup(
-                        req.body
-                    );
+                  .createBackup(
+                    req.body,
+                  );
 
-            return res.status(201).json(
+      return res.status(201).json(
 
-                databaseResponse({
+        databaseResponse({
 
-                    success: true,
+          success: true,
 
-                    message:
+          message:
                         "Backup created successfully",
 
-                    data,
-                })
-            );
+          data,
+        }),
+      );
 
-        } catch (error) {
+    } catch (error) {
 
-            return res.status(500).json(
+      return res.status(500).json(
 
-                databaseResponse({
+        databaseResponse({
 
-                    success: false,
+          success: false,
 
-                    message:
+          message:
                         error.message,
 
-                    error:
+          error:
                         "BACKUP_CREATE_ERROR",
-                })
-            );
-        }
+        }),
+      );
     }
+  }
 
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Restore Backup
     |--------------------------------------------------------------------------
     */
 
-    async restoreBackup(req, res) {
+  async restoreBackup(req, res) {
 
-        try {
+    try {
 
-            const data =
+      const data =
                 await databaseBackupService
-                    .restoreBackup(
-                        req.body
-                    );
+                  .restoreBackup(
+                    req.body,
+                  );
 
-            return res.status(200).json(
+      return res.status(200).json(
 
-                databaseResponse({
+        databaseResponse({
 
-                    success: true,
+          success: true,
 
-                    message:
+          message:
                         "Backup restored successfully",
 
-                    data,
-                })
-            );
+          data,
+        }),
+      );
 
-        } catch (error) {
+    } catch (error) {
 
-            return res.status(500).json(
+      return res.status(500).json(
 
-                databaseResponse({
+        databaseResponse({
 
-                    success: false,
+          success: false,
 
-                    message:
+          message:
                         error.message,
 
-                    error:
+          error:
                         "BACKUP_RESTORE_ERROR",
-                })
-            );
-        }
+        }),
+      );
     }
+  }
 
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Get Backups
     |--------------------------------------------------------------------------
     */
 
-    async getBackups(req, res) {
+  async getBackups(req, res) {
 
-        try {
+    try {
 
-            const data =
+      const data =
                 await databaseBackupService
-                    .getBackups();
+                  .getBackups();
 
-            return res.status(200).json(
+      return res.status(200).json(
 
-                databaseResponse({
+        databaseResponse({
 
-                    success: true,
+          success: true,
 
-                    message:
+          message:
                         "Backups retrieved successfully",
 
-                    data,
-                })
-            );
+          data,
+        }),
+      );
 
-        } catch (error) {
+    } catch (error) {
 
-            return res.status(500).json(
+      return res.status(500).json(
 
-                databaseResponse({
+        databaseResponse({
 
-                    success: false,
+          success: false,
 
-                    message:
+          message:
                         error.message,
 
-                    error:
+          error:
                         "BACKUP_FETCH_ERROR",
-                })
-            );
-        }
+        }),
+      );
     }
+  }
 }
 
 module.exports =

@@ -1,41 +1,13 @@
-// ========================================
-// components/BranchModal.jsx
-// ========================================
-
 import { ModernButton, SubmitButton } from "@/components/buttons/";
 import { Input, Select } from "@/components/forms/";
 import { ModernImageUpload } from "@/components/media/";
 import { FooterModal, HeaderModal, Modal } from "@/components/overlays/";
-import {
-  Edit2,
-  FileText,
-  Globe,
-  Mail,
-  MapPin,
-  Phone,
-  Store,
-  StoreIcon,
-  ToggleLeft,
-  X,
-} from "lucide-react";
+import { Edit2, FileText, Globe, Mail, MapPin, Phone, Store, StoreIcon, ToggleLeft, X } from "lucide-react";
 import useBranchForm from "../hooks/useBranchForm";
 
-export default function BranchModal({
-  open,
-  onClose,
-  onSuccess,
-  branch = null,
-}) {
-  // 🌟 Extraemos 'handleImageChange' y 'previewUrl' para gestionar correctamente la carga del Logo
-  const {
-    loading,
-    formData,
-    previewUrl,
-    isEdit,
-    handleChange,
-    handleImageChange,
-    handleSubmit,
-  } = useBranchForm({
+export default function BranchModal({ open, onClose, onSuccess, branch = null }) {
+  // Extraemos 'handleImageChange' y 'previewUrl' para gestionar correctamente la carga del Logo
+  const { loading, formData, previewUrl, isEdit, handleChange, handleImageChange, handleSubmit } = useBranchForm({
     branch,
     onClose,
     onSuccess,
@@ -47,39 +19,34 @@ export default function BranchModal({
       <HeaderModal
         icon={isEdit ? Edit2 : StoreIcon}
         title={isEdit ? "Editar Sucursal" : "Nueva Sucursal"}
-        subtitle={
-          isEdit
-            ? "Actualiza la información de la sucursal."
-            : "Crea y registra una nueva sucursal."
-        }
+        subtitle={isEdit ? "Actualiza la información de la sucursal." : "Crea y registra una nueva sucursal."}
         onClose={onClose}
       />
 
-      {/* FORM */}
-      <form onSubmit={handleSubmit} className="flex flex-col">
-        {/* BODY */}
-        <div className="max-h-[75vh] overflow-y-auto px-6 py-5">
+      {/* FORM - Con limites de altura estrictos para evitar desbordes generales */}
+      <form onSubmit={handleSubmit} className="flex flex-col h-full max-h-[calc(100vh-200px)] overflow-hidden">
+        {/* BODY - Este contenedor flexible maneja el desborde con scroll de forma independiente */}
+        <div className="flex-1 overflow-y-auto px-6 py-5">
           <div className="grid gap-6 xl:grid-cols-[340px_1fr]">
             {/* IMAGE SECTION */}
-            <div className="space-y-4">
+            <div className="flex flex-col h-full space-y-4">
               <div>
-                <h3 className="text-sm font-semibold text-slate-800 dark:text-slate-100">
-                  Logo de la Sucursal
-                </h3>
+                <h3 className="text-sm font-semibold text-slate-800 dark:text-slate-100">Logo de la Sucursal</h3>
                 <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
                   Sube una imagen representativa de la sucursal.
                 </p>
               </div>
 
-              {/* 🌟 Vinculamos el cargador con el previewUrl e inyectamos el método handleImageChange de forma nativa */}
-              <ModernImageUpload
-                value={previewUrl || formData.logo}
-                onChange={(file) => {
-                  // Simulamos la estructura que espera recibir el e.target de handleImageChange
-                  handleImageChange({ target: { files: [file] } });
-                }}
-                height="h-90"
-              />
+              {/* Vinculamos el cargador con el previewUrl e inyectamos el método handleImageChange de forma nativa */}
+              <div className="flex-1 flex flex-col">
+                <ModernImageUpload
+                  value={previewUrl || formData.logo}
+                  onChange={(file) => {
+                    handleImageChange({ target: { files: [file] } });
+                  }}
+                  height="h-full flex-1"
+                />
+              </div>
             </div>
 
             {/* FORM SECTION */}
@@ -87,9 +54,7 @@ export default function BranchModal({
               {/* GENERAL INFO */}
               <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-900/40 p-5">
                 <div className="mb-5">
-                  <h3 className="text-sm font-semibold text-slate-800 dark:text-slate-100">
-                    Información General
-                  </h3>
+                  <h3 className="text-sm font-semibold text-slate-800 dark:text-slate-100">Información General</h3>
                   <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
                     Datos principales de identificación y estado.
                   </p>
@@ -167,9 +132,7 @@ export default function BranchModal({
                 {/* DESCRIPTION */}
                 <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-900/40 p-5">
                   <div className="mb-5">
-                    <h3 className="text-sm font-semibold text-slate-800 dark:text-slate-100">
-                      Descripción
-                    </h3>
+                    <h3 className="text-sm font-semibold text-slate-800 dark:text-slate-100">Descripción</h3>
                     <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
                       Información adicional sobre la sucursal.
                     </p>
@@ -187,9 +150,7 @@ export default function BranchModal({
                 {/* ADDRESS */}
                 <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-900/40 p-5">
                   <div className="mb-5">
-                    <h3 className="text-sm font-semibold text-slate-800 dark:text-slate-100">
-                      Ubicación
-                    </h3>
+                    <h3 className="text-sm font-semibold text-slate-800 dark:text-slate-100">Ubicación</h3>
                     <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
                       Dirección principal de la sucursal.
                     </p>
@@ -208,24 +169,15 @@ export default function BranchModal({
           </div>
         </div>
 
-        {/* FOOTER */}
+        {/* FOOTER - Fijo abajo */}
         <FooterModal>
           <div className="flex w-full items-center justify-between gap-4">
             <div className="hidden text-xs text-slate-500 sm:block">
               La información será guardada automáticamente en la sucursal.
             </div>
             <div className="ml-auto flex items-center gap-3">
-              <ModernButton
-                type="button"
-                text="Cancelar"
-                variant="outline"
-                icon={X}
-                onClick={onClose}
-              />
-              <SubmitButton
-                text={isEdit ? "Guardar Cambios" : "Crear Sucursal"}
-                loading={loading}
-              />
+              <ModernButton type="button" text="Cancelar" variant="outline" icon={X} onClick={onClose} />
+              <SubmitButton text={isEdit ? "Guardar Cambios" : "Crear Sucursal"} loading={loading} />
             </div>
           </div>
         </FooterModal>

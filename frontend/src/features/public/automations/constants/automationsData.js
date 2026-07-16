@@ -1,19 +1,11 @@
-import {
-  BellRing,
-  CalendarClock,
-  Cpu,
-  Mail,
-  PackageX,
-  ShieldCheck,
-} from "lucide-react";
+import { BellRing, CalendarClock, Cpu, Mail, PackageX, ShieldCheck } from "lucide-react";
 
 // 1. AUTOMATIZACIÓN DE CORREOS (Balanceado: 3 Features + 1 Analítica en Stats = 4)
 export const EMAIL_FLOW = {
   id: "email",
   icon: Mail,
   title: "Automatización de Correos",
-  description:
-    "Envía mensajes personalizados automáticamente durante todo el ciclo de vida del cliente.",
+  description: "Envía mensajes personalizados automáticamente durante todo el ciclo de vida del cliente.",
 
   features: {
     onboarding: [
@@ -53,8 +45,7 @@ export const SECURITY_FLOW = {
   id: "security",
   icon: ShieldCheck,
   title: "Security Inteligente",
-  description:
-    "Protege las cuentas de tus usuarios mediante procesos automáticos de validación y recuperación.",
+  description: "Protege las cuentas de tus usuarios mediante procesos automáticos de validación y recuperación.",
 
   features: {
     autenticacion: [
@@ -91,8 +82,7 @@ export const SUBSCRIPTION_FLOW = {
   id: "subscription",
   icon: CalendarClock,
   title: "Gestión de Suscripciones",
-  description:
-    "Automatiza renovaciones, pagos recurrentes y comunicaciones para maximizar la retención de clientes.",
+  description: "Automatiza renovaciones, pagos recurrentes y comunicaciones para maximizar la retención de clientes.",
 
   features: {
     pagos_facturacion: [
@@ -128,8 +118,7 @@ export const STOCK_FLOW = {
   id: "stock",
   icon: PackageX,
   title: "Control Inteligente de Inventario",
-  description:
-    "Supervisa existencias en tiempo real y evita pérdidas por falta de stock mediante alertas automáticas.",
+  description: "Supervisa existencias en tiempo real y evita pérdidas por falta de stock mediante alertas automáticas.",
 
   features: {
     monitoreo_trazabilidad: [
@@ -165,8 +154,7 @@ export const ALERTS_FLOW = {
   id: "alerts",
   icon: BellRing,
   title: "Alertas Inteligentes",
-  description:
-    "Mantén informado a tu equipo con notificaciones automáticas sobre eventos importantes del negocio.",
+  description: "Mantén informado a tu equipo con notificaciones automáticas sobre eventos importantes del negocio.",
 
   features: {
     tipos_alerta: [
@@ -202,8 +190,7 @@ export const AUTOMATIONS_FLOW = {
   id: "automations",
   icon: Cpu,
   title: "Motor de Automatizaciones",
-  description:
-    "Diseña, conecta y ejecuta flujos de trabajo personalizados basados en eventos y condiciones complejas.",
+  description: "Diseña, conecta y ejecuta flujos de trabajo personalizados basados en eventos y condiciones complejas.",
 
   features: {
     disparadores_y_triggers: [
@@ -233,11 +220,4 @@ export const AUTOMATIONS_FLOW = {
 };
 
 // TODOS LOS FLUJOS ACTUALIZADOS
-export const FLOWS = [
-  EMAIL_FLOW,
-  SECURITY_FLOW,
-  SUBSCRIPTION_FLOW,
-  STOCK_FLOW,
-  ALERTS_FLOW,
-  AUTOMATIONS_FLOW,
-];
+export const FLOWS = [EMAIL_FLOW, SECURITY_FLOW, SUBSCRIPTION_FLOW, STOCK_FLOW, ALERTS_FLOW, AUTOMATIONS_FLOW];

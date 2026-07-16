@@ -15,7 +15,7 @@ const controller =
     require("../controllers/gemini.controller");
 
 const {
-    validateChatRequest
+  validateChatRequest,
 } = require("../validations/chat.validator");
 
 // ========================================
@@ -23,14 +23,14 @@ const {
 // ========================================
 
 router.post(
-    "/chat",
-    auth,
-    roleCheck(
-        "ADMIN",
-        "MANAGER"
-    ),
-    validateChatRequest,
-    controller.sendMessage
+  "/chat",
+  auth,
+  roleCheck(
+    "ADMIN",
+    "MANAGER",
+  ),
+  validateChatRequest,
+  controller.sendMessage,
 );
 
 module.exports = router;

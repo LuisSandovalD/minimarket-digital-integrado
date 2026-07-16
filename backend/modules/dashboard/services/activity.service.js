@@ -1,25 +1,25 @@
 const activityRepository = require(
-    "../repositories/activity.repository"
+  "../repositories/activity.repository",
 );
 
 exports.getActivity = async (
-    companyId
+  companyId,
 ) => {
 
-    const [
-        logs,
-        sessions
-    ] = await Promise.all([
-        activityRepository.getRecentActivity(
-            companyId
-        ),
-        activityRepository.getUserSessions(
-            companyId
-        )
-    ]);
+  const [
+    logs,
+    sessions,
+  ] = await Promise.all([
+    activityRepository.getRecentActivity(
+      companyId,
+    ),
+    activityRepository.getUserSessions(
+      companyId,
+    ),
+  ]);
 
-    return {
-        logs,
-        sessions
-    };
+  return {
+    logs,
+    sessions,
+  };
 };

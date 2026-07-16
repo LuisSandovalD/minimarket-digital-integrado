@@ -73,9 +73,7 @@ export function useSalesPage() {
       if (!sale) return sale;
 
       // Capturamos el número total desde cualquier variante posible del backend
-      const productQty = Number(
-        sale.totalProducts ?? sale._count?.items ?? sale._count?.details ?? 0,
-      );
+      const productQty = Number(sale.totalProducts ?? sale._count?.items ?? sale._count?.details ?? 0);
 
       return {
         ...sale,
@@ -142,10 +140,7 @@ export function useSalesPage() {
       });
       if (modals?.setPaymentOpen) modals.setPaymentOpen(false);
     } catch (err) {
-      console.error(
-        "❌ Error al registrar abono de pago en la transacción:",
-        err,
-      );
+      console.error("❌ Error al registrar abono de pago en la transacción:", err);
     }
   };
 
@@ -155,17 +150,12 @@ export function useSalesPage() {
   const metrics = useMemo(() => {
     const CANCELLED_STATES = ["CANCELLED", "ANULATED", "ANULADO", "CANCELED"];
 
-    const validSales = sales.filter(
-      (sale) =>
-        sale && !CANCELLED_STATES.includes(String(sale.status).toUpperCase()),
-    );
+    const validSales = sales.filter((sale) => sale && !CANCELLED_STATES.includes(String(sale.status).toUpperCase()));
 
     const pageRevenue = validSales.reduce((acc, sale) => {
       const payments = Array.isArray(sale.payments) ? sale.payments : [];
       if (payments.length > 0) {
-        return (
-          acc + payments.reduce((sum, p) => sum + Number(p.amount || 0), 0)
-        );
+        return acc + payments.reduce((sum, p) => sum + Number(p.amount || 0), 0);
       }
       return acc + Number(sale.total || 0);
     }, 0);
@@ -174,8 +164,7 @@ export function useSalesPage() {
     const itemsInPage = validSales.length || 1;
     const estimatedAverage = pageRevenue / itemsInPage;
 
-    const totalRevenue =
-      totalOrders > sales.length ? estimatedAverage * totalOrders : pageRevenue;
+    const totalRevenue = totalOrders > sales.length ? estimatedAverage * totalOrders : pageRevenue;
 
     const averageTicket = Math.round(estimatedAverage * 100) / 100;
 

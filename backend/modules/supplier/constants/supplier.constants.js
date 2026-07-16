@@ -1,19 +1,19 @@
 const SUPPLIER_MESSAGES = {
-  CREATED: 'Supplier created successfully',
+  CREATED: "Supplier created successfully",
 
-  UPDATED: 'Supplier updated successfully',
+  UPDATED: "Supplier updated successfully",
 
-  DELETED: 'Supplier deleted successfully',
+  DELETED: "Supplier deleted successfully",
 
-  RESTORED: 'Supplier restored successfully',
+  RESTORED: "Supplier restored successfully",
 
-  NOT_FOUND: 'Supplier not found',
+  NOT_FOUND: "Supplier not found",
 
-  ALREADY_EXISTS: 'Supplier already exists',
+  ALREADY_EXISTS: "Supplier already exists",
 
-  RUC_EXISTS: 'RUC already registered'
-}
+  RUC_EXISTS: "RUC already registered",
+};
 
 module.exports = {
-  SUPPLIER_MESSAGES
-}
+  SUPPLIER_MESSAGES,
+};

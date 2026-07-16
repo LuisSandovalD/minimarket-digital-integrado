@@ -49,11 +49,7 @@ export default function useBranches(params = {}) {
   const updateBranchLocal = (updatedBranch) => {
     if (!updatedBranch?.id) return;
     setBranches((prev) =>
-      prev
-        .filter(Boolean)
-        .map((branch) =>
-          branch?.id === updatedBranch.id ? updatedBranch : branch,
-        ),
+      prev.filter(Boolean).map((branch) => (branch?.id === updatedBranch.id ? updatedBranch : branch)),
     );
   };
 

@@ -23,8 +23,7 @@ export const updateMyAccount = async (data) => {
       Object.keys(data).forEach((key) => {
         // Si el avatar es un archivo, lo adjunta directo; si no hay archivo nuevo, evita mandar un objeto vacío
         if (key === "avatar") {
-          if (data.avatar instanceof File)
-            payload.append("avatar", data.avatar);
+          if (data.avatar instanceof File) payload.append("avatar", data.avatar);
         } else if (data[key] !== undefined && data[key] !== null) {
           payload.append(key, data[key]);
         }

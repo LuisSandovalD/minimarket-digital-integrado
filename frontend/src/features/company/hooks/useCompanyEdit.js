@@ -18,12 +18,7 @@ const INITIAL_STATE = {
   logo: null, // Guardará la URL del string existente o el archivo File binario
 };
 
-export default function useCompanyEdit({
-  open,
-  companyId,
-  onClose,
-  onSuccess,
-}) {
+export default function useCompanyEdit({ open, companyId, onClose, onSuccess }) {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState(INITIAL_STATE);
 
@@ -119,10 +114,7 @@ export default function useCompanyEdit({
       }
 
       // UPDATE enviando el FormData binario
-      const response = await companyService.updateCompany(
-        companyId,
-        dataToSend,
-      );
+      const response = await companyService.updateCompany(companyId, dataToSend);
 
       // ESPERA REFRESH
       await onSuccess?.(response);

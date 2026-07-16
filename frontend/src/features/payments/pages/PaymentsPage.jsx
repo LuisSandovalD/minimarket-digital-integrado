@@ -39,11 +39,7 @@ export default function PaymentsPage() {
         globalFilters={filters} // Sincroniza los textos de la interfaz con el estado
       />
 
-      <div
-        className={
-          loading ? "opacity-50 pointer-events-none transition-opacity" : ""
-        }
-      >
+      <div className={loading ? "opacity-50 pointer-events-none transition-opacity" : ""}>
         <PaymentTable
           payments={payments}
           page={page}
@@ -54,12 +50,7 @@ export default function PaymentsPage() {
         />
       </div>
 
-      <PaymentDetailModal
-        open={detailOpen}
-        payment={selectedPayment}
-        onClose={closeDetail}
-        onRefresh={reload}
-      />
+      <PaymentDetailModal open={detailOpen} payment={selectedPayment} onClose={closeDetail} onRefresh={reload} />
     </div>
   );
 }

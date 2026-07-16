@@ -3,7 +3,7 @@
 const cron = require("node-cron");
 
 const prisma = require(
-    "../../../config/prisma.config"
+  "../../../config/prisma.config",
 );
 
 /*
@@ -17,19 +17,19 @@ const prisma = require(
 
 function startDeleteSoftDeletedJob() {
 
-    cron.schedule(
+  cron.schedule(
 
-        "0 4 * * *",
+    "0 4 * * *",
 
-        async () => {
+    async () => {
 
-            try {
+      try {
 
-                console.log(
-                    "🗑 Removing soft deleted records..."
-                );
+        console.log(
+          "🗑 Removing soft deleted records...",
+        );
 
-                /*
+        /*
                 |--------------------------------------------------------------------------
                 | Example Cleanup
                 |--------------------------------------------------------------------------
@@ -38,7 +38,7 @@ function startDeleteSoftDeletedJob() {
                 |
                 */
 
-                /*
+        /*
                 await prisma.user.deleteMany({
                     where: {
                         deletedAt: {
@@ -48,26 +48,26 @@ function startDeleteSoftDeletedJob() {
                 });
                 */
 
-                console.log(
-                    "✅ Soft delete cleanup completed"
-                );
+        console.log(
+          "✅ Soft delete cleanup completed",
+        );
 
-            } catch (error) {
+      } catch (error) {
 
-                console.error(
-                    "❌ Soft delete cleanup error:",
-                    error.message
-                );
-            }
-        }
-    );
+        console.error(
+          "❌ Soft delete cleanup error:",
+          error.message,
+        );
+      }
+    },
+  );
 
-    console.log(
-        "✅ Soft delete cleanup job started"
-    );
+  console.log(
+    "✅ Soft delete cleanup job started",
+  );
 }
 
 module.exports = {
 
-    startDeleteSoftDeletedJob,
+  startDeleteSoftDeletedJob,
 };

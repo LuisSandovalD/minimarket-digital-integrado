@@ -43,25 +43,25 @@ exports.getAllInventory = async ({
   // =============================
 
   switch (stockStatus) {
-    case "out":
-      where.stock = 0;
-      break;
+  case "out":
+    where.stock = 0;
+    break;
 
-    case "low":
-      where.stock = {
-        gt: 0,
-        lte: Number(minStock || 5),
-      };
-      break;
+  case "low":
+    where.stock = {
+      gt: 0,
+      lte: Number(minStock || 5),
+    };
+    break;
 
-    case "available":
-      where.stock = {
-        gt: Number(minStock || 5),
-      };
-      break;
+  case "available":
+    where.stock = {
+      gt: Number(minStock || 5),
+    };
+    break;
 
-    default:
-      break;
+  default:
+    break;
   }
 
   // =============================
@@ -170,7 +170,7 @@ exports.getAllInventory = async ({
 exports.getInventoryById =
   async (
     inventoryId,
-    companyId
+    companyId,
   ) => {
 
     return prisma.inventory.findFirst({
@@ -216,7 +216,7 @@ exports.getInventoryById =
 exports.getInventoryByProduct =
   async (
     productId,
-    companyId
+    companyId,
   ) => {
 
     return prisma.inventory.findMany({
@@ -242,7 +242,7 @@ exports.getInventoryByProduct =
 exports.getInventoryByBranch =
   async (
     branchId,
-    companyId
+    companyId,
   ) => {
 
     return prisma.inventory.findMany({
@@ -277,7 +277,7 @@ exports.getInventoryByBranch =
 exports.getLowStock =
   async (
     companyId,
-    threshold = 5
+    threshold = 5,
   ) => {
 
     return prisma.inventory.findMany({
@@ -311,7 +311,7 @@ exports.getLowStock =
 
 exports.getOutOfStock =
   async (
-    companyId
+    companyId,
   ) => {
 
     return prisma.inventory.findMany({
@@ -340,7 +340,7 @@ exports.getOutOfStock =
 exports.checkStockAvailability =
   async (
     inventoryId,
-    quantity
+    quantity,
   ) => {
 
     const inventory =

@@ -1,108 +1,108 @@
 // services/supportTicket.service.js
 
 const repository = require(
-    "../repositories/supportTicket.repository"
+  "../repositories/supportTicket.repository",
 );
 
 const generateTicketNumber = require(
-    "../utils/generateTicketNumber"
+  "../utils/generateTicketNumber",
 );
 
 const getTickets =
     async (companyId) => {
-        return repository.findAll(
-            companyId
-        );
+      return repository.findAll(
+        companyId,
+      );
     };
 
 const getTicketById =
     async (id, companyId) => {
-        const ticket =
+      const ticket =
             await repository.findById(
-                Number(id),
-                companyId
+              Number(id),
+              companyId,
             );
 
-        if (!ticket) {
-            throw new Error(
-                "Ticket no encontrado"
-            );
-        }
+      if (!ticket) {
+        throw new Error(
+          "Ticket no encontrado",
+        );
+      }
 
-        return ticket;
+      return ticket;
     };
 
 const createTicket =
     async ({
+      title,
+      description,
+      priority,
+      attachments,
+      companyId,
+      userId,
+    }) => {
+      return repository.create({
+        ticketNumber:
+                generateTicketNumber(),
+
         title,
         description,
         priority,
         attachments,
+
         companyId,
         userId,
-    }) => {
-        return repository.create({
-            ticketNumber:
-                generateTicketNumber(),
-
-            title,
-            description,
-            priority,
-            attachments,
-
-            companyId,
-            userId,
-        });
+      });
     };
 
 const updateTicket =
     async (id, data) => {
-        return repository.update(
-            Number(id),
-            data
-        );
+      return repository.update(
+        Number(id),
+        data,
+      );
     };
 
 const updateStatus =
     async (id, status) => {
-        const data = {
-            status,
-        };
+      const data = {
+        status,
+      };
 
-        if (
-            status ===
+      if (
+        status ===
             "RESOLVED"
-        ) {
-            data.resolvedAt =
+      ) {
+        data.resolvedAt =
                 new Date();
-        }
+      }
 
-        if (
-            status ===
+      if (
+        status ===
             "CLOSED"
-        ) {
-            data.closedAt =
+      ) {
+        data.closedAt =
                 new Date();
-        }
+      }
 
-        return repository.update(
-            Number(id),
-            data
-        );
+      return repository.update(
+        Number(id),
+        data,
+      );
     };
 
 const deleteTicket =
     async (id) => {
-        return repository.remove(
-            Number(id)
-        );
+      return repository.remove(
+        Number(id),
+      );
     };
 
 module.exports = {
-    getTickets,
-    getTicketById,
-    createTicket,
-    updateTicket,
-    updateStatus,
-    deleteTicket,
+  getTickets,
+  getTicketById,
+  createTicket,
+  updateTicket,
+  updateStatus,
+  deleteTicket,
 };

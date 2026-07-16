@@ -10,34 +10,34 @@
 */
 
 const metricsRepository = require(
-    "../repositories/metrics.repository"
+  "../repositories/metrics.repository",
 );
 
 const databaseMetricsService = require(
-    "../services/database-metrics.service"
+  "../services/database-metrics.service",
 );
 
 const databaseLatencyService = require(
-    "../services/database-latency.service"
+  "../services/database-latency.service",
 );
 
 const databaseConnectionsService = require(
-    "../services/database-connections.service"
+  "../services/database-connections.service",
 );
 
 const databaseStorageService = require(
-    "../services/database-storage.service"
+  "../services/database-storage.service",
 );
 
 module.exports = {
 
-    metricsRepository,
+  metricsRepository,
 
-    databaseMetricsService,
+  databaseMetricsService,
 
-    databaseLatencyService,
+  databaseLatencyService,
 
-    databaseConnectionsService,
+  databaseConnectionsService,
 
-    databaseStorageService,
+  databaseStorageService,
 };

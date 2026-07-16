@@ -38,7 +38,7 @@ module.exports = {
         if (!product) {
 
           throw new Error(
-            `Producto ${item.productId} no encontrado`
+            `Producto ${item.productId} no encontrado`,
           );
 
         }
@@ -54,7 +54,7 @@ module.exports = {
 
           throw new Error(
 
-            `Stock insuficiente para ${product.name}`
+            `Stock insuficiente para ${product.name}`,
 
           );
 

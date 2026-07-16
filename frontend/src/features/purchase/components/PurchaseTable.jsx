@@ -145,20 +145,12 @@ export default function PurchaseTable({
 
   return (
     <>
-      <PurchaseProductsModal
-        open={openProducts}
-        onClose={() => setOpenProducts(false)}
-        purchase={selectedPurchase}
-      />
+      <PurchaseProductsModal open={openProducts} onClose={() => setOpenProducts(false)} purchase={selectedPurchase} />
 
       <div className="space-y-5">
         <div>
-          <h2 className="text-xl font-semibold tracking-tight text-slate-900 dark:text-white">
-            Compras
-          </h2>
-          <p className="mt-1 text-sm text-slate-500">
-            Gestiona órdenes, pagos y registros de compras.
-          </p>
+          <h2 className="text-xl font-semibold tracking-tight text-slate-900 dark:text-white">Compras</h2>
+          <p className="mt-1 text-sm text-slate-500">Gestiona órdenes, pagos y registros de compras.</p>
         </div>
 
         <Table>
@@ -184,22 +176,14 @@ export default function PurchaseTable({
                     </div>
                   </td>
 
-                  <td className="px-6 py-5 text-sm">
-                    {formatPrice(purchase.subtotal)}
-                  </td>
+                  <td className="px-6 py-5 text-sm">{formatPrice(purchase.subtotal)}</td>
 
-                  <td className="px-6 py-5 text-sm">
-                    {formatPrice(purchase.tax)}
-                  </td>
+                  <td className="px-6 py-5 text-sm">{formatPrice(purchase.tax)}</td>
 
-                  <td className="px-6 py-5 text-sm">
-                    {formatPrice(purchase.discount)}
-                  </td>
+                  <td className="px-6 py-5 text-sm">{formatPrice(purchase.discount)}</td>
 
                   <td className="px-6 py-5">
-                    <p className="text-sm font-bold text-slate-900 dark:text-white">
-                      {formatPrice(purchase.total)}
-                    </p>
+                    <p className="text-sm font-bold text-slate-900 dark:text-white">{formatPrice(purchase.total)}</p>
                   </td>
 
                   <td className="px-6 py-5">
@@ -221,38 +205,25 @@ export default function PurchaseTable({
                   </td>
 
                   <td className="px-6 py-5 text-sm text-slate-500 max-w-[250px]">
-                    <p className="line-clamp-2">
-                      {purchase.notes || "Sin notas"}
-                    </p>
+                    <p className="line-clamp-2">{purchase.notes || "Sin notas"}</p>
                   </td>
 
                   {!readOnly && (
                     <td className="px-6 py-5">
-                      <PurchaseActions
-                        purchase={purchase}
-                        onEdit={onEdit}
-                        onDelete={onDelete}
-                      />
+                      <PurchaseActions purchase={purchase} onEdit={onEdit} onDelete={onDelete} />
                     </td>
                   )}
                 </tr>
               ))
             ) : (
               <tr>
-                <td
-                  colSpan={readOnly ? 8 : 9}
-                  className="px-6 py-16 text-center"
-                >
+                <td colSpan={readOnly ? 8 : 9} className="px-6 py-16 text-center">
                   <div className="flex flex-col items-center justify-center">
                     <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-100 dark:bg-slate-800">
                       <Receipt className="h-8 w-8 text-slate-400" />
                     </div>
-                    <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200">
-                      No hay compras
-                    </h3>
-                    <p className="mt-1 text-sm text-slate-500">
-                      Empieza registrando tu primera compra.
-                    </p>
+                    <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200">No hay compras</h3>
+                    <p className="mt-1 text-sm text-slate-500">Empieza registrando tu primera compra.</p>
                   </div>
                 </td>
               </tr>
@@ -261,12 +232,7 @@ export default function PurchaseTable({
 
           {/* CONTROLES DE PAGINACIÓN (Correctamente ubicados dentro de la tabla) */}
           {purchases.length > 0 && (
-            <TFooter
-              page={page}
-              totalPages={totalPages}
-              onPrev={onPrevPage}
-              onNext={onNextPage}
-            />
+            <TFooter page={page} totalPages={totalPages} onPrev={onPrevPage} onNext={onNextPage} />
           )}
         </Table>
       </div>

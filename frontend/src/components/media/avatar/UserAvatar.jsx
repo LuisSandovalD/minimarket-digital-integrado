@@ -131,24 +131,15 @@ export default function UserAvatar({
       {/* INFO */}
       {showInfo && (
         <div className="min-w-0 flex-1">
-          <p className="text-left truncate text-sm font-medium text-slate-900 dark:text-slate-100">
-            {fullName}
-          </p>
+          <p className="text-left truncate text-sm font-medium text-slate-900 dark:text-slate-100">{fullName}</p>
 
           {showEmail && (
-            <p className="text-left truncate text-xs text-slate-500 dark:text-slate-400 leading-tight">
-              {email}
-            </p>
+            <p className="text-left truncate text-xs text-slate-500 dark:text-slate-400 leading-tight">{email}</p>
           )}
 
           <div className="mt-1.5 flex items-center justify-start gap-1">
-            <RoleIcon
-              size={13}
-              className={`flex-shrink-0 ${currentRole.color}`}
-            />
-            <span className={`text-xs font-medium ${currentRole.color}`}>
-              {currentRole.label}
-            </span>
+            <RoleIcon size={13} className={`flex-shrink-0 ${currentRole.color}`} />
+            <span className={`text-xs font-medium ${currentRole.color}`}>{currentRole.label}</span>
           </div>
         </div>
       )}

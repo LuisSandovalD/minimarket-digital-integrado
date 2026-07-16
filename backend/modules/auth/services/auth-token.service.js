@@ -6,36 +6,36 @@ const tokenService = require("./token.service");
 
 const refreshUserToken = async (refreshToken) => {
 
-    const payload =
+  const payload =
         tokenService.verifyRefreshToken(
-            refreshToken
+          refreshToken,
         );
 
-    const accessToken =
+  const accessToken =
         tokenService.generateAccessToken({
-            id: payload.id,
-            email: payload.email
+          id: payload.id,
+          email: payload.email,
         });
 
-    return {
-        accessToken
-    };
+  return {
+    accessToken,
+  };
 };
 
 const verifyActiveToken = async (accessToken) => {
 
-    const payload =
+  const payload =
         tokenService.verifyAccessToken(
-            accessToken
+          accessToken,
         );
 
-    return {
-        valid: true,
-        payload
-    };
+  return {
+    valid: true,
+    payload,
+  };
 };
 
 module.exports = {
-    refreshUserToken,
-    verifyActiveToken
+  refreshUserToken,
+  verifyActiveToken,
 };

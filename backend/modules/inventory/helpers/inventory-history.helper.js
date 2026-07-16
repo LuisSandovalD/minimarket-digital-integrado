@@ -5,12 +5,12 @@
 const {
   generateMovementReference,
 } = require(
-  "../utils/inventory-reference.util"
+  "../utils/inventory-reference.util",
 );
 
 const MOVEMENTS =
   require(
-    "../constants/inventory-movement.constants"
+    "../constants/inventory-movement.constants",
   );
 
 // ========================================
@@ -72,7 +72,7 @@ exports.generateReference =
 
 exports.getMovementLabel =
   (
-    type
+    type,
   ) => {
 
     const labels = {

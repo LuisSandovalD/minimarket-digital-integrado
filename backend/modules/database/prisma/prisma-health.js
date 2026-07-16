@@ -1,7 +1,7 @@
 // modules/database/prisma/prisma-health.js
 
 const prisma = require(
-    "../../../config/prisma.config"
+  "../../../config/prisma.config",
 );
 
 /*
@@ -12,42 +12,42 @@ const prisma = require(
 
 async function prismaHealthCheck() {
 
-    try {
+  try {
 
-        await prisma.$queryRaw`
+    await prisma.$queryRaw`
             SELECT 1;
         `;
 
-        return {
+    return {
 
-            success: true,
+      success: true,
 
-            status: "healthy",
+      status: "healthy",
 
-            provider: "Prisma",
+      provider: "Prisma",
 
-            timestamp:
+      timestamp:
                 new Date(),
-        };
+    };
 
-    } catch (error) {
+  } catch (error) {
 
-        return {
+    return {
 
-            success: false,
+      success: false,
 
-            status: "unhealthy",
+      status: "unhealthy",
 
-            error:
+      error:
                 error.message,
 
-            timestamp:
+      timestamp:
                 new Date(),
-        };
-    }
+    };
+  }
 }
 
 module.exports = {
 
-    prismaHealthCheck,
+  prismaHealthCheck,
 };

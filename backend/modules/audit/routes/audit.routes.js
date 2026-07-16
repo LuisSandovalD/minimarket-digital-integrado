@@ -7,10 +7,10 @@ const verifyToken = require("../../../middleware/auth");
 const authorizeRoles = require("../../../middleware/roleCheck");
 
 router.get(
-    "/",
-    verifyToken,
-    authorizeRoles("ADMIN"),
-    auditController.getAuditLogs
+  "/",
+  verifyToken,
+  authorizeRoles("ADMIN"),
+  auditController.getAuditLogs,
 );
 
 module.exports = router;

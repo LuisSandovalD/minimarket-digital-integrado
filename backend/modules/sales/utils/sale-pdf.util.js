@@ -15,13 +15,13 @@ const fs =
 exports.generateSalePDF =
   async (
     sale,
-    outputPath
+    outputPath,
   ) => {
 
     return new Promise(
       (
         resolve,
-        reject
+        reject,
       ) => {
 
         const doc =
@@ -29,7 +29,7 @@ exports.generateSalePDF =
 
         const stream =
           fs.createWriteStream(
-            outputPath
+            outputPath,
           );
 
         doc.pipe(stream);
@@ -43,7 +43,7 @@ exports.generateSalePDF =
             {
               align:
                 "center",
-            }
+            },
           );
 
         doc.moveDown();
@@ -51,18 +51,18 @@ exports.generateSalePDF =
         // INFO
 
         doc.text(
-          `N° Venta: ${sale.saleNumber}`
+          `N° Venta: ${sale.saleNumber}`,
         );
 
         doc.text(
           `Cliente: ${
             sale.customerName ||
             "Cliente General"
-          }`
+          }`,
         );
 
         doc.text(
-          `Total: ${sale.total}`
+          `Total: ${sale.total}`,
         );
 
         doc.moveDown();
@@ -73,10 +73,10 @@ exports.generateSalePDF =
           (detail) => {
 
             doc.text(
-              `${detail.product.name} | ${detail.quantity} x ${detail.price}`
+              `${detail.product.name} | ${detail.quantity} x ${detail.price}`,
             );
 
-          }
+          },
         );
 
         doc.end();
@@ -85,16 +85,16 @@ exports.generateSalePDF =
           "finish",
           () =>
             resolve(
-              outputPath
-            )
+              outputPath,
+            ),
         );
 
         stream.on(
           "error",
-          reject
+          reject,
         );
 
-      }
+      },
     );
 
   };

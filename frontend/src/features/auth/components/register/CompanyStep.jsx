@@ -1,13 +1,5 @@
 import { Input } from "@/components/forms";
-import {
-  Building2,
-  Check,
-  CreditCard,
-  Globe,
-  Info,
-  MapPin,
-  ReceiptText,
-} from "lucide-react";
+import { Building2, Check, CreditCard, Info, MapPin, ReceiptText } from "lucide-react";
 import { useEffect, useState } from "react";
 import { plans } from "../../constants/plans";
 import PlanComparisonModal from "./PlanComparisonModal";
@@ -54,14 +46,6 @@ export default function CompanyStep({ form, handleChange }) {
         onChange={handleChange}
         icon={MapPin}
       />
-      <Input
-        label="Sitio Web Comercial"
-        name="companyWebsite"
-        placeholder="https://empresa.com"
-        value={form.companyWebsite || ""}
-        onChange={handleChange}
-        icon={Globe}
-      />
 
       {/* PLAN DE SUSCRIPCIÓN */}
       <div className="space-y-3">
@@ -99,9 +83,7 @@ export default function CompanyStep({ form, handleChange }) {
                 <div className="w-full flex flex-col justify-between h-full space-y-2">
                   <div className="flex items-start justify-between gap-2">
                     <div>
-                      <h3 className="font-bold text-base leading-tight">
-                        {plan.label}
-                      </h3>
+                      <h3 className="font-bold text-base leading-tight">{plan.label}</h3>
                       {isPaidPlan && (
                         <span
                           className={`inline-block mt-1 px-1.5 py-0.5 rounded text-[10px] font-medium tracking-wide uppercase ${isSelected ? "bg-indigo-500/30 text-indigo-200 dark:bg-indigo-100 dark:text-indigo-600" : "bg-indigo-50 text-indigo-600 dark:bg-indigo-950/40 dark:text-indigo-400"}`}
@@ -135,30 +117,24 @@ export default function CompanyStep({ form, handleChange }) {
             <>
               <CreditCard className="w-4 h-4 mt-0.5 shrink-0 text-indigo-500" />
               <p className="text-xs leading-normal">
-                ¡Has seleccionado una prueba de{" "}
-                <strong>30 días sin tarjeta</strong>! Al completar tu registro,
-                se activará tu acceso inmediato al Plan{" "}
-                <strong>{currentTier}</strong>. No se requiere ninguna pasarela
-                de pago hoy.
+                ¡Has seleccionado una prueba de <strong>30 días sin tarjeta</strong>! Al completar tu registro, se
+                activará tu acceso inmediato al Plan <strong>{currentTier}</strong>. No se requiere ninguna pasarela de
+                pago hoy.
               </p>
             </>
           ) : (
             <>
               <Info className="w-4 h-4 mt-0.5 shrink-0 text-slate-400" />
               <p className="text-xs leading-normal">
-                Estás seleccionando nuestro <strong>Plan Gratuito</strong>. No
-                requiere tarjetas ni renovaciones obligatorias. Podrás utilizar
-                el sistema de forma indefinida inmediatamente.
+                Estás seleccionando nuestro <strong>Plan Gratuito</strong>. No requiere tarjetas ni renovaciones
+                obligatorias. Podrás utilizar el sistema de forma indefinida inmediatamente.
               </p>
             </>
           )}
         </div>
       </div>
 
-      <PlanComparisonModal
-        open={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-      />
+      <PlanComparisonModal open={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </div>
   );
 }

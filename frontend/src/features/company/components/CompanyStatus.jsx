@@ -11,9 +11,7 @@ export default function CompanyStatus({ company }) {
             <p className="text-sm font-semibold text-slate-800 dark:text-slate-200">
               {company?.isActive ? "Empresa activa" : "Empresa inactiva"}
             </p>
-            <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">
-              Estado operacional actual
-            </p>
+            <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">Estado operacional actual</p>
           </div>
         </div>
 

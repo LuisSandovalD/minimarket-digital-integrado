@@ -89,5 +89,5 @@ module.exports = {
       res.setHeader("Content-Disposition", `attachment; filename="top-products-${parsedCompanyId}.xlsx"`);
       return res.send(buffer);
     } catch (error) { next(error); }
-  }
+  },
 };

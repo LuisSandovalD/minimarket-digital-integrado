@@ -172,8 +172,7 @@ export default function SaleTable({
       default:
         return {
           label: status || "Desconocido",
-          styles:
-            "bg-slate-100 text-slate-600 dark:bg-slate-800 border-slate-200 dark:border-slate-700",
+          styles: "bg-slate-100 text-slate-600 dark:bg-slate-800 border-slate-200 dark:border-slate-700",
         };
     }
   };
@@ -182,9 +181,7 @@ export default function SaleTable({
     <div className="space-y-5">
       {!readOnly && (
         <div>
-          <h2 className="text-xl font-semibold tracking-tight text-slate-900 dark:text-white">
-            Historial de Ventas
-          </h2>
+          <h2 className="text-xl font-semibold tracking-tight text-slate-900 dark:text-white">Historial de Ventas</h2>
           <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
             Gestiona comprobantes, clientes y cobros de caja.
           </p>
@@ -203,13 +200,9 @@ export default function SaleTable({
               const statusInfo = getStatusDetails(sale.status);
               const totalAmount = Number(sale.total || 0);
               const discountAmount = Number(sale.discount || 0);
-              const subtotalAmount =
-                sale.subtotal !== undefined
-                  ? Number(sale.subtotal || 0)
-                  : totalAmount / 1.18;
+              const subtotalAmount = sale.subtotal !== undefined ? Number(sale.subtotal || 0) : totalAmount / 1.18;
 
-              const customerName =
-                sale.customer?.name || sale.customerName || "Cliente General";
+              const customerName = sale.customer?.name || sale.customerName || "Cliente General";
 
               // 🌟 Extracción segura del vendedor (soporta fallback .seller o .user)
               const sellerData = sale.seller || sale.user;
@@ -271,8 +264,7 @@ export default function SaleTable({
                       </div>
                       <div className="flex flex-col min-w-0">
                         <span className="text-sm font-medium text-slate-800 dark:text-slate-200 truncate max-w-[140px]">
-                          {sellerName.split(" ")[0]}{" "}
-                          {sellerName.split(" ")[1] || ""}
+                          {sellerName.split(" ")[0]} {sellerName.split(" ")[1] || ""}
                         </span>
                         <span className="text-[11px] text-slate-400 dark:text-slate-500 font-mono tracking-wider">
                           {sellerRole}
@@ -293,9 +285,7 @@ export default function SaleTable({
                         -{formatPrice(discountAmount)}
                       </span>
                     ) : (
-                      <span className="text-slate-400 dark:text-slate-600">
-                        {formatPrice(0)}
-                      </span>
+                      <span className="text-slate-400 dark:text-slate-600">{formatPrice(0)}</span>
                     )}
                   </td>
 
@@ -367,12 +357,7 @@ export default function SaleTable({
         </tbody>
 
         {safeSales.length > 0 && (
-          <TFooter
-            page={page}
-            totalPages={totalPages}
-            onPrev={onPrevPage}
-            onNext={onNextPage}
-          />
+          <TFooter page={page} totalPages={totalPages} onPrev={onPrevPage} onNext={onNextPage} />
         )}
       </Table>
     </div>

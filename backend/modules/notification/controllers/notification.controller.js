@@ -26,7 +26,7 @@ class NotificationController {
     } catch (error) {
       console.error(
         "❌ Error en NotificationController -> getAll:",
-        error
+        error,
       );
 
       return res.status(500).json({

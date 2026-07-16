@@ -6,12 +6,7 @@ import { ModernButton } from "@/components/buttons";
 import { MetricCard } from "@/components/card";
 import { Calendar, Edit2, MessageSquare, Star, Trash2 } from "lucide-react";
 
-export default function MyReviewsList({
-  reviews = [],
-  loading = false,
-  onEdit,
-  onDelete,
-}) {
+export default function MyReviewsList({ reviews = [], loading = false, onEdit, onDelete }) {
   const totalReviews = reviews.length;
 
   return (
@@ -21,7 +16,6 @@ export default function MyReviewsList({
       subtitle="Historial"
       value={totalReviews}
       description="Aquí puedes ver, editar o eliminar todas las opiniones y calificaciones que has compartido en la plataforma."
-      loading={loading}
     >
       {/* LISTA DE RESEÑAS (RENDEREADA DENTRO DE CHILDREN) */}
       <div className="mt-4 space-y-4">
@@ -44,9 +38,7 @@ export default function MyReviewsList({
                         key={index}
                         size={16}
                         className={
-                          index < rev.rating
-                            ? "fill-amber-400 text-amber-400"
-                            : "text-slate-200 dark:text-slate-700"
+                          index < rev.rating ? "fill-amber-400 text-amber-400" : "text-slate-200 dark:text-slate-700"
                         }
                       />
                     ))}
@@ -55,9 +47,7 @@ export default function MyReviewsList({
                   {rev.createdAt && (
                     <div className="flex items-center gap-1.5 text-xs text-slate-400">
                       <Calendar size={12} />
-                      <span>
-                        {new Date(rev.createdAt).toLocaleDateString()}
-                      </span>
+                      <span>{new Date(rev.createdAt).toLocaleDateString()}</span>
                     </div>
                   )}
                 </div>
@@ -83,9 +73,7 @@ export default function MyReviewsList({
 
               {/* Comentario de la Reseña */}
               {rev.comment && (
-                <p className="mt-2.5 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
-                  {rev.comment}
-                </p>
+                <p className="mt-2.5 text-sm leading-relaxed text-slate-600 dark:text-slate-300">{rev.comment}</p>
               )}
             </div>
           ))

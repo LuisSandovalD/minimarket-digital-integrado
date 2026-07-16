@@ -2,7 +2,7 @@ const prisma =
   require("../../../prisma/client");
 
 const {
-  purchaseInclude
+  purchaseInclude,
 } = require("../includes/purchase.include");
 
 async function getPurchaseByIdRepository(id) {
@@ -10,15 +10,15 @@ async function getPurchaseByIdRepository(id) {
   return prisma.purchase.findUnique({
 
     where: {
-      id
+      id,
     },
 
-    include: purchaseInclude
+    include: purchaseInclude,
 
   });
 
 }
 
 module.exports = {
-  getPurchaseByIdRepository
+  getPurchaseByIdRepository,
 };

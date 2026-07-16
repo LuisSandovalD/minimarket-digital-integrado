@@ -21,16 +21,11 @@ export default function DatabaseBranches({ branches = [] }) {
           >
             <div className="mt-2 space-y-1 text-xs text-muted-foreground border-t border-neutral-100 dark:border-neutral-800/60 pt-3">
               <p className="flex justify-between">
-                <span>CPU usada:</span>{" "}
-                <span className="font-medium text-foreground">
-                  {branch.cpu_used_sec}s
-                </span>
+                <span>CPU usada:</span> <span className="font-medium text-foreground">{branch.cpu_used_sec}s</span>
               </p>
               <p className="flex justify-between">
                 <span>Tiempo activo:</span>{" "}
-                <span className="font-medium text-foreground">
-                  {branch.active_time_seconds}s
-                </span>
+                <span className="font-medium text-foreground">{branch.active_time_seconds}s</span>
               </p>
             </div>
           </MetricCard>

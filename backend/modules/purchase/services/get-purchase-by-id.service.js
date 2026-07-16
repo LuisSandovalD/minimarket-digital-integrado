@@ -1,5 +1,5 @@
 const {
-  getPurchaseByIdRepository
+  getPurchaseByIdRepository,
 } = require("../repositories/get-purchase-by-id.repository");
 
 async function getPurchaseByIdService(id) {
@@ -9,5 +9,5 @@ async function getPurchaseByIdService(id) {
 }
 
 module.exports = {
-  getPurchaseByIdService
+  getPurchaseByIdService,
 };

@@ -1,168 +1,168 @@
 const prisma = require("../../../prisma/client");
 
 const getPurchaseSummary = async (
-    companyId,
-    dateFilter
+  companyId,
+  dateFilter,
 ) => {
-    return prisma.purchase.aggregate({
-        where: {
-            companyId,
-            createdAt: dateFilter,
-        },
+  return prisma.purchase.aggregate({
+    where: {
+      companyId,
+      createdAt: dateFilter,
+    },
 
-        _count: {
-            id: true,
-        },
+    _count: {
+      id: true,
+    },
 
-        _sum: {
-            total: true,
-            subtotal: true,
-        },
+    _sum: {
+      total: true,
+      subtotal: true,
+    },
 
-        _avg: {
-            total: true,
-        },
-    });
+    _avg: {
+      total: true,
+    },
+  });
 };
 
 const getRecentPurchases = async (
-    companyId,
-    limit = 10
+  companyId,
+  limit = 10,
 ) => {
-    return prisma.purchase.findMany({
-        where: {
-            companyId,
-        },
+  return prisma.purchase.findMany({
+    where: {
+      companyId,
+    },
 
-        include: {
-            supplier: true,
-            buyer: true,
-        },
+    include: {
+      supplier: true,
+      buyer: true,
+    },
 
-        orderBy: {
-            createdAt: "desc",
-        },
+    orderBy: {
+      createdAt: "desc",
+    },
 
-        take: limit,
-    });
+    take: limit,
+  });
 };
 
 const getPurchasesChart = async (
-    companyId,
-    dateFilter
+  companyId,
+  dateFilter,
 ) => {
-    const purchases = await prisma.purchase.findMany({
-        where: {
-            companyId,
-            createdAt: dateFilter,
-        },
+  const purchases = await prisma.purchase.findMany({
+    where: {
+      companyId,
+      createdAt: dateFilter,
+    },
 
-        select: {
-            total: true,
-            createdAt: true,
-        },
+    select: {
+      total: true,
+      createdAt: true,
+    },
 
-        orderBy: {
-            createdAt: "asc",
-        },
-    });
+    orderBy: {
+      createdAt: "asc",
+    },
+  });
 
-    const grouped = {};
+  const grouped = {};
 
-    purchases.forEach((purchase) => {
-        const date = purchase.createdAt
-            .toISOString()
-            .split("T")[0];
+  purchases.forEach((purchase) => {
+    const date = purchase.createdAt
+      .toISOString()
+      .split("T")[0];
 
-        if (!grouped[date]) {
-            grouped[date] = 0;
-        }
+    if (!grouped[date]) {
+      grouped[date] = 0;
+    }
 
-        grouped[date] += Number(
-            purchase.total || 0
-        );
-    });
-
-    return Object.entries(grouped).map(
-        ([date, total]) => ({
-            date,
-            total,
-        })
+    grouped[date] += Number(
+      purchase.total || 0,
     );
+  });
+
+  return Object.entries(grouped).map(
+    ([date, total]) => ({
+      date,
+      total,
+    }),
+  );
 };
 
 const getTopSuppliers = async (
-    companyId,
-    dateFilter,
-    limit = 10
+  companyId,
+  dateFilter,
+  limit = 10,
 ) => {
-    const suppliers =
+  const suppliers =
         await prisma.purchase.groupBy({
-            by: ["supplierId"],
+          by: ["supplierId"],
 
-            where: {
-                companyId,
-                createdAt: dateFilter,
-            },
+          where: {
+            companyId,
+            createdAt: dateFilter,
+          },
 
+          _sum: {
+            total: true,
+          },
+
+          _count: {
+            id: true,
+          },
+
+          orderBy: {
             _sum: {
-                total: true,
+              total: "desc",
             },
+          },
 
-            _count: {
-                id: true,
-            },
-
-            orderBy: {
-                _sum: {
-                    total: "desc",
-                },
-            },
-
-            take: limit,
+          take: limit,
         });
 
-    const result = await Promise.all(
-        suppliers.map(async (item) => {
-            const supplier =
+  const result = await Promise.all(
+    suppliers.map(async (item) => {
+      const supplier =
                 await prisma.supplier.findUnique({
-                    where: {
-                        id: item.supplierId,
-                    },
+                  where: {
+                    id: item.supplierId,
+                  },
 
-                    select: {
-                        id: true,
-                        name: true,
-                        email: true,
-                        phone: true,
-                    },
+                  select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                    phone: true,
+                  },
                 });
 
-            return {
-                supplierId: item.supplierId,
-                supplierName:
+      return {
+        supplierId: item.supplierId,
+        supplierName:
                     supplier?.name || "Proveedor",
 
-                email: supplier?.email,
+        email: supplier?.email,
 
-                phone: supplier?.phone,
+        phone: supplier?.phone,
 
-                totalPurchased: Number(
-                    item._sum.total || 0
-                ),
+        totalPurchased: Number(
+          item._sum.total || 0,
+        ),
 
-                purchasesCount:
+        purchasesCount:
                     item._count.id || 0,
-            };
-        })
-    );
+      };
+    }),
+  );
 
-    return result;
+  return result;
 };
 
 module.exports = {
-    getPurchaseSummary,
-    getRecentPurchases,
-    getPurchasesChart,
-    getTopSuppliers,
+  getPurchaseSummary,
+  getRecentPurchases,
+  getPurchasesChart,
+  getTopSuppliers,
 };

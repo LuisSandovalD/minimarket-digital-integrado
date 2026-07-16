@@ -10,23 +10,23 @@ const { z } = require("zod");
 
 const forbiddenKeywords = [
 
-    "DROP",
+  "DROP",
 
-    "DELETE",
+  "DELETE",
 
-    "TRUNCATE",
+  "TRUNCATE",
 
-    "ALTER",
+  "ALTER",
 
-    "UPDATE",
+  "UPDATE",
 
-    "GRANT",
+  "GRANT",
 
-    "REVOKE",
+  "REVOKE",
 
-    "CREATE",
+  "CREATE",
 
-    "REPLACE",
+  "REPLACE",
 ];
 
 /*
@@ -38,68 +38,68 @@ const forbiddenKeywords = [
 const databaseQueryValidation =
     z.object({
 
-        query: z
+      query: z
 
-            .string({
-                required_error:
+        .string({
+          required_error:
                     "Query is required",
-            })
+        })
 
-            .min(
-                1,
-                "Query cannot be empty"
-            )
+        .min(
+          1,
+          "Query cannot be empty",
+        )
 
-            .max(
-                5000,
-                "Query exceeds maximum length"
-            )
+        .max(
+          5000,
+          "Query exceeds maximum length",
+        )
 
-            .transform((value) =>
-                value.trim()
-            )
+        .transform((value) =>
+          value.trim(),
+        )
 
-            .refine((query) => {
+        .refine((query) => {
 
-                const upperQuery =
+          const upperQuery =
                     query.toUpperCase();
 
-                return !forbiddenKeywords.some(
-                    (keyword) =>
-                        upperQuery.includes(
-                            keyword
-                        )
-                );
+          return !forbiddenKeywords.some(
+            (keyword) =>
+              upperQuery.includes(
+                keyword,
+              ),
+          );
 
-            }, {
+        }, {
 
-                message:
+          message:
                     "Dangerous SQL query detected",
-            })
+        })
 
-            .refine((query) => {
+        .refine((query) => {
 
-                const normalized =
+          const normalized =
                     query
-                        .trim()
-                        .toUpperCase();
+                      .trim()
+                      .toUpperCase();
 
-                return (
+          return (
+
+            normalized.startsWith(
+              "SELECT",
+            ) ||
 
                     normalized.startsWith(
-                        "SELECT"
-                    ) ||
-
-                    normalized.startsWith(
-                        "WITH"
+                      "WITH",
                     )
-                );
+          );
 
-            }, {
+        }, {
 
-                message:
+          message:
                     "Only SELECT queries are allowed",
-            }),
+        }),
     });
 
 module.exports =

@@ -391,9 +391,7 @@ export const menuByRole = {
     },
     {
       section: "MESA DE AYUDA",
-      items: [
-        { id: "support", label: "Tickets", icon: LifeBuoy, href: "support" },
-      ],
+      items: [{ id: "support", label: "Tickets", icon: LifeBuoy, href: "support" }],
     },
   ],
 

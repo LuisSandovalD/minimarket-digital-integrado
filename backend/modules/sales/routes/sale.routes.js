@@ -18,7 +18,7 @@ const {
   getSalesController,
   getSaleController,
   createSaleController,
-  cancelSaleController
+  cancelSaleController,
 } = controllers;
 
 // 🎯 Extracción desde el nuevo archivo de reportes modulares
@@ -28,7 +28,7 @@ const {
   downloadDailySalesPDFController,
   downloadDailySalesExcelController,
   downloadTopProductsPDFController,
-  downloadTopProductsExcelController
+  downloadTopProductsExcelController,
 } = reportControllers;
 
 // 🛡️ CONTROL DE DAÑOS CRÍTICO
@@ -45,7 +45,7 @@ const validators = require("../validators/sale.validator");
 const {
   validateCreateSale,
   validateCancelSale,
-  validateAddSalePayment
+  validateAddSalePayment,
 } = validators;
 
 const updateSaleModule = require("../validators/update-sale.validator");

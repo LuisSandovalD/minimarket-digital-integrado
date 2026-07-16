@@ -171,11 +171,7 @@ export default function useRegisterForm(onClose = null) {
         navigate("/login");
       }
     } catch (err) {
-      setError(
-        err.response?.data?.message ||
-          err.message ||
-          "Ocurrió un error inesperado durante el registro.",
-      );
+      setError(err.response?.data?.message || err.message || "Ocurrió un error inesperado durante el registro.");
     } finally {
       setLoading(false);
     }

@@ -25,7 +25,7 @@ module.exports = function accountMapper(user) {
       email: user.company.email,
       phone: user.company.phone,
       website: user.company.website,
-      subscriptionTier: user.company.subscriptionTier
+      subscriptionTier: user.company.subscriptionTier,
     } : null,
     branch: user.branch ? {
       id: user.branch.id,
@@ -35,27 +35,27 @@ module.exports = function accountMapper(user) {
       address: user.branch.address,
       city: user.branch.city,
       state: user.branch.state,
-      country: user.branch.country
+      country: user.branch.country,
     } : null,
     manager: user.manager ? {
       id: user.manager.id,
       name: user.manager.name,
       email: user.manager.email,
-      role: user.manager.role
+      role: user.manager.role,
     } : null,
     subordinates: user.subordinates?.map(sub => ({
       id: sub.id,
       name: sub.name,
       email: sub.email,
       role: sub.role,
-      avatar: sub.avatar
+      avatar: sub.avatar,
     })) || [],
     stats: {
       sales: user._count?.sales || 0,
       purchases: user._count?.purchases || 0,
       supportTickets: user._count?.supportTickets || 0,
       notifications: user._count?.notifications || 0,
-      sessions: user._count?.sessions || 0
+      sessions: user._count?.sessions || 0,
     },
     sessions: user.sessions?.map(session => ({
       id: session.id,
@@ -63,7 +63,7 @@ module.exports = function accountMapper(user) {
       userAgent: session.userAgent,
       isActive: session.isActive,
       expiresAt: session.expiresAt,
-      createdAt: session.createdAt
-    })) || []
+      createdAt: session.createdAt,
+    })) || [],
   };
 };

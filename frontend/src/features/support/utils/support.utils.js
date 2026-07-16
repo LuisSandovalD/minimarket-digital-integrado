@@ -43,10 +43,7 @@ export const filterTickets = (tickets = [], search = "") => {
   return tickets.filter((ticket) => {
     const query = search.toLowerCase();
 
-    return (
-      ticket.title?.toLowerCase().includes(query) ||
-      ticket.description?.toLowerCase().includes(query)
-    );
+    return ticket.title?.toLowerCase().includes(query) || ticket.description?.toLowerCase().includes(query);
   });
 };
 
@@ -55,9 +52,7 @@ export const filterTickets = (tickets = [], search = "") => {
 // ========================================
 
 export const sortTicketsByUpdatedAt = (tickets = []) => {
-  return [...tickets].sort(
-    (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt),
-  );
+  return [...tickets].sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
 };
 
 // ========================================

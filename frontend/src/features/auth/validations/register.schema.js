@@ -27,10 +27,7 @@ export const validateRegisterStep = (step, form) => {
       errors.password = "La contraseña debe tener un mínimo de 8 caracteres";
     }
 
-    if (
-      form.confirmPassword !== undefined &&
-      form.password !== form.confirmPassword
-    ) {
+    if (form.confirmPassword !== undefined && form.password !== form.confirmPassword) {
       errors.confirmPassword = "Las contraseñas no coinciden";
     }
   }

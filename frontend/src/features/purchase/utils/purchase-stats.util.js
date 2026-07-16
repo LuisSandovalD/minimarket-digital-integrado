@@ -13,17 +13,11 @@ export function getPurchaseStats(purchases = []) {
   // STATUS COUNTS
   // ========================================
 
-  const pending = safePurchases.filter(
-    (purchase) => purchase.status === "PENDING",
-  ).length;
+  const pending = safePurchases.filter((purchase) => purchase.status === "PENDING").length;
 
-  const completed = safePurchases.filter(
-    (purchase) => purchase.status === "COMPLETED",
-  ).length;
+  const completed = safePurchases.filter((purchase) => purchase.status === "COMPLETED").length;
 
-  const cancelled = safePurchases.filter(
-    (purchase) => purchase.status === "CANCELLED",
-  ).length;
+  const cancelled = safePurchases.filter((purchase) => purchase.status === "CANCELLED").length;
 
   // ========================================
   // TOTAL MONEY

@@ -4,14 +4,7 @@
 
 import clsx from "clsx";
 
-export default function CardContent({
-  children,
-  className = "",
-  gap = 4,
-  grow = true,
-  centered = false,
-  ...props
-}) {
+export default function CardContent({ children, className = "", gap = 4, grow = true, centered = false, ...props }) {
   const gapClasses = {
     0: "gap-0",
     1: "gap-1",

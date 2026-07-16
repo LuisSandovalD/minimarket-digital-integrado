@@ -1,37 +1,37 @@
 const alertRepository = require(
-    "../repositories/alert.repository"
+  "../repositories/alert.repository",
 );
 
 exports.getAlerts = async (
-    companyId
+  companyId,
 ) => {
 
-    const expirationDate = new Date();
+  const expirationDate = new Date();
 
-    expirationDate.setDate(
-        expirationDate.getDate() + 30
-    );
+  expirationDate.setDate(
+    expirationDate.getDate() + 30,
+  );
 
-    const [
-        lowStock,
-        expiringProducts,
-        notifications
-    ] = await Promise.all([
-        alertRepository.getLowStockAlerts(
-            companyId
-        ),
-        alertRepository.getExpiringProducts(
-            companyId,
-            expirationDate
-        ),
-        alertRepository.getUnreadNotifications(
-            companyId
-        )
-    ]);
+  const [
+    lowStock,
+    expiringProducts,
+    notifications,
+  ] = await Promise.all([
+    alertRepository.getLowStockAlerts(
+      companyId,
+    ),
+    alertRepository.getExpiringProducts(
+      companyId,
+      expirationDate,
+    ),
+    alertRepository.getUnreadNotifications(
+      companyId,
+    ),
+  ]);
 
-    return {
-        lowStock,
-        expiringProducts,
-        notifications
-    };
+  return {
+    lowStock,
+    expiringProducts,
+    notifications,
+  };
 };

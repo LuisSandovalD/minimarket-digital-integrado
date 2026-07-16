@@ -4,11 +4,7 @@
 
 import { useState } from "react";
 
-import {
-  resetPasswordService,
-  sendRecoveryEmailService,
-  verifyRecoveryCodeService,
-} from "../services/auth.service";
+import { resetPasswordService, sendRecoveryEmailService, verifyRecoveryCodeService } from "../services/auth.service";
 
 export default function useForgotPassword(onClose) {
   const [step, setStep] = useState(1);
@@ -41,11 +37,7 @@ export default function useForgotPassword(onClose) {
 
       setStep(2);
     } catch (error) {
-      setError(
-        error?.response?.data?.message ||
-          error.message ||
-          "No fue posible enviar el código",
-      );
+      setError(error?.response?.data?.message || error.message || "No fue posible enviar el código");
     } finally {
       setLoading(false);
     }
@@ -66,9 +58,7 @@ export default function useForgotPassword(onClose) {
 
       setStep(3);
     } catch (error) {
-      setError(
-        error?.response?.data?.message || error.message || "Código inválido",
-      );
+      setError(error?.response?.data?.message || error.message || "Código inválido");
     } finally {
       setLoading(false);
     }
@@ -103,11 +93,7 @@ export default function useForgotPassword(onClose) {
         }
       }, 1500);
     } catch (error) {
-      setError(
-        error?.response?.data?.message ||
-          error.message ||
-          "No fue posible actualizar la contraseña",
-      );
+      setError(error?.response?.data?.message || error.message || "No fue posible actualizar la contraseña");
     } finally {
       setLoading(false);
     }

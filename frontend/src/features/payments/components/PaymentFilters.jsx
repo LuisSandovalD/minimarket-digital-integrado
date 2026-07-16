@@ -20,12 +20,7 @@ import {
 
 import { useEffect, useState } from "react";
 
-export default function PaymentFilters({
-  onSearch,
-  onClear,
-  loading,
-  globalFilters,
-}) {
+export default function PaymentFilters({ onSearch, onClear, loading, globalFilters }) {
   const [localSearch, setLocalSearch] = useState("");
   const [localStatus, setLocalStatus] = useState("");
   const [localType, setLocalType] = useState("");

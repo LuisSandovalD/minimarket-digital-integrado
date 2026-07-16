@@ -11,7 +11,7 @@ async function createPurchaseRepository(purchaseData) {
   return await prisma.purchase.create({
     data: {
       ...mainData,
-      details: details // Lleva el operador "create" resuelto en el servicio
+      details: details, // Lleva el operador "create" resuelto en el servicio
     },
     // 🔥 Traemos todas las relaciones solicitadas para armar la respuesta del Postman exacta
     include: {
@@ -21,29 +21,29 @@ async function createPurchaseRepository(purchaseData) {
           name: true,
           email: true,
           phone: true,
-          role: true
-        }
+          role: true,
+        },
       },
       supplier: {
         select: {
           id: true,
           name: true,
           phone: true,
-          email: true
-        }
+          email: true,
+        },
       },
       branch: {
         select: {
           id: true,
           name: true,
-          code: true
-        }
+          code: true,
+        },
       },
       company: {
         select: {
           id: true,
-          name: true
-        }
+          name: true,
+        },
       },
       details: {
         include: {
@@ -53,17 +53,17 @@ async function createPurchaseRepository(purchaseData) {
               name: true,
               sku: true,
               salePrice: true,
-              purchasePrice: true
-            }
-          }
-        }
+              purchasePrice: true,
+            },
+          },
+        },
       },
       // Si tienes la relación mapeada en tu schema.prisma (aunque esté vacío [])
-      payments: true
-    }
+      payments: true,
+    },
   });
 }
 
 module.exports = {
-  createPurchaseRepository
+  createPurchaseRepository,
 };

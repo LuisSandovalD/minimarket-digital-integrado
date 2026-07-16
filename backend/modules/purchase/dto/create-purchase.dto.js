@@ -12,9 +12,9 @@ const createPurchaseSchema = Joi.object({
       costPrice: Joi.number().positive().required(),
       // 🔥 Asegúrate de que estas dos líneas existan tal cual:
       batchNumber: Joi.string().max(100).optional().allow("", null),
-      expirationDate: Joi.date().optional().allow(null)
-    })
-  )
+      expirationDate: Joi.date().optional().allow(null),
+    }),
+  ),
 });
 
 module.exports = { createPurchaseSchema };

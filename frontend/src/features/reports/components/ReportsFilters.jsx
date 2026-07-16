@@ -1,24 +1,10 @@
-import {
-  CalendarDays,
-  Download,
-  FileBarChart2,
-  FileSpreadsheet,
-  Filter,
-  Printer,
-} from "lucide-react";
+import { CalendarDays, Download, FileBarChart2, FileSpreadsheet, Filter, Printer } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 import { ModernButton } from "@/components/buttons";
 import { Input, Select } from "@/components/forms";
 
-export default function ReportsFilters({
-  filters,
-  onChange,
-  onDownload,
-  onPrint,
-  activeFilters,
-  downloading,
-}) {
+export default function ReportsFilters({ filters, onChange, onDownload, onPrint, activeFilters, downloading }) {
   const { reportType, startDate, endDate } = filters;
   const [showDownloadMenu, setShowDownloadMenu] = useState(false);
   const menuRef = useRef(null);
@@ -64,9 +50,7 @@ export default function ReportsFilters({
             <Filter className="h-4 w-4" />
           </div>
           <div>
-            <h3 className="text-sm font-bold text-slate-800 dark:text-slate-200">
-              Parámetros del Reporte
-            </h3>
+            <h3 className="text-sm font-bold text-slate-800 dark:text-slate-200">Parámetros del Reporte</h3>
             <p className="text-xs text-slate-400 dark:text-slate-500">
               Define los criterios para la extracción de datos
             </p>
@@ -175,12 +159,8 @@ export default function ReportsFilters({
                     <FileSpreadsheet className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
                   </div>
                   <div className="text-left">
-                    <p className="font-semibold text-slate-800 dark:text-slate-200">
-                      Microsoft Excel
-                    </p>
-                    <p className="text-xs text-slate-400 dark:text-slate-500">
-                      .xlsx (Datos planos)
-                    </p>
+                    <p className="font-semibold text-slate-800 dark:text-slate-200">Microsoft Excel</p>
+                    <p className="text-xs text-slate-400 dark:text-slate-500">.xlsx (Datos planos)</p>
                   </div>
                 </button>
 
@@ -195,12 +175,8 @@ export default function ReportsFilters({
                     <FileBarChart2 className="h-4 w-4 text-red-600 dark:text-red-400" />
                   </div>
                   <div className="text-left">
-                    <p className="font-semibold text-slate-800 dark:text-slate-200">
-                      Documento PDF
-                    </p>
-                    <p className="text-xs text-slate-400 dark:text-slate-500">
-                      .pdf (Listo para archivar)
-                    </p>
+                    <p className="font-semibold text-slate-800 dark:text-slate-200">Documento PDF</p>
+                    <p className="text-xs text-slate-400 dark:text-slate-500">.pdf (Listo para archivar)</p>
                   </div>
                 </button>
               </div>

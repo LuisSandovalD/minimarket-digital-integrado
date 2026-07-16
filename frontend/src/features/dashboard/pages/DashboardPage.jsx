@@ -35,9 +35,7 @@ export default function DashboardPage() {
   } = useDashboard();
 
   // Definición de permisos basados en roles
-  const canAccessAnalytics = ["ADMIN", "MANAGER", "SUPERVISOR"].includes(
-    user?.role,
-  );
+  const canAccessAnalytics = ["ADMIN", "MANAGER", "SUPERVISOR"].includes(user?.role);
   const canAccessReports = ["ADMIN", "MANAGER"].includes(user?.role);
 
   if (loading) {
@@ -80,17 +78,11 @@ export default function DashboardPage() {
                 <LineChart size={22} />
               </div>
               <div>
-                <h3 className="font-bold text-slate-800 dark:text-slate-200">
-                  Analítica
-                </h3>
-                <p className="text-xs text-slate-500">
-                  Flujos de caja e históricos.
-                </p>
+                <h3 className="font-bold text-slate-800 dark:text-slate-200">Analítica</h3>
+                <p className="text-xs text-slate-500">Flujos de caja e históricos.</p>
               </div>
             </div>
-            <span className="text-blue-600 font-bold group-hover:translate-x-1 transition-transform">
-              →
-            </span>
+            <span className="text-blue-600 font-bold group-hover:translate-x-1 transition-transform">→</span>
           </Link>
         )}
 
@@ -104,17 +96,11 @@ export default function DashboardPage() {
               <BarChart3 size={22} />
             </div>
             <div>
-              <h3 className="font-bold text-slate-800 dark:text-slate-200">
-                Estadísticas
-              </h3>
-              <p className="text-xs text-slate-500">
-                Rankings y rendimiento top.
-              </p>
+              <h3 className="font-bold text-slate-800 dark:text-slate-200">Estadísticas</h3>
+              <p className="text-xs text-slate-500">Rankings y rendimiento top.</p>
             </div>
           </div>
-          <span className="text-emerald-600 font-bold group-hover:translate-x-1 transition-transform">
-            →
-          </span>
+          <span className="text-emerald-600 font-bold group-hover:translate-x-1 transition-transform">→</span>
         </Link>
 
         {/* REPORTES - Solo ADMIN y MANAGER */}
@@ -128,17 +114,11 @@ export default function DashboardPage() {
                 <FileText size={22} />
               </div>
               <div>
-                <h3 className="font-bold text-slate-800 dark:text-slate-200">
-                  Reportes
-                </h3>
-                <p className="text-xs text-slate-500">
-                  Exportables, PDFs y auditorías.
-                </p>
+                <h3 className="font-bold text-slate-800 dark:text-slate-200">Reportes</h3>
+                <p className="text-xs text-slate-500">Exportables, PDFs y auditorías.</p>
               </div>
             </div>
-            <span className="text-purple-600 font-bold group-hover:translate-x-1 transition-transform">
-              →
-            </span>
+            <span className="text-purple-600 font-bold group-hover:translate-x-1 transition-transform">→</span>
           </Link>
         )}
       </div>

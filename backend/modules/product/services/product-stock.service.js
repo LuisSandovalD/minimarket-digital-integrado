@@ -115,7 +115,7 @@ exports.getLowStock = async (companyId) => {
 
 exports.getExpiring = async (
   companyId,
-  next30Days
+  next30Days,
 ) => {
   return prisma.productBatch.findMany({
     where: {

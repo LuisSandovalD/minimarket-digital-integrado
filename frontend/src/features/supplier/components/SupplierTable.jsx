@@ -71,12 +71,8 @@ export default function SupplierTable({
   return (
     <div className="space-y-5">
       <div>
-        <h2 className="text-xl font-semibold tracking-tight text-slate-900 dark:text-white">
-          Suppliers
-        </h2>
-        <p className="mt-1 text-sm text-slate-500">
-          Gestiona proveedores del sistema.
-        </p>
+        <h2 className="text-xl font-semibold tracking-tight text-slate-900 dark:text-white">Suppliers</h2>
+        <p className="mt-1 text-sm text-slate-500">Gestiona proveedores del sistema.</p>
       </div>
 
       <Table>
@@ -91,37 +87,23 @@ export default function SupplierTable({
               >
                 <td className="px-6 py-5">
                   <div>
-                    <h3 className="text-sm font-semibold text-slate-800 dark:text-white">
-                      {supplier.name}
-                    </h3>
-                    <p className="text-xs text-slate-500">
-                      {supplier.ruc || "Sin RUC"}
-                    </p>
+                    <h3 className="text-sm font-semibold text-slate-800 dark:text-white">{supplier.name}</h3>
+                    <p className="text-xs text-slate-500">{supplier.ruc || "Sin RUC"}</p>
                   </div>
                 </td>
 
-                <td className="px-6 py-5 text-sm text-slate-600 dark:text-slate-300">
-                  {supplier.email || "-"}
-                </td>
+                <td className="px-6 py-5 text-sm text-slate-600 dark:text-slate-300">{supplier.email || "-"}</td>
 
-                <td className="px-6 py-5 text-sm text-slate-600 dark:text-slate-300">
-                  {supplier.phone || "-"}
-                </td>
+                <td className="px-6 py-5 text-sm text-slate-600 dark:text-slate-300">{supplier.phone || "-"}</td>
 
                 <td className="px-6 py-5 text-sm text-slate-600 dark:text-slate-300">
                   {supplier.contactPerson || "-"}
                 </td>
 
-                <td className="px-6 py-5 text-sm text-blue-500">
-                  {supplier.website || "-"}
-                </td>
+                <td className="px-6 py-5 text-sm text-blue-500">{supplier.website || "-"}</td>
 
                 <td className="px-6 py-5">
-                  <SupplierActions
-                    supplier={supplier}
-                    onEdit={handleEdit}
-                    onDelete={handleDelete}
-                  />
+                  <SupplierActions supplier={supplier} onEdit={handleEdit} onDelete={handleDelete} />
                 </td>
               </tr>
             ))
@@ -134,12 +116,7 @@ export default function SupplierTable({
           )}
         </tbody>
         {suppliers.length > 0 && (
-          <TFooter
-            page={page}
-            totalPages={totalPages}
-            onPrev={onPrevPage}
-            onNext={onNextPage}
-          />
+          <TFooter page={page} totalPages={totalPages} onPrev={onPrevPage} onNext={onNextPage} />
         )}
       </Table>
     </div>

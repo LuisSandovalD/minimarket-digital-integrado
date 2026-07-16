@@ -5,13 +5,7 @@
 import { ModernButton } from "@/components/buttons";
 import { SearchInput, Select } from "@/components/forms";
 
-import {
-  CheckCircle2,
-  HelpCircle,
-  RefreshCw,
-  Search,
-  XCircle,
-} from "lucide-react";
+import { CheckCircle2, HelpCircle, RefreshCw, Search, XCircle } from "lucide-react";
 
 import { useState } from "react";
 
@@ -68,9 +62,7 @@ export default function UnitFilters({ onSearch, onClear, loading }) {
     >
       {/* Buscar */}
       <div className="flex-1">
-        <label className="block mb-2 text-sm font-semibold text-slate-700 dark:text-slate-200">
-          Buscar Unidad
-        </label>
+        <label className="block mb-2 text-sm font-semibold text-slate-700 dark:text-slate-200">Buscar Unidad</label>
 
         <SearchInput
           placeholder="Buscar por nombre o abreviatura..."

@@ -4,13 +4,7 @@
 
 import { ModernButton } from "@/components/buttons";
 import { SearchInput } from "@/components/forms";
-import {
-  CheckCircle2,
-  HelpCircle,
-  RefreshCw,
-  Search,
-  XCircle,
-} from "lucide-react";
+import { CheckCircle2, HelpCircle, RefreshCw, Search, XCircle } from "lucide-react";
 import { useState } from "react";
 
 export default function CategoryFilters({ onSearch, onClear, loading }) {
@@ -66,9 +60,7 @@ export default function CategoryFilters({ onSearch, onClear, loading }) {
     >
       {/* Buscar Categoría */}
       <div className="flex-1">
-        <label className="block mb-2 text-sm font-semibold text-slate-700 dark:text-slate-200">
-          Buscar Categoría
-        </label>
+        <label className="block mb-2 text-sm font-semibold text-slate-700 dark:text-slate-200">Buscar Categoría</label>
 
         <SearchInput
           placeholder="Buscar por nombre o descripción..."

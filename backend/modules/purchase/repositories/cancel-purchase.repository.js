@@ -6,17 +6,17 @@ async function cancelPurchaseRepository(id, status) {
   return prisma.purchase.update({
 
     where: {
-      id
+      id,
     },
 
     data: {
-      status
-    }
+      status,
+    },
 
   });
 
 }
 
 module.exports = {
-  cancelPurchaseRepository
+  cancelPurchaseRepository,
 };

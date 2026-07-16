@@ -11,7 +11,7 @@ const prisma =
 
 exports.getHistoryByInventory =
   async (
-    inventoryId
+    inventoryId,
   ) => {
 
     return prisma.inventoryHistory.findMany({
@@ -42,7 +42,7 @@ exports.getHistoryByDateRange =
   async (
     companyId,
     startDate,
-    endDate
+    endDate,
   ) => {
 
     return prisma.inventoryHistory.findMany({
@@ -79,7 +79,7 @@ exports.getHistoryByDateRange =
 
 exports.deleteHistory =
   async (
-    id
+    id,
   ) => {
 
     return prisma.inventoryHistory.delete({

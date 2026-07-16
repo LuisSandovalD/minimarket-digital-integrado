@@ -26,11 +26,7 @@ const InputList = ({
   const inputRef = useRef(null);
 
   const filteredItems = useMemo(() => {
-    return data
-      .filter((item) =>
-        getLabel(item).toLowerCase().includes(query.toLowerCase()),
-      )
-      .slice(0, 10);
+    return data.filter((item) => getLabel(item).toLowerCase().includes(query.toLowerCase())).slice(0, 10);
   }, [data, query, getLabel]);
 
   const handleSelect = (item) => {

@@ -28,20 +28,13 @@ export default function AuditReportPage({ filters }) {
         throw new Error("No se encontró el ID de la empresa.");
       }
 
-      const blobData = await getActivityReport(
-        company.id,
-        filters.startDate,
-        filters.endDate,
-      );
+      const blobData = await getActivityReport(company.id, filters.startDate, filters.endDate);
 
       if (!blobData || blobData.size === 0) {
         throw new Error("El reporte PDF se generó vacío.");
       }
 
-      const blob =
-        blobData instanceof Blob
-          ? blobData
-          : new Blob([blobData], { type: "application/pdf" });
+      const blob = blobData instanceof Blob ? blobData : new Blob([blobData], { type: "application/pdf" });
       const url = URL.createObjectURL(blob);
 
       setPdfUrl((prev) => {
@@ -80,8 +73,8 @@ export default function AuditReportPage({ filters }) {
             Reporte de Auditoría y Actividad
           </h1>
           <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-            Revisa de forma oficial la bitácora de eventos, modificaciones del
-            sistema y seguridad en el rango de fechas seleccionado.
+            Revisa de forma oficial la bitácora de eventos, modificaciones del sistema y seguridad en el rango de fechas
+            seleccionado.
           </p>
         </div>
 
@@ -111,12 +104,8 @@ export default function AuditReportPage({ filters }) {
               <AlertTriangle className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="text-lg font-medium text-slate-900 dark:text-slate-50">
-                No se pudo cargar el reporte
-              </h3>
-              <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-                {error}
-              </p>
+              <h3 className="text-lg font-medium text-slate-900 dark:text-slate-50">No se pudo cargar el reporte</h3>
+              <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">{error}</p>
             </div>
             <button
               onClick={fetchPdf}
@@ -133,13 +122,10 @@ export default function AuditReportPage({ filters }) {
               <Calendar className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="text-sm font-medium text-slate-900 dark:text-slate-200">
-                Rango de fechas requerido
-              </h3>
+              <h3 className="text-sm font-medium text-slate-900 dark:text-slate-200">Rango de fechas requerido</h3>
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                Por favor, selecciona una fecha de inicio y de fin en el panel
-                de filtros para generar la previsualización del reporte de
-                auditoría.
+                Por favor, selecciona una fecha de inicio y de fin en el panel de filtros para generar la
+                previsualización del reporte de auditoría.
               </p>
             </div>
           </div>
@@ -150,9 +136,7 @@ export default function AuditReportPage({ filters }) {
             title="Reporte de Auditoría"
           />
         ) : (
-          <p className="text-slate-400 dark:text-slate-500 text-sm">
-            No hay datos disponibles.
-          </p>
+          <p className="text-slate-400 dark:text-slate-500 text-sm">No hay datos disponibles.</p>
         )}
       </div>
     </div>

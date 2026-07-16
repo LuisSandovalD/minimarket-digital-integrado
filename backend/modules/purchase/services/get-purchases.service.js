@@ -1,5 +1,5 @@
 const {
-  getPurchasesRepository
+  getPurchasesRepository,
 } = require("../repositories/get-purchases.repository");
 
 async function getPurchasesService(filters = {}) {
@@ -19,7 +19,7 @@ async function getPurchasesService(filters = {}) {
     endDate,
 
     sortBy = "createdAt",
-    sortOrder = "desc"
+    sortOrder = "desc",
 
   } = filters;
 
@@ -36,15 +36,15 @@ async function getPurchasesService(filters = {}) {
       {
         purchaseNumber: {
           contains: search,
-          mode: "insensitive"
-        }
+          mode: "insensitive",
+        },
       },
 
       {
         notes: {
           contains: search,
-          mode: "insensitive"
-        }
+          mode: "insensitive",
+        },
       },
 
       {
@@ -52,11 +52,11 @@ async function getPurchasesService(filters = {}) {
           is: {
             name: {
               contains: search,
-              mode: "insensitive"
-            }
-          }
-        }
-      }
+              mode: "insensitive",
+            },
+          },
+        },
+      },
 
     ];
 
@@ -128,12 +128,12 @@ async function getPurchasesService(filters = {}) {
     where,
 
     sortBy,
-    sortOrder
+    sortOrder,
 
   });
 
 }
 
 module.exports = {
-  getPurchasesService
+  getPurchasesService,
 };

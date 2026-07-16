@@ -1,20 +1,13 @@
 import { Bot, User } from "lucide-react";
 
-export default function AIChatMessages({
-  messages,
-  loading,
-  onSuggestionClick,
-  messagesEndRef,
-}) {
+export default function AIChatMessages({ messages, loading, onSuggestionClick, messagesEndRef }) {
   return (
     <div className="flex-1 overflow-y-auto py-6 space-y-6">
       {/* Contenedor de sugerencias iniciales */}
       {messages.length === 0 && (
         <div className="w-full">
           <div className="border border-neutral-200 dark:border-neutral-800 rounded-2xl p-6 bg-background">
-            <h2 className="font-semibold text-lg mb-4 text-foreground">
-              ¿Qué deseas analizar hoy?
-            </h2>
+            <h2 className="font-semibold text-lg mb-4 text-foreground">¿Qué deseas analizar hoy?</h2>
 
             <div className="grid lg:grid-cols-6 grid-cols-2 gap-3">
               {[
@@ -42,10 +35,7 @@ export default function AIChatMessages({
       {messages.map((msg, index) => {
         const isUser = msg.role === "user";
         return (
-          <div
-            key={index}
-            className={`flex gap-3 ${isUser ? "justify-end" : "justify-start"}`}
-          >
+          <div key={index} className={`flex gap-3 ${isUser ? "justify-end" : "justify-start"}`}>
             {!isUser && (
               <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
                 <Bot size={18} />
@@ -77,12 +67,8 @@ export default function AIChatMessages({
           <div className="rounded-2xl border border-neutral-200 dark:border-neutral-800 px-4 py-3 bg-background">
             <div className="flex gap-1 items-center h-5 text-primary">
               <span className="animate-bounce text-[10px]">●</span>
-              <span className="animate-bounce text-[10px] [animation-delay:0.2s]">
-                ●
-              </span>
-              <span className="animate-bounce text-[10px] [animation-delay:0.4s]">
-                ●
-              </span>
+              <span className="animate-bounce text-[10px] [animation-delay:0.2s]">●</span>
+              <span className="animate-bounce text-[10px] [animation-delay:0.4s]">●</span>
             </div>
           </div>
         </div>

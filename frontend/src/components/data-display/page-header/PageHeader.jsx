@@ -26,11 +26,7 @@ export default function PageHeader({
           <div className="flex items-start gap-4">
             {Icon && (
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.05] backdrop-blur-xl">
-                <Icon
-                  size={24}
-                  strokeWidth={1.7}
-                  className="text-slate-700 dark:text-slate-200"
-                />
+                <Icon size={24} strokeWidth={1.7} className="text-slate-700 dark:text-slate-200" />
               </div>
             )}
 
@@ -42,9 +38,7 @@ export default function PageHeader({
               )}
 
               <div>
-                <h1 className="text-2xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">
-                  {title}
-                </h1>
+                <h1 className="text-2xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">{title}</h1>
                 {description && (
                   <p className="mt-1.5 max-w-2xl text-sm leading-relaxed text-slate-500 dark:text-slate-400">
                     {description}
@@ -84,20 +78,13 @@ export default function PageHeader({
                 <div className="flex items-center gap-3">
                   {StatIcon && (
                     <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.05] backdrop-blur-xl">
-                      <StatIcon
-                        size={16}
-                        className="text-slate-600 dark:text-slate-300"
-                      />
+                      <StatIcon size={16} className="text-slate-600 dark:text-slate-300" />
                     </div>
                   )}
 
                   <div>
-                    <p className="text-[11px] uppercase tracking-wider text-slate-400">
-                      {label}
-                    </p>
-                    <h3 className="mt-0.5 text-sm font-medium text-slate-900 dark:text-slate-100">
-                      {value}
-                    </h3>
+                    <p className="text-[11px] uppercase tracking-wider text-slate-400">{label}</p>
+                    <h3 className="mt-0.5 text-sm font-medium text-slate-900 dark:text-slate-100">{value}</h3>
                   </div>
                 </div>
 

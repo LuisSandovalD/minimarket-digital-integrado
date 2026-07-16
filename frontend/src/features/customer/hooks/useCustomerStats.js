@@ -4,9 +4,7 @@ export function useCustomerStats(customers = []) {
   return useMemo(() => {
     const totalCustomers = customers.length;
 
-    const activeCustomers = customers.filter(
-      (customer) => customer.isActive,
-    ).length;
+    const activeCustomers = customers.filter((customer) => customer.isActive).length;
 
     const inactiveCustomers = totalCustomers - activeCustomers;
 

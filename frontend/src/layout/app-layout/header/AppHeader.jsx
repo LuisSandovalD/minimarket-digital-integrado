@@ -42,9 +42,7 @@ export default function AppHeader({ onToggleAside }) {
         <div className="min-w-0 flex-1">
           <h1 className="truncate text-sm font-semibold tracking-tight text-slate-900 dark:text-slate-100">
             <span className="sm:hidden">{headerTime.greeting}</span>
-            <span className="hidden sm:inline">
-              {headerTime.greeting} Bienvenido de nuevo
-            </span>
+            <span className="hidden sm:inline">{headerTime.greeting} Bienvenido de nuevo</span>
           </h1>
 
           <p className="mt-0.5 hidden truncate text-xs font-medium capitalize text-slate-400 dark:text-slate-500 sm:block">

@@ -1,5 +1,5 @@
 const Joi =
-  require('joi');
+  require("joi");
 
 exports.createSchema =
   Joi.object({});

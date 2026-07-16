@@ -1,6 +1,7 @@
-// ========================================
+// ============================================================================
 // features/users/pages/UsersPage.jsx
-// ========================================
+// CORREGIDO: Permisos para dar acceso a MANAGER y limitar acciones críticas
+// ============================================================================
 
 import UserFilters from "../components/UserFilters";
 import UsersHeader from "../components/UsersHeader";
@@ -18,7 +19,13 @@ import { getUser } from "@/features/auth/services/session.service";
 
 export default function UsersPage() {
   const user = getUser();
+
+  // 🛡️ Definición de permisos por Roles
   const isAdmin = user?.role === "ADMIN";
+  const isManager = user?.role === "MANAGER";
+
+  // Ambos pueden gestionar (Crear, Editar, Activar/Desactivar)
+  const canManage = isAdmin || isManager;
 
   const {
     branches,
@@ -56,8 +63,8 @@ export default function UsersPage() {
 
   return (
     <div className="space-y-6">
-      {/* 🛡️ Solo el Admin puede crear nuevos usuarios */}
-      <UsersHeader onCreate={isAdmin ? handleCreate : undefined} />
+      {/* 🛡️ Permitir crear si es Admin o Gerente */}
+      <UsersHeader onCreate={canManage ? handleCreate : undefined} />
 
       <UserFilters
         onSearch={handleSearch}
@@ -72,10 +79,8 @@ export default function UsersPage() {
           expandedUsers={expandedUsers}
           onToggleExpand={toggleExpand}
           onEdit={handleEdit}
-          // 🛡️ Pasamos triggers solo si es admin
-          onToggleStatusTrigger={
-            isAdmin ? handleToggleStatusTrigger : undefined
-          }
+          // 🛡️ Ambos pueden cambiar estado, pero solo Admin puede eliminar físicamente
+          onToggleStatusTrigger={canManage ? handleToggleStatusTrigger : undefined}
           onDeleteTrigger={isAdmin ? handleDeleteTrigger : undefined}
           loading={loading}
           page={pagination?.currentPage || 1}
@@ -84,35 +89,43 @@ export default function UsersPage() {
           onNextPage={handleNextPage}
         />
       ) : (
-        <UsersTableEmpty onCreate={isAdmin ? handleCreate : undefined} />
+        // 🛡️ Mostrar botón de creación vacío según permisos
+        <UsersTableEmpty onCreate={canManage ? handleCreate : undefined} />
       )}
 
-      {/* MODALES PROTEGIDOS POR SEGURIDAD */}
+      {/* ==========================================
+          MODALES DE ACCIÓN CON ACCESOS SEGMENTADOS
+         ========================================== */}
+
+      {/* El Modal de Creación/Edición se monta para Admins y Gerentes */}
+      {canManage && (
+        <UserModal
+          open={openModal}
+          onClose={() => setOpenModal(false)}
+          onSuccess={handleSuccess}
+          user={selectedUser}
+          branches={branches}
+          allUsers={allUsersRaw || users || []}
+        />
+      )}
+
+      {/* El cambio de estado (Inactivar/Activar) se monta para ambos */}
+      {canManage && (
+        <UserStatusModal
+          open={openStatusAlert}
+          onClose={() => setOpenStatusAlert(false)}
+          user={userForAction}
+          onToggleStatus={toggleUserStatus}
+        />
+      )}
+
       {isAdmin && (
-        <>
-          <UserModal
-            open={openModal}
-            onClose={() => setOpenModal(false)}
-            onSuccess={handleSuccess}
-            user={selectedUser}
-            branches={branches}
-            allUsers={allUsersRaw || users || []}
-          />
-
-          <UserStatusModal
-            open={openStatusAlert}
-            onClose={() => setOpenStatusAlert(false)}
-            user={userForAction}
-            onToggleStatus={toggleUserStatus}
-          />
-
-          <UserDeleteModal
-            open={openDeleteAlert}
-            onClose={() => setOpenDeleteAlert(false)}
-            user={userForAction}
-            onDelete={(id) => deleteMutation.mutateAsync(id)}
-          />
-        </>
+        <UserDeleteModal
+          open={openDeleteAlert}
+          onClose={() => setOpenDeleteAlert(false)}
+          user={userForAction}
+          onDelete={(id) => deleteMutation.mutateAsync(id)}
+        />
       )}
     </div>
   );

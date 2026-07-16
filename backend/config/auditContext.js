@@ -8,5 +8,5 @@ const { AsyncLocalStorage } = require("async_hooks");
 const auditStorage = new AsyncLocalStorage();
 
 module.exports = {
-    auditStorage
+  auditStorage,
 };

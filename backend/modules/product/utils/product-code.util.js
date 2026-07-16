@@ -4,7 +4,7 @@
 
 function generateSKU(
   name,
-  total
+  total,
 ) {
 
   const prefix =

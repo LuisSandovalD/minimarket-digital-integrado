@@ -1,40 +1,40 @@
 // modules/database/services/database-latency.service.js
 
 const prisma = require(
-    "../../../config/prisma.config"
+  "../../../config/prisma.config",
 );
 
 class DatabaseLatencyService {
 
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Get Database Latency
     |--------------------------------------------------------------------------
     */
 
-    async getLatency() {
+  async getLatency() {
 
-        const start =
+    const start =
             Date.now();
 
-        await prisma.$queryRaw`
+    await prisma.$queryRaw`
             SELECT NOW();
         `;
 
-        const latency =
+    const latency =
             Date.now() - start;
 
-        return {
+    return {
 
-            success: true,
+      success: true,
 
-            latency:
+      latency:
                 `${latency}ms`,
 
-            timestamp:
+      timestamp:
                 new Date(),
-        };
-    }
+    };
+  }
 }
 
 module.exports =

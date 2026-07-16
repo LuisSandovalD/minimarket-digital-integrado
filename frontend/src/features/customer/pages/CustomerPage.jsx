@@ -1,7 +1,3 @@
-// ========================================
-// features/customers/pages/CustomerPage.jsx
-// ========================================
-
 import { useCallback, useState } from "react";
 
 import CustomerDeleteModal from "../components/CustomerDeleteModal";
@@ -11,47 +7,33 @@ import CustomerHeader from "../components/CustomerHeader";
 import CustomerLoading from "../components/CustomerLoading";
 import CustomerTable from "../components/CustomerTable";
 
+import { getUser } from "@/features/auth/services/session.service";
 import { useCustomerForm } from "../hooks/useCustomerForm";
 import { useCustomers } from "../hooks/useCustomers";
 import { useCustomerStats } from "../hooks/useCustomerStats";
-// 🌟 Importamos el servicio de sesión para validar el rol
-import { getUser } from "@/features/auth/services/session.service";
 
 export default function CustomerPage() {
-  // 🌟 Validamos el rol del usuario
   const user = getUser();
-  const isAdmin = user?.role === "ADMIN";
+  const userRole = user?.role?.toUpperCase();
 
-  const {
-    customers,
-    pagination,
-    loading,
-    filters,
-    updateFilters,
-    clearFilters,
-    refresh,
-  } = useCustomers();
+  const isAdmin = userRole === "ADMIN";
+  const isManager = userRole === "MANAGER" || userRole === "GERENTE";
+
+  const canEditOrCreate = isAdmin || isManager;
+  const canDelete = isAdmin;
+
+  const { customers, pagination, loading, filters, updateFilters, clearFilters, refresh } = useCustomers();
 
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
 
-  const {
-    form,
-    handleChange,
-    saving,
-    modalOpen,
-    openCreate,
-    openEdit,
-    closeModal,
-    save,
-    remove,
-  } = useCustomerForm(refresh);
+  const { form, handleChange, saving, modalOpen, openCreate, openEdit, closeModal, save, remove } =
+    useCustomerForm(refresh);
 
   const stats = useCustomerStats(customers);
 
   const handleOpenDelete = (customer) => {
-    // 🛡️ Seguridad extra: Si no es admin, ignoramos la acción
-    if (!isAdmin) return;
+    if (!canDelete) return;
     setSelectedCustomer(customer);
     setDeleteModalOpen(true);
   };
@@ -62,7 +44,7 @@ export default function CustomerPage() {
   };
 
   const handleDelete = async () => {
-    if (!selectedCustomer || !isAdmin) return;
+    if (!selectedCustomer || !canDelete) return;
 
     await remove(selectedCustomer.id);
     handleCloseDelete();
@@ -99,8 +81,7 @@ export default function CustomerPage() {
       <CustomerHeader
         total={stats.totalCustomers}
         active={stats.activeCustomers}
-        // 🛡️ Solo permitimos crear si es admin
-        onCreate={isAdmin ? openCreate : undefined}
+        onCreate={canEditOrCreate ? openCreate : undefined}
       />
 
       <CustomerFilters
@@ -117,12 +98,10 @@ export default function CustomerPage() {
         totalPages={pagination?.totalPages ?? 1}
         onPrevPage={handlePrevPage}
         onNextPage={handleNextPage}
-        // 🛡️ Pasamos la lógica de edición/eliminación limitada
-        onEdit={openEdit}
-        onDelete={isAdmin ? handleOpenDelete : undefined}
+        onEdit={canEditOrCreate ? openEdit : undefined}
+        onDelete={canDelete ? handleOpenDelete : undefined}
       />
 
-      {/* 🛡️ El modal de formulario también debe protegerse en el onSubmit si fuera necesario */}
       <CustomerFormModal
         open={modalOpen}
         onClose={closeModal}
@@ -133,8 +112,7 @@ export default function CustomerPage() {
         isEdit={Boolean(form.id)}
       />
 
-      {/* MODAL DE CONFIRMACIÓN */}
-      {isAdmin && (
+      {canDelete && (
         <CustomerDeleteModal
           open={deleteModalOpen}
           onClose={handleCloseDelete}

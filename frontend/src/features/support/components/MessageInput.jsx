@@ -13,10 +13,7 @@ export default function MessageInput({ onSend, sending }) {
   // Cerrar el selector de emojis si se hace click afuera
   useEffect(() => {
     function handleClickOutside(event) {
-      if (
-        emojiPickerRef.current &&
-        !emojiPickerRef.current.contains(event.target)
-      ) {
+      if (emojiPickerRef.current && !emojiPickerRef.current.contains(event.target)) {
         setShowEmojiPicker(false);
       }
     }
@@ -82,10 +79,7 @@ export default function MessageInput({ onSend, sending }) {
        * CONTENEDOR FLOTANTE DE EMOJIS
        * ====================================== */}
       {showEmojiPicker && (
-        <div
-          ref={emojiPickerRef}
-          className="absolute bottom-20 left-4 z-50 shadow-2xl animate-fade-in"
-        >
+        <div ref={emojiPickerRef} className="absolute bottom-20 left-4 z-50 shadow-2xl animate-fade-in">
           <EmojiPicker
             theme="dark"
             onEmojiClick={handleEmojiClick}
@@ -119,16 +113,9 @@ export default function MessageInput({ onSend, sending }) {
                 className="relative group h-20 w-20 rounded-xl overflow-hidden bg-black border border-slate-700"
               >
                 {att.type === "IMAGE" ? (
-                  <img
-                    src={att.preview}
-                    alt="preview"
-                    className="h-full w-full object-cover"
-                  />
+                  <img src={att.preview} alt="preview" className="h-full w-full object-cover" />
                 ) : (
-                  <video
-                    src={att.preview}
-                    className="h-full w-full object-cover"
-                  />
+                  <video src={att.preview} className="h-full w-full object-cover" />
                 )}
 
                 {/* Botón flotante para eliminar el archivo individual de la cola */}
@@ -174,11 +161,7 @@ export default function MessageInput({ onSend, sending }) {
           <input
             type="text"
             value={message}
-            placeholder={
-              attachments.length > 0
-                ? "Añade un comentario al archivo..."
-                : "Escribe un mensaje..."
-            }
+            placeholder={attachments.length > 0 ? "Añade un comentario al archivo..." : "Escribe un mensaje..."}
             onChange={(e) => setMessage(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === "Enter" && !sending) {
@@ -201,11 +184,7 @@ export default function MessageInput({ onSend, sending }) {
               disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100
             "
           >
-            {sending ? (
-              <Loader2 size={18} className="animate-spin" />
-            ) : (
-              <Send size={16} className="ml-0.5" />
-            )}
+            {sending ? <Loader2 size={18} className="animate-spin" /> : <Send size={16} className="ml-0.5" />}
           </button>
         </div>
       </div>

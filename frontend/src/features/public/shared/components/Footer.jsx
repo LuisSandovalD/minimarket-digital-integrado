@@ -21,13 +21,10 @@ export default function Footer() {
               <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground">
                 <Boxes className="h-5 w-5" aria-hidden="true" />
               </span>
-              <span className="text-lg font-extrabold tracking-tight text-white">
-                {BRAND.name}
-              </span>
+              <span className="text-lg font-extrabold tracking-tight text-white">{BRAND.name}</span>
             </Link>
             <p className="max-w-xs text-sm leading-relaxed text-dark-foreground/70">
-              {BRAND.tagline} para inventarios, ventas, compras, sucursales y
-              analitica empresarial.
+              {BRAND.tagline} para inventarios, ventas, compras, sucursales y analitica empresarial.
             </p>
           </div>
 
@@ -36,10 +33,7 @@ export default function Footer() {
             <ul className="mt-4 flex flex-col gap-2.5">
               {PRODUCT_LINKS.map((link) => (
                 <li key={link.to}>
-                  <Link
-                    to={link.to}
-                    className="text-sm text-dark-foreground/70 transition-colors hover:text-white"
-                  >
+                  <Link to={link.to} className="text-sm text-dark-foreground/70 transition-colors hover:text-white">
                     {link.label}
                   </Link>
                 </li>
@@ -52,10 +46,7 @@ export default function Footer() {
             <ul className="mt-4 flex flex-col gap-2.5">
               {RESOURCE_LINKS.map((link) => (
                 <li key={link.label}>
-                  <Link
-                    to={link.to}
-                    className="text-sm text-dark-foreground/70 transition-colors hover:text-white"
-                  >
+                  <Link to={link.to} className="text-sm text-dark-foreground/70 transition-colors hover:text-white">
                     {link.label}
                   </Link>
                 </li>
@@ -84,20 +75,13 @@ export default function Footer() {
 
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-6 sm:flex-row">
           <p className="text-xs text-dark-foreground/60">
-            {"\u00A9"} {new Date().getFullYear()} {BRAND.name}. Todos los
-            derechos reservados.
+            {"\u00A9"} {new Date().getFullYear()} {BRAND.name}. Todos los derechos reservados.
           </p>
           <div className="flex gap-6">
-            <Link
-              to="/contacto"
-              className="text-xs text-dark-foreground/60 hover:text-white"
-            >
+            <Link to="/contacto" className="text-xs text-dark-foreground/60 hover:text-white">
               Terminos
             </Link>
-            <Link
-              to="/contacto"
-              className="text-xs text-dark-foreground/60 hover:text-white"
-            >
+            <Link to="/contacto" className="text-xs text-dark-foreground/60 hover:text-white">
               Privacidad
             </Link>
           </div>

@@ -17,27 +17,27 @@ const formatDate =
 
     const month =
       String(
-        date.getMonth() + 1
+        date.getMonth() + 1,
       ).padStart(2, "0");
 
     const day =
       String(
-        date.getDate()
+        date.getDate(),
       ).padStart(2, "0");
 
     const hours =
       String(
-        date.getHours()
+        date.getHours(),
       ).padStart(2, "0");
 
     const minutes =
       String(
-        date.getMinutes()
+        date.getMinutes(),
       ).padStart(2, "0");
 
     const seconds =
       String(
-        date.getSeconds()
+        date.getSeconds(),
       ).padStart(2, "0");
 
     return `${year}${month}${day}-${hours}${minutes}${seconds}`;
@@ -50,7 +50,7 @@ const formatDate =
 
 const generateRandomCode =
   (
-    length = 4
+    length = 4,
   ) => {
 
     return Math.random()
@@ -66,7 +66,7 @@ const generateRandomCode =
 
 const generateReference =
   (
-    prefix
+    prefix,
   ) => {
 
     return `${prefix}-${formatDate()}-${generateRandomCode()}`;
@@ -81,7 +81,7 @@ exports.generateInventoryReference =
   () => {
 
     return generateReference(
-      "INV"
+      "INV",
     );
 
   };
@@ -94,7 +94,7 @@ exports.generateTransferReference =
   () => {
 
     return generateReference(
-      "TRF"
+      "TRF",
     );
 
   };
@@ -105,11 +105,11 @@ exports.generateTransferReference =
 
 exports.generateMovementReference =
   (
-    type = "MOV"
+    type = "MOV",
   ) => {
 
     return generateReference(
-      type
+      type,
     );
 
   };
@@ -122,7 +122,7 @@ exports.generateDamageReference =
   () => {
 
     return generateReference(
-      "DMG"
+      "DMG",
     );
 
   };

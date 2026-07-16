@@ -1,13 +1,5 @@
 import { MetricCard } from "@/components/card";
-import {
-  AlertCircle,
-  ArrowRight,
-  CheckCircle,
-  Clock,
-  ShoppingCart,
-  Wallet,
-  XCircle,
-} from "lucide-react";
+import { AlertCircle, ArrowRight, CheckCircle, Clock, ShoppingCart, Wallet, XCircle } from "lucide-react";
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
 
@@ -15,19 +7,10 @@ export default function RecentSales({ sales = [] }) {
   // ⚡ MEMORIZACIÓN: Evita recálculos de arrays pesados en renderizados frecuentes
   const stats = useMemo(() => {
     const previewSales = sales.slice(0, 5);
-    const totalSales = sales.reduce(
-      (acc, sale) => acc + Number(sale.total || 0),
-      0,
-    );
-    const completedSales = sales.filter(
-      (sale) => sale.status === "COMPLETED",
-    ).length;
-    const pendingSales = sales.filter(
-      (sale) => sale.status === "PENDING",
-    ).length;
-    const cancelledSales = sales.filter(
-      (sale) => sale.status === "CANCELLED",
-    ).length;
+    const totalSales = sales.reduce((acc, sale) => acc + Number(sale.total || 0), 0);
+    const completedSales = sales.filter((sale) => sale.status === "COMPLETED").length;
+    const pendingSales = sales.filter((sale) => sale.status === "PENDING").length;
+    const cancelledSales = sales.filter((sale) => sale.status === "CANCELLED").length;
 
     return {
       previewSales,
@@ -75,15 +58,10 @@ export default function RecentSales({ sales = [] }) {
       <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-emerald-500/10 bg-emerald-500/10 dark:bg-emerald-500/20">
-            <ShoppingCart
-              size={18}
-              className="text-emerald-600 dark:text-emerald-400"
-            />
+            <ShoppingCart size={18} className="text-emerald-600 dark:text-emerald-400" />
           </div>
           <div>
-            <h2 className="text-lg font-bold tracking-tight text-slate-900 dark:text-white">
-              Ventas Recientes
-            </h2>
+            <h2 className="text-lg font-bold tracking-tight text-slate-900 dark:text-white">Ventas Recientes</h2>
             <p className="text-xs text-slate-500 dark:text-slate-400">
               Resumen rápido de las últimas transacciones en el sistema
             </p>
@@ -153,10 +131,7 @@ export default function RecentSales({ sales = [] }) {
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60 text-sm">
                 {stats.previewSales.map((sale) => (
-                  <tr
-                    key={sale.id}
-                    className="group transition-colors hover:bg-slate-50/50 dark:hover:bg-slate-800/20"
-                  >
+                  <tr key={sale.id} className="group transition-colors hover:bg-slate-50/50 dark:hover:bg-slate-800/20">
                     <td className="px-4 py-3.5 font-mono text-xs font-bold text-slate-900 dark:text-white">
                       {sale.saleNumber}
                     </td>
@@ -173,9 +148,7 @@ export default function RecentSales({ sales = [] }) {
                         year: "numeric",
                       })}
                     </td>
-                    <td className="px-4 py-3.5">
-                      {getStatusBadge(sale.status)}
-                    </td>
+                    <td className="px-4 py-3.5">{getStatusBadge(sale.status)}</td>
                     <td className="px-4 py-3.5 text-right font-bold text-slate-900 dark:text-white">
                       S/ {Number(sale.total).toFixed(2)}
                     </td>
@@ -190,15 +163,10 @@ export default function RecentSales({ sales = [] }) {
             <div className="flex items-center gap-4 text-xs">
               <p className="font-medium text-slate-500 dark:text-slate-400">
                 Mostrando las últimas{" "}
-                <span className="text-slate-900 font-bold dark:text-white">
-                  {stats.previewSales.length}
-                </span>{" "}
-                ventas
+                <span className="text-slate-900 font-bold dark:text-white">{stats.previewSales.length}</span> ventas
               </p>
               <div className="h-4 w-px bg-slate-300 dark:bg-slate-700" />
-              <p className="text-rose-500 font-medium">
-                {stats.cancelledSales} transacciones rechazadas
-              </p>
+              <p className="text-rose-500 font-medium">{stats.cancelledSales} transacciones rechazadas</p>
             </div>
 
             <Link

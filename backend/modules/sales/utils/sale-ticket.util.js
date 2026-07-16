@@ -6,7 +6,7 @@ const {
   formatCurrency,
   formatDate,
 } = require(
-  "./sale-format.util"
+  "./sale-format.util",
 );
 
 // ========================================
@@ -15,7 +15,7 @@ const {
 
 exports.generateTicket =
   (
-    sale
+    sale,
   ) => {
 
     let ticket = "";
@@ -34,7 +34,7 @@ exports.generateTicket =
 
     ticket +=
       `Fecha: ${formatDate(
-        sale.createdAt
+        sale.createdAt,
       )}\n`;
 
     ticket +=
@@ -54,15 +54,15 @@ exports.generateTicket =
 
         ticket +=
           `${detail.quantity} x ${formatCurrency(
-            detail.price
+            detail.price,
           )}\n`;
 
         ticket +=
           `${formatCurrency(
-            detail.subtotal
+            detail.subtotal,
           )}\n\n`;
 
-      }
+      },
     );
 
     ticket +=
@@ -70,22 +70,22 @@ exports.generateTicket =
 
     ticket +=
       `Subtotal: ${formatCurrency(
-        sale.subtotal
+        sale.subtotal,
       )}\n`;
 
     ticket +=
       `IGV: ${formatCurrency(
-        sale.tax
+        sale.tax,
       )}\n`;
 
     ticket +=
       `Descuento: ${formatCurrency(
-        sale.discount
+        sale.discount,
       )}\n`;
 
     ticket +=
       `TOTAL: ${formatCurrency(
-        sale.total
+        sale.total,
       )}\n`;
 
     ticket +=

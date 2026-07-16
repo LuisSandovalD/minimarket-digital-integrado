@@ -23,8 +23,7 @@ export default function AsideNavigationSkeleton({ isCollapsed }) {
                     <div
                       className="h-3.5 bg-slate-200 dark:bg-slate-700 rounded flex-1"
                       style={{
-                        width:
-                          itemId === 1 ? "60%" : itemId === 2 ? "75%" : "50%",
+                        width: itemId === 1 ? "60%" : itemId === 2 ? "75%" : "50%",
                       }}
                     />
                   )}

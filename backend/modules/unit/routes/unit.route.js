@@ -6,15 +6,15 @@ const roleCheck = require("../../../middleware/roleCheck");
 const controller = require("../controllers/unit.controller");
 
 const {
-    validateUnitQuery
+  validateUnitQuery,
 } = require("../validators/unit-query.validator");
 
 const {
-    validateCreateUnit
+  validateCreateUnit,
 } = require("../validators/unit-create.validator");
 
 const {
-    validateUpdateUnit
+  validateUpdateUnit,
 } = require("../validators/unit-update.validator");
 
 router.get("/", auth, roleCheck("ADMIN", "MANAGER", "SUPERVISOR", "EMPLOYEE", "VIEWER", "SUPPORT"), validateUnitQuery, controller.getUnits);

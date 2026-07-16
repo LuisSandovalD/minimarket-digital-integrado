@@ -12,32 +12,32 @@ const auditRepository = require("../repositories/audit.repository");
  * ==================================== */
 const logout = async ({ user, token }) => {
 
-    if (token) {
-        await sessionRepository.deactivateSessionByToken(token);
-    }
+  if (token) {
+    await sessionRepository.deactivateSessionByToken(token);
+  }
 
-    if (user?.id) {
-        // Actualizamos el estado de conexión del usuario
-        await userRepository.updateUser(
-            user.id,
-            { isOnline: false }
-        );
+  if (user?.id) {
+    // Actualizamos el estado de conexión del usuario
+    await userRepository.updateUser(
+      user.id,
+      { isOnline: false },
+    );
 
-        // Registramos la acción en la bitácora de auditoría
-        await auditRepository.createAuditLog({
-            userId: user.id,
-            companyId: user.companyId,
-            action: "LOGOUT",
-            entityType: "USER",
-            entityId: user.id,
-            description: "Sesión cerrada explícitamente por el usuario"
-        });
-    }
+    // Registramos la acción en la bitácora de auditoría
+    await auditRepository.createAuditLog({
+      userId: user.id,
+      companyId: user.companyId,
+      action: "LOGOUT",
+      entityType: "USER",
+      entityId: user.id,
+      description: "Sesión cerrada explícitamente por el usuario",
+    });
+  }
 
-    return {
-        success: true,
-        message: "Sesión finalizada correctamente"
-    };
+  return {
+    success: true,
+    message: "Sesión finalizada correctamente",
+  };
 };
 
 /* ======================================
@@ -45,43 +45,43 @@ const logout = async ({ user, token }) => {
  * ==================================== */
 const terminateAllUserSessions = async (userId) => {
 
-    if (!userId) {
-        throw new Error("ID de usuario mandatorio");
-    }
+  if (!userId) {
+    throw new Error("ID de usuario mandatorio");
+  }
 
-    // Buscamos datos del usuario para obtener el companyId requerido por la auditoría
-    const user = await userRepository.findUserById(userId);
+  // Buscamos datos del usuario para obtener el companyId requerido por la auditoría
+  const user = await userRepository.findUserById(userId);
 
-    // Desactivamos todas las sesiones
-    await sessionRepository.deactivateAllSessions(userId);
+  // Desactivamos todas las sesiones
+  await sessionRepository.deactivateAllSessions(userId);
 
-    // Cambiamos el estado en línea
-    await userRepository.updateUser(
-        userId,
-        { isOnline: false }
-    );
+  // Cambiamos el estado en línea
+  await userRepository.updateUser(
+    userId,
+    { isOnline: false },
+  );
 
-    // Registramos la revocación forzada
-    await auditRepository.createAuditLog({
-        userId,
-        companyId: user?.companyId,
-        action: "LOGOUT",
-        entityType: "USER",
-        entityId: userId,
-        description: "Revocación forzada de todos los dispositivos activos"
-    });
+  // Registramos la revocación forzada
+  await auditRepository.createAuditLog({
+    userId,
+    companyId: user?.companyId,
+    action: "LOGOUT",
+    entityType: "USER",
+    entityId: userId,
+    description: "Revocación forzada de todos los dispositivos activos",
+  });
 
-    return {
-        success: true,
-        message: "Se han cerrado todas las sesiones activas en otros dispositivos"
-    };
+  return {
+    success: true,
+    message: "Se han cerrado todas las sesiones activas en otros dispositivos",
+  };
 };
 
 /* ======================================
  * GET USER SESSIONS
  * ==================================== */
 const getUserSessionsList = async (userId) => {
-    return sessionRepository.findAllActiveSessions(userId);
+  return sessionRepository.findAllActiveSessions(userId);
 };
 
 /* ======================================
@@ -89,23 +89,23 @@ const getUserSessionsList = async (userId) => {
  * ==================================== */
 const revokeSingleSession = async (sessionId, userId) => {
 
-    const session = await sessionRepository.findSessionById(sessionId);
+  const session = await sessionRepository.findSessionById(sessionId);
 
-    if (!session || session.userId !== userId) {
-        throw new Error("La sesión no existe o no pertenece a tu cuenta");
-    }
+  if (!session || session.userId !== userId) {
+    throw new Error("La sesión no existe o no pertenece a tu cuenta");
+  }
 
-    await sessionRepository.deactivateSessionById(sessionId);
+  await sessionRepository.deactivateSessionById(sessionId);
 
-    return {
-        success: true,
-        message: "Dispositivo revocado exitosamente"
-    };
+  return {
+    success: true,
+    message: "Dispositivo revocado exitosamente",
+  };
 };
 
 module.exports = {
-    logout,
-    terminateAllUserSessions,
-    getUserSessionsList,
-    revokeSingleSession
+  logout,
+  terminateAllUserSessions,
+  getUserSessionsList,
+  revokeSingleSession,
 };

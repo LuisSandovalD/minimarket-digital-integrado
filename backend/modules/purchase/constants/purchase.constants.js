@@ -8,10 +8,10 @@ const PURCHASE_STATUS = {
 
   PARTIAL: "PARTIAL",
 
-  RECEIVED: "RECEIVED"
+  RECEIVED: "RECEIVED",
 
 };
 
 module.exports = {
-  PURCHASE_STATUS
+  PURCHASE_STATUS,
 };

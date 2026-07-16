@@ -7,21 +7,9 @@ import { useEffect, useState } from "react";
 import { ModernButton } from "@/components/buttons";
 import { SearchInput, Select } from "@/components/forms";
 
-import {
-  Building2,
-  CheckCircle2,
-  HelpCircle,
-  RefreshCw,
-  Search,
-  XCircle,
-} from "lucide-react";
+import { Building2, CheckCircle2, HelpCircle, RefreshCw, Search, XCircle } from "lucide-react";
 
-export default function SupplierFilters({
-  onSearch,
-  onClear,
-  loading,
-  globalFilters,
-}) {
+export default function SupplierFilters({ onSearch, onClear, loading, globalFilters }) {
   const [localSearch, setLocalSearch] = useState("");
   const [localStatus, setLocalStatus] = useState("");
 
@@ -32,6 +20,7 @@ export default function SupplierFilters({
 
   useEffect(() => {
     if (globalFilters) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setLocalSearch(globalFilters.search || "");
       setLocalStatus(globalFilters.isActive ?? "");
     }

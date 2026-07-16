@@ -11,7 +11,7 @@ const uploadToCloudinary = (fileBuffer) => {
       (error, result) => {
         if (error) return reject(error);
         resolve(result.secure_url);
-      }
+      },
     );
     stream.end(fileBuffer);
   });
@@ -34,18 +34,18 @@ const deleteAccount = async (req, res) => {
     if (!password) {
       return res.status(400).json({
         success: false,
-        message: "La contraseña es mandatoria para confirmar la baja de tu perfil corporativo."
+        message: "La contraseña es mandatoria para confirmar la baja de tu perfil corporativo.",
       });
     }
 
     const user = await prisma.user.findUnique({
-      where: { id: userId }
+      where: { id: userId },
     });
 
     if (!user || user.isDeleted) {
       return res.status(404).json({
         success: false,
-        message: "El usuario solicitado no existe o ya ha sido dado de baja previamente."
+        message: "El usuario solicitado no existe o ya ha sido dado de baja previamente.",
       });
     }
 
@@ -53,7 +53,7 @@ const deleteAccount = async (req, res) => {
     if (!isPasswordValid) {
       return res.status(401).json({
         success: false,
-        message: "Contraseña incorrecta. No se ha podido procesar la baja de la cuenta."
+        message: "Contraseña incorrecta. No se ha podido procesar la baja de la cuenta.",
       });
     }
 
@@ -63,13 +63,13 @@ const deleteAccount = async (req, res) => {
         isActive: false,
         isDeleted: true,
         isOnline: false,
-        deletedAt: new Date()
-      }
+        deletedAt: new Date(),
+      },
     });
 
     return successResponse(res, {
       message: "Tu cuenta ha sido dada de baja del sistema de Don Luchito S.A.C. con éxito.",
-      userId: updatedUser.id
+      userId: updatedUser.id,
     });
 
   } catch (error) {
@@ -94,8 +94,8 @@ const updateProfile = async (req, res) => {
         id: updatedUser.id,
         name: updatedUser.name,
         phone: updatedUser.phone,
-        avatar: updatedUser.avatar
-      }
+        avatar: updatedUser.avatar,
+      },
     });
   } catch (error) {
     return errorResponse(res, error);
@@ -115,5 +115,5 @@ module.exports = {
   getProfile,
   updateProfile,
   deleteAccount,
-  getAccountStatus
+  getAccountStatus,
 };

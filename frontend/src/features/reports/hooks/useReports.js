@@ -73,12 +73,8 @@ export default function useReports() {
     const company = getCompany();
     const params = {
       companyId: company?.id,
-      startDate: activeFilters.startDate
-        ? formatDateISO(activeFilters.startDate)
-        : undefined,
-      endDate: activeFilters.endDate
-        ? formatDateISO(activeFilters.endDate)
-        : undefined,
+      startDate: activeFilters.startDate ? formatDateISO(activeFilters.startDate) : undefined,
+      endDate: activeFilters.endDate ? formatDateISO(activeFilters.endDate) : undefined,
     };
 
     const endpoint = REPORT_ENDPOINTS[activeFilters.reportType]?.[format];

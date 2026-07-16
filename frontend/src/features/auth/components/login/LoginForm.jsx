@@ -52,12 +52,7 @@ export default function LoginForm({ onClose }) {
         <FormError message={error} />
 
         <LoginOptions>
-          <Checkbox
-            name="remember"
-            label="Recordarme"
-            checked={form.remember}
-            onChange={handleChange}
-          />
+          <Checkbox name="remember" label="Recordarme" checked={form.remember} onChange={handleChange} />
           <ModernButton
             type="button"
             text="¿Olvidaste tu contraseña?"
@@ -80,27 +75,18 @@ export default function LoginForm({ onClose }) {
 
         <p className="text-center text-xs leading-relaxed text-[#94a3b8] dark:text-white/30">
           Al iniciar sesión aceptas nuestros{" "}
-          <button
-            type="button"
-            className="font-medium text-[#274c77] hover:text-[#6096ba] dark:text-[#a3cef1]"
-          >
+          <button type="button" className="font-medium text-[#274c77] hover:text-[#6096ba] dark:text-[#a3cef1]">
             Términos y Condiciones
           </button>
           {" y nuestra "}
-          <button
-            type="button"
-            className="font-medium text-[#274c77] hover:text-[#6096ba] dark:text-[#a3cef1]"
-          >
+          <button type="button" className="font-medium text-[#274c77] hover:text-[#6096ba] dark:text-[#a3cef1]">
             Política de Privacidad
           </button>
           .
         </p>
       </form>
 
-      <ForgotPasswordModal
-        isOpen={showForgotPassword}
-        onClose={() => setShowForgotPassword(false)}
-      />
+      <ForgotPasswordModal isOpen={showForgotPassword} onClose={() => setShowForgotPassword(false)} />
 
       <TwoFactorLoginModal
         open={showTwoFactor}

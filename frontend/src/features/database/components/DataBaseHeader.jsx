@@ -1,19 +1,8 @@
 import { ModernButton } from "@/components/buttons";
 import { PageHeader } from "@/components/data-display";
-import {
-  CheckCircle2,
-  Database,
-  Download,
-  HardDrive,
-  RefreshCw,
-  Server,
-} from "lucide-react";
+import { CheckCircle2, Database, Download, HardDrive, RefreshCw, Server } from "lucide-react";
 
-export default function DataBaseHeader({
-  onRefresh,
-  onCreateBackup,
-  loading = {},
-}) {
+export default function DataBaseHeader({ onRefresh, onCreateBackup, loading = {} }) {
   return (
     <PageHeader
       icon={Database}
@@ -35,12 +24,7 @@ export default function DataBaseHeader({
           size="md"
           className="rounded-xl px-4 border border-neutral-200 dark:border-neutral-800 bg-muted/50 dark:bg-muted/20 hover:bg-neutral-100 dark:hover:bg-neutral-800 text-foreground transition-colors"
           text="Actualizar"
-          loading={
-            loading?.health ||
-            loading?.metrics ||
-            loading?.monitoring ||
-            loading?.refresh
-          }
+          loading={loading?.health || loading?.metrics || loading?.monitoring || loading?.refresh}
         />
       }
       stats={[

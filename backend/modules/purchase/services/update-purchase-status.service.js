@@ -1,18 +1,18 @@
 const {
-  updatePurchaseRepository
+  updatePurchaseRepository,
 } = require("../repositories/update-purchase.repository");
 
 async function updatePurchaseStatusService(
   id,
-  status
+  status,
 ) {
 
   return updatePurchaseRepository(id, {
-    status
+    status,
   });
 
 }
 
 module.exports = {
-  updatePurchaseStatusService
+  updatePurchaseStatusService,
 };

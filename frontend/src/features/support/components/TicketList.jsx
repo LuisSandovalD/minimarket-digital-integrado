@@ -1,10 +1,6 @@
 import TicketItem from "./TicketItem";
 
-export default function TicketList({
-  tickets = [],
-  selectedTicket,
-  onSelectTicket,
-}) {
+export default function TicketList({ tickets = [], selectedTicket, onSelectTicket }) {
   // ========================================
   // EMPTY STATE (Elegante y limpio)
   // ========================================

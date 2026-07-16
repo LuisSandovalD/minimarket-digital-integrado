@@ -10,9 +10,7 @@ export function SummaryRow({ label, value, bold = false }) {
         className={`
           py-1 text-left text-xs tracking-wide
           ${
-            bold
-              ? "text-slate-600 dark:text-slate-300 font-semibold"
-              : "text-slate-500 dark:text-slate-500 font-normal"
+            bold ? "text-slate-600 dark:text-slate-300 font-semibold" : "text-slate-500 dark:text-slate-500 font-normal"
           }
         `}
       >

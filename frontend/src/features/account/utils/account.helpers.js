@@ -85,8 +85,7 @@ export function parseUserAgent(userAgentStr) {
 
   // Detección simple de Navegador
   if (ua.includes("edg/")) browser = "Edge";
-  else if (ua.includes("chrome") && !ua.includes("chromium"))
-    browser = "Chrome";
+  else if (ua.includes("chrome") && !ua.includes("chromium")) browser = "Chrome";
   else if (ua.includes("safari") && !ua.includes("chrome")) browser = "Safari";
   else if (ua.includes("firefox")) browser = "Firefox";
   else if (ua.includes("opera") || ua.includes("opr/")) browser = "Opera";

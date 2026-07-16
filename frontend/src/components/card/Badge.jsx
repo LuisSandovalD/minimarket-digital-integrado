@@ -19,8 +19,7 @@ export default function Badge({
     default: {
       soft: "bg-slate-100 text-slate-700 dark:bg-white/10 dark:text-slate-200",
       solid: "bg-slate-800 text-white dark:bg-slate-100 dark:text-slate-900",
-      outline:
-        "border border-slate-300 text-slate-700 dark:border-white/15 dark:text-slate-200",
+      outline: "border border-slate-300 text-slate-700 dark:border-white/15 dark:text-slate-200",
     },
 
     primary: {
@@ -32,8 +31,7 @@ export default function Badge({
     success: {
       soft: "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400",
       solid: "bg-emerald-600 text-white",
-      outline:
-        "border border-emerald-300 text-emerald-700 dark:text-emerald-400",
+      outline: "border border-emerald-300 text-emerald-700 dark:text-emerald-400",
     },
 
     warning: {

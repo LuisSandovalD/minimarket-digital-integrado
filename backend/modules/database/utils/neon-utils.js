@@ -10,17 +10,17 @@
 */
 
 function buildNeonHeaders(
-    apiKey
+  apiKey,
 ) {
 
-    return {
+  return {
 
-        Authorization:
+    Authorization:
             `Bearer ${apiKey}`,
 
-        "Content-Type":
+    "Content-Type":
             "application/json",
-    };
+  };
 }
 
 /*
@@ -30,16 +30,16 @@ function buildNeonHeaders(
 */
 
 function buildNeonUrl(
-    projectId,
-    endpoint = ""
+  projectId,
+  endpoint = "",
 ) {
 
-    return `https://console.neon.tech/api/v2/projects/${projectId}${endpoint}`;
+  return `https://console.neon.tech/api/v2/projects/${projectId}${endpoint}`;
 }
 
 module.exports = {
 
-    buildNeonHeaders,
+  buildNeonHeaders,
 
-    buildNeonUrl,
+  buildNeonUrl,
 };

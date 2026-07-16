@@ -1,56 +1,56 @@
 const prisma = require("../../../prisma/client");
 
 const getRecentActivity = async (
-    companyId,
-    limit = 20
+  companyId,
+  limit = 20,
 ) => {
 
-    return prisma.auditLog.findMany({
-        where: {
-            companyId
-        },
+  return prisma.auditLog.findMany({
+    where: {
+      companyId,
+    },
 
-        include: {
-            user: {
-                select: {
-                    id: true,
-                    name: true,
-                    email: true
-                }
-            }
+    include: {
+      user: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
         },
+      },
+    },
 
-        orderBy: {
-            createdAt: "desc"
-        },
+    orderBy: {
+      createdAt: "desc",
+    },
 
-        take: limit
-    });
+    take: limit,
+  });
 };
 
 const getUserSessions = async (
-    companyId
+  companyId,
 ) => {
 
-    return prisma.userSession.findMany({
+  return prisma.userSession.findMany({
 
-        where: {
-            user: {
-                companyId
-            }
-        },
+    where: {
+      user: {
+        companyId,
+      },
+    },
 
-        include: {
-            user: true
-        },
+    include: {
+      user: true,
+    },
 
-        orderBy: {
-            createdAt: "desc"
-        }
-    });
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
 };
 
 module.exports = {
-    getRecentActivity,
-    getUserSessions
+  getRecentActivity,
+  getUserSessions,
 };

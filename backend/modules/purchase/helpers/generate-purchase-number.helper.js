@@ -9,11 +9,11 @@ async function generatePurchaseNumber() {
   const year = now.getFullYear();
 
   const month = String(
-    now.getMonth() + 1
+    now.getMonth() + 1,
   ).padStart(2, "0");
 
   const day = String(
-    now.getDate()
+    now.getDate(),
   ).padStart(2, "0");
 
   return `PUR-${year}${month}${day}-${Date.now()}`;
@@ -21,5 +21,5 @@ async function generatePurchaseNumber() {
 }
 
 module.exports = {
-  generatePurchaseNumber
+  generatePurchaseNumber,
 };

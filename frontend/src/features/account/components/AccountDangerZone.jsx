@@ -110,10 +110,7 @@ export default function AccountDangerZone() {
         </button>
       </section>
 
-      <DeleteAccountModal
-        open={openDeleteModal}
-        onClose={() => setOpenDeleteModal(false)}
-      />
+      <DeleteAccountModal open={openDeleteModal} onClose={() => setOpenDeleteModal(false)} />
     </>
   );
 }

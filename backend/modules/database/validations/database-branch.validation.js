@@ -11,41 +11,41 @@ const { z } = require("zod");
 const databaseBranchValidation =
     z.object({
 
-        branchId: z
+      branchId: z
 
-            .string()
+        .string()
 
-            .trim()
+        .trim()
 
-            .min(
-                1,
-                "Branch ID is required"
-            )
+        .min(
+          1,
+          "Branch ID is required",
+        )
 
-            .max(
-                100,
-                "Branch ID too long"
-            )
+        .max(
+          100,
+          "Branch ID too long",
+        )
 
-            .optional(),
+        .optional(),
 
-        branchName: z
+      branchName: z
 
-            .string()
+        .string()
 
-            .trim()
+        .trim()
 
-            .min(
-                2,
-                "Branch name too short"
-            )
+        .min(
+          2,
+          "Branch name too short",
+        )
 
-            .max(
-                100,
-                "Branch name too long"
-            )
+        .max(
+          100,
+          "Branch name too long",
+        )
 
-            .optional(),
+        .optional(),
     });
 
 module.exports =

@@ -1,8 +1,4 @@
-import {
-  SkeletonCard,
-  SkeletonHeader,
-  SkeletonSearch,
-} from "@/components/skeletons";
+import { SkeletonCard, SkeletonHeader, SkeletonSearch } from "@/components/skeletons";
 
 export default function BarcodeLoading() {
   return (

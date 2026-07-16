@@ -9,7 +9,7 @@
 exports.formatCurrency =
   (
     amount,
-    currency = "PEN"
+    currency = "PEN",
   ) => {
 
     return new Intl.NumberFormat(
@@ -20,7 +20,7 @@ exports.formatCurrency =
           "currency",
 
         currency,
-      }
+      },
     ).format(amount);
 
   };
@@ -31,7 +31,7 @@ exports.formatCurrency =
 
 exports.formatDate =
   (
-    date
+    date,
   ) => {
 
     return new Intl.DateTimeFormat(
@@ -52,9 +52,9 @@ exports.formatDate =
 
         minute:
           "2-digit",
-      }
+      },
     ).format(
-      new Date(date)
+      new Date(date),
     );
 
   };
@@ -65,11 +65,11 @@ exports.formatDate =
 
 exports.formatPercentage =
   (
-    value
+    value,
   ) => {
 
     return `${Number(
-      value
+      value,
     ).toFixed(2)}%`;
 
   };

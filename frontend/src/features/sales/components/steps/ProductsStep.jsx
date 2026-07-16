@@ -9,15 +9,11 @@ import { useProductsStep } from "../../hooks/useProductsStep";
 import CartModal from "../modals/CartModal";
 
 export default function ProductsStep({ products = [], form, setForm }) {
-  const {
-    search,
-    setSearch,
-    cartOpen,
-    setCartOpen,
-    filteredProducts,
-    fmt,
-    cart,
-  } = useProductsStep({ products, form, setForm });
+  const { search, setSearch, cartOpen, setCartOpen, filteredProducts, fmt, cart } = useProductsStep({
+    products,
+    form,
+    setForm,
+  });
 
   // =========================================================================
   // 🔥 PUENTE DE SINCRONIZACIÓN CON EL BACKEND (IGV Adicionado - UI Transparente)
@@ -26,11 +22,8 @@ export default function ProductsStep({ products = [], form, setForm }) {
     if (cart?.details && Array.isArray(cart.details)) {
       const detailsParaBackend = cart.details.map((item) => {
         const precioUnitario = Number(item.unitPrice || item.price || 0);
-        const productoOriginal = products.find(
-          (p) => Number(p.id) === Number(item.productId),
-        );
-        const nombreDetectado =
-          item.productName || item.name || productoOriginal?.name || "Producto";
+        const productoOriginal = products.find((p) => Number(p.id) === Number(item.productId));
+        const nombreDetectado = item.productName || item.name || productoOriginal?.name || "Producto";
 
         return {
           productId: Number(item.productId),
@@ -39,11 +32,7 @@ export default function ProductsStep({ products = [], form, setForm }) {
           productName: nombreDetectado,
           name: nombreDetectado,
           unitPrice: precioUnitario,
-          stock:
-            item.stock ||
-            productoOriginal?.stock ||
-            productoOriginal?.totalStock ||
-            999,
+          stock: item.stock || productoOriginal?.stock || productoOriginal?.totalStock || 999,
         };
       });
 
@@ -61,10 +50,8 @@ export default function ProductsStep({ products = [], form, setForm }) {
       const totalAmountCalculado = subtotalCalculado + taxCalculado;
 
       setForm((prev) => {
-        const estructuraIdentica =
-          JSON.stringify(prev.details) === JSON.stringify(detailsParaBackend);
-        const totalesIdenticos =
-          prev.total === Number(totalAmountCalculado.toFixed(2));
+        const estructuraIdentica = JSON.stringify(prev.details) === JSON.stringify(detailsParaBackend);
+        const totalesIdenticos = prev.total === Number(totalAmountCalculado.toFixed(2));
 
         if (estructuraIdentica && totalesIdenticos) {
           return prev;
@@ -82,9 +69,7 @@ export default function ProductsStep({ products = [], form, setForm }) {
   }, [cart?.details, products, setForm]);
 
   // Forzamos el conteo de unidades directo desde el estado del formulario para blindar la UI
-  const totalUnidadesForm =
-    form?.details?.reduce((acc, item) => acc + Number(item.quantity || 0), 0) ||
-    0;
+  const totalUnidadesForm = form?.details?.reduce((acc, item) => acc + Number(item.quantity || 0), 0) || 0;
   const totalMontoForm = Number(form?.total || 0);
 
   return (
@@ -123,19 +108,13 @@ export default function ProductsStep({ products = [], form, setForm }) {
               >
                 {/* INFO */}
                 <div className="flex-1 min-w-0">
-                  <p className="text-[13px] font-medium text-slate-900 dark:text-slate-100 truncate">
-                    {product.name}
-                  </p>
-                  <p className="text-[11px] text-slate-400 dark:text-slate-600 mt-0.5">
-                    {product.sku}
-                  </p>
+                  <p className="text-[13px] font-medium text-slate-900 dark:text-slate-100 truncate">{product.name}</p>
+                  <p className="text-[11px] text-slate-400 dark:text-slate-600 mt-0.5">{product.sku}</p>
 
                   <div className="flex items-center gap-2 mt-1.5">
                     <span className="text-[13px] font-semibold text-slate-900 dark:text-slate-100">
                       {fmt(product.salePrice)}{" "}
-                      <span className="text-[10px] font-normal text-slate-400 lowercase">
-                        + igv
-                      </span>
+                      <span className="text-[10px] font-normal text-slate-400 lowercase">+ igv</span>
                     </span>
 
                     <span
@@ -145,9 +124,7 @@ export default function ProductsStep({ products = [], form, setForm }) {
                     </span>
 
                     {qty > 0 && (
-                      <span className="text-[11px] font-semibold text-blue-600 dark:text-blue-400">
-                        ×{qty}
-                      </span>
+                      <span className="text-[11px] font-semibold text-blue-600 dark:text-blue-400">×{qty}</span>
                     )}
                   </div>
                 </div>
@@ -156,8 +133,7 @@ export default function ProductsStep({ products = [], form, setForm }) {
                 <button
                   type="button"
                   onClick={() => {
-                    const nombreFijo =
-                      product.name || product.productName || "Producto";
+                    const nombreFijo = product.name || product.productName || "Producto";
                     cart.addToCart({
                       productId: product.id,
                       productName: nombreFijo,

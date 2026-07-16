@@ -20,13 +20,5 @@ export default function ModalButton({
     }
   };
 
-  return (
-    <ModernButton
-      text={text}
-      icon={icon}
-      variant={variant}
-      onClick={handleModal}
-      {...props}
-    />
-  );
+  return <ModernButton text={text} icon={icon} variant={variant} onClick={handleModal} {...props} />;
 }

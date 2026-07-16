@@ -38,13 +38,13 @@ function calculatePricing({
 
   if (purchase < 0) {
     throw new Error(
-      "El precio de compra no puede ser negativo"
+      "El precio de compra no puede ser negativo",
     );
   }
 
   if (margin < 0) {
     throw new Error(
-      "El margen de ganancia no puede ser negativo"
+      "El margen de ganancia no puede ser negativo",
     );
   }
 
@@ -58,7 +58,7 @@ function calculatePricing({
 
   if (sale < cost) {
     throw new Error(
-      "El precio de venta no puede ser menor al costo"
+      "El precio de venta no puede ser menor al costo",
     );
   }
 
@@ -86,7 +86,7 @@ function calculatePricing({
 
 exports.create = async (
   body,
-  user
+  user,
 ) => {
 
   // ========================================
@@ -104,7 +104,7 @@ exports.create = async (
 
     body.sku =
       generateSku(
-        user.companyId
+        user.companyId,
       );
   }
 
@@ -120,7 +120,7 @@ exports.create = async (
 
   await validateProductCreate(
     body,
-    user.companyId
+    user.companyId,
   );
 
   // ========================================
@@ -186,12 +186,12 @@ exports.create = async (
 
             requiresExpiration:
               Boolean(
-                body.requiresExpiration
+                body.requiresExpiration,
               ),
 
             trackBatches:
               Boolean(
-                body.trackBatches
+                body.trackBatches,
               ),
 
             isActive:
@@ -206,12 +206,12 @@ exports.create = async (
 
             categoryId:
               Number(
-                body.categoryId
+                body.categoryId,
               ),
 
             unitId:
               Number(
-                body.unitId
+                body.unitId,
               ),
 
             companyId:
@@ -236,7 +236,7 @@ exports.create = async (
 
               branchId:
                 Number(
-                  body.branchId
+                  body.branchId,
                 ),
 
               companyId:
@@ -286,6 +286,6 @@ exports.create = async (
         ...product,
         inventory,
       };
-    }
+    },
   );
 };

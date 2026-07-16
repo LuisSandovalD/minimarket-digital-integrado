@@ -11,7 +11,7 @@ const prisma =
 
 exports.getInventoryValue =
   async (
-    companyId
+    companyId,
   ) => {
 
     const inventories =
@@ -38,7 +38,7 @@ exports.getInventoryValue =
         );
 
       },
-      0
+      0,
     );
 
   };
@@ -49,7 +49,7 @@ exports.getInventoryValue =
 
 exports.getTotalStock =
   async (
-    companyId
+    companyId,
   ) => {
 
     const result =

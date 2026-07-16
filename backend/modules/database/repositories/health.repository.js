@@ -1,7 +1,7 @@
 // modules/database/repositories/health.repository.js
 
 const prisma = require(
-  "../../../config/prisma.config"
+  "../../../config/prisma.config",
 );
 
 class HealthRepository {

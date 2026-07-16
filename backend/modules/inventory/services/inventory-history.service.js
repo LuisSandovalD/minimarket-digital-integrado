@@ -11,11 +11,11 @@ const repository =
 
 exports.getHistoryByInventory =
   async (
-    inventoryId
+    inventoryId,
   ) => {
 
     return repository.getHistoryByInventory(
-      inventoryId
+      inventoryId,
     );
 
   };
@@ -28,13 +28,13 @@ exports.getHistoryByDateRange =
   async (
     companyId,
     startDate,
-    endDate
+    endDate,
   ) => {
 
     return repository.getHistoryByDateRange(
       companyId,
       startDate,
-      endDate
+      endDate,
     );
 
   };

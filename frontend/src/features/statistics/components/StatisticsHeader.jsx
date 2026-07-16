@@ -1,14 +1,7 @@
 // ========================================
 // features/dashboard/statistics/components/StatisticsHeader.jsx
 // ========================================
-import {
-  BarChart3,
-  Calendar,
-  Package,
-  RefreshCw,
-  Truck,
-  Users,
-} from "lucide-react";
+import { BarChart3, Calendar, Package, RefreshCw, Truck, Users } from "lucide-react";
 
 import { ModernButton } from "@/components/buttons";
 import { PageHeader } from "@/components/data-display";
@@ -40,13 +33,7 @@ export default function StatisticsHeader({
         badge="Estadísticas"
         title="Estadísticas y Rendimiento Operativo"
         description="Análisis de rotación del catálogo, participación de terceros y trazabilidad del personal."
-        headerActions={
-          <ModernButton
-            icon={RefreshCw}
-            text="Actualizar Métricas"
-            onClick={onRefresh}
-          />
-        }
+        headerActions={<ModernButton icon={RefreshCw} text="Actualizar Métricas" onClick={onRefresh} />}
         stats={[
           {
             icon: Package,
@@ -80,11 +67,7 @@ export default function StatisticsHeader({
               key={p.value}
               text={p.label}
               onClick={() => setPeriod(p.value)}
-              className={
-                period === p.value
-                  ? "bg-emerald-600 text-white border-emerald-600 hover:bg-emerald-700"
-                  : ""
-              }
+              className={period === p.value ? "bg-emerald-600 text-white border-emerald-600 hover:bg-emerald-700" : ""}
               variant="outline"
             />
           ))}
@@ -93,9 +76,7 @@ export default function StatisticsHeader({
         {/* SELECTOR DE FECHAS PERSONALIZADO */}
         <div className="flex flex-wrap items-end gap-3">
           <div>
-            <label className="block mb-1 text-xs text-slate-500 font-medium">
-              Fecha inicio
-            </label>
+            <label className="block mb-1 text-xs text-slate-500 font-medium">Fecha inicio</label>
             <input
               type="date"
               value={draftStartDate || ""}
@@ -108,9 +89,7 @@ export default function StatisticsHeader({
           </div>
 
           <div>
-            <label className="block mb-1 text-xs text-slate-500 font-medium">
-              Fecha fin
-            </label>
+            <label className="block mb-1 text-xs text-slate-500 font-medium">Fecha fin</label>
             <input
               type="date"
               value={draftEndDate || ""}
@@ -132,11 +111,7 @@ export default function StatisticsHeader({
         </div>
       </div>
 
-      {dateError && (
-        <div className="text-sm font-semibold text-rose-600 animate-pulse">
-          ⚠️ {dateError}
-        </div>
-      )}
+      {dateError && <div className="text-sm font-semibold text-rose-600 animate-pulse">⚠️ {dateError}</div>}
     </div>
   );
 }

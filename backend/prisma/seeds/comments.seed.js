@@ -12,7 +12,7 @@ async function commentsSeed() {
     "luissandovalcarbonel@gmail.com",
     "jimmysandoval@gmail.com",
     "maria.lopez@sanjosemed.pe",
-    "pedro.ramirez@alimentosdelsur.pe"
+    "pedro.ramirez@alimentosdelsur.pe",
   ];
 
   // 2. Banco de datos optimizado únicamente para los 4 administradores reales
@@ -20,7 +20,7 @@ async function commentsSeed() {
     "luissandovalcarbonel@gmail.com": { rating: 5, comment: "Excelente plataforma para la gestión de inventario de nuestro minimarket." },
     "jimmysandoval@gmail.com": { rating: 4, comment: "Muy buen soporte técnico y el módulo de facturación es rápido. Recomendado." },
     "maria.lopez@sanjosemed.pe": { rating: 5, comment: "La interfaz es limpia y nos ayuda a mantener el orden de la administración médica." },
-    "pedro.ramirez@alimentosdelsur.pe": { rating: 4, comment: "Nos facilita bastante la distribución, se adapta bien al flujo de provincias." }
+    "pedro.ramirez@alimentosdelsur.pe": { rating: 4, comment: "Nos facilita bastante la distribución, se adapta bien al flujo de provincias." },
   };
 
   let totalCreated = 0;
@@ -28,7 +28,7 @@ async function commentsSeed() {
   for (const email of adminEmails) {
     // Buscar al usuario administrador para obtener su id y el companyId asignado
     const adminUser = await prisma.user.findFirst({
-      where: { email }
+      where: { email },
     });
 
     if (!adminUser) {
@@ -42,8 +42,8 @@ async function commentsSeed() {
     const existingReview = await prisma.review.findFirst({
       where: {
         userId: adminUser.id,
-        companyId: adminUser.companyId
-      }
+        companyId: adminUser.companyId,
+      },
     });
 
     if (existingReview) {
@@ -57,18 +57,18 @@ async function commentsSeed() {
         rating: reviewData.rating,
         comment: reviewData.comment,
         userId: adminUser.id,        // Relación requerida NOT NULL (INTEGER)
-        companyId: adminUser.companyId // Relación requerida NOT NULL (INTEGER)
-      }
+        companyId: adminUser.companyId, // Relación requerida NOT NULL (INTEGER)
+      },
     });
 
     totalCreated++;
   }
 
-  console.log(`\n====================================`);
+  console.log("\n====================================");
   console.log(`✅ SEED COMPLETADO: Se cargaron con éxito ${totalCreated} reseñas en la tabla 'Review'.`);
-  console.log(`====================================\n`);
+  console.log("====================================\n");
 }
 
 module.exports = {
-  commentsSeed
+  commentsSeed,
 };

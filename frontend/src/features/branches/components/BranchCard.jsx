@@ -5,16 +5,7 @@
 // ========================================
 
 import { ModernButton } from "@/components/buttons";
-import {
-  Calendar,
-  Code,
-  Edit2,
-  Mail,
-  MapPin,
-  Phone,
-  Store,
-  Trash2,
-} from "lucide-react";
+import { Calendar, Code, Edit2, Mail, MapPin, Phone, Store, Trash2 } from "lucide-react";
 import BranchStatusBadge from "./BranchStatusBadge";
 
 // 🌟 Importación limpia del servicio de sesión del frontend (según tu patrón funcional)
@@ -25,8 +16,7 @@ import { getUser } from "@/features/auth/services/session.service";
 // ========================================
 const actionButtonStyles =
   "h-9 w-9 rounded-xl border border-white/10 bg-white/5 text-white/70 backdrop-blur-sm transition-all duration-200 hover:bg-white/10 hover:text-white";
-const infoRowStyles =
-  "flex items-center gap-3 text-sm text-slate-600 dark:text-slate-300";
+const infoRowStyles = "flex items-center gap-3 text-sm text-slate-600 dark:text-slate-300";
 const iconContainerStyles =
   "flex h-9 w-9 items-center justify-center rounded-xl bg-slate-100 dark:bg-white/[0.04] text-slate-500 dark:text-slate-400";
 
@@ -44,9 +34,7 @@ export default function BranchCard({ branch, onEdit, onDeleteTrigger }) {
   };
 
   const location =
-    branch.city && branch.state
-      ? `${branch.city}, ${branch.state}`
-      : branch.address?.split(",")[0] || "Sin ubicación";
+    branch.city && branch.state ? `${branch.city}, ${branch.state}` : branch.address?.split(",")[0] || "Sin ubicación";
 
   return (
     <article className="group relative overflow-hidden rounded-3xl border border-slate-200/70 bg-white transition-all duration-300 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-xl hover:shadow-black/[0.04] dark:border-slate-800 dark:bg-slate-950 dark:hover:border-slate-700">
@@ -123,9 +111,7 @@ export default function BranchCard({ branch, onEdit, onDeleteTrigger }) {
           {/* CONTACT */}
           {(branch.phone || branch.email) && (
             <div className={infoRowStyles}>
-              <div className={iconContainerStyles}>
-                {branch.phone ? <Phone size={16} /> : <Mail size={16} />}
-              </div>
+              <div className={iconContainerStyles}>{branch.phone ? <Phone size={16} /> : <Mail size={16} />}</div>
               <span className="truncate">{branch.phone || branch.email}</span>
             </div>
           )}

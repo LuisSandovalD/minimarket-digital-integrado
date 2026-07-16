@@ -3,6 +3,6 @@
 // ========================================
 
 module.exports = {
-    JWT_EXPIRES: "7d",
-    SALT_ROUNDS: 10
+  JWT_EXPIRES: "7d",
+  SALT_ROUNDS: 10,
 };

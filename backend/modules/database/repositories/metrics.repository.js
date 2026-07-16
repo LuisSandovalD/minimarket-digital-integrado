@@ -1,5 +1,5 @@
 const prisma = require(
-  "../../../config/prisma.config"
+  "../../../config/prisma.config",
 );
 
 class MetricsRepository {

@@ -1,15 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 import AsideBadge from "./AsideBadge";
 
-export default function AsideItem({
-  label,
-  icon: Icon,
-  href,
-  badge,
-  isActive,
-  isCollapsed,
-  onClick,
-}) {
+export default function AsideItem({ label, icon: Icon, href, badge, isActive, isCollapsed, onClick }) {
   const { companySlug } = useParams();
 
   return (
@@ -22,9 +14,7 @@ export default function AsideItem({
           : "text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white"
       } ${isCollapsed ? "md:justify-center" : ""}`}
     >
-      {isActive && (
-        <div className="absolute left-0 top-2 bottom-2 w-1 rounded-r-full bg-white" />
-      )}
+      {isActive && <div className="absolute left-0 top-2 bottom-2 w-1 rounded-r-full bg-white" />}
 
       <Icon className={`h-5 w-5 shrink-0 ${isActive ? "text-white" : ""}`} />
 

@@ -32,9 +32,7 @@ export default function NotificationHeader({
             className="p-2 text-gray-600 hover:text-blue-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-50 transition-colors shadow-sm"
             title="Sincronizar inventario"
           >
-            <RefreshCw
-              className={`w-4 h-4 ${loading ? "animate-spin text-blue-600" : ""}`}
-            />
+            <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin text-blue-600" : ""}`} />
           </button>
         </div>
       }

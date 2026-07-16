@@ -45,12 +45,9 @@ export default function SaleDetailTable({
   return (
     <div className="space-y-5">
       <div>
-        <h2 className="text-xl font-semibold tracking-tight text-slate-900 dark:text-white">
-          Detalles de Ventas
-        </h2>
+        <h2 className="text-xl font-semibold tracking-tight text-slate-900 dark:text-white">Detalles de Ventas</h2>
         <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-          Audita el historial físico de productos vendidos y montos aplicados
-          por línea de transacción.
+          Audita el historial físico de productos vendidos y montos aplicados por línea de transacción.
         </p>
       </div>
 
@@ -82,10 +79,7 @@ export default function SaleDetailTable({
 
               if (detail.subtotal !== undefined) {
                 subtotalAmount = Number(detail.subtotal || 0);
-                const taxAmount =
-                  detail.tax !== undefined
-                    ? Number(detail.tax || 0)
-                    : subtotalAmount * 0.18;
+                const taxAmount = detail.tax !== undefined ? Number(detail.tax || 0) : subtotalAmount * 0.18;
                 lineTotal = subtotalAmount + taxAmount;
               } else {
                 lineTotal = baseBruta;
@@ -117,9 +111,7 @@ export default function SaleDetailTable({
                       className="text-sm font-medium text-slate-900 dark:text-white max-w-[240px] truncate"
                       title={currentProduct.name || detail.productName}
                     >
-                      {currentProduct.name ||
-                        detail.productName ||
-                        "Artículo Descontinuado"}
+                      {currentProduct.name || detail.productName || "Artículo Descontinuado"}
                     </p>
                     {(currentProduct.sku || detail.productSku) && (
                       <span className="text-[10px] font-mono text-slate-400 dark:text-slate-500 block mt-0.5">
@@ -129,14 +121,10 @@ export default function SaleDetailTable({
                   </td>
 
                   {/* 3. CANTIDAD VENDIDA */}
-                  <td className="px-6 py-4 text-sm font-medium text-slate-700 dark:text-slate-300">
-                    {qty} u.
-                  </td>
+                  <td className="px-6 py-4 text-sm font-medium text-slate-700 dark:text-slate-300">{qty} u.</td>
 
                   {/* 4. PRECIO UNITARIO */}
-                  <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">
-                    {formatMoney(priceUnit)}
-                  </td>
+                  <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">{formatMoney(priceUnit)}</td>
 
                   {/* 5. SUBTOTAL DE LÍNEA (SIN IMPUESTO) */}
                   <td className="px-6 py-4">
@@ -188,8 +176,7 @@ export default function SaleDetailTable({
                     No hay detalles de venta registrados
                   </h3>
                   <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
-                    Las partidas de las transacciones aparecerán reflejadas en
-                    esta lista.
+                    Las partidas de las transacciones aparecerán reflejadas en esta lista.
                   </p>
                 </div>
               </td>
@@ -199,12 +186,7 @@ export default function SaleDetailTable({
 
         {/* PIE DE PÁGINA CON PAGINACIÓN */}
         {safeDetails.length > 0 && (
-          <TFooter
-            page={page}
-            totalPages={totalPages}
-            onPrev={onPrevPage}
-            onNext={onNextPage}
-          />
+          <TFooter page={page} totalPages={totalPages} onPrev={onPrevPage} onNext={onNextPage} />
         )}
       </Table>
     </div>

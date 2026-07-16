@@ -16,12 +16,11 @@ export function useSalePayment({ sale, onSubmit, onClose }) {
   });
 
   // Determinar la deuda inicial de la venta de forma segura
-  const currentDebtAmount = Number(
-    sale?.pendingDebt !== undefined ? sale.pendingDebt : sale?.total || 0,
-  );
+  const currentDebtAmount = Number(sale?.pendingDebt !== undefined ? sale.pendingDebt : sale?.total || 0);
 
   useEffect(() => {
     if (sale) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setForm({
         payments: [
           {
@@ -37,22 +36,15 @@ export function useSalePayment({ sale, onSubmit, onClose }) {
 
   // Sumatoria en tiempo real de lo digitado en el modal
   const totalPaidInModal = Number(
-    (form.payments || [])
-      .reduce((acc, p) => acc + (Number(p.amount) || 0), 0)
-      .toFixed(2),
+    (form.payments || []).reduce((acc, p) => acc + (Number(p.amount) || 0), 0).toFixed(2),
   );
 
   // Cálculo del vuelto (si aplica)
-  const changeDue =
-    totalPaidInModal > currentDebtAmount
-      ? (totalPaidInModal - currentDebtAmount).toFixed(2)
-      : "0.00";
+  const changeDue = totalPaidInModal > currentDebtAmount ? (totalPaidInModal - currentDebtAmount).toFixed(2) : "0.00";
 
   // Cálculo de la deuda remanente que se inyectará al payload raíz del backend
   const calculatedPendingDebt =
-    currentDebtAmount - totalPaidInModal > 0
-      ? Number((currentDebtAmount - totalPaidInModal).toFixed(2))
-      : 0.0;
+    currentDebtAmount - totalPaidInModal > 0 ? Number((currentDebtAmount - totalPaidInModal).toFixed(2)) : 0.0;
 
   // Formato string para pintar en la interfaz UI
   const pendingDebtStr = calculatedPendingDebt.toFixed(2);
@@ -82,9 +74,7 @@ export function useSalePayment({ sale, onSubmit, onClose }) {
   const updatePaymentRow = (id, field, value) => {
     setForm((prev) => ({
       ...prev,
-      payments: prev.payments.map((p) =>
-        p.id === id ? { ...p, [field]: value } : p,
-      ),
+      payments: prev.payments.map((p) => (p.id === id ? { ...p, [field]: value } : p)),
     }));
   };
 
@@ -123,13 +113,8 @@ export function useSalePayment({ sale, onSubmit, onClose }) {
 
     // 2. Determinar dinámicamente el tipo de cobro principal
     // Si incluye un método crédito o la deuda remanente es mayor a cero, es venta crédito, sino venta al contado.
-    const hasCreditRow = validPaymentsInModal.some(
-      (p) => p.method === "CREDIT",
-    );
-    const saleTypePayload =
-      calculatedPendingDebt > 0.05 || hasCreditRow
-        ? "CREDIT_SALE"
-        : "CASH_SALE";
+    const hasCreditRow = validPaymentsInModal.some((p) => p.method === "CREDIT");
+    const saleTypePayload = calculatedPendingDebt > 0.05 || hasCreditRow ? "CREDIT_SALE" : "CASH_SALE";
 
     // 3. Construir payload unificado idéntico al validado en Postman:
     //    { saleType, pendingDebt, isAbonoFlow, payments: [...] }

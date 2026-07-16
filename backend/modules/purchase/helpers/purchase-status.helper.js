@@ -1,5 +1,5 @@
 const {
-  PURCHASE_STATUS
+  PURCHASE_STATUS,
 } = require("../constants/purchase.constants");
 
 function getDefaultPurchaseStatus() {
@@ -9,5 +9,5 @@ function getDefaultPurchaseStatus() {
 }
 
 module.exports = {
-  getDefaultPurchaseStatus
+  getDefaultPurchaseStatus,
 };

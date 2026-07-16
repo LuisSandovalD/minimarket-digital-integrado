@@ -1,23 +1,14 @@
 import { AlertCircle, FileText, Loader2 } from "lucide-react";
 import { reportsRegistry } from "../constants/reportsRegistry";
 
-export default function ReportsViewer({
-  reportType,
-  filters,
-  innerRef,
-  isLoading = false,
-}) {
+export default function ReportsViewer({ reportType, filters, innerRef, isLoading = false }) {
   // 1. Estado: Cargando datos (Spinner/Skeleton elegante)
   if (isLoading && reportType) {
     return (
       <div className="flex flex-col items-center justify-center p-12 rounded-xl border border-slate-200/60 dark:border-white/[0.06] bg-white/50 dark:bg-white/[0.02] backdrop-blur-sm min-h-[400px]">
         <Loader2 className="w-8 h-8 text-blue-500 dark:text-blue-400 animate-spin mb-3 stroke-[1.5]" />
-        <p className="text-sm font-medium text-slate-600 dark:text-slate-400">
-          Procesando información...
-        </p>
-        <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">
-          Generando la estructura del reporte
-        </p>
+        <p className="text-sm font-medium text-slate-600 dark:text-slate-400">Procesando información...</p>
+        <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">Generando la estructura del reporte</p>
       </div>
     );
   }
@@ -29,12 +20,9 @@ export default function ReportsViewer({
         <div className="p-3 rounded-xl bg-slate-100 dark:bg-white/[0.04] text-slate-400 dark:text-slate-400 mb-4">
           <FileText className="w-6 h-6 stroke-[1.5]" />
         </div>
-        <p className="text-sm font-semibold text-slate-700 dark:text-slate-300">
-          Ningún reporte seleccionado
-        </p>
+        <p className="text-sm font-semibold text-slate-700 dark:text-slate-300">Ningún reporte seleccionado</p>
         <p className="text-xs text-slate-400 dark:text-slate-500 text-center mt-1.5 max-w-[280px] leading-relaxed">
-          Por favor, elige un tipo de reporte en los filtros superiores para
-          comenzar la visualización.
+          Por favor, elige un tipo de reporte en los filtros superiores para comenzar la visualización.
         </p>
       </div>
     );

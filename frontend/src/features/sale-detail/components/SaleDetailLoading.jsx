@@ -2,11 +2,7 @@
 // features/sale-detail/components/SaleDetailLoading.jsx
 // ========================================
 
-import {
-  SkeletonHeader,
-  SkeletonSearch,
-  SkeletonTable,
-} from "@/components/skeletons";
+import { SkeletonHeader, SkeletonSearch, SkeletonTable } from "@/components/skeletons";
 
 export default function SaleDetailLoading() {
   return (

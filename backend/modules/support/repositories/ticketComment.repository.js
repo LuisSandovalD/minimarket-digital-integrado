@@ -4,65 +4,65 @@ const prisma =
     require("../../../prisma/client");
 
 const findByTicket = (
-    ticketId
+  ticketId,
 ) => {
-    return prisma.ticketComment.findMany(
-        {
-            where: {
-                ticketId,
-                deletedAt: null,
-            },
+  return prisma.ticketComment.findMany(
+    {
+      where: {
+        ticketId,
+        deletedAt: null,
+      },
 
-            include: {
-                user: true,
-            },
+      include: {
+        user: true,
+      },
 
-            orderBy: {
-                createdAt: "asc",
-            },
-        }
-    );
+      orderBy: {
+        createdAt: "asc",
+      },
+    },
+  );
 };
 
 const create = (data) => {
-    return prisma.ticketComment.create({
-        data,
+  return prisma.ticketComment.create({
+    data,
 
-        include: {
-            user: true,
-        },
-    });
+    include: {
+      user: true,
+    },
+  });
 };
 
 const update = (
-    id,
-    data
+  id,
+  data,
 ) => {
-    return prisma.ticketComment.update({
-        where: {
-            id,
-        },
+  return prisma.ticketComment.update({
+    where: {
+      id,
+    },
 
-        data,
-    });
+    data,
+  });
 };
 
 const remove = (id) => {
-    return prisma.ticketComment.update({
-        where: {
-            id,
-        },
+  return prisma.ticketComment.update({
+    where: {
+      id,
+    },
 
-        data: {
-            deletedAt:
+    data: {
+      deletedAt:
                 new Date(),
-        },
-    });
+    },
+  });
 };
 
 module.exports = {
-    findByTicket,
-    create,
-    update,
-    remove,
+  findByTicket,
+  create,
+  update,
+  remove,
 };

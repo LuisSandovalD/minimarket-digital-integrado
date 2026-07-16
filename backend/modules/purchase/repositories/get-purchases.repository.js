@@ -2,7 +2,7 @@ const prisma =
   require("../../../prisma/client");
 
 const {
-  purchaseInclude
+  purchaseInclude,
 } = require("../includes/purchase.include");
 
 async function getPurchasesRepository({
@@ -13,7 +13,7 @@ async function getPurchasesRepository({
   where = {},
 
   sortBy = "createdAt",
-  sortOrder = "desc"
+  sortOrder = "desc",
 
 }) {
 
@@ -22,7 +22,7 @@ async function getPurchasesRepository({
   const [total, purchases] = await prisma.$transaction([
 
     prisma.purchase.count({
-      where
+      where,
     }),
 
     prisma.purchase.findMany({
@@ -32,14 +32,14 @@ async function getPurchasesRepository({
       include: purchaseInclude,
 
       orderBy: {
-        [sortBy]: sortOrder
+        [sortBy]: sortOrder,
       },
 
       skip,
 
-      take: limit
+      take: limit,
 
-    })
+    }),
 
   ]);
 
@@ -59,14 +59,14 @@ async function getPurchasesRepository({
 
       hasNext: page < Math.ceil(total / limit),
 
-      hasPrevious: page > 1
+      hasPrevious: page > 1,
 
-    }
+    },
 
   };
 
 }
 
 module.exports = {
-  getPurchasesRepository
+  getPurchasesRepository,
 };

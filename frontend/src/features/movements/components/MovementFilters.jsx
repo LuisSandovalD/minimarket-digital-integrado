@@ -9,13 +9,7 @@ import { SearchInput, Select } from "@/components/forms";
 
 import { Package, RefreshCw, Search, Shuffle } from "lucide-react";
 
-export default function MovementFilters({
-  branches = [],
-  products = [],
-  onSearch,
-  onClear,
-  loading,
-}) {
+export default function MovementFilters({ branches = [], products = [], onSearch, onClear, loading }) {
   const [localSearch, setLocalSearch] = useState("");
   const [localBranch, setLocalBranch] = useState("");
   const [localProduct, setLocalProduct] = useState("");

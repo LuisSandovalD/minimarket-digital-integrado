@@ -167,19 +167,9 @@ export default function PurchasePage() {
 
   return (
     <div className="space-y-6">
-      <PurchaseHeader
-        total={stats.total}
-        pending={stats.pending}
-        completed={stats.completed}
-        onCreate={handleCreate}
-      />
+      <PurchaseHeader total={stats.total} pending={stats.pending} completed={stats.completed} onCreate={handleCreate} />
 
-      <PurchaseFilters
-        filters={filters}
-        suppliers={suppliers}
-        onSearch={searchPurchases}
-        onClear={clearFilters}
-      />
+      <PurchaseFilters filters={filters} suppliers={suppliers} onSearch={searchPurchases} onClear={clearFilters} />
 
       <PurchaseTable
         purchases={purchases}

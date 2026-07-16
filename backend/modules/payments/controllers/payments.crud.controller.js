@@ -13,21 +13,21 @@ const paymentsServiceWrite = require("../services/payments.service.write");
 // ========================================
 
 const getPaymentsController = async (req, res, next) => {
-    try {
-        const companyId = req.user.companyId;
+  try {
+    const companyId = req.user.companyId;
 
-        // 1. Capturamos req.query (contiene ?page=1&limit=10&search=... etc.) y lo enviamos al servicio
-        const result = await paymentsServiceRead.getPayments(companyId, req.query);
+    // 1. Capturamos req.query (contiene ?page=1&limit=10&search=... etc.) y lo enviamos al servicio
+    const result = await paymentsServiceRead.getPayments(companyId, req.query);
 
-        // 2. Retornamos la estructura limpia separando la data de los metadatos de paginación
-        res.json({
-            success: true,
-            data: result.data, // El array con los registros de pagos
-            meta: result.meta  // El objeto con total, page, limit y totalPages
-        });
-    } catch (error) {
-        next(error);
-    }
+    // 2. Retornamos la estructura limpia separando la data de los metadatos de paginación
+    res.json({
+      success: true,
+      data: result.data, // El array con los registros de pagos
+      meta: result.meta,  // El objeto con total, page, limit y totalPages
+    });
+  } catch (error) {
+    next(error);
+  }
 };
 
 // ========================================
@@ -35,18 +35,18 @@ const getPaymentsController = async (req, res, next) => {
 // ========================================
 
 const getPaymentController = async (req, res, next) => {
-    try {
-        const payment = await paymentsServiceRead.getPayment(
-            Number(req.params.id)
-        );
+  try {
+    const payment = await paymentsServiceRead.getPayment(
+      Number(req.params.id),
+    );
 
-        res.json({
-            success: true,
-            data: payment,
-        });
-    } catch (error) {
-        next(error);
-    }
+    res.json({
+      success: true,
+      data: payment,
+    });
+  } catch (error) {
+    next(error);
+  }
 };
 
 // ========================================
@@ -54,18 +54,18 @@ const getPaymentController = async (req, res, next) => {
 // ========================================
 
 const createPaymentController = async (req, res, next) => {
-    try {
-        const payment = await paymentsServiceWrite.createPayment(
-            req.body
-        );
+  try {
+    const payment = await paymentsServiceWrite.createPayment(
+      req.body,
+    );
 
-        res.status(201).json({
-            success: true,
-            data: payment,
-        });
-    } catch (error) {
-        next(error);
-    }
+    res.status(201).json({
+      success: true,
+      data: payment,
+    });
+  } catch (error) {
+    next(error);
+  }
 };
 
 // ========================================
@@ -73,19 +73,19 @@ const createPaymentController = async (req, res, next) => {
 // ========================================
 
 const updatePaymentController = async (req, res, next) => {
-    try {
-        const payment = await paymentsServiceWrite.updatePayment(
-            Number(req.params.id),
-            req.body
-        );
+  try {
+    const payment = await paymentsServiceWrite.updatePayment(
+      Number(req.params.id),
+      req.body,
+    );
 
-        res.json({
-            success: true,
-            data: payment,
-        });
-    } catch (error) {
-        next(error);
-    }
+    res.json({
+      success: true,
+      data: payment,
+    });
+  } catch (error) {
+    next(error);
+  }
 };
 
 // ========================================
@@ -93,24 +93,24 @@ const updatePaymentController = async (req, res, next) => {
 // ========================================
 
 const deletePaymentController = async (req, res, next) => {
-    try {
-        await paymentsServiceWrite.deletePayment(
-            Number(req.params.id)
-        );
+  try {
+    await paymentsServiceWrite.deletePayment(
+      Number(req.params.id),
+    );
 
-        res.json({
-            success: true,
-            message: "Pago eliminado correctamente",
-        });
-    } catch (error) {
-        next(error);
-    }
+    res.json({
+      success: true,
+      message: "Pago eliminado correctamente",
+    });
+  } catch (error) {
+    next(error);
+  }
 };
 
 module.exports = {
-    getPaymentsController,
-    getPaymentController,
-    createPaymentController,
-    updatePaymentController,
-    deletePaymentController,
+  getPaymentsController,
+  getPaymentController,
+  createPaymentController,
+  updatePaymentController,
+  deletePaymentController,
 };

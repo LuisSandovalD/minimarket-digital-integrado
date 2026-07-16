@@ -1,8 +1,4 @@
-import {
-  STATS,
-  TRUSTED_LOGOS,
-  HOME_HIGHLIGHTS,
-} from "../constants/homeData.js";
+import { STATS, TRUSTED_LOGOS, HOME_HIGHLIGHTS } from "../constants/homeData.js";
 
 // Capa de servicios de ejemplo. En produccion aqui se harian las
 // llamadas a la API (fetch/axios) para obtener datos dinamicos del Home.

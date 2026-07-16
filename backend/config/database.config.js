@@ -11,38 +11,38 @@ dotenv.config();
 */
 
 const {
-    DATABASE_URL,
-    DIRECT_URL,
+  DATABASE_URL,
+  DIRECT_URL,
 
-    NODE_ENV,
+  NODE_ENV,
 
-    DB_PROVIDER,
+  DB_PROVIDER,
 
-    DB_POOL_MIN,
-    DB_POOL_MAX,
+  DB_POOL_MIN,
+  DB_POOL_MAX,
 
-    DB_CONNECTION_LIMIT,
-    DB_CONNECTION_TIMEOUT,
-    DB_IDLE_TIMEOUT,
+  DB_CONNECTION_LIMIT,
+  DB_CONNECTION_TIMEOUT,
+  DB_IDLE_TIMEOUT,
 
-    DB_RETRY_ATTEMPTS,
-    DB_RETRY_DELAY,
+  DB_RETRY_ATTEMPTS,
+  DB_RETRY_DELAY,
 
-    DB_SSL,
+  DB_SSL,
 
-    DB_QUERY_LOGGING,
+  DB_QUERY_LOGGING,
 
-    DB_MONITORING,
+  DB_MONITORING,
 
-    DB_SLOW_QUERY_THRESHOLD,
+  DB_SLOW_QUERY_THRESHOLD,
 
-    DB_BACKUP_ENABLED,
-    DB_BACKUP_SCHEDULE,
-    DB_BACKUP_RETENTION_DAYS,
+  DB_BACKUP_ENABLED,
+  DB_BACKUP_SCHEDULE,
+  DB_BACKUP_RETENTION_DAYS,
 
-    NEON_API_KEY,
-    NEON_PROJECT_ID,
-    NEON_DATABASE_HOST,
+  NEON_API_KEY,
+  NEON_PROJECT_ID,
+  NEON_DATABASE_HOST,
 
 } = process.env;
 
@@ -54,139 +54,139 @@ const {
 
 const databaseConfig = {
 
-    /*
+  /*
     |--------------------------------------------------------------------------
     | General
     |--------------------------------------------------------------------------
     */
 
-    provider:
+  provider:
         DB_PROVIDER || "postgresql",
 
-    environment:
+  environment:
         NODE_ENV || "development",
 
-    /*
+  /*
     |--------------------------------------------------------------------------
     | URLs
     |--------------------------------------------------------------------------
     */
 
-    url: DATABASE_URL,
+  url: DATABASE_URL,
 
-    directUrl: DIRECT_URL,
+  directUrl: DIRECT_URL,
 
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Connection Pool
     |--------------------------------------------------------------------------
     */
 
-    pool: {
+  pool: {
 
-        min:
+    min:
             Number(DB_POOL_MIN || 2),
 
-        max:
+    max:
             Number(DB_POOL_MAX || 10),
 
-        connectionLimit:
+    connectionLimit:
             Number(DB_CONNECTION_LIMIT || 20),
 
-        connectionTimeout:
+    connectionTimeout:
             Number(
-                DB_CONNECTION_TIMEOUT || 10000
+              DB_CONNECTION_TIMEOUT || 10000,
             ),
 
-        idleTimeout:
+    idleTimeout:
             Number(DB_IDLE_TIMEOUT || 30000),
-    },
+  },
 
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Retry Strategy
     |--------------------------------------------------------------------------
     */
 
-    retry: {
+  retry: {
 
-        attempts:
+    attempts:
             Number(DB_RETRY_ATTEMPTS || 5),
 
-        delay:
+    delay:
             Number(DB_RETRY_DELAY || 2000),
-    },
+  },
 
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Monitoring
     |--------------------------------------------------------------------------
     */
 
-    monitoring: {
+  monitoring: {
 
-        enabled:
+    enabled:
             DB_MONITORING === "true",
 
-        slowQueryThreshold:
+    slowQueryThreshold:
             Number(
-                DB_SLOW_QUERY_THRESHOLD || 500
+              DB_SLOW_QUERY_THRESHOLD || 500,
             ),
-    },
+  },
 
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Backup
     |--------------------------------------------------------------------------
     */
 
-    backup: {
+  backup: {
 
-        enabled:
+    enabled:
             DB_BACKUP_ENABLED === "true",
 
-        schedule:
+    schedule:
             DB_BACKUP_SCHEDULE ||
             "0 2 * * *",
 
-        retentionDays:
+    retentionDays:
             Number(
-                DB_BACKUP_RETENTION_DAYS || 7
+              DB_BACKUP_RETENTION_DAYS || 7,
             ),
-    },
+  },
 
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Security
     |--------------------------------------------------------------------------
     */
 
-    security: {
+  security: {
 
-        ssl:
+    ssl:
             DB_SSL === "true",
 
-        enableQueryLogging:
+    enableQueryLogging:
             DB_QUERY_LOGGING === "true",
-    },
+  },
 
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Neon Configuration
     |--------------------------------------------------------------------------
     */
 
-    neon: {
+  neon: {
 
-        apiKey:
+    apiKey:
             NEON_API_KEY,
 
-        projectId:
+    projectId:
             NEON_PROJECT_ID,
 
-        databaseHost:
+    databaseHost:
             NEON_DATABASE_HOST,
-    },
+  },
 };
 
 /*
@@ -197,9 +197,9 @@ const databaseConfig = {
 
 if (!databaseConfig.url) {
 
-    throw new Error(
-        "DATABASE_URL is required"
-    );
+  throw new Error(
+    "DATABASE_URL is required",
+  );
 }
 
 /*
@@ -209,35 +209,35 @@ if (!databaseConfig.url) {
 */
 
 if (
-    databaseConfig.environment !==
+  databaseConfig.environment !==
     "production"
 ) {
 
-    console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-    console.log("🛢 Database Configuration");
-    console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+  console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+  console.log("🛢 Database Configuration");
+  console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━");
 
-    console.log(
-        "Provider:",
-        databaseConfig.provider
-    );
+  console.log(
+    "Provider:",
+    databaseConfig.provider,
+  );
 
-    console.log(
-        "Environment:",
-        databaseConfig.environment
-    );
+  console.log(
+    "Environment:",
+    databaseConfig.environment,
+  );
 
-    console.log(
-        "Monitoring:",
-        databaseConfig.monitoring.enabled
-    );
+  console.log(
+    "Monitoring:",
+    databaseConfig.monitoring.enabled,
+  );
 
-    console.log(
-        "SSL:",
-        databaseConfig.security.ssl
-    );
+  console.log(
+    "SSL:",
+    databaseConfig.security.ssl,
+  );
 
-    console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+  console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━");
 }
 
 /*

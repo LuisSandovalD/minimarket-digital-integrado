@@ -5,13 +5,7 @@ import { Loader2, MailCheck, X } from "lucide-react";
 import { useState } from "react";
 import { verifyTwoFactorService } from "../../services/twofactor.service";
 
-export default function TwoFactorLoginModal({
-  open,
-  userId,
-  email,
-  onSuccess,
-  onClose,
-}) {
+export default function TwoFactorLoginModal({ open, userId, email, onSuccess, onClose }) {
   const [token, setToken] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -36,11 +30,7 @@ export default function TwoFactorLoginModal({
 
       onSuccess(response);
     } catch (err) {
-      setError(
-        err?.response?.data?.message ||
-          err?.message ||
-          "Código incorrecto o expirado",
-      );
+      setError(err?.response?.data?.message || err?.message || "Código incorrecto o expirado");
     } finally {
       setLoading(false);
     }
@@ -62,12 +52,9 @@ export default function TwoFactorLoginModal({
             <MailCheck size={24} />
           </div>
           <div>
-            <h2 className="text-base font-bold text-slate-900 dark:text-white">
-              Verificación de Seguridad
-            </h2>
+            <h2 className="text-base font-bold text-slate-900 dark:text-white">Verificación de Seguridad</h2>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-              Hemos enviado un código de 6 dígitos a tu correo electrónico
-              registrado.
+              Hemos enviado un código de 6 dígitos a tu correo electrónico registrado.
             </p>
           </div>
         </div>
@@ -77,9 +64,7 @@ export default function TwoFactorLoginModal({
             <input
               type="text"
               value={token}
-              onChange={(e) =>
-                setToken(e.target.value.replace(/\D/g, "").slice(0, 6))
-              }
+              onChange={(e) => setToken(e.target.value.replace(/\D/g, "").slice(0, 6))}
               placeholder="000000"
               maxLength={6}
               autoFocus

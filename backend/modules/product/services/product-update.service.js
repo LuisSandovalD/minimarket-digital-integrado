@@ -34,7 +34,7 @@ function calculatePricing({
   if (isNaN(purchase)) {
 
     throw new Error(
-      "Precio de compra inválido"
+      "Precio de compra inválido",
     );
 
   }
@@ -42,7 +42,7 @@ function calculatePricing({
   if (isNaN(margin)) {
 
     throw new Error(
-      "Margen de ganancia inválido"
+      "Margen de ganancia inválido",
     );
 
   }
@@ -50,7 +50,7 @@ function calculatePricing({
   if (purchase < 0) {
 
     throw new Error(
-      "El precio de compra no puede ser negativo"
+      "El precio de compra no puede ser negativo",
     );
 
   }
@@ -58,7 +58,7 @@ function calculatePricing({
   if (margin < 0) {
 
     throw new Error(
-      "El margen de ganancia no puede ser negativo"
+      "El margen de ganancia no puede ser negativo",
     );
 
   }
@@ -82,27 +82,27 @@ function calculatePricing({
 
     purchasePrice:
       Number(
-        purchase.toFixed(2)
+        purchase.toFixed(2),
       ),
 
     costPrice:
       Number(
-        cost.toFixed(2)
+        cost.toFixed(2),
       ),
 
     salePrice:
       Number(
-        sale.toFixed(2)
+        sale.toFixed(2),
       ),
 
     profitMargin:
       Number(
-        margin.toFixed(2)
+        margin.toFixed(2),
       ),
 
     profitAmount:
       Number(
-        profit.toFixed(2)
+        profit.toFixed(2),
       ),
   };
 
@@ -115,7 +115,7 @@ function calculatePricing({
 exports.update = async (
   id,
   body,
-  user
+  user,
 ) => {
 
   // ========================================
@@ -125,13 +125,13 @@ exports.update = async (
   const oldProduct =
     await repository.getById(
       id,
-      user.companyId
+      user.companyId,
     );
 
   if (!oldProduct) {
 
     throw new Error(
-      "Producto no encontrado"
+      "Producto no encontrado",
     );
 
   }
@@ -307,7 +307,7 @@ exports.update = async (
 
             updateData,
 
-            tx
+            tx,
           );
 
         // ========================================
@@ -383,7 +383,7 @@ exports.update = async (
 
         return updated;
 
-      }
+      },
     );
 
   return product;

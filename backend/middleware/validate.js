@@ -2,39 +2,39 @@
 
 const validate =
     (schema) =>
-        async (
-            req,
-            res,
-            next
-        ) => {
-            try {
-                req.body =
+      async (
+        req,
+        res,
+        next,
+      ) => {
+        try {
+          req.body =
                     await schema.parseAsync(
-                        req.body
+                      req.body,
                     );
 
-                next();
-            } catch (error) {
-                return res.status(400).json({
-                    success: false,
+          next();
+        } catch (error) {
+          return res.status(400).json({
+            success: false,
 
-                    message:
+            message:
                         "Error de validación",
 
-                    errors:
+            errors:
                         error.errors?.map(
-                            (err) => ({
-                                field:
+                          (err) => ({
+                            field:
                                     err.path.join(
-                                        "."
+                                      ".",
                                     ),
 
-                                message:
+                            message:
                                     err.message,
-                            })
+                          }),
                         ) || [],
-                });
-            }
-        };
+          });
+        }
+      };
 
 module.exports = validate;

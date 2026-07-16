@@ -61,8 +61,8 @@ export default function CTASection({ setOpenLogin, setOpenRegister }) {
               transition={smoothTransition}
               className="text-pretty text-base max-w-2xl leading-relaxed text-slate-600 dark:text-dark-foreground/70 sm:text-lg transform-gpu"
             >
-              Centraliza ventas, inventario, reportes y administración
-              multiempresa en una sola plataforma moderna y segura.
+              Centraliza ventas, inventario, reportes y administración multiempresa en una sola plataforma moderna y
+              segura.
             </motion.p>
 
             {/* Grupo de Botones de Acción Simétricos y Responsivos */}
@@ -72,11 +72,7 @@ export default function CTASection({ setOpenLogin, setOpenRegister }) {
               className="mt-6 flex flex-col gap-4 sm:flex-row w-full sm:w-auto justify-center transform-gpu"
             >
               {/* Botón Primario Dinámico */}
-              <motion.div
-                whileHover={hoverScale}
-                whileTap={{ scale: 0.97 }}
-                className="transform-gpu w-full sm:w-auto"
-              >
+              <motion.div whileHover={hoverScale} whileTap={{ scale: 0.97 }} className="transform-gpu w-full sm:w-auto">
                 {!isAuthenticated ? (
                   <ModernButton
                     text="Crear Cuenta"
@@ -100,11 +96,7 @@ export default function CTASection({ setOpenLogin, setOpenRegister }) {
               </motion.div>
 
               {/* Botón Secundario Homogeneizado */}
-              <motion.div
-                whileHover={hoverLift}
-                whileTap={{ scale: 0.97 }}
-                className="transform-gpu w-full sm:w-auto"
-              >
+              <motion.div whileHover={hoverLift} whileTap={{ scale: 0.97 }} className="transform-gpu w-full sm:w-auto">
                 <ModernButton
                   text="Ver demostración"
                   icon={Play}

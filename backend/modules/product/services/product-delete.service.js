@@ -44,7 +44,7 @@ exports.softDelete = async (id, user) => {
 
   if (totalStock > 0) {
     throw new Error(
-      `No se puede eliminar el producto porque tiene stock disponible (${totalStock})`
+      `No se puede eliminar el producto porque tiene stock disponible (${totalStock})`,
     );
   }
 
@@ -61,7 +61,7 @@ exports.softDelete = async (id, user) => {
 
   if (sales > 0) {
     throw new Error(
-      "No se puede eliminar el producto porque tiene ventas registradas"
+      "No se puede eliminar el producto porque tiene ventas registradas",
     );
   }
 
@@ -78,7 +78,7 @@ exports.softDelete = async (id, user) => {
 
   if (purchases > 0) {
     throw new Error(
-      "No se puede eliminar el producto porque tiene compras registradas"
+      "No se puede eliminar el producto porque tiene compras registradas",
     );
   }
 

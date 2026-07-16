@@ -14,29 +14,10 @@ export default function PurchaseActions({
   onDelete,
 }) {
   return (
-    <div
-      className="
-        flex
-        items-center
-        justify-end
-        gap-2
-      "
-    >
-      <ModernButton
-        size="sm"
-        variant="warning"
-        icon={Pencil}
-        text="Editar"
-        onClick={() => onEdit(purchase)}
-      />
+    <div className="flexitems-centerjustify-endgap-2">
+      <ModernButton size="sm" variant="warning" icon={Pencil} text="Editar" onClick={() => onEdit(purchase)} />
 
-      <ModernButton
-        size="sm"
-        variant="danger"
-        icon={Trash2}
-        text="Eliminar"
-        onClick={() => onDelete(purchase)}
-      />
+      <ModernButton size="sm" variant="danger" icon={Trash2} text="Eliminar" onClick={() => onDelete(purchase)} />
     </div>
   );
 }

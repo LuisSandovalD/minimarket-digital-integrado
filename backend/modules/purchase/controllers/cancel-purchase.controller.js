@@ -1,10 +1,10 @@
 const {
-  cancelPurchaseService
+  cancelPurchaseService,
 } = require("../services/cancel-purchase.service");
 
 async function cancelPurchaseController(
   req,
-  res
+  res,
 ) {
 
   try {
@@ -22,7 +22,7 @@ async function cancelPurchaseController(
       message:
         "Compra cancelada",
 
-      data: purchase
+      data: purchase,
 
     });
 
@@ -32,7 +32,7 @@ async function cancelPurchaseController(
 
       ok: false,
 
-      message: error.message
+      message: error.message,
 
     });
 
@@ -41,5 +41,5 @@ async function cancelPurchaseController(
 }
 
 module.exports = {
-  cancelPurchaseController
+  cancelPurchaseController,
 };

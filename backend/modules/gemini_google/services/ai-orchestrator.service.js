@@ -3,70 +3,70 @@
 // ========================================
 
 const {
-    generateResponse,
+  generateResponse,
 } = require("./gemini.service");
 
 const {
-    getConversation,
-    saveMessage,
+  getConversation,
+  saveMessage,
 } = require("./memory.service");
 
 const businessContextService = require("./business-context.service");
 
 const {
-    SYSTEM_PROMPT,
+  SYSTEM_PROMPT,
 } = require("../prompts/system.prompt");
 
 const {
-    buildAdminPrompt,
+  buildAdminPrompt,
 } = require("../prompts/admin.prompt");
 
 const processAIRequest =
     async ({
-        conversationId,
-        message,
-        companyId,
+      conversationId,
+      message,
+      companyId,
     }) => {
-        // 1. Obtener la analítica completa de la DB
-        const businessData =
+      // 1. Obtener la analítica completa de la DB
+      const businessData =
             await businessContextService.build(companyId);
 
-        // 2. Generar el prompt administrativo con el contexto fresco e integrado
-        const adminPromptContenido = buildAdminPrompt(businessData);
+      // 2. Generar el prompt administrativo con el contexto fresco e integrado
+      const adminPromptContenido = buildAdminPrompt(businessData);
 
-        // 3. Montar la instrucción del sistema completa
-        const systemPrompt = `
+      // 3. Montar la instrucción del sistema completa
+      const systemPrompt = `
 ${SYSTEM_PROMPT}
 
 ${adminPromptContenido}
 `;
 
-        saveMessage(
-            conversationId,
-            "user",
-            message
-        );
+      saveMessage(
+        conversationId,
+        "user",
+        message,
+      );
 
-        const conversation =
+      const conversation =
             getConversation(
-                conversationId
+              conversationId,
             );
 
-        const response =
+      const response =
             await generateResponse({
-                systemPrompt,
-                conversation,
+              systemPrompt,
+              conversation,
             });
 
-        saveMessage(
-            conversationId,
-            "model",
-            response
-        );
+      saveMessage(
+        conversationId,
+        "model",
+        response,
+      );
 
-        return response;
+      return response;
     };
 
 module.exports = {
-    processAIRequest,
+  processAIRequest,
 };

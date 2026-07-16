@@ -88,17 +88,12 @@ export default function FeaturesSection() {
             variants={fastFadeUp}
             className="mt-4 max-w-xl text-base leading-relaxed text-[#4a5568] dark:text-[#cbd5e1] sm:text-lg"
           >
-            Centraliza ventas, inventario, compras, clientes, reportes y
-            finanzas en una sola plataforma diseñada para automatizar
-            operaciones, reducir errores y acelerar el crecimiento de tu
-            empresa.
+            Centraliza ventas, inventario, compras, clientes, reportes y finanzas en una sola plataforma diseñada para
+            automatizar operaciones, reducir errores y acelerar el crecimiento de tu empresa.
           </motion.p>
 
           {/* Features como badges premium */}
-          <motion.div
-            variants={fastFadeUp}
-            className="mt-8 flex flex-wrap gap-3 max-w-3xl"
-          >
+          <motion.div variants={fastFadeUp} className="mt-8 flex flex-wrap gap-3 max-w-3xl">
             {FEATURE_TAGS.slice(0, 12).map((feature) => {
               const Icon = feature.icon;
 
@@ -107,13 +102,9 @@ export default function FeaturesSection() {
                   key={feature.id}
                   className="group flex items-center gap-2 rounded-xl border border-[#274c77]/10 bg-white/60 dark:bg-[#0f172a]/60 px-4 py-3 backdrop-blur-md transition-all duration-300 hover:border-[#274c77]/25 hover:bg-white dark:hover:bg-[#0f172a]"
                 >
-                  {Icon && (
-                    <Icon className="h-4 w-4 text-[#274c77] dark:text-[#a3cef1]" />
-                  )}
+                  {Icon && <Icon className="h-4 w-4 text-[#274c77] dark:text-[#a3cef1]" />}
 
-                  <span className="text-sm font-medium text-[#0f172a] dark:text-white">
-                    {feature.title}
-                  </span>
+                  <span className="text-sm font-medium text-[#0f172a] dark:text-white">{feature.title}</span>
                 </div>
               );
             })}

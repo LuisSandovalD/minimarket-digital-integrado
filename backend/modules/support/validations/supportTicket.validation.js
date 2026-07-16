@@ -4,147 +4,147 @@ const { z } = require("zod");
 
 const ticketStatus =
     [
-        "OPEN",
-        "IN_PROGRESS",
-        "WAITING",
-        "RESOLVED",
-        "CLOSED",
-        "REOPENED",
+      "OPEN",
+      "IN_PROGRESS",
+      "WAITING",
+      "RESOLVED",
+      "CLOSED",
+      "REOPENED",
     ];
 
 const ticketPriority =
     [
-        "LOW",
-        "MEDIUM",
-        "HIGH",
-        "CRITICAL",
+      "LOW",
+      "MEDIUM",
+      "HIGH",
+      "CRITICAL",
     ];
 
 const createTicketSchema =
     z.object({
-        title: z
-            .string({
-                required_error:
+      title: z
+        .string({
+          required_error:
                     "El título es obligatorio",
-            })
-            .trim()
-            .min(
-                3,
-                "El título debe tener al menos 3 caracteres"
-            )
-            .max(
-                255,
-                "El título no puede superar los 255 caracteres"
-            ),
+        })
+        .trim()
+        .min(
+          3,
+          "El título debe tener al menos 3 caracteres",
+        )
+        .max(
+          255,
+          "El título no puede superar los 255 caracteres",
+        ),
 
-        description: z
-            .string({
-                required_error:
+      description: z
+        .string({
+          required_error:
                     "La descripción es obligatoria",
-            })
-            .trim()
-            .min(
-                5,
-                "La descripción debe tener al menos 5 caracteres"
-            ),
+        })
+        .trim()
+        .min(
+          5,
+          "La descripción debe tener al menos 5 caracteres",
+        ),
 
-        priority: z
-            .enum(
-                ticketPriority,
-                {
-                    errorMap:
+      priority: z
+        .enum(
+          ticketPriority,
+          {
+            errorMap:
                         () => ({
-                            message:
+                          message:
                                 "Prioridad inválida",
                         }),
-                }
-            )
-            .default(
-                "MEDIUM"
-            ),
+          },
+        )
+        .default(
+          "MEDIUM",
+        ),
 
-        attachments:
+      attachments:
             z.string().optional(),
     });
 
 const updateTicketSchema =
     z
-        .object({
-            title:
+      .object({
+        title:
                 z
-                    .string()
-                    .trim()
-                    .min(
-                        3
-                    )
-                    .max(
-                        255
-                    )
-                    .optional(),
+                  .string()
+                  .trim()
+                  .min(
+                    3,
+                  )
+                  .max(
+                    255,
+                  )
+                  .optional(),
 
-            description:
+        description:
                 z
-                    .string()
-                    .trim()
-                    .min(
-                        5
-                    )
-                    .optional(),
+                  .string()
+                  .trim()
+                  .min(
+                    5,
+                  )
+                  .optional(),
 
-            priority:
+        priority:
                 z
-                    .enum(
-                        ticketPriority
-                    )
-                    .optional(),
+                  .enum(
+                    ticketPriority,
+                  )
+                  .optional(),
 
-            status:
+        status:
                 z
-                    .enum(
-                        ticketStatus
-                    )
-                    .optional(),
+                  .enum(
+                    ticketStatus,
+                  )
+                  .optional(),
 
-            assignedTo:
+        assignedTo:
                 z
-                    .number()
-                    .int()
-                    .positive()
-                    .optional(),
+                  .number()
+                  .int()
+                  .positive()
+                  .optional(),
 
-            resolutionNotes:
+        resolutionNotes:
                 z
-                    .string()
-                    .optional(),
+                  .string()
+                  .optional(),
 
-            attachments:
+        attachments:
                 z
-                    .string()
-                    .optional(),
-        })
-        .refine(
-            (data) => {
-                if (
-                    data.status ===
+                  .string()
+                  .optional(),
+      })
+      .refine(
+        (data) => {
+          if (
+            data.status ===
                     "RESOLVED" &&
                     !data.resolutionNotes
-                ) {
-                    return false;
-                }
+          ) {
+            return false;
+          }
 
-                return true;
-            },
-            {
-                message:
+          return true;
+        },
+        {
+          message:
                     "Las notas de resolución son obligatorias al resolver un ticket",
 
-                path: [
-                    "resolutionNotes",
-                ],
-            }
-        );
+          path: [
+            "resolutionNotes",
+          ],
+        },
+      );
 
 module.exports = {
-    createTicketSchema,
-    updateTicketSchema,
+  createTicketSchema,
+  updateTicketSchema,
 };

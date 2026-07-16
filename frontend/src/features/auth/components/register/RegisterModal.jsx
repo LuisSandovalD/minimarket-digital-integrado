@@ -6,20 +6,11 @@ import RegisterForm from "./RegisterForm";
 import RegisterHeader from "./RegisterHeader";
 import RegisterStepper from "./RegisterStepper";
 
-const OFFICE_IMAGE =
-  "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2069&auto=format&fit=crop";
+const OFFICE_IMAGE = "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2069&auto=format&fit=crop";
 
 export default function RegisterModal({ open, onClose, onSwitchToLogin }) {
-  const {
-    step,
-    form,
-    loading,
-    error,
-    handleChange,
-    nextStep,
-    prevStep,
-    handleRegisterSubmit,
-  } = useRegisterForm(onClose);
+  const { step, form, loading, error, handleChange, nextStep, prevStep, handleRegisterSubmit } =
+    useRegisterForm(onClose);
 
   if (!open) return null;
 
@@ -42,9 +33,7 @@ export default function RegisterModal({ open, onClose, onSwitchToLogin }) {
           <div className="absolute inset-0 flex flex-col justify-between p-10 bg-gradient-to-t from-slate-950/20 via-transparent to-transparent">
             <div className="inline-flex items-center gap-2 self-start rounded-full border border-white/25 bg-white/15 px-4 py-2">
               <div className="h-2 w-2 rounded-full bg-slate-400 dark:bg-slate-500" />
-              <span className="text-sm font-semibold text-white">
-                ERP Empresarial
-              </span>
+              <span className="text-sm font-semibold text-white">ERP Empresarial</span>
             </div>
           </div>
         </motion.div>

@@ -24,9 +24,7 @@ export function usePurchaseProductsStep({ products = [], form, setForm }) {
   const filteredProducts = useMemo(() => {
     const term = search.toLowerCase();
     return products.filter(
-      (product) =>
-        product.name?.toLowerCase().includes(term) ||
-        product.sku?.toLowerCase().includes(term),
+      (product) => product.name?.toLowerCase().includes(term) || product.sku?.toLowerCase().includes(term),
     );
   }, [products, search]);
 
@@ -39,18 +37,14 @@ export function usePurchaseProductsStep({ products = [], form, setForm }) {
   // ADD PRODUCT
   // ========================================
   const addProduct = (product) => {
-    const exists = details.find(
-      (item) => Number(item.productId) === Number(product.id),
-    );
+    const exists = details.find((item) => Number(item.productId) === Number(product.id));
 
     if (exists) {
       // Si ya existe, incrementamos de 1 en 1 de forma segura
       setForm((prev) => ({
         ...prev,
         details: prev.details.map((item) =>
-          item.productId === product.id
-            ? { ...item, quantity: Number(item.quantity) + 1 }
-            : item,
+          item.productId === product.id ? { ...item, quantity: Number(item.quantity) + 1 } : item,
         ),
       }));
       return;
@@ -129,36 +123,23 @@ export function usePurchaseProductsStep({ products = [], form, setForm }) {
   const updateBatchNumber = (productId, value) => {
     setForm((prev) => ({
       ...prev,
-      details: prev.details.map((item) =>
-        item.productId === productId ? { ...item, batchNumber: value } : item,
-      ),
+      details: prev.details.map((item) => (item.productId === productId ? { ...item, batchNumber: value } : item)),
     }));
   };
 
   const updateExpirationDate = (productId, value) => {
     setForm((prev) => ({
       ...prev,
-      details: prev.details.map((item) =>
-        item.productId === productId
-          ? { ...item, expirationDate: value }
-          : item,
-      ),
+      details: prev.details.map((item) => (item.productId === productId ? { ...item, expirationDate: value } : item)),
     }));
   };
 
   // ========================================
   // TOTALS
   // ========================================
-  const totalUnits = details.reduce(
-    (acc, item) => acc + Number(item.quantity || 0),
-    0,
-  );
+  const totalUnits = details.reduce((acc, item) => acc + Number(item.quantity || 0), 0);
 
-  const totalAmount = details.reduce(
-    (acc, item) =>
-      acc + Number(item.quantity || 0) * Number(item.costPrice || 0),
-    0,
-  );
+  const totalAmount = details.reduce((acc, item) => acc + Number(item.quantity || 0) * Number(item.costPrice || 0), 0);
 
   // ========================================
   // HELPERS

@@ -1,10 +1,5 @@
 // features/dashboard/components/DashboardLoading.jsx
-import {
-  SkeletonCard,
-  SkeletonChart,
-  SkeletonHeader,
-  SkeletonStats,
-} from "@/components/skeletons";
+import { SkeletonCard, SkeletonChart, SkeletonHeader, SkeletonStats } from "@/components/skeletons";
 
 export default function DashboardLoading() {
   return (

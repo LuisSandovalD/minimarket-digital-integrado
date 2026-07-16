@@ -8,12 +8,12 @@
 
 exports.roundDecimal =
   (
-    value
+    value,
   ) => {
 
     return Number(
       parseFloat(value)
-        .toFixed(2)
+        .toFixed(2),
     );
 
   };
@@ -25,7 +25,7 @@ exports.roundDecimal =
 exports.calculateTax =
   (
     subtotal,
-    taxRate = 18
+    taxRate = 18,
   ) => {
 
     return (
@@ -43,7 +43,7 @@ exports.calculateTotal =
   (
     subtotal,
     tax,
-    discount = 0
+    discount = 0,
   ) => {
 
     return (
@@ -61,7 +61,7 @@ exports.calculateTotal =
 exports.applyDiscount =
   (
     amount,
-    discount
+    discount,
   ) => {
 
     return (

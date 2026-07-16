@@ -9,7 +9,7 @@ const bcrypt = require("bcryptjs");
 async function adminSeed() {
   const password = await bcrypt.hash(
     process.env.SEED_PASSWORD || "admin123",
-    10
+    10,
   );
 
   console.log("🚀 Iniciando carga masiva de empresas y sus administradores...");
@@ -26,20 +26,20 @@ async function adminSeed() {
         address: "Av. Mariscal Benavides 450, San Vicente de Cañete",
         website: "https://donlucho.pe",
         legalRepresentative: "Luis Enrique Sandoval Carbonel",
-        subscriptionTier: "PREMIUM"
+        subscriptionTier: "PREMIUM",
       },
       admin: {
         name: "Luis Enrique Sandoval Carbonel",
         email: "luissandovalcarbonel@gmail.com",
-        phone: "934049272"
+        phone: "934049272",
       },
       // Sucursales modernas distribuidas estratégicamente en la provincia de Cañete
       customBranches: [
         { name: "Minimarket Don Lucho - Sede Central", city: "San Vicente de Cañete", state: "Lima", code: "HQ-SVC", address: "Av. Mariscal Benavides 450" },
         { name: "Minimarket Don Lucho - Express Imperial", city: "Imperial", state: "Lima", code: "EXP-IMP", address: "Av. Ramos Larrea 320" },
         { name: "Minimarket Don Lucho - Urban Mala", city: "Mala", state: "Lima", code: "URB-MAL", address: "Av. Marchand 560" },
-        { name: "Minimarket Don Lucho - Market & Deli Asia", city: "Asia", state: "Lima", code: "MD-ASA", address: "Panamericana Sur Km 97.5 (Boulevard)" }
-      ]
+        { name: "Minimarket Don Lucho - Market & Deli Asia", city: "Asia", state: "Lima", code: "MD-ASA", address: "Panamericana Sur Km 97.5 (Boulevard)" },
+      ],
     },
     {
       company: {
@@ -52,13 +52,13 @@ async function adminSeed() {
         address: "Jr. Las Flores 456, San Borja",
         website: "https://tecnologicavega.com",
         legalRepresentative: "Jimmy Sandoval Vega",
-        subscriptionTier: "PREMIUM"
+        subscriptionTier: "PREMIUM",
       },
       admin: {
         name: "Jimmy Sandoval Vega",
         email: "jimmysandoval@gmail.com",
-        phone: "987999879"
-      }
+        phone: "987999879",
+      },
     },
     {
       company: {
@@ -71,13 +71,13 @@ async function adminSeed() {
         address: "Av. Salaverry 789, Jesús María",
         website: "https://sanjosemed.pe",
         legalRepresentative: "María Fernanda López",
-        subscriptionTier: "PREMIUM"
+        subscriptionTier: "PREMIUM",
       },
       admin: {
         name: "María Fernanda López",
         email: "maria.lopez@sanjosemed.pe",
-        phone: "945678123"
-      }
+        phone: "945678123",
+      },
     },
     {
       company: {
@@ -90,14 +90,14 @@ async function adminSeed() {
         address: "Av. Alfonso Ugarte 512, Arequipa",
         website: "https://alimentosdelsur.pe",
         legalRepresentative: "Pedro Ramírez Soto",
-        subscriptionTier: "BASIC"
+        subscriptionTier: "BASIC",
       },
       admin: {
         name: "Pedro Ramírez Soto",
         email: "pedro.ramirez@alimentosdelsur.pe",
-        phone: "912345678"
-      }
-    }
+        phone: "912345678",
+      },
+    },
   ];
 
   // Pool de regiones para el resto de empresas automáticas
@@ -108,7 +108,7 @@ async function adminSeed() {
     { city: "Trujillo", state: "La Libertad", code: "TRU", address: "Av. Larco 789" },
     { city: "Chiclayo", state: "Lambayeque", code: "CIX", address: "Av. Balta 345" },
     { city: "Piura", state: "Piura", code: "PIU", address: "Av. Grau 1420" },
-    { city: "Cusco", state: "Cusco", code: "CUZ", address: "Av. El Sol 612" }
+    { city: "Cusco", state: "Cusco", code: "CUZ", address: "Av. El Sol 612" },
   ];
 
   let companyIndex = 0;
@@ -118,7 +118,7 @@ async function adminSeed() {
 
     // 1. Crear Empresa
     const company = await prisma.company.create({
-      data: item.company
+      data: item.company,
     });
 
     // 2. Crear Suscripción Mensual Activa
@@ -134,8 +134,8 @@ async function adminSeed() {
         currentPeriodStart: now,
         currentPeriodEnd: periodEnd,
         stripeSubscriptionId: `sub_mock_${company.slug}_001`,
-        stripePriceId: `price_${company.subscriptionTier.toLowerCase()}_mensual`
-      }
+        stripePriceId: `price_${company.subscriptionTier.toLowerCase()}_mensual`,
+      },
     });
 
     // 3. Crear Historial de Facturación
@@ -152,7 +152,7 @@ async function adminSeed() {
           status: "COMPLETED",
           receiptUrl: `https://dashboard.stripe.com/receipts/mock-${company.id}-1`,
           stripeInvoiceId: `in_mock_${company.slug}_001`,
-          createdAt: lastMonth
+          createdAt: lastMonth,
         },
         {
           companyId: company.id,
@@ -161,14 +161,14 @@ async function adminSeed() {
           status: "COMPLETED",
           receiptUrl: `https://dashboard.stripe.com/receipts/mock-${company.id}-2`,
           stripeInvoiceId: `in_mock_${company.slug}_002`,
-          createdAt: now
-        }
-      ]
+          createdAt: now,
+        },
+      ],
     });
 
     // 4. Crear Configuración base
     await prisma.configuration.create({
-      data: { companyId: company.id }
+      data: { companyId: company.id },
     });
 
     // 5. Manejo de Sucursales
@@ -188,7 +188,7 @@ async function adminSeed() {
           country: "Perú",
           phone: company.phone,
           email: `sucursal.${cBranch.code.toLowerCase()}@donlucho.pe`,
-          companyId: company.id
+          companyId: company.id,
         };
 
         if (i === 0) {
@@ -209,8 +209,8 @@ async function adminSeed() {
           country: "Perú",
           phone: company.phone,
           email: company.email,
-          companyId: company.id
-        }
+          companyId: company.id,
+        },
       });
 
       const numSucursalesAdicionales = (companyIndex % 2 === 0) ? 3 : 2;
@@ -227,7 +227,7 @@ async function adminSeed() {
           country: "Perú",
           phone: company.phone,
           email: `contacto.${region.city.toLowerCase()}@${company.slug}.com`,
-          companyId: company.id
+          companyId: company.id,
         });
       }
     }
@@ -236,7 +236,7 @@ async function adminSeed() {
     if (sucursalesData.length > 0) {
       await prisma.branch.createMany({
         data: sucursalesData,
-        skipDuplicates: true
+        skipDuplicates: true,
       });
     }
 
@@ -249,8 +249,8 @@ async function adminSeed() {
         role: "ADMIN",
         phone: item.admin.phone,
         companyId: company.id,
-        branchId: mainBranch.id
-      }
+        branchId: mainBranch.id,
+      },
     });
 
     console.log(`✅ Registro exitoso para ${company.name}`);

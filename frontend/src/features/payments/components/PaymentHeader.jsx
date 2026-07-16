@@ -7,12 +7,7 @@ import { CheckCircle, Clock, CreditCard, DollarSign } from "lucide-react";
 
 import { PageHeader } from "@/components/data-display";
 
-export default function PaymentHeader({
-  totalPayments = 0,
-  totalAmount = 0,
-  completed = 0,
-  pending = 0,
-}) {
+export default function PaymentHeader({ totalPayments = 0, totalAmount = 0, completed = 0, pending = 0 }) {
   return (
     <PageHeader
       icon={CreditCard}

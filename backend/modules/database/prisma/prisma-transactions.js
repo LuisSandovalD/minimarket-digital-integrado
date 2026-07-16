@@ -1,7 +1,7 @@
 // modules/database/prisma/prisma-transactions.js
 
 const prisma = require(
-    "../../../config/prisma.config"
+  "../../../config/prisma.config",
 );
 
 /*
@@ -11,39 +11,39 @@ const prisma = require(
 */
 
 async function runTransaction(
-    operations = []
+  operations = [],
 ) {
 
-    try {
+  try {
 
-        const result =
+    const result =
             await prisma.$transaction(
-                operations
+              operations,
             );
 
-        return {
+    return {
 
-            success: true,
+      success: true,
 
-            result,
+      result,
 
-            timestamp:
+      timestamp:
                 new Date(),
-        };
+    };
 
-    } catch (error) {
+  } catch (error) {
 
-        return {
+    return {
 
-            success: false,
+      success: false,
 
-            error:
+      error:
                 error.message,
 
-            timestamp:
+      timestamp:
                 new Date(),
-        };
-    }
+    };
+  }
 }
 
 /*
@@ -53,20 +53,20 @@ async function runTransaction(
 */
 
 async function interactiveTransaction(
-    callback
+  callback,
 ) {
 
-    return prisma.$transaction(
-        async (tx) => {
+  return prisma.$transaction(
+    async (tx) => {
 
-            return callback(tx);
-        }
-    );
+      return callback(tx);
+    },
+  );
 }
 
 module.exports = {
 
-    runTransaction,
+  runTransaction,
 
-    interactiveTransaction,
+  interactiveTransaction,
 };

@@ -35,15 +35,9 @@ export default function useBarcode() {
     loadProducts();
   }, [loadProducts]);
 
-  const filteredProducts = useMemo(
-    () => filterProducts(products, search),
-    [products, search],
-  );
+  const filteredProducts = useMemo(() => filterProducts(products, search), [products, search]);
 
-  const totalPages = Math.max(
-    1,
-    Math.ceil(filteredProducts.length / ITEMS_PER_PAGE),
-  );
+  const totalPages = Math.max(1, Math.ceil(filteredProducts.length / ITEMS_PER_PAGE));
 
   const paginatedProducts = useMemo(() => {
     const start = (currentPage - 1) * ITEMS_PER_PAGE;
@@ -60,9 +54,7 @@ export default function useBarcode() {
     const exists = selectedProducts.find((item) => item.id === product.id);
 
     if (exists) {
-      setSelectedProducts((prev) =>
-        prev.filter((item) => item.id !== product.id),
-      );
+      setSelectedProducts((prev) => prev.filter((item) => item.id !== product.id));
 
       return;
     }
@@ -71,24 +63,17 @@ export default function useBarcode() {
   };
 
   const handleSelectAll = () => {
-    const allSelected = filteredProducts.every((product) =>
-      selectedProducts.some((item) => item.id === product.id),
-    );
+    const allSelected = filteredProducts.every((product) => selectedProducts.some((item) => item.id === product.id));
 
     if (allSelected) {
       setSelectedProducts((prev) =>
-        prev.filter(
-          (selected) =>
-            !filteredProducts.some((product) => product.id === selected.id),
-        ),
+        prev.filter((selected) => !filteredProducts.some((product) => product.id === selected.id)),
       );
 
       return;
     }
 
-    const newProducts = filteredProducts.filter(
-      (product) => !selectedProducts.some((item) => item.id === product.id),
-    );
+    const newProducts = filteredProducts.filter((product) => !selectedProducts.some((item) => item.id === product.id));
 
     setSelectedProducts((prev) => [...prev, ...newProducts]);
   };

@@ -21,7 +21,7 @@ exports.createProduct =
       const product =
         await service.create(
           req.body,
-          req.user
+          req.user,
         );
 
       // ========================================
@@ -42,7 +42,7 @@ exports.createProduct =
 
       console.error(
         "CREATE PRODUCT ERROR:",
-        error
+        error,
       );
 
       // ========================================

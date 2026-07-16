@@ -7,8 +7,5 @@ export const unitSchema = yup.object({
 
   type: yup.string().required("El tipo es obligatorio"),
 
-  conversionFactor: yup
-    .number()
-    .positive()
-    .required("El factor es obligatorio"),
+  conversionFactor: yup.number().positive().required("El factor es obligatorio"),
 });

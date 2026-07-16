@@ -36,9 +36,7 @@ const PAYMENT_METHODS = [
 const NEED_REFERENCE = ["CARD", "YAPE", "PLIN", "TRANSFER"];
 
 const fmt = (value) =>
-  new Intl.NumberFormat("es-PE", { style: "currency", currency: "PEN" }).format(
-    Number(value || 0),
-  );
+  new Intl.NumberFormat("es-PE", { style: "currency", currency: "PEN" }).format(Number(value || 0));
 
 export default function SalePaymentModal({ open, onClose, sale, onSubmit }) {
   // Orquestación directa con el Hook de abonos limpios
@@ -57,11 +55,7 @@ export default function SalePaymentModal({ open, onClose, sale, onSubmit }) {
 
   // Captura de saldos actuales de la venta en BD
   const totalHistorico = sale ? Number(sale.total || 0) : 0;
-  const deudaPendienteActual = sale
-    ? Number(
-        sale.pendingDebt !== undefined ? sale.pendingDebt : sale.total || 0,
-      )
-    : 0;
+  const deudaPendienteActual = sale ? Number(sale.pendingDebt !== undefined ? sale.pendingDebt : sale.total || 0) : 0;
 
   // 🛡️ VALIDACIÓN COHERENTE PARA ABONOS
   const canSubmit = totalPaidInModal > 0;
@@ -71,14 +65,8 @@ export default function SalePaymentModal({ open, onClose, sale, onSubmit }) {
   return (
     <Modal open={isVisible} onClose={onClose} size="xl">
       {sale && (
-        <form
-          onSubmit={handleSubmit}
-          className="flex flex-col h-full bg-slate-50 dark:bg-slate-950"
-        >
-          <HeaderModal
-            title={`Amortización / Pago de Deuda - Venta #${sale.id || ""}`}
-            onClose={onClose}
-          />
+        <form onSubmit={handleSubmit} className="flex flex-col h-full bg-slate-50 dark:bg-slate-950">
+          <HeaderModal title={`Amortización / Pago de Deuda - Venta #${sale.id || ""}`} onClose={onClose} />
 
           <div className="flex-1 overflow-y-auto p-4">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
@@ -87,21 +75,15 @@ export default function SalePaymentModal({ open, onClose, sale, onSubmit }) {
                 {/* BANNER INFORMATIVO DE SALDO DEUDOR */}
                 <div className="rounded-2xl p-4 bg-amber-50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/40">
                   <div className="flex items-start gap-2.5">
-                    <CheckCircle
-                      className="text-amber-600 dark:text-amber-400 shrink-0 mt-0.5"
-                      size={18}
-                    />
+                    <CheckCircle className="text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" size={18} />
                     <div>
                       <h4 className="text-sm font-bold text-amber-900 dark:text-amber-300">
                         Estado de la Cuenta por Cobrar
                       </h4>
                       <p className="text-xs text-amber-700 dark:text-amber-400 mt-0.5">
                         Esta orden presents un saldo en deuda de{" "}
-                        <strong className="font-bold">
-                          {fmt(deudaPendienteActual)}
-                        </strong>
-                        . Introduce los montos de amortización que el cliente va
-                        a cancelar en caja.
+                        <strong className="font-bold">{fmt(deudaPendienteActual)}</strong>. Introduce los montos de
+                        amortización que el cliente va a cancelar en caja.
                       </p>
                     </div>
                   </div>
@@ -110,9 +92,7 @@ export default function SalePaymentModal({ open, onClose, sale, onSubmit }) {
                 {/* DESGLOSE DE MÉTODOS MIXTOS */}
                 <div className="rounded-2xl p-3 bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/60 space-y-2.5">
                   <div className="flex items-center justify-between">
-                    <p className="text-sm font-semibold text-slate-900 dark:text-white">
-                      Medios de Pago Recibidos
-                    </p>
+                    <p className="text-sm font-semibold text-slate-900 dark:text-white">Medios de Pago Recibidos</p>
                     {totalPaidInModal < deudaPendienteActual && (
                       <button
                         type="button"
@@ -126,8 +106,7 @@ export default function SalePaymentModal({ open, onClose, sale, onSubmit }) {
 
                   {!form.payments || form.payments.length === 0 ? (
                     <p className="text-sm text-slate-400 py-1">
-                      Agrega al menos un método de pago para registrar el
-                      ingreso.
+                      Agrega al menos un método de pago para registrar el ingreso.
                     </p>
                   ) : (
                     <div className="space-y-2">
@@ -149,9 +128,7 @@ export default function SalePaymentModal({ open, onClose, sale, onSubmit }) {
                       <p className="text-sm text-emerald-800 dark:text-emerald-400">
                         Vuelto estimado a entregar al cliente
                       </p>
-                      <p className="text-lg font-black text-emerald-600 dark:text-emerald-400">
-                        {fmt(changeDue)}
-                      </p>
+                      <p className="text-lg font-black text-emerald-600 dark:text-emerald-400">{fmt(changeDue)}</p>
                     </div>
                   )}
                 </div>
@@ -162,22 +139,14 @@ export default function SalePaymentModal({ open, onClose, sale, onSubmit }) {
                 <div className="sticky top-0 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/60 overflow-hidden">
                   <div className="px-4 py-2.5 border-b border-slate-200/50 dark:border-slate-800/50 flex items-center gap-2">
                     <Receipt size={14} className="text-slate-500" />
-                    <p className="text-sm font-medium text-slate-700 dark:text-slate-300">
-                      Resumen de la Deuda
-                    </p>
+                    <p className="text-sm font-medium text-slate-700 dark:text-slate-300">Resumen de la Deuda</p>
                   </div>
 
                   <div className="p-4 space-y-3">
                     <table className="w-full text-sm border-collapse">
                       <tbody>
-                        <SummaryRow
-                          label="Total Histórico Venta"
-                          value={fmt(totalHistorico)}
-                        />
-                        <SummaryRow
-                          label="Deuda Pendiente Inicial"
-                          value={fmt(deudaPendienteActual)}
-                        />
+                        <SummaryRow label="Total Histórico Venta" value={fmt(totalHistorico)} />
+                        <SummaryRow label="Deuda Pendiente Inicial" value={fmt(deudaPendienteActual)} />
                         <tr className="border-t border-slate-200/50 dark:border-slate-800/50">
                           <td className="pt-2 pb-1 font-semibold text-slate-900 dark:text-white">
                             Total Abonado Ahora
@@ -196,23 +165,15 @@ export default function SalePaymentModal({ open, onClose, sale, onSubmit }) {
                           <p className="text-[11px] text-blue-600 mb-0.5 font-medium">
                             Saldo Restante Post-Pago (Seguirá en Crédito)
                           </p>
-                          <p className="text-xl font-bold text-blue-600">
-                            {fmt(pendingDebt)}
-                          </p>
+                          <p className="text-xl font-bold text-blue-600">{fmt(pendingDebt)}</p>
                         </div>
                       ) : (
                         <div className="rounded-xl p-2.5 border border-emerald-200 bg-emerald-50/40 flex items-center gap-2">
-                          <CheckCircle
-                            size={15}
-                            className="text-emerald-600 shrink-0"
-                          />
+                          <CheckCircle size={15} className="text-emerald-600 shrink-0" />
                           <div>
-                            <p className="text-xs font-bold text-emerald-700">
-                              ¡Deuda Liquidada por completo!
-                            </p>
+                            <p className="text-xs font-bold text-emerald-700">¡Deuda Liquidada por completo!</p>
                             <p className="text-[10px] text-emerald-600">
-                              El estado de la venta cambiará a PAGADO
-                              automáticamente.
+                              El estado de la venta cambiará a PAGADO automáticamente.
                             </p>
                           </div>
                         </div>
@@ -228,12 +189,7 @@ export default function SalePaymentModal({ open, onClose, sale, onSubmit }) {
             <ModernButton type="button" variant="outline" onClick={onClose}>
               Cancelar
             </ModernButton>
-            <ModernButton
-              type="submit"
-              disabled={!canSubmit}
-              variant="primary"
-              icon={ArrowRight}
-            >
+            <ModernButton type="submit" disabled={!canSubmit} variant="primary" icon={ArrowRight}>
               Registrar Amortización
             </ModernButton>
           </FooterModal>
@@ -246,9 +202,7 @@ export default function SalePaymentModal({ open, onClose, sale, onSubmit }) {
 // ── COMPONENTE HIJO OPTIMIZADO PARA LA FILA DE PAGOS ──
 function PaymentRow({ payment, canRemove, onUpdate, onRemove }) {
   const currentMethodObj =
-    PAYMENT_METHODS.find(
-      (m) => m.backendMethodId === Number(payment.paymentMethodId),
-    ) || PAYMENT_METHODS[0];
+    PAYMENT_METHODS.find((m) => m.backendMethodId === Number(payment.paymentMethodId)) || PAYMENT_METHODS[0];
 
   const needsRef = NEED_REFERENCE.includes(currentMethodObj.value);
 
@@ -263,9 +217,7 @@ function PaymentRow({ payment, canRemove, onUpdate, onRemove }) {
             <button
               key={m.backendMethodId}
               type="button"
-              onClick={() =>
-                onUpdate(payment.id, "paymentMethodId", m.backendMethodId)
-              }
+              onClick={() => onUpdate(payment.id, "paymentMethodId", m.backendMethodId)}
               className={`h-11 rounded-lg border flex flex-col items-center justify-center gap-0.5 transition-all ${
                 sel
                   ? "border-slate-400 dark:border-slate-500 bg-slate-50 dark:bg-slate-800 font-semibold text-slate-900 dark:text-white"

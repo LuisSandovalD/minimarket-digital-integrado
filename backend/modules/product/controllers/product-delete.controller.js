@@ -16,7 +16,7 @@ exports.deleteProduct =
 
       await service.softDelete(
         Number(req.params.id),
-        req.user
+        req.user,
       );
 
       res.json({
@@ -47,7 +47,7 @@ exports.restoreProduct =
 
       const product =
         await service.restore(
-          Number(req.params.id)
+          Number(req.params.id),
         );
 
       res.json({

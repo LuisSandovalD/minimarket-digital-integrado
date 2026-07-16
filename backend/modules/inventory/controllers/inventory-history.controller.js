@@ -12,7 +12,7 @@ const service =
 exports.getHistoryByInventory =
   async (
     req,
-    res
+    res,
   ) => {
 
     try {
@@ -21,8 +21,8 @@ exports.getHistoryByInventory =
         await service.getHistoryByInventory(
 
           Number(
-            req.params.inventoryId
-          )
+            req.params.inventoryId,
+          ),
         );
 
       res.json({
@@ -54,7 +54,7 @@ exports.getHistoryByInventory =
 exports.getHistoryByDateRange =
   async (
     req,
-    res
+    res,
   ) => {
 
     try {
@@ -65,12 +65,12 @@ exports.getHistoryByDateRange =
           req.user.companyId,
 
           new Date(
-            req.query.startDate
+            req.query.startDate,
           ),
 
           new Date(
-            req.query.endDate
-          )
+            req.query.endDate,
+          ),
         );
 
       res.json({

@@ -11,33 +11,33 @@
 
 function databaseResponse({
 
-    success = true,
+  success = true,
 
-    message = "Success",
+  message = "Success",
 
-    data = null,
+  data = null,
 
-    error = null,
+  error = null,
 
-    meta = {},
+  meta = {},
 
 }) {
 
-    return {
+  return {
 
-        success,
+    success,
 
-        message,
+    message,
 
-        data,
+    data,
 
-        error,
+    error,
 
-        meta,
+    meta,
 
-        timestamp:
+    timestamp:
             new Date(),
-    };
+  };
 }
 
 module.exports =

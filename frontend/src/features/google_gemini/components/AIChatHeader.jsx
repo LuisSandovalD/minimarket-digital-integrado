@@ -12,25 +12,19 @@ export default function AIChatHeader() {
 
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-base font-semibold text-foreground">
-                Asistente IA
-              </h1>
+              <h1 className="text-base font-semibold text-foreground">Asistente IA</h1>
               <span className="rounded-full border border-neutral-200 dark:border-neutral-800 bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
                 Conectado
               </span>
             </div>
-            <p className="text-sm text-muted-foreground">
-              Consultas sobre ventas, inventario, compras y rendimiento.
-            </p>
+            <p className="text-sm text-muted-foreground">Consultas sobre ventas, inventario, compras y rendimiento.</p>
           </div>
         </div>
 
         {/* Indicador IA */}
         <div className="hidden md:flex items-center gap-2 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-muted/50 dark:bg-muted/20 px-3 py-1.5">
           <Sparkles className="h-4 w-4 text-primary" />
-          <span className="text-sm font-medium text-muted-foreground">
-            Análisis inteligente
-          </span>
+          <span className="text-sm font-medium text-muted-foreground">Análisis inteligente</span>
         </div>
       </div>
     </header>

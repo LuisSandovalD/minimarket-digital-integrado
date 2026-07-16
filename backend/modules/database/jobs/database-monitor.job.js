@@ -3,7 +3,7 @@
 const cron = require("node-cron");
 
 const databaseMonitoringService = require(
-    "../services/database-monitoring.service"
+  "../services/database-monitoring.service",
 );
 
 /*
@@ -17,58 +17,58 @@ const databaseMonitoringService = require(
 
 function startDatabaseMonitorJob() {
 
-    cron.schedule(
+  cron.schedule(
 
-        "*/5 * * * *",
+    "*/5 * * * *",
 
-        async () => {
+    async () => {
 
-            try {
+      try {
 
-                const monitoring =
+        const monitoring =
                     await databaseMonitoringService
-                        .getMonitoring();
+                      .getMonitoring();
 
-                console.log(
-                    "━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-                );
+        console.log(
+          "━━━━━━━━━━━━━━━━━━━━━━━━━━━",
+        );
 
-                console.log(
-                    "📊 Database Monitoring"
-                );
+        console.log(
+          "📊 Database Monitoring",
+        );
 
-                console.log(
-                    "Connections:",
-                    monitoring
-                        .activeConnections
-                        ?.length || 0
-                );
+        console.log(
+          "Connections:",
+          monitoring
+            .activeConnections
+            ?.length || 0,
+        );
 
-                console.log(
-                    "Memory:",
-                    monitoring.memoryUsage
-                );
+        console.log(
+          "Memory:",
+          monitoring.memoryUsage,
+        );
 
-                console.log(
-                    "━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-                );
+        console.log(
+          "━━━━━━━━━━━━━━━━━━━━━━━━━━━",
+        );
 
-            } catch (error) {
+      } catch (error) {
 
-                console.error(
-                    "❌ Monitor job error:",
-                    error.message
-                );
-            }
-        }
-    );
+        console.error(
+          "❌ Monitor job error:",
+          error.message,
+        );
+      }
+    },
+  );
 
-    console.log(
-        "✅ Database monitor job started"
-    );
+  console.log(
+    "✅ Database monitor job started",
+  );
 }
 
 module.exports = {
 
-    startDatabaseMonitorJob,
+  startDatabaseMonitorJob,
 };

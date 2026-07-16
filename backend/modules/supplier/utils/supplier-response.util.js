@@ -1,26 +1,26 @@
 function successResponse(
   data,
-  message = 'Success'
+  message = "Success",
 ) {
   return {
     success: true,
     message,
-    data
-  }
+    data,
+  };
 }
 
 function errorResponse(
-  message = 'Error',
-  errors = null
+  message = "Error",
+  errors = null,
 ) {
   return {
     success: false,
     message,
-    errors
-  }
+    errors,
+  };
 }
 
 module.exports = {
   successResponse,
-  errorResponse
-}
+  errorResponse,
+};

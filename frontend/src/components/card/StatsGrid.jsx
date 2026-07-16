@@ -1,10 +1,4 @@
-import {
-  defaultViewport,
-  fadeUp,
-  hoverLift,
-  smoothTransition,
-  staggerContainer,
-} from "@/components/effects";
+import { defaultViewport, fadeUp, hoverLift, smoothTransition, staggerContainer } from "@/components/effects";
 import { motion } from "framer-motion";
 import MetricCard from "./MetricCard";
 
@@ -49,11 +43,7 @@ export default function StatsGrid({
           {renderItem ? (
             renderItem(item, index)
           ) : (
-            <CardComponent
-              {...item}
-              variant={item.variant ?? cardVariant}
-              className={`w-full ${cardClassName}`}
-            />
+            <CardComponent {...item} variant={item.variant ?? cardVariant} className={`w-full ${cardClassName}`} />
           )}
         </Item>
       ))}

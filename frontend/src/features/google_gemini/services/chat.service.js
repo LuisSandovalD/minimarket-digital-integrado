@@ -7,11 +7,7 @@ import api from "@/api/axios";
  * @param {string} params.message - El mensaje o pregunta del usuario ("hola", "como vamos", etc).
  * @param {string} params.companyId - ID de la empresa para cargar las métricas en el prompt.
  */
-export const sendChatMessage = async ({
-  conversationId,
-  message,
-  companyId,
-}) => {
+export const sendChatMessage = async ({ conversationId, message, companyId }) => {
   try {
     // Adecuado: Pasamos el objeto completo que espera el processAIRequest del backend
     const { data } = await api.post("/gemini/chat", {

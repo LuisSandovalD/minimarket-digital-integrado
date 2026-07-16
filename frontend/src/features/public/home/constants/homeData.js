@@ -43,26 +43,22 @@ export const HOME_HIGHLIGHTS = [
   {
     icon: Boxes,
     title: "Inventario en tiempo real",
-    description:
-      "Controla stock por sucursal, lotes y vencimientos con actualizaciones al instante.",
+    description: "Controla stock por sucursal, lotes y vencimientos con actualizaciones al instante.",
   },
   {
     icon: ShoppingCart,
     title: "Punto de venta veloz",
-    description:
-      "POS optimizado para caja rápida, múltiples métodos de pago y facturación electrónica.",
+    description: "POS optimizado para caja rápida, múltiples métodos de pago y facturación electrónica.",
   },
   {
     icon: Truck,
     title: "Compras y proveedores",
-    description:
-      "Órdenes de compra, recepciones y cuentas por pagar organizadas en un solo lugar.",
+    description: "Órdenes de compra, recepciones y cuentas por pagar organizadas en un solo lugar.",
   },
   {
     icon: Sparkles,
     title: "Decisiones con IA",
-    description:
-      "Predice demanda, detecta quiebres de stock y recibe recomendaciones automáticas.",
+    description: "Predice demanda, detecta quiebres de stock y recibe recomendaciones automáticas.",
   },
 ];
 
@@ -84,21 +80,18 @@ export const SECTOR_GALLERY = [
     title: "Minimarkets y Retail",
     description:
       "Control de pasillos, múltiples cajas POS en simultáneo, vencimientos rápidos y reposición inteligente automatizada.",
-    image:
-      "https://images.unsplash.com/photo-1578916171728-46686eac8d58?q=80&w=800&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1578916171728-46686eac8d58?q=80&w=800&auto=format&fit=crop",
   },
   {
     title: "Centros de Distribución",
     description:
       "Gestión avanzada de almacenes múltiples, movimientos entre sucursales, control estricto de lotes y despacho logístico.",
-    image:
-      "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=800&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=800&auto=format&fit=crop",
   },
   {
     title: "Franquicias y Multiempresas",
     description:
       "Consolidación de reportes globales, centralización de catálogos y analítica predictiva corporativa mediante IA.",
-    image:
-      "https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=800&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=800&auto=format&fit=crop",
   },
 ];

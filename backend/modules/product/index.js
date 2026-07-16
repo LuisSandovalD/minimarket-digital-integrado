@@ -1,2 +1,2 @@
 module.exports =
-  require('./routes/product.routes');
+  require("./routes/product.routes");

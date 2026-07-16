@@ -26,8 +26,7 @@ const features = [
     bg: "bg-emerald-500/15",
     border: "hover:border-emerald-400/60",
     title: "Backups Inteligentes",
-    description:
-      "Respaldos automáticos en la nube y restauración completa de la base de datos cuando sea necesario.",
+    description: "Respaldos automáticos en la nube y restauración completa de la base de datos cuando sea necesario.",
   },
 ];
 
@@ -70,24 +69,17 @@ export default function PlanPremiumDetail() {
             <span className="inline-flex rounded-full bg-slate-100 px-4 py-1 text-xs font-bold uppercase tracking-wider text-slate-700 dark:bg-slate-800 dark:text-slate-300">
               Máximo Rendimiento
             </span>
-            <h2 className="mt-3 text-4xl font-black tracking-tight text-slate-900 dark:text-white">
-              Plan PREMIUM
-            </h2>
+            <h2 className="mt-3 text-4xl font-black tracking-tight text-slate-900 dark:text-white">Plan PREMIUM</h2>
             <p className="mt-2 max-w-xl text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-              Automatización avanzada, inteligencia artificial, analítica
-              predictiva y seguridad empresarial para organizaciones que buscan
-              el máximo rendimiento.
+              Automatización avanzada, inteligencia artificial, analítica predictiva y seguridad empresarial para
+              organizaciones que buscan el máximo rendimiento.
             </p>
           </div>
 
           <div className="text-left md:text-right bg-transparent">
             {/* Corregido: Eliminado el degradado de color text-transparent del precio */}
-            <h3 className="text-5xl font-black tracking-tight text-slate-900 dark:text-white">
-              S/ 99
-            </h3>
-            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-              Todo incluido
-            </p>
+            <h3 className="text-5xl font-black tracking-tight text-slate-900 dark:text-white">S/ 99</h3>
+            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Todo incluido</p>
           </div>
         </div>
 
@@ -133,9 +125,7 @@ export default function PlanPremiumDetail() {
                     <Icon size={22} />
                   </motion.div>
 
-                  <h3 className="font-bold text-slate-900 dark:text-white">
-                    {feature.title}
-                  </h3>
+                  <h3 className="font-bold text-slate-900 dark:text-white">{feature.title}</h3>
 
                   <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
                     {feature.description}
@@ -160,21 +150,14 @@ export default function PlanPremiumDetail() {
             transition={{ repeat: Infinity, duration: 2 }}
             className="shrink-0"
           >
-            <ShieldCheck
-              className="text-emerald-600 dark:text-emerald-400"
-              size={24}
-            />
+            <ShieldCheck className="text-emerald-600 dark:text-emerald-400" size={24} />
           </motion.div>
 
           <div>
-            <h4 className="font-semibold text-emerald-800 dark:text-emerald-400">
-              Acceso Corporativo Completo
-            </h4>
+            <h4 className="font-semibold text-emerald-800 dark:text-emerald-400">Acceso Corporativo Completo</h4>
             <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300/90">
-              Crea usuarios ilimitados y administra permisos para
-              administradores, gerentes, supervisores, empleados, auditores y
-              futuros roles personalizados mediante un systema avanzado de
-              control de acceso.
+              Crea usuarios ilimitados y administra permisos para administradores, gerentes, supervisores, empleados,
+              auditores y futuros roles personalizados mediante un systema avanzado de control de acceso.
             </p>
           </div>
         </motion.div>

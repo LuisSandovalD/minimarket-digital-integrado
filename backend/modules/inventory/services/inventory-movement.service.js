@@ -19,12 +19,12 @@ exports.getMovements = async (filters) => {
 exports.getProductMovements =
   async (
     productId,
-    companyId
+    companyId,
   ) => {
 
     return repository.getProductMovements(
       productId,
-      companyId
+      companyId,
     );
 
   };
@@ -36,12 +36,12 @@ exports.getProductMovements =
 exports.getBranchMovements =
   async (
     branchId,
-    companyId
+    companyId,
   ) => {
 
     return repository.getBranchMovements(
       branchId,
-      companyId
+      companyId,
     );
 
   };

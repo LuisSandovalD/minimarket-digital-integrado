@@ -2,10 +2,17 @@
 // hooks/useBranchForm.js
 // ========================================
 
+import { getUser } from "@/features/auth/services/session.service";
 import { useEffect, useState } from "react";
 import { createBranch, updateBranch } from "../services/branch.service";
 
-const INITIAL_STATE = {
+// Obtenemos dinámicamente la información del usuario logueado en esta sesión
+const getSessionCompanyId = () => {
+  const user = getUser();
+  return user?.companyId ? Number(user.companyId) : null;
+};
+
+const getInitialState = () => ({
   name: "",
   code: "",
   address: "",
@@ -18,11 +25,12 @@ const INITIAL_STATE = {
   country: "",
   postalCode: "",
   isActive: true,
-};
+  companyId: getSessionCompanyId(), // 🌟 Dinámico desde el primer render
+});
 
 export default function useBranchForm({ branch, onClose, onSuccess }) {
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState(INITIAL_STATE);
+  const [formData, setFormData] = useState(getInitialState());
   const [previewUrl, setPreviewUrl] = useState("");
 
   const isEdit = !!branch;
@@ -30,7 +38,7 @@ export default function useBranchForm({ branch, onClose, onSuccess }) {
   useEffect(() => {
     if (!branch) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
-      setFormData(INITIAL_STATE);
+      setFormData(getInitialState());
       setPreviewUrl("");
       return;
     }
@@ -48,14 +56,13 @@ export default function useBranchForm({ branch, onClose, onSuccess }) {
       country: branch.country || "",
       postalCode: branch.postalCode || "",
       isActive: branch.isActive ?? true,
+      companyId: branch.companyId ? Number(branch.companyId) : getSessionCompanyId(),
     });
     setPreviewUrl(branch.logo || "");
   }, [branch]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    // Normalizamos aquí por si acaso cambia el select manualmente
     const normalizedValue = name === "isActive" ? value === "true" : value;
 
     setFormData((prev) => ({
@@ -81,7 +88,7 @@ export default function useBranchForm({ branch, onClose, onSuccess }) {
   };
 
   const resetForm = () => {
-    setFormData(INITIAL_STATE);
+    setFormData(getInitialState());
     setPreviewUrl("");
   };
 
@@ -93,12 +100,20 @@ export default function useBranchForm({ branch, onClose, onSuccess }) {
       setLoading(true);
       let response;
 
-      // 🌟 SEGURO TOTAL: Forzamos que 'isActive' viaje como un Boolean puro (true/false) al Backend
-      // Esto evita fallos si el usuario guardó sin interactuar primero con tu componente <Select />
+      // 1. 🌟 Evitamos colisiones de códigos vacíos en Prisma generándolos dinámicamente si no se ingresan
+      const finalCode = formData.code.trim() === "" ? `BR-${Date.now().toString().slice(-6)}` : formData.code.trim();
+
+      const currentCompanyId = getSessionCompanyId();
+
       const payload = {
         ...formData,
+        code: finalCode,
         isActive: String(formData.isActive) === "true",
+        companyId: Number(formData.companyId || currentCompanyId),
       };
+
+      // 2. ❌ Removemos propiedades que Prisma no acepta como columnas nativas
+      delete payload.slug;
 
       if (isEdit) {
         response = await updateBranch(branch.id, payload);

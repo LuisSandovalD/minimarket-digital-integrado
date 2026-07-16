@@ -92,9 +92,8 @@ export default function PricingHero() {
             variants={fastFadeUp}
             className="mt-4 max-w-xl text-base leading-relaxed text-[#4a5568] dark:text-[#cbd5e1] sm:text-lg"
           >
-            Potencia la infraestructura tecnológica de tu empresa con soluciones
-            diseñadas para ajustarse exactamente a tu volumen de operación
-            actual y futuro.
+            Potencia la infraestructura tecnológica de tu empresa con soluciones diseñadas para ajustarse exactamente a
+            tu volumen de operación actual y futuro.
           </motion.p>
 
           {/* Botones de Conversión e Interacción */}
@@ -103,11 +102,7 @@ export default function PricingHero() {
             className="relative z-30 mt-6 flex w-full flex-wrap items-center gap-3 sm:w-auto"
           >
             {!isAuthenticated && (
-              <motion.div
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="transform-gpu"
-              >
+              <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="transform-gpu">
                 <ModernButton
                   text="Comenzar Ahora"
                   icon={ArrowRight}

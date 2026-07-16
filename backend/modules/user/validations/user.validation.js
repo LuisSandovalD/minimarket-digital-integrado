@@ -48,14 +48,14 @@ const createPurchaseSchema = Joi.object({
           costPrice:
             Joi.number()
               .positive()
-              .required()
+              .required(),
 
-        })
+        }),
 
-      )
+      ),
 
 });
 
 module.exports = {
-  createPurchaseSchema
+  createPurchaseSchema,
 };

@@ -22,9 +22,7 @@ export const formatCurrency = (value) => {
  */
 export const calculateSubtotal = (details = []) => {
   const rawSubtotal = details.reduce(
-    (acc, item) =>
-      acc +
-      Number(item.quantity || 0) * Number(item.price || item.unitPrice || 0),
+    (acc, item) => acc + Number(item.quantity || 0) * Number(item.price || item.unitPrice || 0),
     0,
   );
   // Redondeamos preventivamente a 2 decimales para evitar ruido de flotantes

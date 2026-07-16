@@ -3,16 +3,7 @@
 // ========================================
 
 import MetricCard from "@/components/card/MetricCard";
-import {
-  Activity,
-  ArrowRight,
-  FileText,
-  Package,
-  PlusCircle,
-  RefreshCw,
-  ShoppingCart,
-  Users,
-} from "lucide-react";
+import { Activity, ArrowRight, FileText, Package, PlusCircle, RefreshCw, ShoppingCart, Users } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export default function RecentActivity({ logs = [] }) {
@@ -46,14 +37,9 @@ export default function RecentActivity({ logs = [] }) {
     return `Hace ${Math.floor(diff / 86400)} días`;
   };
 
-  const createCount = logs.filter((log) =>
-    log.action?.includes("CREATE"),
-  ).length;
-  const updateCount = logs.filter((log) =>
-    log.action?.includes("UPDATE"),
-  ).length;
-  const usersCount = new Set(logs.map((log) => log.user?.id).filter(Boolean))
-    .size;
+  const createCount = logs.filter((log) => log.action?.includes("CREATE")).length;
+  const updateCount = logs.filter((log) => log.action?.includes("UPDATE")).length;
+  const usersCount = new Set(logs.map((log) => log.user?.id).filter(Boolean)).size;
 
   return (
     <div className="rounded-3xl border border-slate-200/70 dark:border-slate-800/70 bg-white/70 dark:bg-slate-900/70 p-6 shadow-sm backdrop-blur-xl">
@@ -61,12 +47,8 @@ export default function RecentActivity({ logs = [] }) {
       <div className="mb-6 flex items-center gap-3">
         <Activity size={22} className="text-blue-600" />
         <div>
-          <h2 className="text-xl font-semibold text-slate-800 dark:text-white">
-            Actividad Reciente
-          </h2>
-          <p className="text-sm text-slate-500 dark:text-slate-400">
-            Últimos movimientos registrados en el sistema.
-          </p>
+          <h2 className="text-xl font-semibold text-slate-800 dark:text-white">Actividad Reciente</h2>
+          <p className="text-sm text-slate-500 dark:text-slate-400">Últimos movimientos registrados en el sistema.</p>
         </div>
       </div>
 
@@ -109,9 +91,7 @@ export default function RecentActivity({ logs = [] }) {
       {/* Lista de Registros */}
       {logs.length === 0 ? (
         <div className="flex h-52 items-center justify-center rounded-2xl border border-dashed border-slate-300 dark:border-slate-700">
-          <span className="text-sm text-slate-400">
-            No existe actividad reciente
-          </span>
+          <span className="text-sm text-slate-400">No existe actividad reciente</span>
         </div>
       ) : (
         <>
@@ -120,27 +100,17 @@ export default function RecentActivity({ logs = [] }) {
               const Icon = getIcon(log.action);
 
               return (
-                <div
-                  key={log.id}
-                  className="flex items-center gap-4 rounded-2xl bg-slate-100 dark:bg-slate-800 p-4"
-                >
+                <div key={log.id} className="flex items-center gap-4 rounded-2xl bg-slate-100 dark:bg-slate-800 p-4">
                   <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-100 dark:bg-slate-700 shrink-0">
-                    <Icon
-                      size={18}
-                      className="text-blue-600 dark:text-blue-400"
-                    />
+                    <Icon size={18} className="text-blue-600 dark:text-blue-400" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="font-semibold text-slate-800 dark:text-white truncate">
                       {translateAction(log.action)}
                     </p>
-                    <p className="text-sm text-slate-500 dark:text-slate-400 truncate">
-                      {log.user?.name || "Sistema"}
-                    </p>
+                    <p className="text-sm text-slate-500 dark:text-slate-400 truncate">{log.user?.name || "Sistema"}</p>
                   </div>
-                  <div className="text-xs text-slate-400 whitespace-nowrap">
-                    {formatRelativeDate(log.createdAt)}
-                  </div>
+                  <div className="text-xs text-slate-400 whitespace-nowrap">{formatRelativeDate(log.createdAt)}</div>
                 </div>
               );
             })}

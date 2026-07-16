@@ -42,8 +42,8 @@ module.exports = {
           where: { id: saleId },
           include: {
             payments: true,
-            details: true
-          }
+            details: true,
+          },
         });
 
         if (!originalSale) {
@@ -64,7 +64,7 @@ module.exports = {
           await increaseStock(
             Number(oldItem.productId),
             Number(oldItem.quantity),
-            tx
+            tx,
           );
         }
 
@@ -101,7 +101,7 @@ module.exports = {
           const debtDifference = parseFloat((newCreditAmount - oldCreditAmount).toFixed(2));
 
           const customer = await tx.customer.findUnique({
-            where: { id: Number(originalSale.customerId) }
+            where: { id: Number(originalSale.customerId) },
           });
 
           if (customer) {
@@ -118,7 +118,7 @@ module.exports = {
 
               await tx.customer.update({
                 where: { id: customer.id },
-                data: { currentDebt: { increment: debtDifference } }
+                data: { currentDebt: { increment: debtDifference } },
               });
             }
           }
@@ -136,15 +136,15 @@ module.exports = {
             discount,
             total,
             notes: body.notes || originalSale.notes,
-            status: saleStatus
-          }
+            status: saleStatus,
+          },
         });
 
         // ========================================
         // 6. PURGAR Y RENOVAR DESGLOSE DE ARTÍCULOS
         // ========================================
         await tx.saleDetail.deleteMany({
-          where: { saleId: saleId }
+          where: { saleId: saleId },
         });
 
         const detailsData = body.details.map((item) => {
@@ -159,12 +159,12 @@ module.exports = {
             price: Number(item.price),
             subtotal: itemSubtotal,
             discount: 0.00,
-            tax: itemTax
+            tax: itemTax,
           };
         });
 
         await tx.saleDetail.createMany({
-          data: detailsData
+          data: detailsData,
         });
 
         // ========================================
@@ -174,7 +174,7 @@ module.exports = {
           await decreaseStockByProduct(
             Number(item.productId),
             Number(item.quantity),
-            tx
+            tx,
           );
         }
 
@@ -183,7 +183,7 @@ module.exports = {
         // ========================================
         if (Array.isArray(body.payments) && body.payments.length > 0) {
           await tx.payment.deleteMany({
-            where: { saleId: saleId }
+            where: { saleId: saleId },
           });
 
           const newPayments = body.payments.map(payment => {
@@ -196,12 +196,12 @@ module.exports = {
               reference: payment.reference || (isCredit ? "REAJUSTE-CREDITO" : "REAJUSTE-EFECTIVO"),
               notes: payment.notes || "Pago recalculado por modificación de venta.",
               paidAt: isCredit ? null : new Date(),
-              dueDate: payment.dueDate ? new Date(payment.dueDate) : null
+              dueDate: payment.dueDate ? new Date(payment.dueDate) : null,
             };
           });
 
           await tx.payment.createMany({
-            data: newPayments
+            data: newPayments,
           });
         }
 
@@ -210,7 +210,7 @@ module.exports = {
       {
         maxWait: 8000,
         timeout: 15000,
-      }
+      },
     );
 
     // ========================================
@@ -245,7 +245,7 @@ module.exports = {
                                 <td style="padding: 6px; border-bottom: 1px solid #e2e8f0;">${item.quantity}</td>
                                 <td style="padding: 6px; border-bottom: 1px solid #e2e8f0;">S/. ${Number(item.price).toFixed(2)}</td>
                             </tr>
-                        `).join('')}
+                        `).join("")}
                     </tbody>
                 </table>
 
@@ -257,7 +257,7 @@ module.exports = {
                 <hr style="border: 0; border-top: 1px solid #e2e8f0;">
                 <small style="color: #94a3b8;">ERP POS System - Notificaciones de control transaccional.</small>
             </div>
-        `
+        `,
       }).catch(emailError => {
         console.error("⚠️ Falló el envío del correo de reajuste:", emailError.message || emailError);
       });

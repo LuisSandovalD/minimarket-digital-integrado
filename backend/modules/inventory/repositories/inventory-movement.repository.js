@@ -11,7 +11,7 @@ const prisma =
 
 exports.createMovement =
   async (
-    data
+    data,
   ) => {
 
     return prisma.inventoryHistory.create({
@@ -162,7 +162,7 @@ exports.getMovements = async ({
 exports.getProductMovements =
   async (
     productId,
-    companyId
+    companyId,
   ) => {
 
     return prisma.inventoryHistory.findMany({
@@ -190,7 +190,7 @@ exports.getProductMovements =
 exports.getBranchMovements =
   async (
     branchId,
-    companyId
+    companyId,
   ) => {
 
     return prisma.inventoryHistory.findMany({

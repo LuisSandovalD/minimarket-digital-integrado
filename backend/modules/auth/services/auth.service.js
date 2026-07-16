@@ -14,6 +14,6 @@ module.exports = {
 
   ...require("./twofactor.service"),
 
-  ...require("./token.service")
+  ...require("./token.service"),
 
 };

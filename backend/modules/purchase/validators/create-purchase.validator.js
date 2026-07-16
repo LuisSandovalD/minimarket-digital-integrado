@@ -59,14 +59,14 @@ const createPurchaseSchema = Joi.object({
           expirationDate:
             Joi.date()
               .optional()
-              .allow(null)
+              .allow(null),
 
-        })
+        }),
 
-      )
+      ),
 
 });
 
 module.exports = {
-  createPurchaseSchema
+  createPurchaseSchema,
 };

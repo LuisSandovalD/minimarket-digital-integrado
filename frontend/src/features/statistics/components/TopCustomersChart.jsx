@@ -17,15 +17,9 @@ export default function TopCustomersChart({ customers = [] }) {
     .sort((a, b) => b.total - a.total)
     .slice(0, 5);
 
-  const totalPurchases = chartData.reduce(
-    (acc, customer) => acc + customer.total,
-    0,
-  );
+  const totalPurchases = chartData.reduce((acc, customer) => acc + customer.total, 0);
   const topCustomer = chartData[0];
-  const topPercentage =
-    totalPurchases > 0 && topCustomer
-      ? ((topCustomer.total / totalPurchases) * 100).toFixed(1)
-      : 0;
+  const topPercentage = totalPurchases > 0 && topCustomer ? ((topCustomer.total / totalPurchases) * 100).toFixed(1) : 0;
 
   return (
     <div className="rounded-3xl border border-slate-200/70 dark:border-slate-800/70 bg-white/70 dark:bg-slate-900/70 p-6 shadow-sm backdrop-blur-xl">
@@ -35,12 +29,8 @@ export default function TopCustomersChart({ customers = [] }) {
           <Users size={20} className="text-cyan-600" />
         </div>
         <div>
-          <h2 className="text-lg font-semibold text-slate-800 dark:text-white">
-            Top Clientes
-          </h2>
-          <p className="text-xs text-slate-500 dark:text-slate-400">
-            Clientes con mayor frecuencia de compra
-          </p>
+          <h2 className="text-lg font-semibold text-slate-800 dark:text-white">Top Clientes</h2>
+          <p className="text-xs text-slate-500 dark:text-slate-400">Clientes con mayor frecuencia de compra</p>
         </div>
       </div>
 
@@ -76,10 +66,7 @@ export default function TopCustomersChart({ customers = [] }) {
           {/* Ranking */}
           <div className="mt-6 space-y-3">
             {chartData.map((customer, index) => {
-              const percentage =
-                totalPurchases > 0
-                  ? ((customer.total / totalPurchases) * 100).toFixed(1)
-                  : 0;
+              const percentage = totalPurchases > 0 ? ((customer.total / totalPurchases) * 100).toFixed(1) : 0;
 
               return (
                 <div
@@ -91,17 +78,11 @@ export default function TopCustomersChart({ customers = [] }) {
                       #{index + 1}
                     </span>
                     <div>
-                      <p className="font-medium text-slate-800 dark:text-white">
-                        {customer.name}
-                      </p>
-                      <p className="text-xs text-slate-500">
-                        {percentage}% de participación
-                      </p>
+                      <p className="font-medium text-slate-800 dark:text-white">{customer.name}</p>
+                      <p className="text-xs text-slate-500">{percentage}% de participación</p>
                     </div>
                   </div>
-                  <span className="font-semibold text-cyan-600 dark:text-cyan-400">
-                    {customer.total} compras
-                  </span>
+                  <span className="font-semibold text-cyan-600 dark:text-cyan-400">{customer.total} compras</span>
                 </div>
               );
             })}

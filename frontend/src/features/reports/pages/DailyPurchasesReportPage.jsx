@@ -29,21 +29,14 @@ export default function DailyPurchasesReportPage({ filters }) {
       }
 
       // Invocamos al servicio binario que trae el archivo directo de la API
-      const blobData = await getDailyPurchasesReport(
-        company.id,
-        filters.startDate,
-        filters.endDate,
-      );
+      const blobData = await getDailyPurchasesReport(company.id, filters.startDate, filters.endDate);
 
       // Validación de consistencia del binario
       if (!blobData || blobData.size === 0) {
         throw new Error("El archivo PDF de compras se recibió vacío.");
       }
 
-      const blob =
-        blobData instanceof Blob
-          ? blobData
-          : new Blob([blobData], { type: "application/pdf" });
+      const blob = blobData instanceof Blob ? blobData : new Blob([blobData], { type: "application/pdf" });
       const url = URL.createObjectURL(blob);
 
       // Limpieza preventiva de memoria asignada previamente
@@ -53,9 +46,7 @@ export default function DailyPurchasesReportPage({ filters }) {
       });
     } catch (err) {
       console.error("Error al renderizar el visor de PDF de compras:", err);
-      setError(
-        err.message || "Error al generar el reporte de compras diarias.",
-      );
+      setError(err.message || "Error al generar el reporte de compras diarias.");
     } finally {
       setLoading(false);
     }
@@ -86,8 +77,8 @@ export default function DailyPurchasesReportPage({ filters }) {
             Reporte Diario de Compras
           </h1>
           <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-            Visualiza de manera oficial la evolución, balance y analíticas de
-            compras correspondientes al rango de fechas seleccionado.
+            Visualiza de manera oficial la evolución, balance y analíticas de compras correspondientes al rango de
+            fechas seleccionado.
           </p>
         </div>
 
@@ -117,12 +108,8 @@ export default function DailyPurchasesReportPage({ filters }) {
               <AlertTriangle className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="text-lg font-medium text-slate-900 dark:text-slate-50">
-                No se pudo cargar el reporte
-              </h3>
-              <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-                {error}
-              </p>
+              <h3 className="text-lg font-medium text-slate-900 dark:text-slate-50">No se pudo cargar el reporte</h3>
+              <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">{error}</p>
             </div>
             <button
               onClick={fetchPdf}
@@ -139,12 +126,10 @@ export default function DailyPurchasesReportPage({ filters }) {
               <Calendar className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="text-sm font-medium text-slate-900 dark:text-slate-200">
-                Rango de fechas requerido
-              </h3>
+              <h3 className="text-sm font-medium text-slate-900 dark:text-slate-200">Rango de fechas requerido</h3>
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                Por favor, selecciona una fecha de inicio y de fin en el panel
-                de filtros para generar la previsualización del reporte.
+                Por favor, selecciona una fecha de inicio y de fin en el panel de filtros para generar la
+                previsualización del reporte.
               </p>
             </div>
           </div>
@@ -155,9 +140,7 @@ export default function DailyPurchasesReportPage({ filters }) {
             title="Reporte Diario de Compras"
           />
         ) : (
-          <p className="text-slate-400 dark:text-slate-500 text-sm">
-            No hay datos disponibles.
-          </p>
+          <p className="text-slate-400 dark:text-slate-500 text-sm">No hay datos disponibles.</p>
         )}
       </div>
     </div>

@@ -2,10 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 import useAuth from "@/features/auth/hooks/useAuth";
-import {
-  clearSession,
-  getCompany,
-} from "@/features/auth/services/session.service";
+import { clearSession, getCompany } from "@/features/auth/services/session.service";
 import { hasTierAccess } from "@/features/auth/utils/subscription";
 
 import AsideFooter from "./components/AsideFooter";
@@ -51,11 +48,7 @@ export default function AppAside({ isOpen }) {
         isOpen ? "translate-x-0" : "-translate-x-full"
       } lg:translate-x-0`}
     >
-      <AsideHeader
-        isCollapsed={isCollapsed}
-        company={company}
-        isLoading={loading}
-      />
+      <AsideHeader isCollapsed={isCollapsed} company={company} isLoading={loading} />
 
       <div className="flex-1 overflow-y-auto">
         <AsideNavigation

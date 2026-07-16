@@ -41,11 +41,7 @@ export default function BarcodeHeader({
         }}
         headerActions={
           <>
-            <ModernButton
-              onClick={onExportPDF}
-              icon={FileText}
-              text="Exportar PDF"
-            />
+            <ModernButton onClick={onExportPDF} icon={FileText} text="Exportar PDF" />
             <ModernButton onClick={onPrint} icon={Printer} text="Imprimir" />
           </>
         }

@@ -8,21 +8,21 @@ const saleInclude = {
       id: true,
       name: true,
       ruc: true,
-    }
+    },
   },
   branch: {
     select: {
       id: true,
       name: true,
       address: true,
-    }
+    },
   },
   seller: {
     select: {
       id: true,
       name: true,
       email: true,
-    }
+    },
   },
   customer: {
     select: {
@@ -31,8 +31,8 @@ const saleInclude = {
       documentType: true,
       documentNumber: true,
       phone: true,
-      email: true
-    }
+      email: true,
+    },
   },
   details: {
     include: {
@@ -43,12 +43,12 @@ const saleInclude = {
           sku: true,
           barcode: true,
           salePrice: true,
-        }
-      }
+        },
+      },
     },
     orderBy: {
-      id: "asc"
-    }
+      id: "asc",
+    },
   },
   payments: {
     include: {
@@ -56,24 +56,24 @@ const saleInclude = {
         select: {
           id: true,
           name: true,
-          type: true
-        }
-      }
+          type: true,
+        },
+      },
     },
     orderBy: {
-      createdAt: "desc"
-    }
+      createdAt: "desc",
+    },
   },
 
   // 🎯 AGREGA ESTA LÍNEA AQUÍ:
   // Le dice a Prisma que calcule la cantidad de elementos en la relación "details"
   _count: {
     select: {
-      details: true
-    }
-  }
+      details: true,
+    },
+  },
 };
 
 module.exports = {
-  saleInclude
+  saleInclude,
 };

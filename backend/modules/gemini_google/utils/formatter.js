@@ -4,28 +4,28 @@
 
 const currency = (value) => {
 
-    if (
-        value === null ||
+  if (
+    value === null ||
         value === undefined
-    ) {
-        return "S/ 0.00";
-    }
+  ) {
+    return "S/ 0.00";
+  }
 
-    return new Intl.NumberFormat(
-        "es-PE",
-        {
-            style: "currency",
-            currency: "PEN"
-        }
-    ).format(Number(value));
+  return new Intl.NumberFormat(
+    "es-PE",
+    {
+      style: "currency",
+      currency: "PEN",
+    },
+  ).format(Number(value));
 };
 
 const percent = (value) => {
 
-    return `${Number(value).toFixed(2)}%`;
+  return `${Number(value).toFixed(2)}%`;
 };
 
 module.exports = {
-    currency,
-    percent
+  currency,
+  percent,
 };

@@ -1,12 +1,5 @@
 // plans.config.js o dentro de tu componente de Pricing
-import {
-  Archive,
-  Cpu,
-  FileBarChart,
-  LayoutDashboard,
-  ScanLine,
-  Store,
-} from "lucide-react";
+import { Archive, Cpu, FileBarChart, LayoutDashboard, ScanLine, Store } from "lucide-react";
 
 export const plans = [
   {
@@ -15,8 +8,7 @@ export const plans = [
     tagline: "Digitalización Base",
     priceMonthly: 0, // antes: 10 — un plan FREE no puede cobrar
     priceAnnual: 0, // antes: 8  — idem
-    description:
-      "Ideal para bodegas independientes y pequeños comercios locales que empiezan.",
+    description: "Ideal para bodegas independientes y pequeños comercios locales que empiezan.",
     icon: LayoutDashboard,
     features: [
       "1 Sucursal Física única",
@@ -34,8 +26,7 @@ export const plans = [
     tagline: "Crecimiento Comercial",
     priceMonthly: 49,
     priceAnnual: 39,
-    description:
-      "Diseñado para negocios en expansión que manejan múltiples sedes o almacenes.",
+    description: "Diseñado para negocios en expansión que manejan múltiples sedes o almacenes.",
     icon: Store,
     features: [
       "Todo lo incluido en el Plan FREE",
@@ -55,8 +46,7 @@ export const plans = [
     tagline: "Corporativo e Inteligente",
     priceMonthly: 99,
     priceAnnual: 79,
-    description:
-      "Para empresas exigentes que buscan automatización inteligente y resguardo crítico.",
+    description: "Para empresas exigentes que buscan automatización inteligente y resguardo crítico.",
     icon: Cpu,
     features: [
       "Todo lo incluido en el Plan BASIC",
@@ -75,25 +65,21 @@ export const modules = [
   {
     icon: Store,
     title: "Soporte Multisucursales Real",
-    description:
-      "Crea, edita y supervisa el inventario de todas tus tiendas o bodegas desde una misma cuenta.",
+    description: "Crea, edita y supervisa el inventario de todas tus tiendas o bodegas desde una misma cuenta.",
   },
   {
     icon: Archive,
     title: "Historial de Kárdex Completo",
-    description:
-      "Audita quién modificó el stock, cuándo ocurrió y cuál fue el motivo para evitar pérdidas.",
+    description: "Audita quién modificó el stock, cuándo ocurrió y cuál fue el motivo para evitar pérdidas.",
   },
   {
     icon: FileBarChart,
     title: "Reportes y Exportación",
-    description:
-      "Exporta ventas e inventarios a Excel y analiza métricas mediante gráficos interactivos.",
+    description: "Exporta ventas e inventarios a Excel y analiza métricas mediante gráficos interactivos.",
   },
   {
     icon: ScanLine,
     title: "Generador de Códigos de Barras",
-    description:
-      "Genera etiquetas para productos sin código de fábrica y acelera el proceso de venta.",
+    description: "Genera etiquetas para productos sin código de fábrica y acelera el proceso de venta.",
   },
 ];

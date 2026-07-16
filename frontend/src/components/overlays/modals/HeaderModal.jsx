@@ -44,30 +44,17 @@ export default function HeaderModal({
       className={`flex items-center justify-between border-b border-[#d7e0e7] bg-[#f8fbfd] dark:border-[#365d86]/20 dark:bg-[#0f172a] ${s.wrapper}`}
     >
       {/* PANEL IZQUIERDO: CONTENIDO */}
-      <div
-        className="flex items-center min-w-0 flex-1 mr-4 gap-inherit"
-        style={{ gap: "inherit" }}
-      >
+      <div className="flex items-center min-w-0 flex-1 mr-4 gap-inherit" style={{ gap: "inherit" }}>
         {Icon && (
-          <div
-            className={`flex shrink-0 items-center justify-center bg-[#274c77] text-white ${s.icon}`}
-          >
+          <div className={`flex shrink-0 items-center justify-center bg-[#274c77] text-white ${s.icon}`}>
             <Icon size={s.iconSize} />
           </div>
         )}
 
         {/* TEXTO */}
         <div className="min-w-0">
-          <h2 className={`truncate text-[#274c77] dark:text-white ${s.title}`}>
-            {title}
-          </h2>
-          {subtitle && (
-            <p
-              className={`truncate text-[#6096ba] dark:text-[#8fb8d8] ${s.subtitle}`}
-            >
-              {subtitle}
-            </p>
-          )}
+          <h2 className={`truncate text-[#274c77] dark:text-white ${s.title}`}>{title}</h2>
+          {subtitle && <p className={`truncate text-[#6096ba] dark:text-[#8fb8d8] ${s.subtitle}`}>{subtitle}</p>}
         </div>
       </div>
 

@@ -55,14 +55,7 @@ export default function Trend({
   const Icon = isPositive ? TrendingUp : isNegative ? TrendingDown : Minus;
 
   return (
-    <div
-      className={clsx(
-        "inline-flex items-center gap-2 font-semibold",
-        currentSize.text,
-        colorClass,
-        className,
-      )}
-    >
+    <div className={clsx("inline-flex items-center gap-2 font-semibold", currentSize.text, colorClass, className)}>
       {showIcon && <Icon size={currentSize.icon} strokeWidth={2.2} />}
 
       <span>
@@ -70,11 +63,7 @@ export default function Trend({
         {value}%
       </span>
 
-      {label && (
-        <span className="font-normal text-slate-500 dark:text-slate-400">
-          {label}
-        </span>
-      )}
+      {label && <span className="font-normal text-slate-500 dark:text-slate-400">{label}</span>}
     </div>
   );
 }

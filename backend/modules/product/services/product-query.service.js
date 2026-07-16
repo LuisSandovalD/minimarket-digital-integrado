@@ -20,7 +20,7 @@ const calculateInventoryStock = (inventory = []) => {
       total: 0,
       reserved: 0,
       damaged: 0,
-    }
+    },
   );
 };
 
@@ -39,7 +39,7 @@ exports.getAll = async (companyId, query = {}) => {
     categoryId,
     status,
     sortBy,
-    sortOrder: sortOrder.toLowerCase() === "asc" ? "asc" : "desc"
+    sortOrder: sortOrder.toLowerCase() === "asc" ? "asc" : "desc",
   };
 
   // 2. Llamamos al nuevo repositorio adaptado a Prisma con estas opciones
@@ -63,8 +63,8 @@ exports.getAll = async (companyId, query = {}) => {
       currentPage: options.page,
       itemsPerPage: options.limit,
       hasNextPage: options.page * options.limit < total,
-      hasPrevPage: options.page > 1
-    }
+      hasPrevPage: options.page > 1,
+    },
   };
 };
 

@@ -22,12 +22,12 @@ module.exports = {
 
       const month =
         String(
-          today.getMonth() + 1
+          today.getMonth() + 1,
         ).padStart(2, "0");
 
       const day =
         String(
-          today.getDate()
+          today.getDate(),
         ).padStart(2, "0");
 
       // ========================================

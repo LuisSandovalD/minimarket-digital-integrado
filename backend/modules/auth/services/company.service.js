@@ -39,5 +39,5 @@ const createCompany = async (company, plan = "FREE") => {
 
 // EXPORTACIÓN UNIFICADA: Garantiza que Express y los controladores lo lean correctamente
 module.exports = {
-  createCompany
+  createCompany,
 };

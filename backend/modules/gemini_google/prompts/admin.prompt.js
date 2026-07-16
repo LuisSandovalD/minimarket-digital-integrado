@@ -99,5 +99,5 @@ Responde en español.
 `;
 
 module.exports = {
-    buildAdminPrompt
+  buildAdminPrompt,
 };

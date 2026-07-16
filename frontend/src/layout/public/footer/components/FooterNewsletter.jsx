@@ -21,40 +21,28 @@ export default function FooterNewsletter() {
       }), // Genera un formato elegante: "11 jul 2026, 14:30"
     };
 
-    emailjs
-      .send(
-        "service_vj08bgm",
-        "template_j5f1bos",
-        templateParams,
-        "3kx4H0jM5Gq2uayHH",
-      )
-      .then(
-        () => {
-          alert("¡Solicitud enviada con éxito! Nos comunicaremos pronto.");
-          setEmail("");
-          setLoading(false);
-        },
-        () => {
-          alert("Hubo un error al enviar. Por favor, intenta de nuevo.");
-          setLoading(false);
-        },
-      );
+    emailjs.send("service_vj08bgm", "template_j5f1bos", templateParams, "3kx4H0jM5Gq2uayHH").then(
+      () => {
+        alert("¡Solicitud enviada con éxito! Nos comunicaremos pronto.");
+        setEmail("");
+        setLoading(false);
+      },
+      () => {
+        alert("Hubo un error al enviar. Por favor, intenta de nuevo.");
+        setLoading(false);
+      },
+    );
   };
 
   return (
     <div className="flex flex-col gap-3 max-w-sm text-left">
-      <h3 className="text-xs font-bold tracking-wider uppercase text-[#0f172a] dark:text-white/90">
-        Suscríbete
-      </h3>
+      <h3 className="text-xs font-bold tracking-wider uppercase text-[#0f172a] dark:text-white/90">Suscríbete</h3>
 
       <p className="text-sm font-medium text-slate-500 dark:text-[#cbd5e1]/60">
         ¿Quieres que nos comuniquemos contigo? Déjanos tu correo aquí.
       </p>
 
-      <form
-        onSubmit={handleSubmit}
-        className="mt-2 flex items-center gap-2 w-full transform-gpu"
-      >
+      <form onSubmit={handleSubmit} className="mt-2 flex items-center gap-2 w-full transform-gpu">
         <div className="flex-1 min-w-0">
           <Input
             type="email"

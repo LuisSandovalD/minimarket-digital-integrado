@@ -33,9 +33,7 @@ export default function BarcodeCard({ product, selected, onSelect }) {
       <div className="p-6">
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0 flex-1">
-            <h3 className="truncate text-lg font-medium text-slate-900 dark:text-slate-100">
-              {product.name}
-            </h3>
+            <h3 className="truncate text-lg font-medium text-slate-900 dark:text-slate-100">{product.name}</h3>
 
             <p className="mt-1 truncate text-sm text-slate-500 dark:text-slate-400">
               {product.description || "Producto registrado"}

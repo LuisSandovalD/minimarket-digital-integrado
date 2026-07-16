@@ -11,16 +11,16 @@
 */
 
 async function calculateLatency(
-    callback
+  callback,
 ) {
 
-    const start = Date.now();
+  const start = Date.now();
 
-    await callback();
+  await callback();
 
-    const end = Date.now();
+  const end = Date.now();
 
-    return end - start;
+  return end - start;
 }
 
 module.exports =

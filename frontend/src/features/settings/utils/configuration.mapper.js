@@ -24,10 +24,7 @@ export const mapConfigurationToForm = (data) => {
     currency: data.currency ?? "PEN",
 
     // 💰 TAX
-    taxRate:
-      data.taxRate !== undefined && data.taxRate !== null
-        ? Number(data.taxRate)
-        : 0,
+    taxRate: data.taxRate !== undefined && data.taxRate !== null ? Number(data.taxRate) : 0,
     defaultTaxEnabled: data.defaultTaxEnabled ?? true,
 
     // 📦 INVENTORY
@@ -70,22 +67,15 @@ export const mapFormToPayload = (form) => {
 
     // Casteos numéricos rigurosos para cumplir con las reglas del esquema Zod
     taxRate: form.taxRate === "" ? 0 : Number(form.taxRate),
-    lowStockThreshold:
-      form.lowStockThreshold === "" ? 0 : Number(form.lowStockThreshold),
-    expiringDaysAlert:
-      form.expiringDaysAlert === "" ? 30 : Number(form.expiringDaysAlert),
-    sessionTimeout:
-      form.sessionTimeout === "" ? 3600 : Number(form.sessionTimeout),
-    passwordMinLength:
-      form.passwordMinLength === "" ? 8 : Number(form.passwordMinLength),
-    maxLoginAttempts:
-      form.maxLoginAttempts === "" ? 5 : Number(form.maxLoginAttempts),
+    lowStockThreshold: form.lowStockThreshold === "" ? 0 : Number(form.lowStockThreshold),
+    expiringDaysAlert: form.expiringDaysAlert === "" ? 30 : Number(form.expiringDaysAlert),
+    sessionTimeout: form.sessionTimeout === "" ? 3600 : Number(form.sessionTimeout),
+    passwordMinLength: form.passwordMinLength === "" ? 8 : Number(form.passwordMinLength),
+    maxLoginAttempts: form.maxLoginAttempts === "" ? 5 : Number(form.maxLoginAttempts),
 
     // Tratamiento especial para campos anulables (nullables) de Prisma
     passwordExpiresDays:
-      form.passwordExpiresDays === "" || form.passwordExpiresDays === null
-        ? null
-        : Number(form.passwordExpiresDays),
+      form.passwordExpiresDays === "" || form.passwordExpiresDays === null ? null : Number(form.passwordExpiresDays),
 
     // =========================================================================
     // ENCAPSULAMIENTO CORPORATIVO

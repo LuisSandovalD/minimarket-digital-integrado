@@ -16,7 +16,7 @@ const normalizeDate =
       0,
       0,
       0,
-      0
+      0,
     );
 
     return normalized;
@@ -30,7 +30,7 @@ const normalizeDate =
 exports.isExpiringSoon =
   (
     expirationDate,
-    days = 30
+    days = 30,
   ) => {
 
     if (!expirationDate) {
@@ -41,21 +41,21 @@ exports.isExpiringSoon =
 
     const today =
       normalizeDate(
-        new Date()
+        new Date(),
       );
 
     const limitDate =
       normalizeDate(
-        new Date()
+        new Date(),
       );
 
     limitDate.setDate(
-      today.getDate() + days
+      today.getDate() + days,
     );
 
     const expiration =
       normalizeDate(
-        expirationDate
+        expirationDate,
       );
 
     return (
@@ -70,7 +70,7 @@ exports.isExpiringSoon =
 
 exports.isExpired =
   (
-    expirationDate
+    expirationDate,
   ) => {
 
     if (!expirationDate) {
@@ -81,12 +81,12 @@ exports.isExpired =
 
     const expiration =
       normalizeDate(
-        expirationDate
+        expirationDate,
       );
 
     const today =
       normalizeDate(
-        new Date()
+        new Date(),
       );
 
     return expiration < today;
@@ -99,7 +99,7 @@ exports.isExpired =
 
 exports.buildLowStockAlert =
   (
-    product
+    product,
   ) => {
 
     return {
@@ -122,7 +122,7 @@ exports.buildLowStockAlert =
 
 exports.buildExpiringAlert =
   (
-    product
+    product,
   ) => {
 
     return {
@@ -146,7 +146,7 @@ exports.buildExpiringAlert =
 exports.buildDamagedAlert =
   (
     product,
-    quantity
+    quantity,
   ) => {
 
     return {

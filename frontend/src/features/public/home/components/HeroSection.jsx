@@ -94,8 +94,8 @@ export default function HeroSection() {
             variants={fastFadeUp}
             className="mt-4 max-w-xl text-base leading-relaxed text-[#4a5568] dark:text-[#cbd5e1] sm:text-lg"
           >
-            Ventas, inventario, compras y reportes unificados en una interfaz de
-            velocidad nativa diseñada para el crecimiento de tu negocio.
+            Ventas, inventario, compras y reportes unificados en una interfaz de velocidad nativa diseñada para el
+            crecimiento de tu negocio.
           </motion.p>
 
           {/* Botones */}
@@ -104,11 +104,7 @@ export default function HeroSection() {
             className="relative z-30 mt-6 flex w-full flex-wrap items-center gap-3 sm:w-auto"
           >
             {!isAuthenticated && (
-              <motion.div
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="transform-gpu"
-              >
+              <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="transform-gpu">
                 <ModernButton
                   text="Comenzar Ahora"
                   icon={ArrowRight}
@@ -121,11 +117,7 @@ export default function HeroSection() {
               </motion.div>
             )}
 
-            <motion.div
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="transform-gpu"
-            >
+            <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="transform-gpu">
               <ModernButton
                 text="Ver Video Promocional"
                 icon={Play}
@@ -160,11 +152,7 @@ export default function HeroSection() {
       </div>
 
       {/* Modal del video */}
-      <VideoDemoModal
-        open={promoOpen}
-        onClose={() => setPromoOpen(false)}
-        videoUrl="/videos/publicidad-erp.mp4"
-      />
+      <VideoDemoModal open={promoOpen} onClose={() => setPromoOpen(false)} videoUrl="/videos/publicidad-erp.mp4" />
     </section>
   );
 }

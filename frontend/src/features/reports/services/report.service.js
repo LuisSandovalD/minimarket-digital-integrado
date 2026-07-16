@@ -7,11 +7,7 @@ import api from "@/api/axios";
 // ========================================
 // Compras diarias (Reporte PDF)
 // ========================================
-export const getDailyPurchasesReport = async (
-  companyId,
-  startDate,
-  endDate,
-) => {
+export const getDailyPurchasesReport = async (companyId, startDate, endDate) => {
   const response = await api.get("/purchase/reports/daily/pdf", {
     params: {
       companyId,

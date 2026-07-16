@@ -38,5 +38,5 @@ const createBranch = async (branch, companyId) => {
 
 // EXPORTACIÓN UNIFICADA: Todo empaquetado bajo la misma firma arquitectónica de la app
 module.exports = {
-  createBranch
+  createBranch,
 };

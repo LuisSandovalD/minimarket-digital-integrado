@@ -29,6 +29,7 @@ export default function DatabasePage() {
   const [openSuccess, setOpenSuccess] = useState(false);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (successMessage) setOpenSuccess(true);
   }, [successMessage]);
 
@@ -59,19 +60,11 @@ export default function DatabasePage() {
   }
 
   return (
-    <div className="w-full min-h-screen p-6 space-y-10 bg-transparent">
-      <DataBaseHeader
-        onRefresh={handleRefresh}
-        onCreateBackup={handleCreateBackup}
-        loading={loading}
-      />
+    <div className="w-full min-h-screen space-y-6 bg-transparent">
+      <DataBaseHeader onRefresh={handleRefresh} onCreateBackup={handleCreateBackup} loading={loading} />
 
       <section className="space-y-4">
-        <DatabaseOverview
-          health={health}
-          metrics={metrics}
-          monitoring={monitoring}
-        />
+        <DatabaseOverview health={health} metrics={metrics} monitoring={monitoring} />
       </section>
 
       <section className="space-y-4">

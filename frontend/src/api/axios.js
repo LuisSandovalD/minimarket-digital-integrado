@@ -4,10 +4,7 @@
 
 import axios from "axios";
 
-import {
-  clearSession,
-  getToken,
-} from "../features/auth/services/session.service";
+import { clearSession, getToken } from "../features/auth/services/session.service";
 
 /* ======================================
  * AXIOS INSTANCE
@@ -59,9 +56,7 @@ api.interceptors.response.use(
         "/auth/reset-password",
       ];
 
-      const shouldIgnore = ignoredRoutes.some((route) =>
-        config?.url?.includes(route),
-      );
+      const shouldIgnore = ignoredRoutes.some((route) => config?.url?.includes(route));
 
       if (shouldIgnore) {
         return Promise.reject(error);

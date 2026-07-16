@@ -10,15 +10,7 @@ export function useProductsStep({ products = [], form, setForm }) {
   const [cartOpen, setCartOpen] = useState(false);
 
   // Consumo y puente de la lógica central del carrito
-  const {
-    details,
-    getQty,
-    addToCart,
-    updateQty,
-    removeItem,
-    totalUnits,
-    totalAmount,
-  } = useCart(form, setForm);
+  const { details, getQty, addToCart, updateQty, removeItem, totalUnits, totalAmount } = useCart(form, setForm);
 
   // Filtrado reactivo en tiempo real por Nombre, SKU o Código de Barras (Escáner)
   const filteredProducts = useMemo(() => {

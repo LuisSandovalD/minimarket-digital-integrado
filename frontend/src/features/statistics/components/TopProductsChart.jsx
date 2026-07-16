@@ -19,10 +19,7 @@ export default function TopProductsChart({ products = [] }) {
 
   const totalSold = chartData.reduce((acc, item) => acc + item.quantity, 0);
   const topProduct = chartData[0];
-  const topPercentage =
-    totalSold > 0 && topProduct
-      ? ((topProduct.quantity / totalSold) * 100).toFixed(1)
-      : 0;
+  const topPercentage = totalSold > 0 && topProduct ? ((topProduct.quantity / totalSold) * 100).toFixed(1) : 0;
 
   return (
     <div className="rounded-3xl border border-slate-200/70 dark:border-slate-800/70 bg-white/70 dark:bg-slate-900/70 p-6 shadow-sm backdrop-blur-xl">
@@ -32,12 +29,8 @@ export default function TopProductsChart({ products = [] }) {
           <Package size={20} className="text-blue-600" />
         </div>
         <div>
-          <h2 className="text-lg font-semibold text-slate-800 dark:text-white">
-            Top Productos
-          </h2>
-          <p className="text-xs text-slate-500 dark:text-slate-400">
-            Productos con mayor volumen de ventas
-          </p>
+          <h2 className="text-lg font-semibold text-slate-800 dark:text-white">Top Productos</h2>
+          <p className="text-xs text-slate-500 dark:text-slate-400">Productos con mayor volumen de ventas</p>
         </div>
       </div>
 
@@ -79,10 +72,7 @@ export default function TopProductsChart({ products = [] }) {
           {/* Ranking */}
           <div className="mt-6 space-y-3">
             {chartData.map((product, index) => {
-              const percentage =
-                totalSold > 0
-                  ? ((product.quantity / totalSold) * 100).toFixed(1)
-                  : 0;
+              const percentage = totalSold > 0 ? ((product.quantity / totalSold) * 100).toFixed(1) : 0;
 
               return (
                 <div
@@ -94,17 +84,11 @@ export default function TopProductsChart({ products = [] }) {
                       #{index + 1}
                     </span>
                     <div>
-                      <p className="font-medium text-slate-800 dark:text-white">
-                        {product.name}
-                      </p>
-                      <p className="text-xs text-slate-500">
-                        {percentage}% de participación
-                      </p>
+                      <p className="font-medium text-slate-800 dark:text-white">{product.name}</p>
+                      <p className="text-xs text-slate-500">{percentage}% de participación</p>
                     </div>
                   </div>
-                  <span className="font-semibold text-blue-600 dark:text-blue-400">
-                    {product.quantity} und.
-                  </span>
+                  <span className="font-semibold text-blue-600 dark:text-blue-400">{product.quantity} und.</span>
                 </div>
               );
             })}

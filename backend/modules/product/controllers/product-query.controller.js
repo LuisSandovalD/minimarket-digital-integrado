@@ -39,7 +39,7 @@ exports.getProductById =
       const product =
         await service.getById(
           Number(req.params.id),
-          req.user.companyId
+          req.user.companyId,
         );
 
       if (!product) {
@@ -79,7 +79,7 @@ exports.getFeaturedProducts =
 
       const products =
         await service.getFeatured(
-          req.user.companyId
+          req.user.companyId,
         );
 
       res.json({

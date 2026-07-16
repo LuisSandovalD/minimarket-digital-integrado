@@ -4,11 +4,7 @@ import { ArrowRight, LayoutDashboard, LogIn, LogOut } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 
 // IMPORTAMOS LAS FUNCIONES DE SESIÓN
-import {
-  clearSession,
-  getCompany,
-  isAuthenticated,
-} from "@/features/auth/services/session.service";
+import { clearSession, getCompany, isAuthenticated } from "@/features/auth/services/session.service";
 
 export default function NavbarActions({ setOpenLogin, setOpenRegister }) {
   const navigate = useNavigate();
@@ -18,13 +14,10 @@ export default function NavbarActions({ setOpenLogin, setOpenRegister }) {
 
   // Obtenemos la empresa. Si getCompany() devuelve un objeto, usamos su slug o id.
   const company = getCompany();
-  const companySlug =
-    typeof company === "object" ? company?.slug || company?.name : company;
+  const companySlug = typeof company === "object" ? company?.slug || company?.name : company;
 
   // Construimos la ruta base dinámica usando el parámetro idéntico a tu ruta privada (/:companySlug/dashboard)
-  const dashboardPath = companySlug
-    ? `/${companySlug}/dashboard`
-    : "/dashboard";
+  const dashboardPath = companySlug ? `/${companySlug}/dashboard` : "/dashboard";
 
   // Función para manejar el cierre de sesión de forma segura
   const handleLogout = () => {
@@ -41,19 +34,10 @@ export default function NavbarActions({ setOpenLogin, setOpenRegister }) {
           /* SI ESTÁ LOGUEADO: Muestra acceso al sistema y salir */
           <>
             <Link to={dashboardPath}>
-              <ModernButton
-                text="Acceder al sistema"
-                icon={LayoutDashboard}
-                variant="primary"
-              />
+              <ModernButton text="Acceder al sistema" icon={LayoutDashboard} variant="primary" />
             </Link>
 
-            <ModernButton
-              text=""
-              icon={LogOut}
-              variant="danger"
-              onClick={handleLogout}
-            />
+            <ModernButton text="" icon={LogOut} variant="danger" onClick={handleLogout} />
           </>
         ) : (
           /* SI NO ESTÁ LOGUEADO: Muestra los botones clásicos de Auth */

@@ -25,10 +25,7 @@ export default function Navbar({ setOpenLogin, setOpenRegister }) {
 
           <div className="flex items-center gap-2">
             {/* HEREDAMOS LAS PROPS DE MODAL AQUÍ */}
-            <NavbarActions
-              setOpenLogin={setOpenLogin}
-              setOpenRegister={setOpenRegister}
-            />
+            <NavbarActions setOpenLogin={setOpenLogin} setOpenRegister={setOpenRegister} />
             <NavbarMobileButton onClick={openMenu} />
           </div>
         </div>

@@ -32,10 +32,7 @@ export default function PurchaseStepper({ currentStep = 1 }) {
           const Icon = step.icon;
 
           return (
-            <div
-              key={step.label}
-              className="flex items-center flex-1 last:flex-none"
-            >
+            <div key={step.label} className="flex items-center flex-1 last:flex-none">
               {/* NODE WRAPPER */}
               <div className="flex flex-col items-center relative z-10">
                 {/* ICON CONTAINER CARD */}
@@ -60,11 +57,7 @@ export default function PurchaseStepper({ currentStep = 1 }) {
                   `}
                 >
                   {isCompleted ? (
-                    <Check
-                      size={16}
-                      strokeWidth={3}
-                      className="animate-in fade-in zoom-in duration-200"
-                    />
+                    <Check size={16} strokeWidth={3} className="animate-in fade-in zoom-in duration-200" />
                   ) : (
                     <Icon size={16} strokeWidth={isActive ? 2.5 : 2} />
                   )}

@@ -43,18 +43,13 @@ export default function ChatFlotante({ ticketId, selectedTicket }) {
               {/* Textos del Ticket */}
               <div className="flex flex-col min-w-0">
                 <div className="flex items-center gap-1.5">
-                  <span className="font-mono text-xs font-bold text-blue-400">
-                    {getTicketVisualId()}
-                  </span>
+                  <span className="font-mono text-xs font-bold text-blue-400">{getTicketVisualId()}</span>
                   <h3 className="truncate text-sm font-semibold text-slate-200">
                     {selectedTicket?.title || "Soporte Técnico"}
                   </h3>
                 </div>
                 <p className="flex items-center gap-1 text-[11px] text-slate-400">
-                  <Circle
-                    size={6}
-                    className="fill-emerald-500 text-emerald-500 animate-pulse"
-                  />
+                  <Circle size={6} className="fill-emerald-500 text-emerald-500 animate-pulse" />
                   Agente asignado en línea
                 </p>
               </div>

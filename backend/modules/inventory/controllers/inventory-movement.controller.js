@@ -9,7 +9,6 @@ const service =
 // GET MOVEMENTS
 // ========================================
 
-
 exports.getMovements = async (req, res) => {
   try {
     const result = await service.getMovements({
@@ -47,7 +46,7 @@ exports.getMovements = async (req, res) => {
 exports.getProductMovements =
   async (
     req,
-    res
+    res,
   ) => {
 
     try {
@@ -56,10 +55,10 @@ exports.getProductMovements =
         await service.getProductMovements(
 
           Number(
-            req.params.productId
+            req.params.productId,
           ),
 
-          req.user.companyId
+          req.user.companyId,
         );
 
       res.json({
@@ -91,7 +90,7 @@ exports.getProductMovements =
 exports.getBranchMovements =
   async (
     req,
-    res
+    res,
   ) => {
 
     try {
@@ -100,10 +99,10 @@ exports.getBranchMovements =
         await service.getBranchMovements(
 
           Number(
-            req.params.branchId
+            req.params.branchId,
           ),
 
-          req.user.companyId
+          req.user.companyId,
         );
 
       res.json({

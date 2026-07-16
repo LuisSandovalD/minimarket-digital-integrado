@@ -1,23 +1,10 @@
-// ============================================================================
-// features/purchase/components/steps/ProductStep.jsx
-// MODERNO Y TRANSPARENTE: Catálogo de selección con barras de control fluidas
-// ============================================================================
-
 import { SearchInput } from "@/components/forms/";
 import { Box, Layers, Plus, ShoppingCart, Tag } from "lucide-react";
 import { usePurchaseProductsStep } from "../../hooks/usePurchaseProductsStep.js";
 import PurchaseCartModal from "../modals/PurchaseCartModal.jsx";
 
 export default function ProductsStep({ products = [], form, setForm }) {
-  const {
-    search,
-    setSearch,
-    cartOpen,
-    setCartOpen,
-    filteredProducts,
-    cart,
-    fmt,
-  } = usePurchaseProductsStep({
+  const { search, setSearch, cartOpen, setCartOpen, filteredProducts, cart, fmt } = usePurchaseProductsStep({
     products,
     form,
     setForm,
@@ -106,13 +93,8 @@ export default function ProductsStep({ products = [], form, setForm }) {
           ) : (
             /* EMPTY STATE VIEW */
             <div className="py-14 text-center border border-dashed border-slate-200/80 dark:border-slate-800/80 rounded-2xl bg-white/30 dark:bg-slate-950/10 backdrop-blur-xs max-w-2xl mx-auto">
-              <Box
-                size={28}
-                className="mx-auto text-slate-300 dark:text-slate-700 mb-2"
-              />
-              <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
-                No se encontraron artículos
-              </p>
+              <Box size={28} className="mx-auto text-slate-300 dark:text-slate-700 mb-2" />
+              <p className="text-sm font-medium text-slate-500 dark:text-slate-400">No se encontraron artículos</p>
               <p className="text-xs text-slate-400 dark:text-slate-600 mt-0.5">
                 Intenta buscar con otros términos o códigos de barra.
               </p>
@@ -131,10 +113,7 @@ export default function ProductsStep({ products = [], form, setForm }) {
               Unidades Solicitadas
             </p>
             <p className="font-bold text-xl text-slate-800 dark:text-slate-100 mt-0.5">
-              {cart.totalUnits}{" "}
-              <span className="text-xs font-normal text-slate-400 dark:text-slate-500">
-                und.
-              </span>
+              {cart.totalUnits} <span className="text-xs font-normal text-slate-400 dark:text-slate-500">und.</span>
             </p>
           </div>
 

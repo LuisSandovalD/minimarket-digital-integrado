@@ -53,14 +53,10 @@ export const createSale = async (data) => {
 // UPDATE SALE (🔥 CON BLINDAJE ANTI-[object Object])
 // ========================================
 export const updateSale = async (idOrObject, data) => {
-  const cleanId =
-    idOrObject && typeof idOrObject === "object" ? idOrObject.id : idOrObject;
+  const cleanId = idOrObject && typeof idOrObject === "object" ? idOrObject.id : idOrObject;
 
   if (!cleanId) {
-    console.error(
-      "❌ Error en updateSale: No se proporcionó un ID válido.",
-      idOrObject,
-    );
+    console.error("❌ Error en updateSale: No se proporcionó un ID válido.", idOrObject);
     throw new Error("ID de venta requerido para la actualización.");
   }
 

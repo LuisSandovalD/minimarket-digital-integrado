@@ -2,11 +2,7 @@
 // features/payments/components/PaymentLoading.jsx
 // ========================================
 
-import {
-  SkeletonHeader,
-  SkeletonSearch,
-  SkeletonTable,
-} from "@/components/skeletons";
+import { SkeletonHeader, SkeletonSearch, SkeletonTable } from "@/components/skeletons";
 
 export default function PaymentLoading() {
   return (

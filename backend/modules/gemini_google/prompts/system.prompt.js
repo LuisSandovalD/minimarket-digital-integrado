@@ -69,5 +69,5 @@ Responde siempre en español.
 `;
 
 module.exports = {
-    SYSTEM_PROMPT
+  SYSTEM_PROMPT,
 };

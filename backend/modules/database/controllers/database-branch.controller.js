@@ -1,110 +1,110 @@
 // modules/database/controllers/database-branch.controller.js
 
 const databaseBranchService = require(
-    "../services/database-branch.service"
+  "../services/database-branch.service",
 );
 
 const databaseResponse = require(
-    "../utils/database-response"
+  "../utils/database-response",
 );
 
 class DatabaseBranchController {
 
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Get Branches
     |--------------------------------------------------------------------------
     */
 
-    async getBranches(req, res) {
+  async getBranches(req, res) {
 
-        try {
+    try {
 
-            const data =
+      const data =
                 await databaseBranchService
-                    .getBranches();
+                  .getBranches();
 
-            return res.status(200).json(
+      return res.status(200).json(
 
-                databaseResponse({
+        databaseResponse({
 
-                    success: true,
+          success: true,
 
-                    message:
+          message:
                         "Branches retrieved successfully",
 
-                    data,
-                })
-            );
+          data,
+        }),
+      );
 
-        } catch (error) {
+    } catch (error) {
 
-            return res.status(500).json(
+      return res.status(500).json(
 
-                databaseResponse({
+        databaseResponse({
 
-                    success: false,
+          success: false,
 
-                    message:
+          message:
                         error.message,
 
-                    error:
+          error:
                         "BRANCH_FETCH_ERROR",
-                })
-            );
-        }
+        }),
+      );
     }
+  }
 
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Create Branch
     |--------------------------------------------------------------------------
     */
 
-    async createBranch(req, res) {
+  async createBranch(req, res) {
 
-        try {
+    try {
 
-            const {
-                branchName,
-            } = req.body;
+      const {
+        branchName,
+      } = req.body;
 
-            const data =
+      const data =
                 await databaseBranchService
-                    .createBranch(
-                        branchName
-                    );
+                  .createBranch(
+                    branchName,
+                  );
 
-            return res.status(201).json(
+      return res.status(201).json(
 
-                databaseResponse({
+        databaseResponse({
 
-                    success: true,
+          success: true,
 
-                    message:
+          message:
                         "Branch created successfully",
 
-                    data,
-                })
-            );
+          data,
+        }),
+      );
 
-        } catch (error) {
+    } catch (error) {
 
-            return res.status(500).json(
+      return res.status(500).json(
 
-                databaseResponse({
+        databaseResponse({
 
-                    success: false,
+          success: false,
 
-                    message:
+          message:
                         error.message,
 
-                    error:
+          error:
                         "BRANCH_CREATE_ERROR",
-                })
-            );
-        }
+        }),
+      );
     }
+  }
 }
 
 module.exports =

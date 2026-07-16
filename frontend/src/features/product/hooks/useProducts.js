@@ -85,8 +85,7 @@ export default function useProducts(initialFilters = {}) {
   // METODOS ASYNCRONOS
   // ========================================
   const createProduct = async (data) => createMutation.mutateAsync(data);
-  const updateProduct = async (id, data) =>
-    updateMutation.mutateAsync({ id, data });
+  const updateProduct = async (id, data) => updateMutation.mutateAsync({ id, data });
   const deleteProduct = async (id) => deleteMutation.mutateAsync(id);
 
   return {

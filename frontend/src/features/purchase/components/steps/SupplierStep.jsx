@@ -1,8 +1,3 @@
-// ============================================================================
-// features/purchase/components/steps/SupplierStep.jsx
-// MODERNO Y TRANSPARENTE: Selección de proveedor con tarjetas de información sutiles
-// ============================================================================
-
 import { Select } from "@/components/forms/"; // Importación requerida para que el componente funcione
 import { Building2, FileText, Mail, Phone, User } from "lucide-react";
 import { useMemo } from "react";
@@ -22,11 +17,7 @@ export default function SupplierStep({ suppliers = [], form, setForm }) {
   // Memorizamos las opciones para evitar cálculos innecesarios en renders secundarios
   const supplierOptions = useMemo(() => {
     return (Array.isArray(suppliers) ? suppliers : []).map((supplier) => {
-      const nameDisplay =
-        supplier?.companyName ||
-        supplier?.name ||
-        supplier?.razonSocial ||
-        "Proveedor sin nombre";
+      const nameDisplay = supplier?.companyName || supplier?.name || supplier?.razonSocial || "Proveedor sin nombre";
       const rucDisplay = supplier?.ruc || supplier?.documentId || "";
 
       return {
@@ -36,9 +27,7 @@ export default function SupplierStep({ suppliers = [], form, setForm }) {
     });
   }, [suppliers]);
 
-  const currentSupplier = suppliers.find(
-    (s) => String(s.id) === String(form?.supplierId),
-  );
+  const currentSupplier = suppliers.find((s) => String(s.id) === String(form?.supplierId));
 
   return (
     <div className="flex-1 overflow-y-auto bg-transparent custom-scrollbar mt-5">
@@ -72,27 +61,20 @@ export default function SupplierStep({ suppliers = [], form, setForm }) {
                     Contacto Legal
                   </p>
                   <p className="font-semibold text-slate-800 dark:text-slate-200 truncate">
-                    {currentSupplier?.contactName ||
-                      currentSupplier?.contact ||
-                      "No especificado"}
+                    {currentSupplier?.contactName || currentSupplier?.contact || "No especificado"}
                   </p>
                 </div>
               </div>
 
               {/* IDENTIFICACIÓN */}
               <div className="flex items-start gap-3 p-2 rounded-xl hover:bg-slate-100/40 dark:hover:bg-slate-900/30 transition-colors duration-200">
-                <Building2
-                  size={16}
-                  className="mt-0.5 text-slate-400 shrink-0"
-                />
+                <Building2 size={16} className="mt-0.5 text-slate-400 shrink-0" />
                 <div className="min-w-0">
                   <p className="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider">
                     Identificación (RUC/DNI)
                   </p>
                   <p className="font-semibold text-slate-700 dark:text-slate-300 truncate font-mono">
-                    {currentSupplier?.ruc ||
-                      currentSupplier?.documentId ||
-                      "Sin documento"}
+                    {currentSupplier?.ruc || currentSupplier?.documentId || "Sin documento"}
                   </p>
                 </div>
               </div>
@@ -105,9 +87,7 @@ export default function SupplierStep({ suppliers = [], form, setForm }) {
                     Teléfono / Celular
                   </p>
                   <p className="font-semibold text-slate-800 dark:text-slate-200 truncate">
-                    {currentSupplier?.phone ||
-                      currentSupplier?.telephone ||
-                      "Sin teléfono"}
+                    {currentSupplier?.phone || currentSupplier?.telephone || "Sin teléfono"}
                   </p>
                 </div>
               </div>
@@ -129,13 +109,9 @@ export default function SupplierStep({ suppliers = [], form, setForm }) {
         ) : (
           /* ESTADO VACÍO (PLACEHOLDER) */
           <div className="p-20 text-center border border-dashed border-slate-200/80 dark:border-slate-800/80 rounded-2xl bg-white/30 dark:bg-slate-950/10 backdrop-blur-xs animate-in fade-in duration-300">
-            <Building2
-              size={28}
-              className="mx-auto text-slate-300 dark:text-slate-700 mb-3 animate-pulse"
-            />
+            <Building2 size={28} className="mx-auto text-slate-300 dark:text-slate-700 mb-3 animate-pulse" />
             <p className="text-xs font-medium text-slate-400 dark:text-slate-500 max-w-sm mx-auto leading-relaxed">
-              Por favor, selecciona un proveedor válido para cargar la Ficha
-              Comercial y poder continuar con la orden.
+              Por favor, selecciona un proveedor válido para cargar la Ficha Comercial y poder continuar con la orden.
             </p>
           </div>
         )}

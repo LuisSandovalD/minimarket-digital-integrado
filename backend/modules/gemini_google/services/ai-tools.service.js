@@ -2,63 +2,63 @@ const prisma = require("../../../prisma/client");
 ;
 
 const getTopProducts = async (
-    companyId,
-    limit = 10
+  companyId,
+  limit = 10,
 ) => {
-    const products =
+  const products =
         await prisma.saleDetail.groupBy({
-            by: ["productId"],
+          by: ["productId"],
 
+          _sum: {
+            quantity: true,
+            subtotal: true,
+          },
+
+          orderBy: {
             _sum: {
-                quantity: true,
-                subtotal: true,
+              quantity: "desc",
             },
+          },
 
-            orderBy: {
-                _sum: {
-                    quantity: "desc",
-                },
-            },
-
-            take: limit,
+          take: limit,
         });
 
-    return products;
+  return products;
 };
 
 const getLowStockProducts = async (
-    companyId
+  companyId,
 ) => {
-    return prisma.inventory.findMany({
-        where: {
-            companyId,
-            stock: {
-                lte: 10,
-            },
-        },
+  return prisma.inventory.findMany({
+    where: {
+      companyId,
+      stock: {
+        lte: 10,
+      },
+    },
 
-        include: {
-            product: true,
-        },
-    });
+    include: {
+      product: true,
+    },
+  });
 };
 
 const getTopCategories = async (
-    companyId
+  companyId,
 ) => {
-    return prisma.category.findMany({
-        where: {
-            companyId,
-        },
+  return prisma.category.findMany({
+    where: {
+      companyId,
+    },
 
-        include: {
-            products: true,
-        },
-    });
+    include: {
+      products: true,
+    },
+  });
 };
 
 module.exports = {
-    getTopProducts,
-    getLowStockProducts,
-    getTopCategories,
+  getTopProducts,
+  getLowStockProducts,
+  getTopCategories,
 };

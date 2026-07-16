@@ -19,7 +19,7 @@ const createPayment = async (data, tx = prisma) => {
       transactionId: data.transactionId || null,
       dueDate: data.dueDate ? new Date(data.dueDate) : null,
       paidAt: data.status === "PENDING" ? null : new Date(),
-    }
+    },
   });
 };
 
@@ -50,7 +50,7 @@ const createManyPayments = async (saleId, payments = [], tx = prisma) => {
   });
 
   return tx.payment.findMany({
-    where: { saleId: Number(saleId) }
+    where: { saleId: Number(saleId) },
   });
 };
 

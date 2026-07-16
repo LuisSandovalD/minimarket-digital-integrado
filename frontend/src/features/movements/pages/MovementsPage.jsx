@@ -9,16 +9,7 @@ import MovementsTable from "../components/MovementsTable";
 import useMovements from "../hooks/useMovements";
 
 export default function MovementsPage() {
-  const {
-    movements,
-    pagination,
-    loading,
-    filters,
-    updateFilters,
-    nextPage,
-    prevPage,
-    refetch,
-  } = useMovements();
+  const { movements, pagination, loading, filters, updateFilters, nextPage, prevPage, refetch } = useMovements();
 
   const handleSearch = (values) => {
     updateFilters(values);
@@ -42,11 +33,7 @@ export default function MovementsPage() {
     <div className="space-y-6 p-6">
       <MovementsHeader movements={movements} onRefresh={refetch} />
 
-      <MovementFilters
-        loading={loading}
-        onSearch={handleSearch}
-        onClear={handleClear}
-      />
+      <MovementFilters loading={loading} onSearch={handleSearch} onClear={handleClear} />
 
       <MovementsTable
         movements={movements}

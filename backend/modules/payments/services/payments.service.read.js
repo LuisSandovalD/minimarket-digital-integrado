@@ -10,14 +10,14 @@ const paymentsRepositoryRead =
 // ========================================
 
 const getPayments = async (companyId, queryParams) => {
-    return await paymentsRepositoryRead.findAll(companyId, queryParams);
+  return await paymentsRepositoryRead.findAll(companyId, queryParams);
 };
 // ========================================
 // GET ONE
 // ========================================
 
 const getPayment = async (id) => {
-    return await paymentsRepositoryRead.findById(id);
+  return await paymentsRepositoryRead.findById(id);
 };
 
 // ========================================
@@ -25,7 +25,7 @@ const getPayment = async (id) => {
 // ========================================
 
 const getPaymentsBySale = async (saleId) => {
-    return await paymentsRepositoryRead.findBySale(saleId);
+  return await paymentsRepositoryRead.findBySale(saleId);
 };
 
 // ========================================
@@ -33,12 +33,12 @@ const getPaymentsBySale = async (saleId) => {
 // ========================================
 
 const getPaymentsByPurchase = async (purchaseId) => {
-    return await paymentsRepositoryRead.findByPurchase(purchaseId);
+  return await paymentsRepositoryRead.findByPurchase(purchaseId);
 };
 
 module.exports = {
-    getPayments,
-    getPayment,
-    getPaymentsBySale,
-    getPaymentsByPurchase,
+  getPayments,
+  getPayment,
+  getPaymentsBySale,
+  getPaymentsByPurchase,
 };

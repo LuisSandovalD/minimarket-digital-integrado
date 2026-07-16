@@ -1,65 +1,65 @@
 // modules/database/services/database-query.service.js
 
 const prisma = require(
-    "../../../config/prisma.config"
+  "../../../config/prisma.config",
 );
 
 const safeQuery = require(
-    "../utils/safe-query"
+  "../utils/safe-query",
 );
 
 const databaseQueryValidation = require(
-    "../validations/database-query.validation"
+  "../validations/database-query.validation",
 );
 
 class DatabaseQueryService {
 
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Execute Safe Query
     |--------------------------------------------------------------------------
     */
 
-    async executeQuery(query) {
+  async executeQuery(query) {
 
-        const validated =
+    const validated =
             databaseQueryValidation.parse({
-                query,
+              query,
             });
 
-        const isSafe =
+    const isSafe =
             safeQuery(
-                validated.query
+              validated.query,
             );
 
-        if (!isSafe) {
+    if (!isSafe) {
 
-            throw new Error(
-                "Dangerous query detected"
-            );
-        }
-
-        const result =
-            await prisma
-                .$queryRawUnsafe(
-                    validated.query
-                );
-
-        return {
-
-            success: true,
-
-            rows:
-                Array.isArray(result)
-                    ? result.length
-                    : 0,
-
-            data: result,
-
-            executedAt:
-                new Date(),
-        };
+      throw new Error(
+        "Dangerous query detected",
+      );
     }
+
+    const result =
+            await prisma
+              .$queryRawUnsafe(
+                validated.query,
+              );
+
+    return {
+
+      success: true,
+
+      rows:
+                Array.isArray(result)
+                  ? result.length
+                  : 0,
+
+      data: result,
+
+      executedAt:
+                new Date(),
+    };
+  }
 }
 
 module.exports =

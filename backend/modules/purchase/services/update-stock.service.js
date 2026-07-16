@@ -4,28 +4,28 @@ const prisma =
 async function updateStockService(
   productId,
   branchId,
-  quantity
+  quantity,
 ) {
 
   return prisma.inventory.updateMany({
 
     where: {
       productId,
-      branchId
+      branchId,
     },
 
     data: {
 
       stock: {
-        increment: quantity
-      }
+        increment: quantity,
+      },
 
-    }
+    },
 
   });
 
 }
 
 module.exports = {
-  updateStockService
+  updateStockService,
 };

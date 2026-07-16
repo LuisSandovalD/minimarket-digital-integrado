@@ -1,4 +1,5 @@
 import ChatFlotante from "../components/ChatFlotante";
+import ChatLoading from "../components/ChatLoading";
 import CreateTicketModal from "../components/CreateTicketModal";
 import SupportHeader from "../components/SupportHeader";
 import SupportSidebar from "../components/SupportSidebar";
@@ -12,7 +13,7 @@ export default function SupportPage() {
   // LOADING GLOBAL SAFE ENTRY
   // =========================
   if (state.loadingTickets && !state.selectedTicket) {
-    return <>cargando</>;
+    return <ChatLoading />;
   }
 
   return (

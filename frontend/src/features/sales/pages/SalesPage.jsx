@@ -55,9 +55,7 @@ export default function SalesPage() {
       id: sale.id,
       saleNumber: sale.saleNumber || `TRX-${String(sale.id).toUpperCase()}`,
       total: Number(sale.total || 0),
-      customer: sale.customer
-        ? { name: sale.customer.name }
-        : { name: "Cliente General" },
+      customer: sale.customer ? { name: sale.customer.name } : { name: "Cliente General" },
       details: saleDetailsArray.map((d) => ({
         id: d.id,
         quantity: Number(d.quantity || 1),
@@ -95,19 +93,11 @@ export default function SalesPage() {
         totalRevenue={Number(metrics?.totalRevenue || 0)}
         totalOrders={Number(metrics?.totalOrders || 0)}
         averageTicket={Number(metrics?.averageTicket || 0)}
-        onCreate={
-          canManageSales ? () => modals?.setCreateOpen?.(true) : undefined
-        }
-        onOpenReports={
-          canAccessReports ? () => setReportsOpen(true) : undefined
-        }
+        onCreate={canManageSales ? () => modals?.setCreateOpen?.(true) : undefined}
+        onOpenReports={canAccessReports ? () => setReportsOpen(true) : undefined}
       />
 
-      <SaleFilters
-        onSearch={actions?.handleApplyFilters}
-        onClear={actions?.handleClearFilters}
-        loading={loading}
-      />
+      <SaleFilters onSearch={actions?.handleApplyFilters} onClear={actions?.handleClearFilters} loading={loading} />
 
       <SaleTable
         sales={sales}
@@ -158,9 +148,7 @@ export default function SalesPage() {
               setSelectedSaleData(null);
             }}
             sale={selectedSaleData}
-            onConfirmBilling={async (p) =>
-              await actions?.handleEmitBilling?.(p)
-            }
+            onConfirmBilling={async (p) => await actions?.handleEmitBilling?.(p)}
           />
         </>
       )}
@@ -169,17 +157,11 @@ export default function SalesPage() {
         open={!!modals?.detailOpen}
         onClose={() => modals?.setDetailOpen?.(false)}
         sale={modals?.selectedSale || null}
-        onPaymentChangeState={
-          canManageSales ? handlePaymentChangeState : undefined
-        }
+        onPaymentChangeState={canManageSales ? handlePaymentChangeState : undefined}
       />
 
       {canAccessReports && (
-        <SalesReportsModal
-          open={reportsOpen}
-          onClose={() => setReportsOpen(false)}
-          companyId={metrics?.companyId}
-        />
+        <SalesReportsModal open={reportsOpen} onClose={() => setReportsOpen(false)} companyId={metrics?.companyId} />
       )}
     </div>
   );

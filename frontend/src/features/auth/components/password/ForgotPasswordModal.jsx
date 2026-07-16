@@ -21,12 +21,7 @@ export default function ForgotPasswordModal({ isOpen, onClose }) {
 
   return (
     <Modal open={isOpen} onClose={onClose} size="md">
-      <HeaderModal
-        title="Recuperar Contraseña"
-        subtitle={STEP_LABELS[step - 1]}
-        icon={KeyRound}
-        onClose={onClose}
-      />
+      <HeaderModal title="Recuperar Contraseña" subtitle={STEP_LABELS[step - 1]} icon={KeyRound} onClose={onClose} />
 
       {/* ─── INDICADOR DE PASOS ─── */}
       <div className="flex items-center gap-2 px-6 pt-6">
@@ -34,9 +29,7 @@ export default function ForgotPasswordModal({ isOpen, onClose }) {
           <div
             key={index}
             className={`h-1.5 flex-1 rounded-full transition-colors duration-300 ${
-              index < step
-                ? "bg-gradient-to-r from-[#274c77] to-[#6096ba]"
-                : "bg-[#d7e0e7] dark:bg-white/10"
+              index < step ? "bg-gradient-to-r from-[#274c77] to-[#6096ba]" : "bg-[#d7e0e7] dark:bg-white/10"
             }`}
           />
         ))}
@@ -52,26 +45,13 @@ export default function ForgotPasswordModal({ isOpen, onClose }) {
             exit={{ opacity: 0, x: -16 }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
           >
-            {step === 1 && (
-              <ForgotPasswordStepEmail
-                email={email}
-                setEmail={setEmail}
-                onNext={() => setStep(2)}
-              />
-            )}
+            {step === 1 && <ForgotPasswordStepEmail email={email} setEmail={setEmail} onNext={() => setStep(2)} />}
 
             {step === 2 && (
-              <ForgotPasswordStepCode
-                email={email}
-                code={code}
-                setCode={setCode}
-                onNext={() => setStep(3)}
-              />
+              <ForgotPasswordStepCode email={email} code={code} setCode={setCode} onNext={() => setStep(3)} />
             )}
 
-            {step === 3 && (
-              <ForgotPasswordStepReset code={code} onSuccess={onClose} />
-            )}
+            {step === 3 && <ForgotPasswordStepReset code={code} onSuccess={onClose} />}
           </motion.div>
         </AnimatePresence>
       </div>

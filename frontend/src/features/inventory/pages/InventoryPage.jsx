@@ -50,14 +50,7 @@ export default function InventoryPage() {
   // INVENTORY MAIN HOOK
   // ========================================
 
-  const {
-    inventories,
-    pagination,
-    loading,
-    fetching,
-    actionLoading,
-    executeStockAction,
-  } = useInventory(filters);
+  const { inventories, pagination, loading, fetching, actionLoading, executeStockAction } = useInventory(filters);
 
   // ========================================
   // MODAL STATE

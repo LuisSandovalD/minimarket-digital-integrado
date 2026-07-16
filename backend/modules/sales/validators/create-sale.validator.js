@@ -77,7 +77,7 @@ const schema = Joi.object({
             Joi.number()
               .min(0)
               .required(),
-        })
+        }),
       )
       .min(1)
       .required(),
@@ -115,7 +115,7 @@ const schema = Joi.object({
             Joi.string()
               .max(255)
               .allow("", null),
-        })
+        }),
       )
       .default([]),
 

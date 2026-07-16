@@ -21,9 +21,7 @@ export default function StatisticsPage() {
   const user = getUser();
 
   // Definimos permisos: Admin, Manager y Supervisor pueden ver estadísticas
-  const canAccessStatistics = ["ADMIN", "MANAGER", "SUPERVISOR"].includes(
-    user?.role,
-  );
+  const canAccessStatistics = ["ADMIN", "MANAGER", "SUPERVISOR"].includes(user?.role);
 
   const {
     loading,
@@ -50,16 +48,9 @@ export default function StatisticsPage() {
   if (!canAccessStatistics) {
     return (
       <div className="flex flex-col items-center justify-center h-full p-10 text-center">
-        <h2 className="text-xl font-bold text-slate-800 dark:text-slate-200">
-          Acceso Restringido
-        </h2>
-        <p className="text-slate-500">
-          No tienes permisos para visualizar esta sección de estadísticas.
-        </p>
-        <button
-          onClick={() => navigate(-1)}
-          className="mt-4 text-blue-600 underline"
-        >
+        <h2 className="text-xl font-bold text-slate-800 dark:text-slate-200">Acceso Restringido</h2>
+        <p className="text-slate-500">No tienes permisos para visualizar esta sección de estadísticas.</p>
+        <button onClick={() => navigate(-1)} className="mt-4 text-blue-600 underline">
           Volver atrás
         </button>
       </div>

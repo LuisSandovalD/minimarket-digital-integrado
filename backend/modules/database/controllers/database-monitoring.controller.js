@@ -1,59 +1,59 @@
 // modules/database/controllers/database-monitoring.controller.js
 
 const databaseMonitoringService = require(
-    "../services/database-monitoring.service"
+  "../services/database-monitoring.service",
 );
 
 const databaseResponse = require(
-    "../utils/database-response"
+  "../utils/database-response",
 );
 
 class DatabaseMonitoringController {
 
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Get Monitoring
     |--------------------------------------------------------------------------
     */
 
-    async getMonitoring(req, res) {
+  async getMonitoring(req, res) {
 
-        try {
+    try {
 
-            const data =
+      const data =
                 await databaseMonitoringService
-                    .getMonitoring();
+                  .getMonitoring();
 
-            return res.status(200).json(
+      return res.status(200).json(
 
-                databaseResponse({
+        databaseResponse({
 
-                    success: true,
+          success: true,
 
-                    message:
+          message:
                         "Database monitoring retrieved successfully",
 
-                    data,
-                })
-            );
+          data,
+        }),
+      );
 
-        } catch (error) {
+    } catch (error) {
 
-            return res.status(500).json(
+      return res.status(500).json(
 
-                databaseResponse({
+        databaseResponse({
 
-                    success: false,
+          success: false,
 
-                    message:
+          message:
                         error.message,
 
-                    error:
+          error:
                         "DATABASE_MONITORING_ERROR",
-                })
-            );
-        }
+        }),
+      );
     }
+  }
 }
 
 module.exports =

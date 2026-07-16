@@ -3,17 +3,7 @@
 // ========================================
 
 import { Input } from "@/components/forms";
-import {
-  Banknote,
-  Calendar,
-  CheckCircle,
-  CreditCard,
-  Landmark,
-  Plus,
-  Receipt,
-  Smartphone,
-  Trash2,
-} from "lucide-react";
+import { Banknote, Calendar, CheckCircle, CreditCard, Landmark, Plus, Receipt, Smartphone, Trash2 } from "lucide-react";
 import { SummaryRow } from "../SummaryRow";
 
 const SALE_TYPES = [
@@ -37,12 +27,9 @@ const PAYMENT_METHODS = [
 const NEEDS_REFERENCE = ["CARD", "YAPE", "PLIN", "TRANSFER"];
 
 const fmt = (value) =>
-  new Intl.NumberFormat("es-PE", { style: "currency", currency: "PEN" }).format(
-    Number(value || 0),
-  );
+  new Intl.NumberFormat("es-PE", { style: "currency", currency: "PEN" }).format(Number(value || 0));
 
-const sumPayments = (payments) =>
-  (payments || []).reduce((acc, p) => acc + Number(p.amount || 0), 0);
+const sumPayments = (payments) => (payments || []).reduce((acc, p) => acc + Number(p.amount || 0), 0);
 
 const roundToTenCents = (value) => Math.round(Number(value || 0) * 10) / 10;
 
@@ -51,12 +38,7 @@ const getTodayDateString = () => {
   return today.toISOString().split("T")[0];
 };
 
-export default function PaymentStep({
-  form,
-  setForm,
-  totalOverride = null,
-  isAbonoFlow = false,
-}) {
+export default function PaymentStep({ form, setForm, totalOverride = null, isAbonoFlow = false }) {
   const details = Array.isArray(form?.details) ? form.details : [];
 
   // ── DETERMINACIÓN DEL TOTAL REUTILIZABLE ──
@@ -71,9 +53,7 @@ export default function PaymentStep({
     tax = total - subtotal;
   } else {
     subtotal = details.reduce(
-      (acc, item) =>
-        acc +
-        Number(item.quantity || 0) * Number(item.price || item.unitPrice || 0),
+      (acc, item) => acc + Number(item.quantity || 0) * Number(item.price || item.unitPrice || 0),
       0,
     );
     tax = subtotal * 0.18;
@@ -150,9 +130,7 @@ export default function PaymentStep({
     const rounded = roundToTenCents(value);
     setForm((prev) => ({
       ...prev,
-      payments: (prev.payments || []).map((p) =>
-        p.id === id ? { ...p, amount: rounded.toFixed(2) } : p,
-      ),
+      payments: (prev.payments || []).map((p) => (p.id === id ? { ...p, amount: rounded.toFixed(2) } : p)),
     }));
   };
 
@@ -160,9 +138,7 @@ export default function PaymentStep({
     setForm((prev) => ({
       ...prev,
       creditDueDate: dateValue,
-      payments: (prev.payments || []).map((p) =>
-        p.id === "CREDIT-ID" ? { ...p, dueDate: dateValue } : p,
-      ),
+      payments: (prev.payments || []).map((p) => (p.id === "CREDIT-ID" ? { ...p, dueDate: dateValue } : p)),
     }));
   };
 
@@ -190,9 +166,7 @@ export default function PaymentStep({
               <p className="text-sm font-semibold mb-2">Tipo de venta</p>
               <div className="grid grid-cols-2 gap-2">
                 {SALE_TYPES.map((type) => {
-                  const selected =
-                    form.saleType === type.value ||
-                    (!form.saleType && type.value === "CASH_SALE");
+                  const selected = form.saleType === type.value || (!form.saleType && type.value === "CASH_SALE");
                   return (
                     <button
                       key={type.value}
@@ -200,12 +174,8 @@ export default function PaymentStep({
                       onClick={() => setSaleType(type.value)}
                       className={`rounded-xl border p-2.5 text-left flex flex-col gap-0.5 transition-all ${selected ? "border-slate-400/60 dark:border-slate-600 bg-white dark:bg-slate-900/80" : "border-slate-200/40 dark:border-slate-800/40 bg-white/20 dark:bg-slate-950/20 hover:bg-white/50"}`}
                     >
-                      <span className="text-sm font-semibold">
-                        {type.label}
-                      </span>
-                      <span className="text-xs text-slate-500">
-                        {type.description}
-                      </span>
+                      <span className="text-sm font-semibold">{type.label}</span>
+                      <span className="text-xs text-slate-500">{type.description}</span>
                     </button>
                   );
                 })}
@@ -217,9 +187,7 @@ export default function PaymentStep({
           {isCashSale && (
             <div className="rounded-2xl p-3 bg-white/80 dark:bg-white/[0.03] border border-black/[0.06] dark:border-white/[0.05] space-y-2.5">
               <div className="flex items-center justify-between">
-                <p className="text-sm font-semibold">
-                  {isAbonoFlow ? "Desglose del Abono" : "Pagos"}
-                </p>
+                <p className="text-sm font-semibold">{isAbonoFlow ? "Desglose del Abono" : "Pagos"}</p>
                 {(!isFullyPaid || isAbonoFlow) && (
                   <button
                     type="button"
@@ -232,9 +200,7 @@ export default function PaymentStep({
               </div>
 
               {(form.payments || []).length === 0 ? (
-                <p className="text-sm text-slate-400 py-1">
-                  Agrega al menos un método de pago.
-                </p>
+                <p className="text-sm text-slate-400 py-1">Agrega al menos un método de pago.</p>
               ) : (
                 <div className="space-y-2">
                   {(form.payments || []).map((p) => (
@@ -250,35 +216,27 @@ export default function PaymentStep({
                 </div>
               )}
 
-              {total > 0 &&
-                (form.payments || []).length > 0 &&
-                !isAbonoFlow && (
-                  <div className="pt-2">
-                    <div className="flex justify-between text-xs text-slate-500 mb-1">
-                      <span>Progreso de Pago</span>
-                      <span>
-                        {Math.min(Math.round((totalPaid / total) * 100), 100)}%
-                      </span>
-                    </div>
-                    <div className="h-1.5 rounded-full bg-slate-200/60 dark:bg-slate-800/60 overflow-hidden">
-                      <div
-                        className={`h-full rounded-full transition-all duration-500 ${isFullyPaid ? "bg-emerald-500" : "bg-blue-500"}`}
-                        style={{
-                          width: `${Math.min((totalPaid / total) * 100, 100)}%`,
-                        }}
-                      />
-                    </div>
+              {total > 0 && (form.payments || []).length > 0 && !isAbonoFlow && (
+                <div className="pt-2">
+                  <div className="flex justify-between text-xs text-slate-500 mb-1">
+                    <span>Progreso de Pago</span>
+                    <span>{Math.min(Math.round((totalPaid / total) * 100), 100)}%</span>
                   </div>
-                )}
+                  <div className="h-1.5 rounded-full bg-slate-200/60 dark:bg-slate-800/60 overflow-hidden">
+                    <div
+                      className={`h-full rounded-full transition-all duration-500 ${isFullyPaid ? "bg-emerald-500" : "bg-blue-500"}`}
+                      style={{
+                        width: `${Math.min((totalPaid / total) * 100, 100)}%`,
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
 
               {change > 0 && hasCash && !isAbonoFlow && (
                 <div className="rounded-xl p-2.5 border border-slate-200/50 dark:border-slate-800/50 bg-white/40 dark:bg-slate-900/40 flex items-center justify-between">
-                  <p className="text-sm text-slate-600 dark:text-slate-400">
-                    Vuelto estimado a entregar
-                  </p>
-                  <p className="text-lg font-bold text-emerald-600 dark:text-emerald-400">
-                    {fmt(change)}
-                  </p>
+                  <p className="text-sm text-slate-600 dark:text-slate-400">Vuelto estimado a entregar</p>
+                  <p className="text-lg font-bold text-emerald-600 dark:text-emerald-400">{fmt(change)}</p>
                 </div>
               )}
             </div>
@@ -289,15 +247,10 @@ export default function PaymentStep({
             <div className="rounded-2xl p-3 bg-white/80 dark:bg-white/[0.03] border border-black/[0.06] dark:border-white/[0.05] space-y-3">
               <p className="text-sm font-semibold">Configuración de crédito</p>
               <div className="rounded-xl p-2.5 border border-emerald-200/60 dark:border-emerald-900/40 bg-emerald-50/60 dark:bg-emerald-950/20 flex items-start gap-2">
-                <CheckCircle
-                  size={15}
-                  className="text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5"
-                />
+                <CheckCircle size={15} className="text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
                 <p className="text-xs text-emerald-800 dark:text-emerald-400">
-                  Esta venta quedará registrada como **Cuenta por Cobrar
-                  (Crédito)**. El monto total de{" "}
-                  <strong className="font-bold">{fmt(total)}</strong> pasará a
-                  estado pendiente hasta su vencimiento.
+                  Esta venta quedará registrada como **Cuenta por Cobrar (Crédito)**. El monto total de{" "}
+                  <strong className="font-bold">{fmt(total)}</strong> pasará a estado pendiente hasta su vencimiento.
                 </p>
               </div>
               <Input
@@ -317,9 +270,7 @@ export default function PaymentStep({
           <div className="sticky top-0 rounded-2xl bg-white/80 dark:bg-white/[0.03] border border-black/[0.06] dark:border-white/[0.05] overflow-hidden">
             <div className="px-4 py-2.5 border-b border-slate-200/50 dark:border-slate-800/50 flex items-center gap-2">
               <Receipt size={14} />
-              <p className="text-sm font-medium">
-                {isAbonoFlow ? "Resumen de Deuda" : "Resumen del comprobante"}
-              </p>
+              <p className="text-sm font-medium">{isAbonoFlow ? "Resumen de Deuda" : "Resumen del comprobante"}</p>
             </div>
 
             <div className="p-4 space-y-3">
@@ -350,24 +301,15 @@ export default function PaymentStep({
                       value={
                         isAbonoFlow
                           ? "Abono / Amortización"
-                          : SALE_TYPES.find((t) => t.value === form.saleType)
-                              ?.label || "Contado"
+                          : SALE_TYPES.find((t) => t.value === form.saleType)?.label || "Contado"
                       }
                     />
                     {isCashSale ? (
                       (form.payments || [])
                         .filter((p) => Number(p.amount) > 0)
                         .map((p) => {
-                          const m = PAYMENT_METHODS.find(
-                            (m) => m.value === p.method,
-                          );
-                          return (
-                            <SummaryRow
-                              key={p.id}
-                              label={m?.label || p.method}
-                              value={fmt(p.amount)}
-                            />
-                          );
+                          const m = PAYMENT_METHODS.find((m) => m.value === p.method);
+                          return <SummaryRow key={p.id} label={m?.label || p.method} value={fmt(p.amount)} />;
                         })
                     ) : (
                       <SummaryRow label="Crédito Directo" value={fmt(total)} />
@@ -379,32 +321,21 @@ export default function PaymentStep({
               <div>
                 {isCreditSale ? (
                   <div className="rounded-xl p-2.5 border border-amber-200/60 dark:border-amber-900/40 bg-amber-50/60 dark:bg-amber-950/20">
-                    <p className="text-xs text-amber-600 mb-0.5">
-                      Monto Financiado
-                    </p>
-                    <p className="text-xl font-bold text-amber-700 dark:text-amber-300">
-                      {fmt(total)}
-                    </p>
+                    <p className="text-xs text-amber-600 mb-0.5">Monto Financiado</p>
+                    <p className="text-xl font-bold text-amber-700 dark:text-amber-300">{fmt(total)}</p>
                   </div>
                 ) : pending > 0 ? (
                   <div className="rounded-xl p-2.5 border border-amber-200/60 dark:border-amber-900/40 bg-amber-50/60 dark:bg-amber-950/20">
                     <p className="text-xs text-amber-600 mb-0.5">
                       {isAbonoFlow ? "Saldo pendiente final" : "Saldo Restante"}
                     </p>
-                    <p className="text-xl font-bold text-amber-700 dark:text-amber-300">
-                      {fmt(pending)}
-                    </p>
+                    <p className="text-xl font-bold text-amber-700 dark:text-amber-300">{fmt(pending)}</p>
                   </div>
                 ) : total > 0 ? (
                   <div className="rounded-xl p-2.5 border border-emerald-200/60 dark:border-emerald-900/40 bg-emerald-50/60 dark:bg-emerald-950/20 flex items-center gap-2">
-                    <CheckCircle
-                      size={14}
-                      className="text-emerald-600 dark:text-emerald-400 shrink-0"
-                    />
+                    <CheckCircle size={14} className="text-emerald-600 dark:text-emerald-400 shrink-0" />
                     <p className="text-sm font-semibold text-emerald-700 dark:text-emerald-300">
-                      {isAbonoFlow
-                        ? "Deuda saldada por completo"
-                        : "Monto Cubierto"}
+                      {isAbonoFlow ? "Deuda saldada por completo" : "Monto Cubierto"}
                     </p>
                   </div>
                 ) : null}
@@ -464,9 +395,7 @@ function PaymentRow({ payment, canRemove, onUpdate, onRemove, onBlurAmount }) {
           min="0"
           step="0.10"
           value={payment.amount ?? ""}
-          onChange={(e) =>
-            onUpdate(payment.id, { ...payment, amount: e.target.value })
-          }
+          onChange={(e) => onUpdate(payment.id, { ...payment, amount: e.target.value })}
           onBlur={(e) => onBlurAmount(payment.id, e.target.value)}
         />
         {needsRef && (
@@ -474,9 +403,7 @@ function PaymentRow({ payment, canRemove, onUpdate, onRemove, onBlurAmount }) {
             label={refLabel}
             type="text"
             value={payment.reference || ""}
-            onChange={(e) =>
-              onUpdate(payment.id, { ...payment, reference: e.target.value })
-            }
+            onChange={(e) => onUpdate(payment.id, { ...payment, reference: e.target.value })}
           />
         )}
       </div>

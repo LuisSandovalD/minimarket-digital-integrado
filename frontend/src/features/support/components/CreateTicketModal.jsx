@@ -12,12 +12,7 @@ import { FooterModal, HeaderModal, Modal } from "@/components/overlays/";
 // Importamos las opciones de prioridad constantes
 import { PRIORITY_OPTIONS } from "../constants/support";
 
-export default function CreateTicketModal({
-  open,
-  onCancel,
-  onCreate,
-  loading,
-}) {
+export default function CreateTicketModal({ open, onCancel, onCreate, loading }) {
   const [form, setForm] = useState({
     title: "",
     description: "",
@@ -88,16 +83,11 @@ export default function CreateTicketModal({
                   dark:bg-slate-950
                 "
               >
-                <HelpCircle
-                  size={20}
-                  className="text-slate-600 dark:text-slate-300"
-                />
+                <HelpCircle size={20} className="text-slate-600 dark:text-slate-300" />
               </div>
 
               <div>
-                <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
-                  Detalles de la Incidencia
-                </h3>
+                <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Detalles de la Incidencia</h3>
                 <p className="text-xs text-slate-500 dark:text-slate-400">
                   Describe de forma clara y concisa el inconveniente.
                 </p>
@@ -141,16 +131,11 @@ export default function CreateTicketModal({
                   dark:bg-slate-950
                 "
               >
-                <FileText
-                  size={20}
-                  className="text-slate-600 dark:text-slate-300"
-                />
+                <FileText size={20} className="text-slate-600 dark:text-slate-300" />
               </div>
 
               <div>
-                <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
-                  Descripción Detallada
-                </h3>
+                <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Descripción Detallada</h3>
               </div>
             </div>
 
@@ -190,23 +175,13 @@ export default function CreateTicketModal({
         <FooterModal>
           <div className="flex w-full items-center justify-between gap-4 pb-5">
             <div className="hidden sm:block text-xs text-slate-500">
-              El ticket se asignará automáticamente al equipo técnico de
-              guardia.
+              El ticket se asignará automáticamente al equipo técnico de guardia.
             </div>
 
             <div className="ml-auto flex items-center gap-3">
-              <ModernButton
-                type="button"
-                text="Cancelar"
-                variant="outline"
-                icon={X}
-                onClick={onCancel}
-              />
+              <ModernButton type="button" text="Cancelar" variant="outline" icon={X} onClick={onCancel} />
 
-              <SubmitButton
-                text={loading ? "Creando..." : "Crear Ticket"}
-                loading={loading}
-              />
+              <SubmitButton text={loading ? "Creando..." : "Crear Ticket"} loading={loading} />
             </div>
           </div>
         </FooterModal>

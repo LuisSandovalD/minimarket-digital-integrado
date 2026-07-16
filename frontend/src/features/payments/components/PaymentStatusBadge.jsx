@@ -8,11 +8,7 @@ const variants = {
 
 export default function PaymentStatusBadge({ status }) {
   return (
-    <span
-      className={`px-2 py-1 rounded-lg text-xs font-medium ${
-        variants[status] || "bg-slate-100 text-slate-700"
-      }`}
-    >
+    <span className={`px-2 py-1 rounded-lg text-xs font-medium ${variants[status] || "bg-slate-100 text-slate-700"}`}>
       {status}
     </span>
   );

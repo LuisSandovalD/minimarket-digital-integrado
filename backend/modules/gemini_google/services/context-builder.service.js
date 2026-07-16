@@ -2,10 +2,8 @@
 // services/context-builder.service.js
 // ========================================
 
-const buildContext = (
-    businessData
-) => {
-    return `
+const buildContext = (businessData) => {
+  return `
 
 EMPRESA
 
@@ -19,33 +17,31 @@ Compras Mes:
 ${JSON.stringify(businessData.purchasesMonth, null, 2)}
 
 Productos Más Vendidos:
-${businessData.topProducts
-            .map(
-                (p) =>
-                    `- ${p.product}: ${p.quantity}` // Corregido: p.name -> p.product
-            )
-            .join("\n")}
+${(businessData.topProducts || []).map(
+    (p) =>
+      `- ${p.name}: ${p.quantitySales} unidades`,
+  ).join("\n")}
 
 Productos con Stock Bajo:
-${businessData.lowStock
-            .map(
-                (p) =>
-                    `- ${p.product}: ${p.stock} (Min: ${p.minStock})` // Corregido: p.name -> p.product
-            )
-            .join("\n")}
+${(businessData.lowStock || []).map(
+    (p) =>
+      `- ${p.name}: ${p.currentStock} (Min: ${p.minimumRequired})`,
+  ).join("\n")}
 
 Proveedores Destacados:
-${businessData.topSuppliers
-            .map((s) => `- ${s.supplier}: $${s.amount}`) // Corregido: s.name -> s.supplier
-            .join("\n")}
+${(businessData.topSuppliers || []).map(
+    (s) =>
+      `- ${s.name}: S/. ${Number(s.purchasedVolume || 0).toFixed(2)}`,
+  ).join("\n")}
 
 Empleados Destacados:
-${businessData.topEmployees
-            .map((e) => `- ${e.employee}: $${e.sales} (${e.transactions} transacciones)`) // Corregido: e.name -> e.employee
-            .join("\n")}
+${(businessData.topEmployees || []).map(
+    (e) =>
+      `- ${e.name}: S/. ${Number(e.totalInvoiced || 0).toFixed(2)} (${e.ticketsCount} transacciones)`,
+  ).join("\n")}
 `;
 };
 
 module.exports = {
-    buildContext,
+  buildContext,
 };

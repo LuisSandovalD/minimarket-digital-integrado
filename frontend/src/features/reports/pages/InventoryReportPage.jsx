@@ -29,21 +29,14 @@ export default function InventoryReportPage({ filters }) {
       }
 
       // Solicitamos el binario (Blob) del PDF de inventario
-      const blobData = await getInventoryReport(
-        company.id,
-        filters.startDate,
-        filters.endDate,
-      );
+      const blobData = await getInventoryReport(company.id, filters.startDate, filters.endDate);
 
       // Validación de integridad del archivo recibido
       if (!blobData || blobData.size === 0) {
         throw new Error("El archivo PDF se recibió vacío.");
       }
 
-      const blob =
-        blobData instanceof Blob
-          ? blobData
-          : new Blob([blobData], { type: "application/pdf" });
+      const blob = blobData instanceof Blob ? blobData : new Blob([blobData], { type: "application/pdf" });
       const url = URL.createObjectURL(blob);
 
       // Limpieza preventiva de memoria en estados anteriores
@@ -52,10 +45,7 @@ export default function InventoryReportPage({ filters }) {
         return url;
       });
     } catch (err) {
-      console.error(
-        "Error al generar vista previa del PDF de inventario:",
-        err,
-      );
+      console.error("Error al generar vista previa del PDF de inventario:", err);
       setError(err.message || "Error al generar el reporte de inventario.");
     } finally {
       setLoading(false);
@@ -63,6 +53,7 @@ export default function InventoryReportPage({ filters }) {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchPdf();
 
     // Limpieza de memoria (Clean-up) cuando el usuario sale o cambian filtros
@@ -72,6 +63,7 @@ export default function InventoryReportPage({ filters }) {
         return null;
       });
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters]);
 
   const hasFilters = filters?.startDate && filters?.endDate;
@@ -86,8 +78,7 @@ export default function InventoryReportPage({ filters }) {
             Reporte de Inventario
           </h1>
           <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-            Visualiza de manera oficial el stock de productos, valoración del
-            almacén y alertas de reposición vigentes.
+            Visualiza de manera oficial el stock de productos, valoración del almacén y alertas de reposición vigentes.
           </p>
         </div>
 
@@ -117,12 +108,8 @@ export default function InventoryReportPage({ filters }) {
               <AlertTriangle className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="text-lg font-medium text-slate-900 dark:text-slate-50">
-                No se pudo cargar el reporte
-              </h3>
-              <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-                {error}
-              </p>
+              <h3 className="text-lg font-medium text-slate-900 dark:text-slate-50">No se pudo cargar el reporte</h3>
+              <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">{error}</p>
             </div>
             <button
               onClick={fetchPdf}
@@ -139,12 +126,10 @@ export default function InventoryReportPage({ filters }) {
               <Calendar className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="text-sm font-medium text-slate-900 dark:text-slate-200">
-                Rango de fechas requerido
-              </h3>
+              <h3 className="text-sm font-medium text-slate-900 dark:text-slate-200">Rango de fechas requerido</h3>
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                Por favor, selecciona una fecha de inicio y de fin en el panel
-                de filtros para generar el reporte de inventario.
+                Por favor, selecciona una fecha de inicio y de fin en el panel de filtros para generar el reporte de
+                inventario.
               </p>
             </div>
           </div>
@@ -155,9 +140,7 @@ export default function InventoryReportPage({ filters }) {
             title="Reporte Oficial de Inventario"
           />
         ) : (
-          <p className="text-slate-400 dark:text-slate-500 text-sm">
-            No hay datos disponibles.
-          </p>
+          <p className="text-slate-400 dark:text-slate-500 text-sm">No hay datos disponibles.</p>
         )}
       </div>
     </div>

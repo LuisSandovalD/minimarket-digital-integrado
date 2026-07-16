@@ -28,10 +28,7 @@ export default function TopProductsReportPage() {
         throw new Error("El reporte PDF se generó vacío.");
       }
 
-      const blob =
-        blobData instanceof Blob
-          ? blobData
-          : new Blob([blobData], { type: "application/pdf" });
+      const blob = blobData instanceof Blob ? blobData : new Blob([blobData], { type: "application/pdf" });
       const url = URL.createObjectURL(blob);
 
       setPdfUrl((prev) => {
@@ -47,6 +44,7 @@ export default function TopProductsReportPage() {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchPdf();
     return () => {
       setPdfUrl((curr) => {
@@ -66,8 +64,7 @@ export default function TopProductsReportPage() {
             Reporte de Productos Top
           </h1>
           <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-            Visualiza y descarga el análisis de los productos con mayor
-            rendimiento y ventas en tu empresa.
+            Visualiza y descarga el análisis de los productos con mayor rendimiento y ventas en tu empresa.
           </p>
         </div>
 
@@ -97,12 +94,8 @@ export default function TopProductsReportPage() {
               <AlertTriangle className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="text-lg font-medium text-slate-900 dark:text-slate-50">
-                No se pudo cargar el reporte
-              </h3>
-              <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-                {error}
-              </p>
+              <h3 className="text-lg font-medium text-slate-900 dark:text-slate-50">No se pudo cargar el reporte</h3>
+              <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">{error}</p>
             </div>
             <button
               onClick={fetchPdf}
@@ -119,9 +112,7 @@ export default function TopProductsReportPage() {
             title="Top Productos"
           />
         ) : (
-          <p className="text-slate-400 dark:text-slate-500 text-sm">
-            No hay datos disponibles.
-          </p>
+          <p className="text-slate-400 dark:text-slate-500 text-sm">No hay datos disponibles.</p>
         )}
       </div>
     </div>

@@ -23,11 +23,7 @@ const fastFadeUp = {
 export default function AnalyticsFeatures() {
   // Reutilizamos el set de datos comerciales y analíticos para balancear las 4 tarjetas
   const analyticsFeatures = SALES_FEATURES.filter(
-    (group) =>
-      group.id === "analytics" ||
-      group.id === "sales" ||
-      group.id === "discounts" ||
-      group.id === "customers",
+    (group) => group.id === "analytics" || group.id === "sales" || group.id === "discounts" || group.id === "customers",
   );
 
   return (
@@ -67,9 +63,8 @@ export default function AnalyticsFeatures() {
             variants={fastFadeUp}
             className="text-pretty text-base leading-relaxed text-slate-600 dark:text-[#cbd5e1] max-w-2xl"
           >
-            Transforma los datos de tus ventas, clientes y promociones en
-            paneles gráficos comprensibles. Monitorea el crecimiento de tus
-            locales sin configuraciones complejas.
+            Transforma los datos de tus ventas, clientes y promociones en paneles gráficos comprensibles. Monitorea el
+            crecimiento de tus locales sin configuraciones complejas.
           </motion.p>
         </motion.div>
 
@@ -107,12 +102,8 @@ export default function AnalyticsFeatures() {
 
                   {/* Textos descriptivos */}
                   <div className="space-y-2 mb-6 flex-1">
-                    <h3 className="text-lg font-black tracking-tight text-slate-900 dark:text-white">
-                      {group.title}
-                    </h3>
-                    <p className="text-sm leading-relaxed text-slate-500 dark:text-[#cbd5e1]/70">
-                      {group.description}
-                    </p>
+                    <h3 className="text-lg font-black tracking-tight text-slate-900 dark:text-white">{group.title}</h3>
+                    <p className="text-sm leading-relaxed text-slate-500 dark:text-[#cbd5e1]/70">{group.description}</p>
                   </div>
 
                   {/* Listado de sub-ítems inferiores */}
@@ -127,12 +118,8 @@ export default function AnalyticsFeatures() {
                             </div>
                           )}
                           <div className="space-y-0.5">
-                            <h4 className="text-xs font-bold text-slate-800 dark:text-slate-200">
-                              {item.title}
-                            </h4>
-                            <p className="text-[11px] leading-normal text-slate-400 dark:text-slate-400">
-                              {item.text}
-                            </p>
+                            <h4 className="text-xs font-bold text-slate-800 dark:text-slate-200">{item.title}</h4>
+                            <p className="text-[11px] leading-normal text-slate-400 dark:text-slate-400">{item.text}</p>
                           </div>
                         </div>
                       );

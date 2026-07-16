@@ -32,7 +32,7 @@ exports.generateSKU =
     // FORMAT
 
     return `DAD-${String(
-      nextNumber
+      nextNumber,
     ).padStart(5, "0")}`;
 
   };

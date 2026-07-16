@@ -43,14 +43,8 @@ export default function AlertModal({
             {/* 2. Renderizado clásico por Props (por si se usa de la forma antigua) */}
             {(title || message) && (
               <div>
-                {title && (
-                  <h3 className="font-semibold text-lg text-slate-900 dark:text-white">
-                    {title}
-                  </h3>
-                )}
-                {message && (
-                  <p className="text-sm text-slate-500 mt-1">{message}</p>
-                )}
+                {title && <h3 className="font-semibold text-lg text-slate-900 dark:text-white">{title}</h3>}
+                {message && <p className="text-sm text-slate-500 mt-1">{message}</p>}
               </div>
             )}
 

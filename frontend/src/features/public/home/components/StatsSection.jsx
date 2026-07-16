@@ -38,8 +38,7 @@ export default function StatsSection() {
       icon: icons[index] || BarChart3,
       title: stat.value,
       subtitle: stat.label,
-      description:
-        highlight.description || "Optimización operativa en tiempo real.",
+      description: highlight.description || "Optimización operativa en tiempo real.",
     };
   });
 
@@ -84,9 +83,8 @@ export default function StatsSection() {
             variants={fastFadeUp}
             className="mt-3 max-w-2xl text-base leading-relaxed text-slate-600 dark:text-dark-foreground/70"
           >
-            Un ecosistema integral en la nube diseñado para controlar
-            inventarios complejos, acelerar tus cajas de venta y proyectar tu
-            crecimiento con analítica de precisión.
+            Un ecosistema integral en la nube diseñado para controlar inventarios complejos, acelerar tus cajas de venta
+            y proyectar tu crecimiento con analítica de precisión.
           </motion.p>
         </motion.div>
 

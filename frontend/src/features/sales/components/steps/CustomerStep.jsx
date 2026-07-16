@@ -14,8 +14,7 @@ export default function CustomerStep({ customers = [], form, setForm }) {
 
     // Regla común: Si tiene 11 dígitos (RUC en Perú) suele ser FACTURA.
     // De lo contrario, BOLETA.
-    const suggestedInvoiceType =
-      documentNumber.length === 11 ? "FACTURA" : "BOLETA";
+    const suggestedInvoiceType = documentNumber.length === 11 ? "FACTURA" : "BOLETA";
 
     setForm((prev) => ({
       ...prev,
@@ -68,9 +67,7 @@ export default function CustomerStep({ customers = [], form, setForm }) {
           icon={User}
           placeholder="Nombre o número de documento…"
           data={customers}
-          getLabel={(c) =>
-            `${c.name || ""} ${c.documentNumber ? `· ${c.documentNumber}` : ""}`
-          }
+          getLabel={(c) => `${c.name || ""} ${c.documentNumber ? `· ${c.documentNumber}` : ""}`}
           onSelect={handleSelectCustomer}
         />
 
@@ -90,9 +87,7 @@ export default function CustomerStep({ customers = [], form, setForm }) {
                 {initials ?? <User size={17} />}
               </div>
               <div>
-                <p className="text-[14px] font-medium text-slate-900 dark:text-slate-100">
-                  {c.name}
-                </p>
+                <p className="text-[14px] font-medium text-slate-900 dark:text-slate-100">{c.name}</p>
                 <span
                   className="
                   inline-flex items-center gap-1 mt-1
@@ -101,8 +96,7 @@ export default function CustomerStep({ customers = [], form, setForm }) {
                   dark:bg-emerald-500/10 dark:text-emerald-400
                 "
                 >
-                  <span className="text-[9px]">✓</span> Seleccionado (
-                  {form.invoiceType})
+                  <span className="text-[9px]">✓</span> Seleccionado ({form.invoiceType})
                 </span>
               </div>
             </div>
@@ -113,13 +107,8 @@ export default function CustomerStep({ customers = [], form, setForm }) {
             {/* FIELD ROWS */}
             <div className="divide-y divide-black/[0.04] dark:divide-white/[0.04]">
               {fields.map(({ label, value }) => (
-                <div
-                  key={label}
-                  className="flex items-baseline justify-between py-2.5"
-                >
-                  <span className="text-[12px] text-slate-400 dark:text-slate-500">
-                    {label}
-                  </span>
+                <div key={label} className="flex items-baseline justify-between py-2.5">
+                  <span className="text-[12px] text-slate-400 dark:text-slate-500">{label}</span>
                   <span
                     className={`
                     text-[13px] text-right max-w-[65%] break-words
@@ -139,16 +128,9 @@ export default function CustomerStep({ customers = [], form, setForm }) {
         ) : (
           /* EMPTY STATE */
           <div className="flex flex-col items-center gap-1.5 py-14 text-center">
-            <User
-              size={26}
-              className="text-slate-200 dark:text-slate-800 mb-2"
-            />
-            <p className="text-[14px] font-medium text-slate-400 dark:text-slate-600">
-              Ningún cliente seleccionado
-            </p>
-            <p className="text-[13px] text-slate-300 dark:text-slate-700">
-              Busca un cliente para continuar.
-            </p>
+            <User size={26} className="text-slate-200 dark:text-slate-800 mb-2" />
+            <p className="text-[14px] font-medium text-slate-400 dark:text-slate-600">Ningún cliente seleccionado</p>
+            <p className="text-[13px] text-slate-300 dark:text-slate-700">Busca un cliente para continuar.</p>
           </div>
         )}
       </div>

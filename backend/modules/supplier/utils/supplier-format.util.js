@@ -24,10 +24,10 @@ function formatSupplierResponse(supplier) {
 
     createdAt: supplier.createdAt,
 
-    updatedAt: supplier.updatedAt
-  }
+    updatedAt: supplier.updatedAt,
+  };
 }
 
 module.exports = {
-  formatSupplierResponse
-}
+  formatSupplierResponse,
+};

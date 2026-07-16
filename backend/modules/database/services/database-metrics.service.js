@@ -1,73 +1,73 @@
 // modules/database/services/database-metrics.service.js
 
 const databaseRepository = require(
-    "../repositories/database.repository"
+  "../repositories/database.repository",
 );
 
 const metricsRepository = require(
-    "../repositories/metrics.repository"
+  "../repositories/metrics.repository",
 );
 
 class DatabaseMetricsService {
 
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Get Database Metrics
     |--------------------------------------------------------------------------
     */
 
-    async getMetrics() {
+  async getMetrics() {
 
-        const size =
+    const size =
             await databaseRepository
-                .getDatabaseSize();
+              .getDatabaseSize();
 
-        const connections =
+    const connections =
             await databaseRepository
-                .getConnections();
+              .getConnections();
 
-        const tables =
+    const tables =
             await metricsRepository
-                .getTablesCount();
+              .getTablesCount();
 
-        const indexes =
+    const indexes =
             await metricsRepository
-                .getIndexesCount();
+              .getIndexesCount();
 
-        const stats =
+    const stats =
             await metricsRepository
-                .getDatabaseStats();
+              .getDatabaseStats();
 
-        return {
+    return {
 
-            success: true,
+      success: true,
 
-            databaseSize:
+      databaseSize:
                 size[0]?.size || "0 MB",
 
-            databaseBytes:
+      databaseBytes:
                 size[0]?.bytes || 0,
 
-            activeConnections:
+      activeConnections:
                 connections[0]?.total || 0,
 
-            tables:
+      tables:
                 tables?.total || 0,
 
-            indexes:
+      indexes:
                 indexes?.total || 0,
 
-            stats:
+      stats:
                 stats[0] || {},
 
-            environment:
+      environment:
                 process.env.NODE_ENV ||
                 "development",
 
-            timestamp:
+      timestamp:
                 new Date(),
-        };
-    }
+    };
+  }
 }
 
 module.exports =

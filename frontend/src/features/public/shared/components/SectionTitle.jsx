@@ -1,12 +1,6 @@
 import { motion } from "framer-motion";
 
-export default function SectionTitle({
-  eyebrow,
-  title,
-  description,
-  align = "center",
-  className = "",
-}) {
+export default function SectionTitle({ eyebrow, title, description, align = "center", className = "" }) {
   const isCenter = align === "center";
   return (
     <motion.div
@@ -23,13 +17,9 @@ export default function SectionTitle({
           {eyebrow}
         </span>
       ) : null}
-      <h2 className="text-pretty text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl">
-        {title}
-      </h2>
+      <h2 className="text-pretty text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl">{title}</h2>
       {description ? (
-        <p className="text-pretty text-base leading-relaxed text-muted-foreground sm:text-lg">
-          {description}
-        </p>
+        <p className="text-pretty text-base leading-relaxed text-muted-foreground sm:text-lg">{description}</p>
       ) : null}
     </motion.div>
   );

@@ -40,23 +40,16 @@ export default function PlanBasicDetail() {
             <span className="inline-flex rounded-full bg-slate-100 px-4 py-1 text-xs font-bold uppercase tracking-wider text-slate-700 dark:bg-slate-800 dark:text-slate-300">
               Negocios en Expansión
             </span>
-            <h2 className="mt-3 text-3xl font-bold text-slate-900 dark:text-white">
-              Plan BASIC
-            </h2>
+            <h2 className="mt-3 text-3xl font-bold text-slate-900 dark:text-white">Plan BASIC</h2>
             <p className="mt-2 max-w-xl text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-              El equilibrio perfecto para comercios que manejan múltiples
-              sucursales y necesitan control total sobre inventario, ventas y
-              reportes.
+              El equilibrio perfecto para comercios que manejan múltiples sucursales y necesitan control total sobre
+              inventario, ventas y reportes.
             </p>
           </div>
 
           <div className="text-left md:text-right bg-transparent">
-            <h3 className="text-5xl font-black text-slate-900 dark:text-white tracking-tight">
-              S/ 49
-            </h3>
-            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-              Facturación mensual
-            </p>
+            <h3 className="text-5xl font-black text-slate-900 dark:text-white tracking-tight">S/ 49</h3>
+            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Facturación mensual</p>
           </div>
         </div>
 
@@ -103,9 +96,7 @@ export default function PlanBasicDetail() {
                   </motion.div>
 
                   <div>
-                    <h3 className="font-semibold text-slate-900 dark:text-white">
-                      {module.title}
-                    </h3>
+                    <h3 className="font-semibold text-slate-900 dark:text-white">{module.title}</h3>
                     <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
                       {module.description}
                     </p>

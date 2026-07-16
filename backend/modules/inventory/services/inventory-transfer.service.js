@@ -14,7 +14,7 @@ exports.transferStock =
     originInventoryId,
     targetInventoryId,
     quantity,
-    userId
+    userId,
   ) => {
 
     return prisma.$transaction(
@@ -43,7 +43,7 @@ exports.transferStock =
         ) {
 
           throw new Error(
-            "Inventario inválido"
+            "Inventario inválido",
           );
 
         }
@@ -54,7 +54,7 @@ exports.transferStock =
         ) {
 
           throw new Error(
-            "Stock insuficiente"
+            "Stock insuficiente",
           );
 
         }
@@ -161,7 +161,7 @@ exports.transferStock =
           success: true,
         };
 
-      }
+      },
 
     );
 

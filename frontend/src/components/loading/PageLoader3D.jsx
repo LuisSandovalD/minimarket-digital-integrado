@@ -24,10 +24,7 @@ const PageLoader3D = () => {
 
       <div className="flex h-screen w-full flex-col items-center justify-center bg-slate-50 dark:bg-slate-950 p-6 overflow-hidden select-none font-sans transition-colors duration-500">
         {/* Contenedor de la Escena 3D */}
-        <div
-          className="relative h-44 w-44 flex items-center justify-center"
-          style={{ perspective: "1000px" }}
-        >
+        <div className="relative h-44 w-44 flex items-center justify-center" style={{ perspective: "1000px" }}>
           {/* Icono Lucide con efecto de levitación y profundidad */}
           <div
             className="z-10 text-indigo-600 dark:text-indigo-400 animate-float-3d"

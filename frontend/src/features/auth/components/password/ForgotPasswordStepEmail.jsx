@@ -21,11 +21,7 @@ export default function ForgotPasswordStepEmail({ email, setEmail, onNext }) {
 
       onNext();
     } catch (err) {
-      setError(
-        err?.response?.data?.message ||
-          err?.message ||
-          "No se pudo enviar el código. Intenta de nuevo.",
-      );
+      setError(err?.response?.data?.message || err?.message || "No se pudo enviar el código. Intenta de nuevo.");
     } finally {
       setLoading(false);
     }
@@ -34,8 +30,7 @@ export default function ForgotPasswordStepEmail({ email, setEmail, onNext }) {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <p className="text-sm text-[#6096ba] dark:text-[#8fb8d8]">
-        Ingresa tu correo electrónico y te enviaremos un código para restablecer
-        tu contraseña.
+        Ingresa tu correo electrónico y te enviaremos un código para restablecer tu contraseña.
       </p>
 
       <Input

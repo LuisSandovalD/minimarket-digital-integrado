@@ -36,29 +36,29 @@ const globalForPrisma = global;
 */
 
 const prismaLogs = [
-    {
-        emit: "event",
-        level: "query",
-    },
-    {
-        emit: "stdout",
-        level: "info",
-    },
-    {
-        emit: "stdout",
-        level: "warn",
-    },
-    {
-        emit: "stdout",
-        level: "error",
-    },
+  {
+    emit: "event",
+    level: "query",
+  },
+  {
+    emit: "stdout",
+    level: "info",
+  },
+  {
+    emit: "stdout",
+    level: "warn",
+  },
+  {
+    emit: "stdout",
+    level: "error",
+  },
 ];
 
 /*
 |--------------------------------------------------------------------------
 | Prisma Client Instance (Raw)
 |--------------------------------------------------------------------------
-| 
+|
 | Instancia base sin extensiones para evitar bucles infinitos al guardar logs.
 |
 */
@@ -66,116 +66,116 @@ const prismaLogs = [
 const prismaRaw =
     globalForPrisma.prismaRaw ||
     new PrismaClient({
-        log: prismaLogs,
-        errorFormat: "pretty",
+      log: prismaLogs,
+      errorFormat: "pretty",
     });
 
 if (process.env.NODE_ENV !== "production") {
-    globalForPrisma.prismaRaw = prismaRaw;
+  globalForPrisma.prismaRaw = prismaRaw;
 }
 
 /*
 |--------------------------------------------------------------------------
 | Prisma Extensions (Auditoría Automatizada)
 |--------------------------------------------------------------------------
-| 
+|
 | Extendemos la instancia base para escuchar mutaciones y auditar.
 |
 */
 
 const prisma = prismaRaw.$extends({
-    query: {
-        $allModel: {
-            // 🟢 CREACIONES (CREATE)
-            async create({ model, args, query }) {
-                const context = auditStorage.getStore();
-                if (!context || model === "AuditLog") return query(args);
+  query: {
+    $allModel: {
+      // 🟢 CREACIONES (CREATE)
+      async create({ model, args, query }) {
+        const context = auditStorage.getStore();
+        if (!context || model === "AuditLog") return query(args);
 
-                const result = await query(args);
+        const result = await query(args);
 
-                await prismaRaw.auditLog.create({
-                    data: {
-                        action: "CREATE",
-                        entityType: model,
-                        entityId: result.id ? Number(result.id) : 0,
-                        description: `Creación automática en la tabla ${model}`,
-                        newValues: result,
-                        userId: context.userId,
-                        companyId: context.companyId,
-                        branchId: context.branchId,
-                        ipAddress: context.ipAddress,
-                        userAgent: context.userAgent,
-                    },
-                });
+        await prismaRaw.auditLog.create({
+          data: {
+            action: "CREATE",
+            entityType: model,
+            entityId: result.id ? Number(result.id) : 0,
+            description: `Creación automática en la tabla ${model}`,
+            newValues: result,
+            userId: context.userId,
+            companyId: context.companyId,
+            branchId: context.branchId,
+            ipAddress: context.ipAddress,
+            userAgent: context.userAgent,
+          },
+        });
 
-                return result;
-            },
+        return result;
+      },
 
-            // 🟡 ACTUALIZACIONES Y BORRADOS LÓGICOS (UPDATE)
-            async update({ model, args, query }) {
-                const context = auditStorage.getStore();
-                if (!context || model === "AuditLog") return query(args);
+      // 🟡 ACTUALIZACIONES Y BORRADOS LÓGICOS (UPDATE)
+      async update({ model, args, query }) {
+        const context = auditStorage.getStore();
+        if (!context || model === "AuditLog") return query(args);
 
-                const oldValues = await prismaRaw[model].findFirst({
-                    where: args.where,
-                });
+        const oldValues = await prismaRaw[model].findFirst({
+          where: args.where,
+        });
 
-                const result = await query(args);
-                const isSoftDelete = args.data?.isDeleted === true;
-                const entityId = result?.id || oldValues?.id || 0;
+        const result = await query(args);
+        const isSoftDelete = args.data?.isDeleted === true;
+        const entityId = result?.id || oldValues?.id || 0;
 
-                await prismaRaw.auditLog.create({
-                    data: {
-                        action: isSoftDelete ? "SOFT_DELETE" : "UPDATE",
-                        entityType: model,
-                        entityId: Number(entityId),
-                        description: isSoftDelete
-                            ? `Registro enviado a la papelera (Soft Delete) en ${model}`
-                            : `Actualización de datos en la tabla ${model}`,
-                        oldValues: oldValues || {},
-                        newValues: args.data || {},
-                        userId: context.userId,
-                        companyId: context.companyId,
-                        branchId: context.branchId,
-                        ipAddress: context.ipAddress,
-                        userAgent: context.userAgent,
-                    },
-                });
+        await prismaRaw.auditLog.create({
+          data: {
+            action: isSoftDelete ? "SOFT_DELETE" : "UPDATE",
+            entityType: model,
+            entityId: Number(entityId),
+            description: isSoftDelete
+              ? `Registro enviado a la papelera (Soft Delete) en ${model}`
+              : `Actualización de datos en la tabla ${model}`,
+            oldValues: oldValues || {},
+            newValues: args.data || {},
+            userId: context.userId,
+            companyId: context.companyId,
+            branchId: context.branchId,
+            ipAddress: context.ipAddress,
+            userAgent: context.userAgent,
+          },
+        });
 
-                return result;
-            },
+        return result;
+      },
 
-            // 🔴 ELIMINACIONES FÍSICAS (DELETE)
-            async delete({ model, args, query }) {
-                const context = auditStorage.getStore();
-                if (!context || model === "AuditLog") return query(args);
+      // 🔴 ELIMINACIONES FÍSICAS (DELETE)
+      async delete({ model, args, query }) {
+        const context = auditStorage.getStore();
+        if (!context || model === "AuditLog") return query(args);
 
-                const oldValues = await prismaRaw[model].findFirst({
-                    where: args.where,
-                });
+        const oldValues = await prismaRaw[model].findFirst({
+          where: args.where,
+        });
 
-                const result = await query(args);
-                const entityId = oldValues?.id || 0;
+        const result = await query(args);
+        const entityId = oldValues?.id || 0;
 
-                await prismaRaw.auditLog.create({
-                    data: {
-                        action: "DELETE",
-                        entityType: model,
-                        entityId: Number(entityId),
-                        description: `Eliminación física permanente de registro en ${model}`,
-                        oldValues: oldValues || {},
-                        userId: context.userId,
-                        companyId: context.companyId,
-                        branchId: context.branchId,
-                        ipAddress: context.ipAddress,
-                        userAgent: context.userAgent,
-                    },
-                });
+        await prismaRaw.auditLog.create({
+          data: {
+            action: "DELETE",
+            entityType: model,
+            entityId: Number(entityId),
+            description: `Eliminación física permanente de registro en ${model}`,
+            oldValues: oldValues || {},
+            userId: context.userId,
+            companyId: context.companyId,
+            branchId: context.branchId,
+            ipAddress: context.ipAddress,
+            userAgent: context.userAgent,
+          },
+        });
 
-                return result;
-            },
-        },
+        return result;
+      },
     },
+  },
 });
 
 /*
@@ -190,23 +190,23 @@ const prisma = prismaRaw.$extends({
 
 if (process.env.NODE_ENV !== "production") {
 
-    prismaRaw.$on("query", async (event) => {
+  prismaRaw.$on("query", async (event) => {
 
-        console.log("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        console.log("🟢 Prisma Query");
-        console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    console.log("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    console.log("🟢 Prisma Query");
+    console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━");
 
-        console.log("📌 Query:");
-        console.log(event.query);
+    console.log("📌 Query:");
+    console.log(event.query);
 
-        console.log("\n📦 Params:");
-        console.log(event.params);
+    console.log("\n📦 Params:");
+    console.log(event.params);
 
-        console.log("\n⏱ Duration:");
-        console.log(`${event.duration}ms`);
+    console.log("\n⏱ Duration:");
+    console.log(`${event.duration}ms`);
 
-        console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-    });
+    console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+  });
 }
 
 /*
@@ -217,26 +217,26 @@ if (process.env.NODE_ENV !== "production") {
 
 async function connectDatabase() {
 
-    try {
+  try {
 
-        await prismaRaw.$connect();
+    await prismaRaw.$connect();
 
-        console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        console.log("✅ Database connected");
-        console.log(
-            `🌍 Environment: ${process.env.NODE_ENV}`
-        );
-        console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    console.log("✅ Database connected");
+    console.log(
+      `🌍 Environment: ${process.env.NODE_ENV}`,
+    );
+    console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━");
 
-    } catch (error) {
+  } catch (error) {
 
-        console.error("━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        console.error("❌ Database connection failed");
-        console.error(error.message);
-        console.error("━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    console.error("━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    console.error("❌ Database connection failed");
+    console.error(error.message);
+    console.error("━━━━━━━━━━━━━━━━━━━━━━━━━━━");
 
-        process.exit(1);
-    }
+    process.exit(1);
+  }
 }
 
 /*
@@ -251,21 +251,21 @@ async function connectDatabase() {
 
 async function disconnectDatabase() {
 
-    try {
+  try {
 
-        await prismaRaw.$disconnect();
+    await prismaRaw.$disconnect();
 
-        console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        console.log("🔴 Prisma disconnected");
-        console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    console.log("🔴 Prisma disconnected");
+    console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━");
 
-    } catch (error) {
+  } catch (error) {
 
-        console.error(
-            "Error disconnecting database:",
-            error.message
-        );
-    }
+    console.error(
+      "Error disconnecting database:",
+      error.message,
+    );
+  }
 }
 
 /*
@@ -275,25 +275,25 @@ async function disconnectDatabase() {
 */
 
 process.on("beforeExit", async () => {
-    await disconnectDatabase();
+  await disconnectDatabase();
 });
 
 process.on("SIGINT", async () => {
 
-    console.log("\n⚠ SIGINT received");
+  console.log("\n⚠ SIGINT received");
 
-    await disconnectDatabase();
+  await disconnectDatabase();
 
-    process.exit(0);
+  process.exit(0);
 });
 
 process.on("SIGTERM", async () => {
 
-    console.log("\n⚠ SIGTERM received");
+  console.log("\n⚠ SIGTERM received");
 
-    await disconnectDatabase();
+  await disconnectDatabase();
 
-    process.exit(0);
+  process.exit(0);
 });
 
 /*

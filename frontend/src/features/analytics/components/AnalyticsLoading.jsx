@@ -1,11 +1,7 @@
 // ========================================
 // features/dashboard/analytics/components/AnalyticsLoading.jsx
 // ========================================
-import {
-  SkeletonCard,
-  SkeletonChart,
-  SkeletonHeader,
-} from "@/components/skeletons";
+import { SkeletonCard, SkeletonChart, SkeletonHeader } from "@/components/skeletons";
 
 export default function AnalyticsLoading() {
   return (

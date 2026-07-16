@@ -54,15 +54,8 @@ export default function SessionsModal({ open, onClose }) {
 
   const getDeviceIcon = (label = "") => {
     const lower = label.toLowerCase();
-    if (
-      lower.includes("phone") ||
-      lower.includes("android") ||
-      lower.includes("iphone") ||
-      lower.includes("mobile")
-    ) {
-      return (
-        <Smartphone size={16} className="text-slate-500 dark:text-slate-400" />
-      );
+    if (lower.includes("phone") || lower.includes("android") || lower.includes("iphone") || lower.includes("mobile")) {
+      return <Smartphone size={16} className="text-slate-500 dark:text-slate-400" />;
     }
     return <Monitor size={16} className="text-slate-500 dark:text-slate-400" />;
   };
@@ -121,11 +114,7 @@ export default function SessionsModal({ open, onClose }) {
         ) : (
           <div className="space-y-3">
             {sessions.map((session) => {
-              const deviceName =
-                session.deviceLabel ||
-                session.deviceName ||
-                session.device ||
-                "Terminal Desconocido";
+              const deviceName = session.deviceLabel || session.deviceName || session.device || "Terminal Desconocido";
 
               const isRevoking = revokingId === session.id;
 
@@ -145,9 +134,7 @@ export default function SessionsModal({ open, onClose }) {
 
                     <div className="min-w-0 flex-1">
                       <div className="mb-1.5 flex items-center gap-2 flex-wrap">
-                        <p className="truncate text-sm font-bold text-slate-800 dark:text-slate-200">
-                          {deviceName}
-                        </p>
+                        <p className="truncate text-sm font-bold text-slate-800 dark:text-slate-200">{deviceName}</p>
                         {session.isCurrent && (
                           <span className="text-[9px] px-2 py-0.5 font-extrabold uppercase tracking-wider rounded-md bg-primary text-white animate-pulse">
                             Este Dispositivo
@@ -157,26 +144,17 @@ export default function SessionsModal({ open, onClose }) {
 
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1 text-[11px] text-slate-400 dark:text-slate-500 font-medium">
                         <div className="flex items-center gap-1.5 truncate">
-                          <MapPin
-                            size={13}
-                            className="shrink-0 text-slate-400"
-                          />
+                          <MapPin size={13} className="shrink-0 text-slate-400" />
                           <span>IP: {session.ipAddress || "Oculta / VPN"}</span>
                         </div>
 
                         <div className="flex items-center gap-1.5 truncate">
-                          <Clock
-                            size={13}
-                            className="shrink-0 text-slate-400"
-                          />
+                          <Clock size={13} className="shrink-0 text-slate-400" />
                           <span>
-                            {new Date(session.createdAt).toLocaleString(
-                              "es-PE",
-                              {
-                                dateStyle: "short",
-                                timeStyle: "short",
-                              },
-                            )}
+                            {new Date(session.createdAt).toLocaleString("es-PE", {
+                              dateStyle: "short",
+                              timeStyle: "short",
+                            })}
                           </span>
                         </div>
                       </div>
@@ -190,9 +168,7 @@ export default function SessionsModal({ open, onClose }) {
                       variant="danger"
                       size="sm"
                       onClick={() => handleCloseSession(session.id)}
-                      disabled={
-                        sessionsLoading || isRevoking || session.isCurrent
-                      }
+                      disabled={sessionsLoading || isRevoking || session.isCurrent}
                       title={
                         session.isCurrent
                           ? "No puedes revocar tu sesión activa desde aquí"

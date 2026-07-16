@@ -1,64 +1,64 @@
 const salesRepository = require(
-    "../repositories/sales.repository"
+  "../repositories/sales.repository",
 );
 
 const customerRepository = require(
-    "../repositories/customer.repository"
+  "../repositories/customer.repository",
 );
 
 const purchaseRepository = require(
-    "../repositories/purchase.repository"
+  "../repositories/purchase.repository",
 );
 
 exports.getAnalytics = async (
-    companyId,
-    dateFilter
+  companyId,
+  dateFilter,
 ) => {
-    const [
-        topProducts,
-        topCustomers,
-        recentSales,
+  const [
+    topProducts,
+    topCustomers,
+    recentSales,
 
-        recentPurchases,
-        purchasesChart,
-        topSuppliers,
-    ] = await Promise.all([
-        salesRepository.getTopProducts(
-            companyId,
-            dateFilter
-        ),
+    recentPurchases,
+    purchasesChart,
+    topSuppliers,
+  ] = await Promise.all([
+    salesRepository.getTopProducts(
+      companyId,
+      dateFilter,
+    ),
 
-        customerRepository.getTopCustomers(
-            companyId,
-            dateFilter
-        ),
+    customerRepository.getTopCustomers(
+      companyId,
+      dateFilter,
+    ),
 
-        salesRepository.getRecentSales(
-            companyId
-        ),
+    salesRepository.getRecentSales(
+      companyId,
+    ),
 
-        purchaseRepository.getRecentPurchases(
-            companyId
-        ),
+    purchaseRepository.getRecentPurchases(
+      companyId,
+    ),
 
-        purchaseRepository.getPurchasesChart(
-            companyId,
-            dateFilter
-        ),
+    purchaseRepository.getPurchasesChart(
+      companyId,
+      dateFilter,
+    ),
 
-        purchaseRepository.getTopSuppliers(
-            companyId,
-            dateFilter
-        ),
-    ]);
+    purchaseRepository.getTopSuppliers(
+      companyId,
+      dateFilter,
+    ),
+  ]);
 
-    return {
-        topProducts,
-        topCustomers,
-        recentSales,
+  return {
+    topProducts,
+    topCustomers,
+    recentSales,
 
-        recentPurchases,
-        purchasesChart,
-        topSuppliers,
-    };
+    recentPurchases,
+    purchasesChart,
+    topSuppliers,
+  };
 };

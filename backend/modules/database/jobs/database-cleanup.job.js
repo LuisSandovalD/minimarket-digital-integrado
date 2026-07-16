@@ -3,7 +3,7 @@
 const cron = require("node-cron");
 
 const databaseCleanupService = require(
-    "../services/database-cleanup.service"
+  "../services/database-cleanup.service",
 );
 
 /*
@@ -17,41 +17,41 @@ const databaseCleanupService = require(
 
 function startDatabaseCleanupJob() {
 
-    cron.schedule(
+  cron.schedule(
 
-        "0 3 * * *",
+    "0 3 * * *",
 
-        async () => {
+    async () => {
 
-            try {
+      try {
 
-                console.log(
-                    "🧹 Running database cleanup..."
-                );
+        console.log(
+          "🧹 Running database cleanup...",
+        );
 
-                await databaseCleanupService
-                    .cleanup();
+        await databaseCleanupService
+          .cleanup();
 
-                console.log(
-                    "✅ Cleanup completed"
-                );
+        console.log(
+          "✅ Cleanup completed",
+        );
 
-            } catch (error) {
+      } catch (error) {
 
-                console.error(
-                    "❌ Cleanup job error:",
-                    error.message
-                );
-            }
-        }
-    );
+        console.error(
+          "❌ Cleanup job error:",
+          error.message,
+        );
+      }
+    },
+  );
 
-    console.log(
-        "✅ Database cleanup job started"
-    );
+  console.log(
+    "✅ Database cleanup job started",
+  );
 }
 
 module.exports = {
 
-    startDatabaseCleanupJob,
+  startDatabaseCleanupJob,
 };

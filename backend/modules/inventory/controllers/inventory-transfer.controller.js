@@ -12,7 +12,7 @@ const service =
 exports.transferStock =
   async (
     req,
-    res
+    res,
   ) => {
 
     try {
@@ -21,18 +21,18 @@ exports.transferStock =
         await service.transferStock(
 
           Number(
-            req.body.originInventoryId
+            req.body.originInventoryId,
           ),
 
           Number(
-            req.body.targetInventoryId
+            req.body.targetInventoryId,
           ),
 
           Number(
-            req.body.quantity
+            req.body.quantity,
           ),
 
-          req.user.id
+          req.user.id,
         );
 
       res.json({

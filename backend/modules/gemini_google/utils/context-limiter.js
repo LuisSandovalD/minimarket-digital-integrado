@@ -3,66 +3,66 @@
 // ========================================
 
 const limitArray = (
-    data,
-    limit = 20
+  data,
+  limit = 20,
 ) => {
 
-    if (!Array.isArray(data)) {
-        return [];
-    }
+  if (!Array.isArray(data)) {
+    return [];
+  }
 
-    return data.slice(
-        0,
-        limit
-    );
+  return data.slice(
+    0,
+    limit,
+  );
 };
 
 const reduceContext = (
-    context
+  context,
 ) => {
 
-    return {
+  return {
 
-        ...context,
+    ...context,
 
-        topProducts:
+    topProducts:
             limitArray(
-                context.topProducts,
-                15
+              context.topProducts,
+              15,
             ),
 
-        lowStockProducts:
+    lowStockProducts:
             limitArray(
-                context.lowStockProducts,
-                15
+              context.lowStockProducts,
+              15,
             ),
 
-        lowRotationProducts:
+    lowRotationProducts:
             limitArray(
-                context.lowRotationProducts,
-                15
+              context.lowRotationProducts,
+              15,
             ),
 
-        topEmployees:
+    topEmployees:
             limitArray(
-                context.topEmployees,
-                10
+              context.topEmployees,
+              10,
             ),
 
-        topSuppliers:
+    topSuppliers:
             limitArray(
-                context.topSuppliers,
-                10
+              context.topSuppliers,
+              10,
             ),
 
-        recentActivity:
+    recentActivity:
             limitArray(
-                context.recentActivity,
-                20
-            )
-    };
+              context.recentActivity,
+              20,
+            ),
+  };
 };
 
 module.exports = {
-    reduceContext
+  reduceContext,
 };

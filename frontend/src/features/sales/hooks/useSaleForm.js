@@ -55,21 +55,15 @@ export function useSaleForm({ onSubmit, onClose }) {
   const { subtotal, tax, total } = useMemo(() => {
     const details = form.details || [];
     const rawSubtotal = details.reduce(
-      (acc, item) =>
-        acc +
-        Number(item.quantity || 0) * Number(item.price || item.salePrice || 0),
+      (acc, item) => acc + Number(item.quantity || 0) * Number(item.price || item.salePrice || 0),
       0,
     );
     const subtotalRedondeado = Math.round(rawSubtotal * 100) / 100;
     const descuentoRedondeado = Number(form.discount || 0);
 
-    const netoConDescuento = Math.max(
-      0,
-      subtotalRedondeado - descuentoRedondeado,
-    );
+    const netoConDescuento = Math.max(0, subtotalRedondeado - descuentoRedondeado);
     const impuestoCalculado = Math.round(netoConDescuento * 0.18 * 100) / 100;
-    const totalCalculado =
-      Math.round((netoConDescuento + impuestoCalculado) * 100) / 100;
+    const totalCalculado = Math.round((netoConDescuento + impuestoCalculado) * 100) / 100;
 
     return {
       subtotal: subtotalRedondeado,
@@ -113,8 +107,7 @@ export function useSaleForm({ onSubmit, onClose }) {
       customerId: form.customerId ? Number(form.customerId) : 1,
       invoiceType: form.invoiceType || "BOLETA",
       discount: Number(form.discount || 0),
-      notes:
-        form.notes?.trim() || "Venta presencial en tienda - Pago en efectivo",
+      notes: form.notes?.trim() || "Venta presencial en tienda - Pago en efectivo",
       status: form.saleType === "CREDIT_SALE" ? "CREDIT_PENDING" : "COMPLETED",
       details: form.details.map((item) => ({
         productId: Number(item.productId),
@@ -130,10 +123,7 @@ export function useSaleForm({ onSubmit, onClose }) {
       setForm(initialFormState);
       onClose();
     } catch (error) {
-      console.error(
-        "❌ Error al procesar el envío del formulario de ventas:",
-        error,
-      );
+      console.error("❌ Error al procesar el envío del formulario de ventas:", error);
     }
   };
 

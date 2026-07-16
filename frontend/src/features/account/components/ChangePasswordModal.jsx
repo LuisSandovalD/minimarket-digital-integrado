@@ -44,20 +44,13 @@ export default function ChangePasswordModal({ open, onClose }) {
       number: /[0-9]/.test(form.newPassword),
       special: /[^A-Za-z0-9]/.test(form.newPassword),
       match:
-        form.newPassword.length > 0 &&
-        form.confirmPassword.length > 0 &&
-        form.newPassword === form.confirmPassword,
+        form.newPassword.length > 0 && form.confirmPassword.length > 0 && form.newPassword === form.confirmPassword,
     }),
     [form],
   );
 
   const isStrongPassword = useMemo(() => {
-    return (
-      validations.length &&
-      validations.uppercase &&
-      validations.number &&
-      validations.special
-    );
+    return validations.length && validations.uppercase && validations.number && validations.special;
   }, [validations]);
 
   function handleChange(e) {
@@ -84,8 +77,7 @@ export default function ChangePasswordModal({ open, onClose }) {
     if (!form.newPassword) {
       newErrors.newPassword = "Debes ingresar una nueva contraseña";
     } else if (!isStrongPassword) {
-      newErrors.newPassword =
-        "La contraseña no cumple con los requisitos mínimos";
+      newErrors.newPassword = "La contraseña no cumple con los requisitos mínimos";
     }
     if (!form.confirmPassword) {
       newErrors.confirmPassword = "Por favor, confirma tu contraseña";
@@ -171,22 +163,10 @@ export default function ChangePasswordModal({ open, onClose }) {
               Requisitos obligatorios de seguridad:
             </p>
             <div className="grid grid-cols-2 gap-2">
-              <ValidationCheck
-                valid={validations.length}
-                text="Mínimo 8 caracteres"
-              />
-              <ValidationCheck
-                valid={validations.uppercase}
-                text="Una Mayúscula (A-Z)"
-              />
-              <ValidationCheck
-                valid={validations.number}
-                text="Un Número (0-9)"
-              />
-              <ValidationCheck
-                valid={validations.special}
-                text="Carácter especial (@$!%)"
-              />
+              <ValidationCheck valid={validations.length} text="Mínimo 8 caracteres" />
+              <ValidationCheck valid={validations.uppercase} text="Una Mayúscula (A-Z)" />
+              <ValidationCheck valid={validations.number} text="Un Número (0-9)" />
+              <ValidationCheck valid={validations.special} text="Carácter especial (@$!%)" />
             </div>
           </div>
         )}
@@ -194,12 +174,7 @@ export default function ChangePasswordModal({ open, onClose }) {
 
       <FooterModal>
         <div className="flex gap-3 justify-end w-full">
-          <ModernButton
-            text="Cancelar"
-            variant="outline"
-            onClick={onClose}
-            disabled={passwordLoading}
-          />
+          <ModernButton text="Cancelar" variant="outline" onClick={onClose} disabled={passwordLoading} />
           <ModernButton
             text={passwordLoading ? "Guardando..." : "Actualizar Contraseña"}
             icon={ShieldCheck}
@@ -217,22 +192,14 @@ function ValidationCheck({ valid, text }) {
     <div className="flex items-center gap-2 text-xs">
       <div
         className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-md transition-colors ${
-          valid
-            ? "bg-emerald-500 text-white"
-            : "bg-slate-200 text-slate-400 dark:bg-slate-800 dark:text-slate-600"
+          valid ? "bg-emerald-500 text-white" : "bg-slate-200 text-slate-400 dark:bg-slate-800 dark:text-slate-600"
         }`}
       >
-        {valid ? (
-          <Check size={11} strokeWidth={3} />
-        ) : (
-          <X size={11} strokeWidth={3} />
-        )}
+        {valid ? <Check size={11} strokeWidth={3} /> : <X size={11} strokeWidth={3} />}
       </div>
       <span
         className={`font-medium transition-colors ${
-          valid
-            ? "text-emerald-600 dark:text-emerald-400"
-            : "text-slate-500 dark:text-slate-400"
+          valid ? "text-emerald-600 dark:text-emerald-400" : "text-slate-500 dark:text-slate-400"
         }`}
       >
         {text}

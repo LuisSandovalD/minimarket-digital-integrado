@@ -42,5 +42,5 @@ module.exports = {
   findCompanyByName,
   findCompanyBySlug,
   findCompanyByRuc,
-  createCompany
+  createCompany,
 };

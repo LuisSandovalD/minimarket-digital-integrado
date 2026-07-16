@@ -1,13 +1,6 @@
 import { PageHeader } from "@/components/data-display/";
 import { Input } from "@/components/forms/";
-import {
-  CheckCircle,
-  Clock,
-  Layers,
-  LifeBuoy,
-  Plus,
-  Search,
-} from "lucide-react";
+import { CheckCircle, Clock, Layers, LifeBuoy, Plus, Search } from "lucide-react";
 
 export default function SupportHeader({
   search = "",

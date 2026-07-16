@@ -10,40 +10,40 @@
 */
 
 const databaseRepository = require(
-    "../repositories/database.repository"
+  "../repositories/database.repository",
 );
 
 const databaseHealthService = require(
-    "../services/database-health.service"
+  "../services/database-health.service",
 );
 
 const databaseMetricsService = require(
-    "../services/database-metrics.service"
+  "../services/database-metrics.service",
 );
 
 const databaseMonitoringService = require(
-    "../services/database-monitoring.service"
+  "../services/database-monitoring.service",
 );
 
 const databaseConnectionsService = require(
-    "../services/database-connections.service"
+  "../services/database-connections.service",
 );
 
 const databaseStorageService = require(
-    "../services/database-storage.service"
+  "../services/database-storage.service",
 );
 
 module.exports = {
 
-    databaseRepository,
+  databaseRepository,
 
-    databaseHealthService,
+  databaseHealthService,
 
-    databaseMetricsService,
+  databaseMetricsService,
 
-    databaseMonitoringService,
+  databaseMonitoringService,
 
-    databaseConnectionsService,
+  databaseConnectionsService,
 
-    databaseStorageService,
+  databaseStorageService,
 };

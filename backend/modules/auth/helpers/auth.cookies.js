@@ -35,5 +35,5 @@ const clearAuthCookie = (res) => {
 // EXPORTACIÓN UNIFICADA BLINDADA
 module.exports = {
   setAuthCookie,
-  clearAuthCookie
+  clearAuthCookie,
 };

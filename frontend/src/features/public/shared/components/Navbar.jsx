@@ -24,9 +24,7 @@ export default function Navbar() {
   return (
     <header
       className={`sticky top-0 z-50 w-full border-b transition-colors ${
-        scrolled
-          ? "border-border bg-background/85 backdrop-blur-md"
-          : "border-transparent bg-background"
+        scrolled ? "border-border bg-background/85 backdrop-blur-md" : "border-transparent bg-background"
       }`}
     >
       <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
@@ -34,9 +32,7 @@ export default function Navbar() {
           <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground">
             <Boxes className="h-5 w-5" aria-hidden="true" />
           </span>
-          <span className="text-lg font-extrabold tracking-tight">
-            {BRAND.name}
-          </span>
+          <span className="text-lg font-extrabold tracking-tight">{BRAND.name}</span>
         </NavLink>
 
         <ul className="hidden items-center gap-1 lg:flex">
@@ -47,9 +43,7 @@ export default function Navbar() {
                 end={link.to === "/"}
                 className={({ isActive }) =>
                   `rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-                    isActive
-                      ? "text-primary"
-                      : "text-muted-foreground hover:text-foreground"
+                    isActive ? "text-primary" : "text-muted-foreground hover:text-foreground"
                   }`
                 }
               >
@@ -89,9 +83,7 @@ export default function Navbar() {
                   end={link.to === "/"}
                   className={({ isActive }) =>
                     `block rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
-                      isActive
-                        ? "bg-muted text-primary"
-                        : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                      isActive ? "bg-muted text-primary" : "text-muted-foreground hover:bg-muted hover:text-foreground"
                     }`
                   }
                 >

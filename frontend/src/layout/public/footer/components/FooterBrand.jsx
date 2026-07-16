@@ -14,8 +14,7 @@ export default function FooterBrand() {
 
       {/* Descripción con balance de contraste perfecto entre modos */}
       <p className="text-sm leading-relaxed text-slate-500 hover:text-slate-600 dark:text-[#cbd5e1]/70 dark:hover:text-[#cbd5e1]/90 transition-colors duration-200">
-        Plataforma moderna para la gestión empresarial, inventario, ventas y
-        operaciones avanzadas en tiempo real.
+        Plataforma moderna para la gestión empresarial, inventario, ventas y operaciones avanzadas en tiempo real.
       </p>
     </div>
   );

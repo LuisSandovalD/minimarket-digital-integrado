@@ -49,8 +49,7 @@ const TYPE_CONFIG = {
   PURCHASE_READY: {
     label: "Listo p/ Compra",
     icon: ShoppingCart,
-    styles:
-      "bg-blue-50 border-blue-200 text-blue-700 dark:bg-blue-950/30 dark:border-blue-900 dark:text-blue-400",
+    styles: "bg-blue-50 border-blue-200 text-blue-700 dark:bg-blue-950/30 dark:border-blue-900 dark:text-blue-400",
     iconColor: "text-blue-500",
     isCriticalStock: false,
   },
@@ -65,16 +64,14 @@ const TYPE_CONFIG = {
   INVENTORY_MISMATCH: {
     label: "Descuadre",
     icon: FileSpreadsheet,
-    styles:
-      "bg-rose-50 border-rose-200 text-rose-700 dark:bg-rose-950/30 dark:border-rose-900 dark:text-rose-400",
+    styles: "bg-rose-50 border-rose-200 text-rose-700 dark:bg-rose-950/30 dark:border-rose-900 dark:text-rose-400",
     iconColor: "text-rose-500",
     isCriticalStock: true, // Lo tratamos como crítico porque falta mercadería física
   },
   PAYMENT_OVERDUE: {
     label: "Pago Vencido",
     icon: AlertCircle,
-    styles:
-      "bg-red-50 border-red-200 text-red-700 dark:bg-red-950/30 dark:border-red-900 dark:text-red-400",
+    styles: "bg-red-50 border-red-200 text-red-700 dark:bg-red-950/30 dark:border-red-900 dark:text-red-400",
     iconColor: "text-red-500",
     isCriticalStock: false,
   },
@@ -106,8 +103,7 @@ export default function NotificationsTable({
           {notifications.length > 0 ? (
             notifications.map((notif) => {
               // Si viene un tipo desconocido, usamos 'SYSTEM_ALERT' por defecto
-              const config =
-                TYPE_CONFIG[notif.type] || TYPE_CONFIG.SYSTEM_ALERT;
+              const config = TYPE_CONFIG[notif.type] || TYPE_CONFIG.SYSTEM_ALERT;
               const IconComponent = config.icon;
 
               return (
@@ -140,9 +136,7 @@ export default function NotificationsTable({
                         {notif.title}
                       </h3>
                       <p className="mt-0.5 font-mono text-xs text-slate-500 dark:text-slate-400">
-                        {notif.product?.sku
-                          ? `SKU: ${notif.product.sku}`
-                          : "N/A"}
+                        {notif.product?.sku ? `SKU: ${notif.product.sku}` : "N/A"}
                       </p>
                     </div>
                   </td>
@@ -174,16 +168,12 @@ export default function NotificationsTable({
                       <div className="flex flex-col">
                         <span
                           className={`text-base font-mono font-black ${
-                            config.isCriticalStock
-                              ? "text-red-600"
-                              : "text-slate-700 dark:text-slate-300"
+                            config.isCriticalStock ? "text-red-600" : "text-slate-700 dark:text-slate-300"
                           }`}
                         >
                           {notif.product.stock} u.
                         </span>
-                        <span className="text-[10px] text-slate-400">
-                          Mínimo: {notif.product.minStock} u.
-                        </span>
+                        <span className="text-[10px] text-slate-400">Mínimo: {notif.product.minStock} u.</span>
                       </div>
                     ) : (
                       <span className="text-xs text-slate-400">No aplica</span>
@@ -195,9 +185,7 @@ export default function NotificationsTable({
                     <div className="flex items-center gap-2 text-slate-600 dark:text-slate-300">
                       <CalendarDays size={14} className="text-slate-400" />
                       <span className="text-sm">
-                        {notif.createdAt
-                          ? new Date(notif.createdAt).toLocaleDateString()
-                          : "En vivo"}
+                        {notif.createdAt ? new Date(notif.createdAt).toLocaleDateString() : "En vivo"}
                       </span>
                     </div>
                   </td>
@@ -217,23 +205,14 @@ export default function NotificationsTable({
             })
           ) : (
             <tr>
-              <td
-                colSpan={columns.length}
-                className="px-6 py-16 text-center text-sm text-slate-500"
-              >
-                No se encontraron alertas de inventario activas con los filtros
-                aplicados.
+              <td colSpan={columns.length} className="px-6 py-16 text-center text-sm text-slate-500">
+                No se encontraron alertas de inventario activas con los filtros aplicados.
               </td>
             </tr>
           )}
         </tbody>
 
-        <TFooter
-          page={page}
-          totalPages={totalPages}
-          onPrev={onPrev}
-          onNext={onNext}
-        />
+        <TFooter page={page} totalPages={totalPages} onPrev={onPrev} onNext={onNext} />
       </Table>
     </div>
   );

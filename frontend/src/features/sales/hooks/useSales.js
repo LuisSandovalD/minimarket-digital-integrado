@@ -1,11 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import {
-  cancelSale,
-  createSale,
-  getSales,
-  registerSalePayment,
-  returnSale,
-} from "../services/sale.service";
+import { cancelSale, createSale, getSales, registerSalePayment, returnSale } from "../services/sale.service";
 
 export const useSales = () => {
   const [sales, setSales] = useState([]);
@@ -13,9 +7,7 @@ export const useSales = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // ========================================
   // FETCH ALL SALES (Normalizado)
-  // ========================================
   const fetchSales = useCallback(async (params = {}) => {
     try {
       setLoading(true);
@@ -32,20 +24,16 @@ export const useSales = () => {
         rawSales =
           serverData.sales ||
           serverData.data ||
-          (serverData["0"] && !serverData.id
-            ? Object.values(serverData)
-            : [serverData]);
+          (serverData["0"] && !serverData.id ? Object.values(serverData) : [serverData]);
       } else if (response && !response.data && !response.meta) {
         if (Array.isArray(response)) rawSales = response;
-        else if (typeof response === "object")
-          rawSales = response.sales || response.data || Object.values(response);
+        else if (typeof response === "object") rawSales = response.sales || response.data || Object.values(response);
       }
 
       const normalizedSales = rawSales
         .map((sale) => {
           if (!sale) return null;
-          const itemArray =
-            sale.details || sale.SaleDetails || sale.items || [];
+          const itemArray = sale.details || sale.SaleDetails || sale.items || [];
           return {
             ...sale,
             details: Array.isArray(itemArray) ? itemArray : [],
@@ -74,8 +62,7 @@ export const useSales = () => {
       const newSale = responseData["0"] ? responseData["0"] : responseData;
 
       if (newSale) {
-        const itemArray =
-          newSale.details || newSale.SaleDetails || newSale.items || [];
+        const itemArray = newSale.details || newSale.SaleDetails || newSale.items || [];
         const normalizedNewSale = {
           ...newSale,
           details: Array.isArray(itemArray) ? itemArray : [],
@@ -106,15 +93,8 @@ export const useSales = () => {
       setSales((prevSales) =>
         prevSales.map((sale) => {
           if (sale.id === id) {
-            const totalAboneado = (payload.payments || []).reduce(
-              (acc, p) => acc + Number(p.amount),
-              0,
-            );
-            const deudaPrevia = Number(
-              sale.pendingDebt !== undefined
-                ? sale.pendingDebt
-                : sale.total || 0,
-            );
+            const totalAboneado = (payload.payments || []).reduce((acc, p) => acc + Number(p.amount), 0);
+            const deudaPrevia = Number(sale.pendingDebt !== undefined ? sale.pendingDebt : sale.total || 0);
             const deudaRestante = Math.max(0, deudaPrevia - totalAboneado);
 
             // 🎯 CORRECCIÓN: Alineado con Prisma del Backend ("COMPLETED" en lugar de "PAID")
@@ -154,11 +134,7 @@ export const useSales = () => {
       setLoading(true);
       setError(null);
       await cancelSale(id);
-      setSales((prev) =>
-        prev.map((sale) =>
-          sale.id === id ? { ...sale, status: "CANCELLED" } : sale,
-        ),
-      );
+      setSales((prev) => prev.map((sale) => (sale.id === id ? { ...sale, status: "CANCELLED" } : sale)));
     } catch (err) {
       console.error("❌ Error en removeSale:", err);
       throw err;
@@ -186,6 +162,7 @@ export const useSales = () => {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchSales();
   }, [fetchSales]);
 

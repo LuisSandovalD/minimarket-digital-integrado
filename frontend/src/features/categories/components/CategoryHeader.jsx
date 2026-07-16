@@ -15,13 +15,9 @@ export default function CategoryHeader({
   // STATS
   // ========================================
 
-  const rootCategories = categories.filter(
-    (category) => !category.parentId,
-  ).length;
+  const rootCategories = categories.filter((category) => !category.parentId).length;
 
-  const childCategories = categories.filter(
-    (category) => category.parentId,
-  ).length;
+  const childCategories = categories.filter((category) => category.parentId).length;
 
   return (
     <PageHeader

@@ -6,16 +6,7 @@ import { Users } from "lucide-react";
 
 export default function UsersEmpty() {
   // Encabezados idénticos a los de tu tabla para mantener la estructura visual uniforme
-  const headers = [
-    "Usuario",
-    "Contacto",
-    "Rol",
-    "Sucursal",
-    "Estado",
-    "Último acceso",
-    "Creado",
-    "",
-  ];
+  const headers = ["Usuario", "Contacto", "Rol", "Sucursal", "Estado", "Último acceso", "Creado", ""];
 
   return (
     <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.05] shadow-[0_8px_32px_rgba(0,0,0,0.12)] backdrop-blur-2xl dark:bg-white/[0.03]">
@@ -71,8 +62,8 @@ export default function UsersEmpty() {
 
                   {/* DESCRIPCIÓN */}
                   <p className="mt-2 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
-                    Actualmente no existen usuarios registrados en este nivel
-                    jerárquico o con los filtros seleccionados.
+                    Actualmente no existen usuarios registrados en este nivel jerárquico o con los filtros
+                    seleccionados.
                   </p>
                 </div>
               </td>

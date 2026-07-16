@@ -10,16 +10,16 @@ const { buildDateFilter } = require("./date.filter");
  * @returns {Object} { gte: Date, lte: Date }
  */
 exports.dashboardFilter = (query) => {
-    const { period, startDate, endDate } = query;
+  const { period, startDate, endDate } = query;
 
-    // 💡 Regla de Seguridad: Si por algún motivo el frontend envía el string vacío,
-    // indefinido o nulo, forzamos "TODAY" como el período activo por defecto.
-    const activePeriod = period || "TODAY";
+  // 💡 Regla de Seguridad: Si por algún motivo el frontend envía el string vacío,
+  // indefinido o nulo, forzamos "TODAY" como el período activo por defecto.
+  const activePeriod = period || "TODAY";
 
-    // Retornamos el filtro construido por el motor de fechas
-    return buildDateFilter({
-        period: activePeriod,
-        startDate,
-        endDate,
-    });
+  // Retornamos el filtro construido por el motor de fechas
+  return buildDateFilter({
+    period: activePeriod,
+    startDate,
+    endDate,
+  });
 };

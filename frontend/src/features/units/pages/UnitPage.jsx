@@ -19,17 +19,7 @@ export default function UnitPage() {
   const user = getUser();
   const isAdmin = user?.role === "ADMIN";
 
-  const {
-    units,
-    loading,
-    reload,
-    search,
-    clearFilters,
-    page,
-    totalPages,
-    nextPage,
-    prevPage,
-  } = useUnits();
+  const { units, loading, reload, search, clearFilters, page, totalPages, nextPage, prevPage } = useUnits();
 
   const [openForm, setOpenForm] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
@@ -75,12 +65,7 @@ export default function UnitPage() {
       />
 
       {/* Modal para Crear / Editar */}
-      <UnitFormModal
-        open={openForm}
-        onClose={() => setOpenForm(false)}
-        reload={reload}
-        selectedUnit={selectedUnit}
-      />
+      <UnitFormModal open={openForm} onClose={() => setOpenForm(false)} reload={reload} selectedUnit={selectedUnit} />
 
       {/* 🛡️ Solo renderizamos el modal de eliminación si es Admin */}
       {isAdmin && (

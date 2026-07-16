@@ -24,23 +24,11 @@ export default function SupplierActions({
     >
       {/* EDIT */}
 
-      <ModernButton
-        size="sm"
-        variant="warning"
-        icon={Pencil}
-        text="Editar"
-        onClick={() => onEdit(supplier)}
-      />
+      <ModernButton size="sm" variant="warning" icon={Pencil} text="Editar" onClick={() => onEdit(supplier)} />
 
       {/* DELETE */}
 
-      <ModernButton
-        size="sm"
-        variant="danger"
-        icon={Trash2}
-        text="Eliminar"
-        onClick={() => onDelete(supplier.id)}
-      />
+      <ModernButton size="sm" variant="danger" icon={Trash2} text="Eliminar" onClick={() => onDelete(supplier.id)} />
     </div>
   );
 }

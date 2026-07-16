@@ -56,9 +56,7 @@ export default function ContactForm() {
           setTimeout(() => setSent(false), 5000);
         },
         (error) => {
-          alert(
-            "Hubo un error al enviar el formulario. Por favor, intenta de nuevo.",
-          );
+          alert("Hubo un error al enviar el formulario. Por favor, intenta de nuevo.");
           setLoading(false);
         },
       );
@@ -76,9 +74,7 @@ export default function ContactForm() {
         {/* Luz ambiental interna sutil */}
         <div className="pointer-events-none absolute -right-16 -top-16 -z-10 h-40 w-40 rounded-full bg-primary/10 blur-3xl" />
 
-        <h2 className="text-xl font-black tracking-tight text-white sm:text-2xl">
-          Escríbenos
-        </h2>
+        <h2 className="text-xl font-black tracking-tight text-white sm:text-2xl">Escríbenos</h2>
         <p className="mt-1 text-sm text-dark-foreground/65">
           Completa el formulario y un asesor se pondrá en contacto contigo.
         </p>
@@ -111,10 +107,7 @@ export default function ContactForm() {
 
         {/* Textarea de Mensaje */}
         <div className="mt-5 flex flex-col gap-1.5">
-          <label
-            htmlFor="mensaje"
-            className="text-xs font-semibold uppercase tracking-wider text-dark-foreground/75"
-          >
+          <label htmlFor="mensaje" className="text-xs font-semibold uppercase tracking-wider text-dark-foreground/75">
             Mensaje<span className="text-primary"> *</span>
           </label>
           <textarea

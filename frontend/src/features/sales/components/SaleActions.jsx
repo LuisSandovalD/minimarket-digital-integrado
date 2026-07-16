@@ -2,14 +2,7 @@
 // features/sales/components/SaleActions.jsx
 // ========================================
 import { ModernButton } from "@/components/buttons";
-import {
-  Ban,
-  Coins,
-  Eye,
-  FileCheck2,
-  MoreVertical,
-  Receipt,
-} from "lucide-react";
+import { Ban, Coins, Eye, FileCheck2, MoreVertical, Receipt } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 export default function SaleActions({
@@ -25,15 +18,9 @@ export default function SaleActions({
   const [open, setOpen] = useState(false);
   const menuRef = useRef(null);
 
-  const isPaid =
-    sale?.paymentStatus === "PAID" ||
-    sale?.pendingAmount === 0 ||
-    sale?.status === "COMPLETED";
+  const isPaid = sale?.paymentStatus === "PAID" || sale?.pendingAmount === 0 || sale?.status === "COMPLETED";
 
-  const isCanceled =
-    sale?.status === "CANCELED" ||
-    sale?.status === "ANULADO" ||
-    sale?.status === "CANCELLED";
+  const isCanceled = sale?.status === "CANCELED" || sale?.status === "ANULADO" || sale?.status === "CANCELLED";
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -55,13 +42,7 @@ export default function SaleActions({
 
   return (
     <div className="relative inline-block text-left" ref={menuRef}>
-      <ModernButton
-        icon={MoreVertical}
-        variant="ghost"
-        size="icon"
-        text=""
-        onClick={toggleMenu}
-      />
+      <ModernButton icon={MoreVertical} variant="ghost" size="icon" text="" onClick={toggleMenu} />
 
       {open && (
         <div
@@ -89,9 +70,7 @@ export default function SaleActions({
             icon={Coins}
             text={isPaid ? "Ver historial de pagos" : "Registrar Cobro / Pago"}
             className={`justify-start font-normal h-9 rounded-lg ${
-              !isPaid
-                ? "text-emerald-600 font-medium dark:text-emerald-400"
-                : "text-slate-700 dark:text-slate-300"
+              !isPaid ? "text-emerald-600 font-medium dark:text-emerald-400" : "text-slate-700 dark:text-slate-300"
             }`}
             disabled={isCanceled}
             onClick={(e) => {
@@ -106,11 +85,7 @@ export default function SaleActions({
             fullWidth
             variant="ghost"
             icon={FileCheck2}
-            text={
-              sale?.invoiceIssued || sale?.status === "COMPLETED"
-                ? "Ver Comprobante"
-                : "Emitir Boleta / Factura"
-            }
+            text={sale?.invoiceIssued || sale?.status === "COMPLETED" ? "Ver Comprobante" : "Emitir Boleta / Factura"}
             className="justify-start font-normal text-slate-700 dark:text-slate-300 h-9 rounded-lg"
             disabled={isCanceled}
             onClick={(e) => {

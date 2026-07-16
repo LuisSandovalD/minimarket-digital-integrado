@@ -91,10 +91,7 @@ export const addStockService = async (inventoryId, body) => {
 // ========================================
 
 export const removeStockService = async (inventoryId, body) => {
-  const response = await api.patch(
-    `/inventory/${inventoryId}/remove-stock`,
-    body,
-  );
+  const response = await api.patch(`/inventory/${inventoryId}/remove-stock`, body);
 
   return response.data;
 };

@@ -2,25 +2,25 @@
 
 class DatabaseCleanupService {
 
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Cleanup Database
     |--------------------------------------------------------------------------
     */
 
-    async cleanup() {
+  async cleanup() {
 
-        return {
+    return {
 
-            success: true,
+      success: true,
 
-            message:
+      message:
                 "Database cleanup completed",
 
-            timestamp:
+      timestamp:
                 new Date(),
-        };
-    }
+    };
+  }
 }
 
 module.exports =

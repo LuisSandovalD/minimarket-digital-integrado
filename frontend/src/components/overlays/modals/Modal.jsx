@@ -1,14 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { createPortal } from "react-dom";
 
-export default function Modal({
-  open,
-  onClose,
-  children,
-  size = "md",
-  closeOnOutside = true,
-  blur = true,
-}) {
+export default function Modal({ open, onClose, children, size = "md", closeOnOutside = true, blur = true }) {
   const sizes = {
     sm: "md:max-w-md",
     md: "md:max-w-xl",

@@ -2,12 +2,7 @@ import { Calendar, Download, FileBarChart2, FileText } from "lucide-react";
 
 import { PageHeader } from "@/components/data-display/";
 
-export default function ReportsHeader({
-  totalReports = 0,
-  totalExports = 0,
-  scheduledReports = 0,
-  onGenerate,
-}) {
+export default function ReportsHeader({ totalReports = 0, totalExports = 0, scheduledReports = 0, onGenerate }) {
   return (
     <PageHeader
       icon={FileText}

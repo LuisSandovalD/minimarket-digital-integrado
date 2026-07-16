@@ -7,31 +7,31 @@ const auth = require("../../../middleware/auth");
 const checkRole = require("../../../middleware/roleCheck");
 
 router.get(
-    "/",
-    auth,
-    checkRole("ADMIN", "MANAGER", "SUPERVISOR"),
-    alertController.getAlerts
+  "/",
+  auth,
+  checkRole("ADMIN", "MANAGER", "SUPERVISOR"),
+  alertController.getAlerts,
 );
 
 router.get(
-    "/low-stock",
-    auth,
-    checkRole("ADMIN", "MANAGER", "SUPERVISOR"),
-    alertController.getAlerts
+  "/low-stock",
+  auth,
+  checkRole("ADMIN", "MANAGER", "SUPERVISOR"),
+  alertController.getAlerts,
 );
 
 router.get(
-    "/expiring-products",
-    auth,
-    checkRole("ADMIN", "MANAGER", "SUPERVISOR"),
-    alertController.getAlerts
+  "/expiring-products",
+  auth,
+  checkRole("ADMIN", "MANAGER", "SUPERVISOR"),
+  alertController.getAlerts,
 );
 
 router.get(
-    "/notifications",
-    auth,
-    checkRole("ADMIN", "MANAGER", "SUPERVISOR", "EMPLOYEE"),
-    alertController.getAlerts
+  "/notifications",
+  auth,
+  checkRole("ADMIN", "MANAGER", "SUPERVISOR", "EMPLOYEE"),
+  alertController.getAlerts,
 );
 
 module.exports = router;

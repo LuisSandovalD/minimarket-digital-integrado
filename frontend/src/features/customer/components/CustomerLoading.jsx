@@ -1,8 +1,4 @@
-import {
-  SkeletonHeader,
-  SkeletonSearch,
-  SkeletonTable,
-} from "@/components/skeletons";
+import { SkeletonHeader, SkeletonSearch, SkeletonTable } from "@/components/skeletons";
 
 export default function CustomerLoading() {
   return (

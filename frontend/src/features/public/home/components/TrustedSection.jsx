@@ -1,9 +1,4 @@
-import {
-  fadeUp,
-  hoverLift,
-  smoothTransition,
-  staggerContainer,
-} from "@/components/effects";
+import { fadeUp, hoverLift, smoothTransition, staggerContainer } from "@/components/effects";
 import { motion } from "framer-motion";
 import { ArrowUpRight, Building2, Sparkles } from "lucide-react";
 import { SECTOR_GALLERY, TRUSTED_LOGOS } from "../constants/homeData.js";
@@ -57,8 +52,8 @@ export default function TrustedSection() {
             transition={smoothTransition}
             className="mt-3 max-w-2xl text-base leading-relaxed text-slate-600 dark:text-dark-foreground/70"
           >
-            Desde minimarkets locales hasta redes de distribución multiempresa.
-            Optimizando operaciones en tiempo real día tras día.
+            Desde minimarkets locales hasta redes de distribución multiempresa. Optimizando operaciones en tiempo real
+            día tras día.
           </motion.p>
         </motion.div>
 
@@ -83,9 +78,7 @@ export default function TrustedSection() {
                   <Building2 className="h-4 w-4 text-[#274c77] dark:text-[#6096ba] group-hover:text-[#6096ba] dark:group-hover:text-[#a3cef1] transition-colors" />
                 </div>
                 {/* Nombre de la Empresa */}
-                <span className="text-base font-extrabold tracking-tight whitespace-nowrap">
-                  {logo}
-                </span>
+                <span className="text-base font-extrabold tracking-tight whitespace-nowrap">{logo}</span>
               </div>
             ))}
           </motion.div>
@@ -120,10 +113,7 @@ export default function TrustedSection() {
 
               {/* Botón Flotante con Icono de Esquina */}
               <div className="absolute top-4 right-4 h-8 w-8 rounded-full bg-white/80 dark:bg-white/5 border border-slate-200 dark:border-white/10 backdrop-blur-md flex items-center justify-center opacity-0 group-hover:opacity-100 group-hover:translate-x-0 translate-x-2 transition-all duration-300 shadow-sm">
-                <ArrowUpRight
-                  size={14}
-                  className="text-[#274c77] dark:text-[#a3cef1]"
-                />
+                <ArrowUpRight size={14} className="text-[#274c77] dark:text-[#a3cef1]" />
               </div>
 
               {/* Textos del Sector */}

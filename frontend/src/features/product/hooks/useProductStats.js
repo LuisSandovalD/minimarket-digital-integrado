@@ -10,9 +10,7 @@ export default function useProductStats(products = []) {
 
     const activeProducts = products.filter((p) => p.isActive).length;
 
-    const lowStockProducts = products.filter(
-      (p) => p.stock <= p.minStock,
-    ).length;
+    const lowStockProducts = products.filter((p) => p.stock <= p.minStock).length;
 
     const featuredProducts = products.filter((p) => p.isFeatured).length;
 

@@ -11,36 +11,36 @@ const { z } = require("zod");
 const databaseBackupValidation =
     z.object({
 
-        name: z
+      name: z
 
-            .string()
+        .string()
 
-            .trim()
+        .trim()
 
-            .min(
-                3,
-                "Backup name too short"
-            )
+        .min(
+          3,
+          "Backup name too short",
+        )
 
-            .max(
-                100,
-                "Backup name too long"
-            )
+        .max(
+          100,
+          "Backup name too long",
+        )
 
-            .optional(),
+        .optional(),
 
-        description: z
+      description: z
 
-            .string()
+        .string()
 
-            .trim()
+        .trim()
 
-            .max(
-                500,
-                "Description too long"
-            )
+        .max(
+          500,
+          "Description too long",
+        )
 
-            .optional(),
+        .optional(),
     });
 
 module.exports =

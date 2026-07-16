@@ -71,9 +71,7 @@ export default function Select({
         />
       </div>
 
-      {error && (
-        <p className="text-xs font-medium text-red-500 mt-1">{error}</p>
-      )}
+      {error && <p className="text-xs font-medium text-red-500 mt-1">{error}</p>}
     </div>
   );
 }

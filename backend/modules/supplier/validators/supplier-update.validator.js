@@ -1,8 +1,8 @@
 function validateUpdateSupplier(req, res, next) {
   try {
     const {
-      email
-    } = req.body
+      email,
+    } = req.body;
 
     if (
       email &&
@@ -10,16 +10,16 @@ function validateUpdateSupplier(req, res, next) {
     ) {
       return res.status(400).json({
         success: false,
-        message: 'Invalid email'
-      })
+        message: "Invalid email",
+      });
     }
 
-    next()
+    next();
   } catch (error) {
-    next(error)
+    next(error);
   }
 }
 
 module.exports = {
-  validateUpdateSupplier
-}
+  validateUpdateSupplier,
+};

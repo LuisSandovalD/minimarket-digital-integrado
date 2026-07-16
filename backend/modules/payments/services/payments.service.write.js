@@ -10,7 +10,7 @@ const paymentsRepositoryWrite =
 // ========================================
 
 const createPayment = async (data) => {
-    return await paymentsRepositoryWrite.create(data);
+  return await paymentsRepositoryWrite.create(data);
 };
 
 // ========================================
@@ -18,7 +18,7 @@ const createPayment = async (data) => {
 // ========================================
 
 const updatePayment = async (id, data) => {
-    return await paymentsRepositoryWrite.update(id, data);
+  return await paymentsRepositoryWrite.update(id, data);
 };
 
 // ========================================
@@ -26,11 +26,11 @@ const updatePayment = async (id, data) => {
 // ========================================
 
 const deletePayment = async (id) => {
-    return await paymentsRepositoryWrite.delete(id);
+  return await paymentsRepositoryWrite.delete(id);
 };
 
 module.exports = {
-    createPayment,
-    updatePayment,
-    deletePayment,
+  createPayment,
+  updatePayment,
+  deletePayment,
 };

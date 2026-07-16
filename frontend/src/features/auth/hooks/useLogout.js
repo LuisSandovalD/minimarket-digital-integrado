@@ -10,9 +10,7 @@ export default function useLogout() {
       // Intentamos avisar al backend (opcional por si no hay red)
       await logoutService();
     } catch (error) {
-      console.warn(
-        "Aviso de logout no alcanzado en servidor, limpiando localmente...",
-      );
+      console.warn("Aviso de logout no alcanzado en servidor, limpiando localmente...");
     } finally {
       // El slice se encarga de limpiar Redux y session.service borra LocalStorage
       dispatch(logoutAction());

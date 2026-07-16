@@ -12,21 +12,21 @@
 */
 
 async function restoreDatabase(
-    snapshotId
+  snapshotId,
 ) {
 
-    return {
+  return {
 
-        success: true,
+    success: true,
 
-        snapshotId,
+    snapshotId,
 
-        restoredAt:
+    restoredAt:
             new Date(),
-    };
+  };
 }
 
 module.exports = {
 
-    restoreDatabase,
+  restoreDatabase,
 };

@@ -33,11 +33,7 @@ export default function ConfigurationHeader({
       // ========================================
       // EXTRA ACTIONS (Por si necesitas meter algo en el futuro)
       // ========================================
-      headerActions={
-        <div className="flex items-center gap-3">
-          {/* Opciones extra si fueran necesarias */}
-        </div>
-      }
+      headerActions={<div className="flex items-center gap-3">{/* Opciones extra si fueran necesarias */}</div>}
       // ========================================
       // STATS (Indicadores de la configuración actual)
       // ========================================
@@ -56,9 +52,7 @@ export default function ConfigurationHeader({
           icon: DatabaseZap,
           label: "Copia de Seguridad",
           value: isBackupEnabled ? "Activo" : "Inactivo",
-          className: isBackupEnabled
-            ? "text-emerald-600 dark:text-emerald-400"
-            : "text-slate-400",
+          className: isBackupEnabled ? "text-emerald-600 dark:text-emerald-400" : "text-slate-400",
         },
       ]}
     />

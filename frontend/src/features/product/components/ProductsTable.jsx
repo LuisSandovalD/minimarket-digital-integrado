@@ -3,17 +3,7 @@
 // ========================================
 
 import { Table, TFooter, THead } from "@/components/data-display/";
-import {
-  Activity,
-  Barcode,
-  Boxes,
-  DollarSign,
-  Hash,
-  Package,
-  Settings2,
-  Tag,
-  TrendingUp,
-} from "lucide-react";
+import { Activity, Barcode, Boxes, DollarSign, Hash, Package, Settings2, Tag, TrendingUp } from "lucide-react";
 import { formatPrice } from "../utils/product.helpers";
 import ProductActions from "./ProductActions";
 import ProductStatusBadge from "./ProductStatusBadge";
@@ -118,12 +108,8 @@ export default function ProductsTable({
     <div className="space-y-6">
       {/* HEADER */}
       <div>
-        <h2 className="text-xl font-semibold tracking-tight text-slate-900 dark:text-white">
-          Productos
-        </h2>
-        <p className="mt-1 text-sm text-slate-500">
-          Gestiona inventario, precios y productos.
-        </p>
+        <h2 className="text-xl font-semibold tracking-tight text-slate-900 dark:text-white">Productos</h2>
+        <p className="mt-1 text-sm text-slate-500">Gestiona inventario, precios y productos.</p>
       </div>
 
       {/* TABLE CONTENEDOR */}
@@ -134,9 +120,7 @@ export default function ProductsTable({
           <tbody className={loading ? "opacity-50 transition-opacity" : ""}>
             {safeProducts.length > 0 ? (
               safeProducts.map((product) => {
-                const stock = Number(
-                  product.availableStock ?? product.totalStock ?? 0,
-                );
+                const stock = Number(product.availableStock ?? product.totalStock ?? 0);
                 const purchase = Number(product.purchasePrice || 0);
                 const cost = Number(product.costPrice || 0);
                 const sale = Number(product.salePrice || 0);
@@ -173,8 +157,7 @@ export default function ProductsTable({
                           {stock} unidades
                         </span>
                         <span className="text-xs text-slate-400 dark:text-slate-500">
-                          Min: {product.minStock} • Max:{" "}
-                          {product.maxStock || "-"}
+                          Min: {product.minStock} • Max: {product.maxStock || "-"}
                         </span>
                       </div>
                     </td>
@@ -192,9 +175,7 @@ export default function ProductsTable({
                           <span className="text-[10px] font-medium uppercase tracking-wider text-slate-400 w-12">
                             Cost:
                           </span>
-                          <span className="text-sm font-semibold text-orange-500">
-                            {formatPrice(cost)}
-                          </span>
+                          <span className="text-sm font-semibold text-orange-500">{formatPrice(cost)}</span>
                         </div>
                         <div className="flex items-center gap-2">
                           <span className="text-[10px] font-medium uppercase tracking-wider text-slate-400 w-12">
@@ -223,11 +204,7 @@ export default function ProductsTable({
                       <ProductStatusBadge active={product.isActive} />
                     </td>
                     <td className="px-8 py-5.5 whitespace-nowrap">
-                      <ProductActions
-                        product={product}
-                        onEdit={onEdit}
-                        onDelete={onDelete}
-                      />
+                      <ProductActions product={product} onEdit={onEdit} onDelete={onDelete} />
                     </td>
                   </tr>
                 );
@@ -240,12 +217,8 @@ export default function ProductsTable({
                     <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-400">
                       <Package className="h-7 w-7" />
                     </div>
-                    <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200">
-                      No hay productos
-                    </h3>
-                    <p className="mt-1 text-sm text-slate-500">
-                      Empieza creando tu primer producto.
-                    </p>
+                    <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200">No hay productos</h3>
+                    <p className="mt-1 text-sm text-slate-500">Empieza creando tu primer producto.</p>
                   </div>
                 </td>
               </tr>
@@ -254,13 +227,7 @@ export default function ProductsTable({
 
           {/* CONTROLES DE PAGINACIÓN UNIFICADOS CON TFOOTER */}
           {safeProducts.length > 0 && (
-            <TFooter
-              page={page}
-              totalPages={totalPages}
-              onPrev={onPrevPage}
-              onNext={onNextPage}
-              disabled={loading}
-            />
+            <TFooter page={page} totalPages={totalPages} onPrev={onPrevPage} onNext={onNextPage} disabled={loading} />
           )}
         </Table>
       </div>

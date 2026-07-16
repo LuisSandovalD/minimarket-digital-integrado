@@ -126,12 +126,8 @@ export default function InventoriesTable({
             </tr>
           ) : inventories.length > 0 ? (
             inventories.map((inventory) => {
-              const status = getStockStatus(
-                inventory.stock,
-                inventory.product?.minStock,
-              );
-              const availableStock =
-                (inventory.stock || 0) - (inventory.reservedStock || 0);
+              const status = getStockStatus(inventory.stock, inventory.product?.minStock);
+              const availableStock = (inventory.stock || 0) - (inventory.reservedStock || 0);
 
               return (
                 <tr
@@ -151,9 +147,7 @@ export default function InventoriesTable({
                       <h3 className="text-sm font-semibold text-slate-800 dark:text-white">
                         {inventory.product?.name}
                       </h3>
-                      <p className="mt-1 text-xs text-slate-500">
-                        SKU: {inventory.product?.sku || "-"}
-                      </p>
+                      <p className="mt-1 text-xs text-slate-500">SKU: {inventory.product?.sku || "-"}</p>
                     </div>
                   </td>
 
@@ -163,9 +157,7 @@ export default function InventoriesTable({
                   </td>
 
                   {/* STOCK */}
-                  <td className="px-6 py-5 text-sm font-bold text-slate-800 dark:text-slate-100">
-                    {inventory.stock}
-                  </td>
+                  <td className="px-6 py-5 text-sm font-bold text-slate-800 dark:text-slate-100">{inventory.stock}</td>
 
                   {/* RESERVED */}
                   <td className="px-6 py-5 text-sm text-slate-500 dark:text-slate-400">
@@ -256,21 +248,14 @@ export default function InventoriesTable({
                   <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200">
                     Sin unidades en inventario
                   </h3>
-                  <p className="mt-1 text-sm text-slate-500">
-                    No se encontraron registros de stock asignados.
-                  </p>
+                  <p className="mt-1 text-sm text-slate-500">No se encontraron registros de stock asignados.</p>
                 </div>
               </td>
             </tr>
           )}
         </tbody>
         {inventories.length > 0 && (
-          <TFooter
-            page={page}
-            totalPages={totalPages}
-            onPrev={onPrevPage}
-            onNext={onNextPage}
-          />
+          <TFooter page={page} totalPages={totalPages} onPrev={onPrevPage} onNext={onNextPage} />
         )}
       </Table>
     </div>

@@ -24,17 +24,7 @@ export default function CategoriesPage() {
   // ========================================
   // DATA (Hook con filtros y paginación)
   // ========================================
-  const {
-    categories,
-    loading,
-    page,
-    totalPages,
-    search,
-    clearFilters,
-    nextPage,
-    prevPage,
-    reload,
-  } = useCategories();
+  const { categories, loading, page, totalPages, search, clearFilters, nextPage, prevPage, reload } = useCategories();
 
   // ========================================
   // HANDLERS
@@ -79,11 +69,7 @@ export default function CategoriesPage() {
       {/* ========================================
        * FILTROS (Buscador y Estado)
        * ====================================== */}
-      <CategoryFilters
-        onSearch={search}
-        onClear={clearFilters}
-        loading={loading}
-      />
+      <CategoryFilters onSearch={search} onClear={clearFilters} loading={loading} />
 
       {/* ========================================
        * TABLE / EMPTY (Mapeo exacto de props)

@@ -10,7 +10,7 @@ exports.getInventoryStatus =
   (
     stock,
     minStock,
-    maxStock
+    maxStock,
   ) => {
 
     if (stock <= 0) {

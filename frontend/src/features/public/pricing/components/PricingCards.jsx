@@ -54,11 +54,7 @@ export default function PricingCards() {
               {/* Distintivo flotante para el plan central */}
               {plan.isPopular && (
                 <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-slate-950 text-white dark:bg-white dark:text-slate-950 text-[10px] font-black tracking-widest uppercase px-3.5 py-1 rounded-full shadow-md flex items-center gap-1 z-20 border border-slate-800 dark:border-slate-200">
-                  <Sparkles
-                    size={10}
-                    className="text-amber-400 dark:text-amber-500"
-                  />{" "}
-                  Más Recomendado
+                  <Sparkles size={10} className="text-amber-400 dark:text-amber-500" /> Más Recomendado
                 </span>
               )}
 
@@ -71,9 +67,7 @@ export default function PricingCards() {
                     <Icon size={20} />
                   </div>
                   <div className="bg-transparent">
-                    <h3 className="text-lg font-bold tracking-tight">
-                      {plan.name}
-                    </h3>
+                    <h3 className="text-lg font-bold tracking-tight">{plan.name}</h3>
                     <p
                       className={`text-xs transition-colors duration-200 ${plan.isPopular ? "text-slate-400 dark:text-slate-500 font-semibold" : "text-slate-500 dark:text-slate-400 font-medium"}`}
                     >
@@ -91,17 +85,11 @@ export default function PricingCards() {
                 {/* Precios */}
                 <div className="mt-6 flex items-baseline gap-1 overflow-hidden h-10 bg-transparent">
                   {isFree ? (
-                    <span className="text-4xl font-black tracking-tight block">
-                      Gratis
-                    </span>
+                    <span className="text-4xl font-black tracking-tight block">Gratis</span>
                   ) : (
                     <div className="flex items-baseline gap-1 bg-transparent">
-                      <span className="text-4xl font-black tracking-tight">
-                        S/ {currentPrice}
-                      </span>
-                      <span className="text-xs font-medium text-slate-400 dark:text-slate-500">
-                        /mes
-                      </span>
+                      <span className="text-4xl font-black tracking-tight">S/ {currentPrice}</span>
+                      <span className="text-xs font-medium text-slate-400 dark:text-slate-500">/mes</span>
                     </div>
                   )}
                 </div>
@@ -116,9 +104,7 @@ export default function PricingCards() {
                     </p>
                   )}
                   {isFree && (
-                    <p className="text-xs font-semibold text-slate-400 dark:text-slate-500">
-                      Sin tarjeta de crédito
-                    </p>
+                    <p className="text-xs font-semibold text-slate-400 dark:text-slate-500">Sin tarjeta de crédito</p>
                   )}
                 </div>
 
@@ -129,10 +115,7 @@ export default function PricingCards() {
                 {/* Lista de Características */}
                 <ul className="space-y-3 bg-transparent">
                   {plan.features.map((feature, idx) => (
-                    <li
-                      key={idx}
-                      className="flex items-start gap-2.5 bg-transparent"
-                    >
+                    <li key={idx} className="flex items-start gap-2.5 bg-transparent">
                       <Check
                         size={16}
                         className={`shrink-0 mt-0.5 ${plan.isPopular ? "text-slate-200 dark:text-slate-800" : "text-slate-600 dark:text-slate-400"}`}
@@ -151,9 +134,7 @@ export default function PricingCards() {
               <div className="mt-8 relative z-20 bg-transparent">
                 {isLogged ? (
                   <ModernButton
-                    text={
-                      isFree ? "Ir al Dashboard" : `Cambiar al ${plan.name}`
-                    }
+                    text={isFree ? "Ir al Dashboard" : `Cambiar al ${plan.name}`}
                     onClick={() => {
                       if (isFree) {
                         window.location.href = "/dashboard";

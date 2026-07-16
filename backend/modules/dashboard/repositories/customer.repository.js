@@ -1,40 +1,40 @@
 const prisma = require("../../../prisma/client");
 
 const getTopCustomers = async (
-    companyId,
-    dateFilter,
-    limit = 10
+  companyId,
+  dateFilter,
+  limit = 10,
 ) => {
 
-    return prisma.customer.findMany({
+  return prisma.customer.findMany({
+    where: {
+      companyId,
+    },
+
+    include: {
+      sales: {
         where: {
-            companyId
+          createdAt: dateFilter,
         },
+      },
+    },
 
-        include: {
-            sales: {
-                where: {
-                    createdAt: dateFilter
-                }
-            }
-        },
-
-        take: limit
-    });
+    take: limit,
+  });
 };
 
 const getCustomerCount = async (
-    companyId
+  companyId,
 ) => {
 
-    return prisma.customer.count({
-        where: {
-            companyId
-        }
-    });
+  return prisma.customer.count({
+    where: {
+      companyId,
+    },
+  });
 };
 
 module.exports = {
-    getTopCustomers,
-    getCustomerCount
+  getTopCustomers,
+  getCustomerCount,
 };

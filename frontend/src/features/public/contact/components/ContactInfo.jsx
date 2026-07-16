@@ -64,8 +64,8 @@ export default function ContactInfo() {
             variants={fastFadeUp}
             className="text-pretty text-base leading-relaxed text-slate-600 dark:text-[#cbd5e1]/70"
           >
-            Nuestro equipo te ayuda a configurar Nexora para tu operación.
-            Agenda una demo o escríbenos por el canal que prefieras.
+            Nuestro equipo te ayuda a configurar Nexora para tu operación. Agenda una demo o escríbenos por el canal que
+            prefieras.
           </motion.p>
         </div>
 

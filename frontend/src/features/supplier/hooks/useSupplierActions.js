@@ -1,10 +1,6 @@
 import { useState } from "react";
 
-import {
-  createSupplier,
-  updateSupplier,
-  deleteSupplier,
-} from "../services/supplier.service";
+import { createSupplier, updateSupplier, deleteSupplier } from "../services/supplier.service";
 
 export default function useSupplierActions({
   form,

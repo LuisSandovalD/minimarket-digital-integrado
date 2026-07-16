@@ -8,18 +8,11 @@ import {
   YAxis,
 } from "recharts";
 
-export default function LineChart({
-  title = "Ventas",
-  data = [],
-  dataKey = "sales",
-  nameKey = "date",
-}) {
+export default function LineChart({ title = "Ventas", data = [], dataKey = "sales", nameKey = "date" }) {
   return (
     <div className="rounded-3xl border border-slate-200/70 dark:border-slate-800/70 bg-white/70 dark:bg-slate-900/70 p-6 shadow-sm backdrop-blur-xl">
       <div className="mb-5">
-        <h2 className="text-lg font-semibold text-slate-800 dark:text-white">
-          {title}
-        </h2>
+        <h2 className="text-lg font-semibold text-slate-800 dark:text-white">{title}</h2>
       </div>
 
       {data.length === 0 ? (
@@ -46,13 +39,7 @@ export default function LineChart({
 
               <Tooltip />
 
-              <Line
-                type="monotone"
-                dataKey={dataKey}
-                strokeWidth={3}
-                dot={{ r: 4 }}
-                activeDot={{ r: 7 }}
-              />
+              <Line type="monotone" dataKey={dataKey} strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 7 }} />
             </RechartsLineChart>
           </ResponsiveContainer>
         </div>

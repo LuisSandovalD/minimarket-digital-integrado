@@ -40,10 +40,8 @@ export const INVENTORY_FEATURES = [
     eyebrow: "Inventario",
     icon: Boxes,
     title: "Control total de tu inventario",
-    description:
-      "Administra productos, lotes, vencimientos y stock por sucursal en tiempo real.",
-    image:
-      "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=800&q=80",
+    description: "Administra productos, lotes, vencimientos y stock por sucursal en tiempo real.",
+    image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=800&q=80",
     items: [
       {
         icon: PackageCheck,
@@ -72,10 +70,8 @@ export const INVENTORY_FEATURES = [
     eyebrow: "Código de Barras",
     icon: ScanLine,
     title: "Gestión con código de barras",
-    description:
-      "Genera, imprime y escanea códigos para agilizar toda tu operación.",
-    image:
-      "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=800&q=80",
+    description: "Genera, imprime y escanea códigos para agilizar toda tu operación.",
+    image: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=800&q=80",
     items: [
       {
         icon: QrCode,
@@ -99,10 +95,8 @@ export const INVENTORY_FEATURES = [
     eyebrow: "Trazabilidad",
     icon: History,
     title: "Kárdex e historial de movimientos",
-    description:
-      "Audita el ciclo de vida de cada producto con un registro inmutable de ingresos, salidas y ajustes.",
-    image:
-      "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=800&q=80",
+    description: "Audita el ciclo de vida de cada producto con un registro inmutable de ingresos, salidas y ajustes.",
+    image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=800&q=80",
     items: [
       {
         icon: History,
@@ -126,10 +120,8 @@ export const INVENTORY_FEATURES = [
     eyebrow: "Lotes y Almacenamiento",
     icon: Layers,
     title: "Control de lotes y caducidad",
-    description:
-      "Garantiza la rotación correcta de productos perecederos o con fecha de vencimiento crítica.",
-    image:
-      "https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=800&q=80",
+    description: "Garantiza la rotación correcta de productos perecederos o con fecha de vencimiento crítica.",
+    image: "https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=800&q=80",
     items: [
       {
         icon: TrendingDown,
@@ -164,10 +156,8 @@ export const SALES_FEATURES = [
     eyebrow: "Ventas POS",
     icon: ShoppingCart,
     title: "Punto de venta rápido y confiable",
-    description:
-      "Cobra en segundos con múltiples métodos de pago y facturación electrónica.",
-    image:
-      "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=800&q=80",
+    description: "Cobra en segundos con múltiples métodos de pago y facturación electrónica.",
+    image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=800&q=80",
     items: [
       {
         icon: CreditCard,
@@ -191,10 +181,8 @@ export const SALES_FEATURES = [
     eyebrow: "Analítica",
     icon: BarChart3,
     title: "Reportes y analítica que impulsan decisiones",
-    description:
-      "Visualiza el rendimiento de tu negocio con reportes claros y en vivo.",
-    image:
-      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80",
+    description: "Visualiza el rendimiento de tu negocio con reportes claros y en vivo.",
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80",
     items: [
       {
         icon: FileBarChart,
@@ -223,10 +211,8 @@ export const SALES_FEATURES = [
     eyebrow: "Promociones",
     icon: Percent,
     title: "Campañas y reglas de descuento",
-    description:
-      "Automatiza promociones complejas, ofertas flash y cupones de fidelización.",
-    image:
-      "https://images.unsplash.com/photo-1472851294608-062f824d29cc?auto=format&fit=crop&w=800&q=80",
+    description: "Automatiza promociones complejas, ofertas flash y cupones de fidelización.",
+    image: "https://images.unsplash.com/photo-1472851294608-062f824d29cc?auto=format&fit=crop&w=800&q=80",
     items: [
       {
         icon: Receipt,
@@ -250,10 +236,8 @@ export const SALES_FEATURES = [
     eyebrow: "Fidelización",
     icon: UserCheck,
     title: "Gestión avanzada de clientes",
-    description:
-      "Registra historiales de consumo, asigna líneas de crédito y mejora la retención.",
-    image:
-      "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=80",
+    description: "Registra historiales de consumo, asigna líneas de crédito y mejora la retención.",
+    image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=80",
     items: [
       {
         icon: Users,
@@ -288,10 +272,8 @@ export const PURCHASE_FEATURES = [
     eyebrow: "Compras",
     icon: Truck,
     title: "Compras y proveedores organizados",
-    description:
-      "Genera órdenes de compra, recibe mercadería y controla tus cuentas por pagar.",
-    image:
-      "https://images.unsplash.com/photo-1533929736458-ca588d08c8be?auto=format&fit=crop&w=800&q=80",
+    description: "Genera órdenes de compra, recibe mercadería y controla tus cuentas por pagar.",
+    image: "https://images.unsplash.com/photo-1533929736458-ca588d08c8be?auto=format&fit=crop&w=800&q=80",
     items: [
       {
         icon: Truck,
@@ -315,10 +297,8 @@ export const PURCHASE_FEATURES = [
     eyebrow: "IA Empresarial",
     icon: Sparkles,
     title: "Inteligencia artificial para tu negocio",
-    description:
-      "Predice demanda, evita quiebres de stock y recibe recomendaciones inteligentes.",
-    image:
-      "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80",
+    description: "Predice demanda, evita quiebres de stock y recibe recomendaciones inteligentes.",
+    image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80",
     items: [
       {
         icon: Brain,
@@ -347,10 +327,8 @@ export const PURCHASE_FEATURES = [
     eyebrow: "Finanzas",
     icon: Scale,
     title: "Cuentas por pagar y gastos",
-    description:
-      "Mantén al día tus flujos de caja registrando costos operativos y obligaciones financieras.",
-    image:
-      "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=800&q=80",
+    description: "Mantén al día tus flujos de caja registrando costos operativos y obligaciones financieras.",
+    image: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=800&q=80",
     items: [
       {
         icon: Wallet,
@@ -374,10 +352,8 @@ export const PURCHASE_FEATURES = [
     eyebrow: "Logística",
     icon: Terminal,
     title: "Evaluación y cadena de abastecimiento",
-    description:
-      "Califica el cumplimiento de tus proveedores y automatiza solicitudes basados en históricos.",
-    image:
-      "https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=800&q=80",
+    description: "Califica el cumplimiento de tus proveedores y automatiza solicitudes basados en históricos.",
+    image: "https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=800&q=80",
     items: [
       {
         icon: UserCheck,

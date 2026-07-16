@@ -1,7 +1,7 @@
 // modules/database/routes/database.routes.js
 
 const express = require(
-    "express"
+  "express",
 );
 
 const router =
@@ -14,27 +14,27 @@ const router =
 */
 
 const databaseHealthController = require(
-    "../controllers/database-health.controller"
+  "../controllers/database-health.controller",
 );
 
 const databaseMetricsController = require(
-    "../controllers/database-metrics.controller"
+  "../controllers/database-metrics.controller",
 );
 
 const databaseBackupController = require(
-    "../controllers/database-backup.controller"
+  "../controllers/database-backup.controller",
 );
 
 const databaseQueryController = require(
-    "../controllers/database-query.controller"
+  "../controllers/database-query.controller",
 );
 
 const databaseBranchController = require(
-    "../controllers/database-branch.controller"
+  "../controllers/database-branch.controller",
 );
 
 const databaseMonitoringController = require(
-    "../controllers/database-monitoring.controller"
+  "../controllers/database-monitoring.controller",
 );
 
 /*
@@ -52,9 +52,9 @@ const auth =
 
 router.get(
 
-    "/health",
-    auth,
-    databaseHealthController.getHealth
+  "/health",
+  auth,
+  databaseHealthController.getHealth,
 );
 
 /*
@@ -65,9 +65,9 @@ router.get(
 
 router.get(
 
-    "/metrics",
-    auth,
-    databaseMetricsController.getMetrics
+  "/metrics",
+  auth,
+  databaseMetricsController.getMetrics,
 );
 
 /*
@@ -78,10 +78,10 @@ router.get(
 
 router.get(
 
-    "/monitoring",
-    auth,
-    databaseMonitoringController
-        .getMonitoring
+  "/monitoring",
+  auth,
+  databaseMonitoringController
+    .getMonitoring,
 );
 
 /*
@@ -92,9 +92,9 @@ router.get(
 
 router.post(
 
-    "/query",
-    auth,
-    databaseQueryController.executeQuery
+  "/query",
+  auth,
+  databaseQueryController.executeQuery,
 );
 
 /*
@@ -105,26 +105,26 @@ router.post(
 
 router.get(
 
-    "/backups",
-    auth,
+  "/backups",
+  auth,
 
-    databaseBackupController.getBackups
+  databaseBackupController.getBackups,
 );
 
 router.post(
 
-    "/backups",
-    auth,
+  "/backups",
+  auth,
 
-    databaseBackupController.createBackup
+  databaseBackupController.createBackup,
 );
 
 router.post(
 
-    "/backups/restore",
-    auth,
+  "/backups/restore",
+  auth,
 
-    databaseBackupController.restoreBackup
+  databaseBackupController.restoreBackup,
 );
 
 /*
@@ -135,18 +135,18 @@ router.post(
 
 router.get(
 
-    "/branches",
-    auth,
+  "/branches",
+  auth,
 
-    databaseBranchController.getBranches
+  databaseBranchController.getBranches,
 );
 
 router.post(
 
-    "/branches",
-    auth,
+  "/branches",
+  auth,
 
-    databaseBranchController.createBranch
+  databaseBranchController.createBranch,
 );
 
 module.exports =

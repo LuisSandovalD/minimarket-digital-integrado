@@ -20,13 +20,7 @@ import SaleDetailsTable from "../components/SaleDetailsTable";
 export default function SaleDetailsPage() {
   const user = getUser();
 
-  const {
-    saleDetails = [],
-    loading = false,
-    pagination = {},
-    metrics = {},
-    actions = {},
-  } = useSaleDetails();
+  const { saleDetails = [], loading = false, pagination = {}, metrics = {}, actions = {} } = useSaleDetails();
 
   const [selectedDetail, setSelectedDetail] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
@@ -74,11 +68,7 @@ export default function SaleDetailsPage() {
   return (
     <div className="space-y-6">
       {/* HEADER: Indicadores globales */}
-      <SaleDetailHeader
-        total={total}
-        totalQuantity={totalQuantity}
-        totalRevenue={totalRevenue}
-      />
+      <SaleDetailHeader total={total} totalQuantity={totalQuantity} totalRevenue={totalRevenue} />
 
       {/* FILTROS: Interacción con el servidor */}
       <SaleDetailFilters
@@ -98,11 +88,7 @@ export default function SaleDetailsPage() {
       />
 
       {/* MODAL: Detalle de ítem */}
-      <SaleDetailModal
-        open={modalOpen}
-        detail={selectedDetail}
-        onClose={handleClose}
-      />
+      <SaleDetailModal open={modalOpen} detail={selectedDetail} onClose={handleClose} />
     </div>
   );
 }

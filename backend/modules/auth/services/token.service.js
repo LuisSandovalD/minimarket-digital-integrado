@@ -20,7 +20,7 @@ const generateAccessToken = (user) => {
       branchId: user.branchId,
     },
     JWT_SECRET,
-    { expiresIn: JWT_EXPIRES }
+    { expiresIn: JWT_EXPIRES },
   );
 };
 
@@ -28,7 +28,7 @@ const generateRefreshToken = (user) => {
   return jwt.sign(
     { id: user.id, email: user.email },
     JWT_REFRESH_SECRET,
-    { expiresIn: JWT_REFRESH_EXPIRES }
+    { expiresIn: JWT_REFRESH_EXPIRES },
   );
 };
 

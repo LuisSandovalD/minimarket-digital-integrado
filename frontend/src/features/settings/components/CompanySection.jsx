@@ -3,9 +3,7 @@ import { Input } from "@/components/forms/";
 export default function CompanySection({ form, updateField, errors }) {
   return (
     <div className="space-y-4">
-      <h2 className="text-sm font-bold tracking-wide uppercase text-slate-400 dark:text-slate-500">
-        Empresa
-      </h2>
+      <h2 className="text-sm font-bold tracking-wide uppercase text-slate-400 dark:text-slate-500">Empresa</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Input
           label="Nombre Empresa"

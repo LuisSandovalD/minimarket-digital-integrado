@@ -4,13 +4,13 @@
 
 module.exports = (
   schema,
-  source = "body"
+  source = "body",
 ) => {
 
   return (
     req,
     res,
-    next
+    next,
   ) => {
 
     // 🛡️ ÚNICO CAMBIO SEGURIDAD: Evita que el servidor muera si el esquema no existe
@@ -33,7 +33,7 @@ module.exports = (
       {
         abortEarly: false,
         stripUnknown: true,
-      }
+      },
     );
 
     if (error) {
@@ -48,7 +48,7 @@ module.exports = (
                 detail.path.join("."),
               message:
                 detail.message,
-            })
+            }),
           ),
       });
     }

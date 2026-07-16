@@ -1,63 +1,63 @@
 // modules/database/services/database-branch.service.js
 
 const {
-    getBranches,
-    createBranch,
+  getBranches,
+  createBranch,
 } = require(
-    "../neon/neon-branches"
+  "../neon/neon-branches",
 );
 
 class DatabaseBranchService {
 
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Get Neon Branches
     |--------------------------------------------------------------------------
     */
 
-    async getBranches() {
+  async getBranches() {
 
-        const branches =
+    const branches =
             await getBranches();
 
-        return {
+    return {
 
-            success: true,
+      success: true,
 
-            provider: "Neon",
+      provider: "Neon",
 
-            branches,
+      branches,
 
-            timestamp:
+      timestamp:
                 new Date(),
-        };
-    }
+    };
+  }
 
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Create Neon Branch
     |--------------------------------------------------------------------------
     */
 
-    async createBranch(
-        branchName
-    ) {
+  async createBranch(
+    branchName,
+  ) {
 
-        const branch =
+    const branch =
             await createBranch(
-                branchName
+              branchName,
             );
 
-        return {
+    return {
 
-            success: true,
+      success: true,
 
-            branch,
+      branch,
 
-            timestamp:
+      timestamp:
                 new Date(),
-        };
-    }
+    };
+  }
 }
 
 module.exports =

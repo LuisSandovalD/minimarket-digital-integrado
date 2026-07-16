@@ -10,8 +10,8 @@ const purchaseInclude = {
       name: true,
       email: true,
       phone: true,
-      role: true
-    }
+      role: true,
+    },
   },
 
   // Incluye los datos esenciales de contacto del proveedor
@@ -20,8 +20,8 @@ const purchaseInclude = {
       id: true,
       name: true,
       phone: true,
-      email: true
-    }
+      email: true,
+    },
   },
 
   // Vincula la sucursal donde se realizó o registró la compra
@@ -29,16 +29,16 @@ const purchaseInclude = {
     select: {
       id: true,
       name: true,
-      code: true
-    }
+      code: true,
+    },
   },
 
   // Corporativo al que pertenece la transacción
   company: {
     select: {
       id: true,
-      name: true
-    }
+      name: true,
+    },
   },
 
   // Detalle de los productos adquiridos, cantidades y costos
@@ -50,27 +50,27 @@ const purchaseInclude = {
           name: true,
           sku: true,
           salePrice: true,
-          purchasePrice: true
-        }
-      }
-    }
+          purchasePrice: true,
+        },
+      },
+    },
   },
 
   // 🔥 SOLUCIÓN CRÍTICA: Select explícito de campos existentes en 'Payment'.
-  // Al retirar el antiguo 'payments: true', evitamos que Prisma busque 
+  // Al retirar el antiguo 'payments: true', evitamos que Prisma busque
   // la columna fantasma 'remainingAmount' que rompía la consulta en PostgreSQL.
   payments: {
     select: {
       id: true,
       amount: true,
       paymentMethod: true,
-      createdAt: true
-      // Nota: Si usas campos adicionales confirmados en tu schema como 
+      createdAt: true,
+      // Nota: Si usas campos adicionales confirmados en tu schema como
       // 'referenceNumber' o 'status', puedes agregarlos aquí de forma segura.
-    }
-  }
+    },
+  },
 };
 
 module.exports = {
-  purchaseInclude
+  purchaseInclude,
 };

@@ -2,13 +2,7 @@
 // HELPERS
 // ========================================
 
-import {
-  AlertCircle,
-  ArrowDown,
-  ArrowUp,
-  PackageX,
-  RefreshCcw,
-} from "lucide-react";
+import { AlertCircle, ArrowDown, ArrowUp, PackageX, RefreshCcw } from "lucide-react";
 
 export const getMovementStyles = (type) => {
   switch (type) {

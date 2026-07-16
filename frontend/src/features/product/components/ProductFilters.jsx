@@ -4,22 +4,10 @@
 
 import { ModernButton } from "@/components/buttons";
 import { SearchInput, Select } from "@/components/forms";
-import {
-  CheckCircle2,
-  HelpCircle,
-  RefreshCw,
-  Search,
-  Tag,
-  XCircle,
-} from "lucide-react";
+import { CheckCircle2, HelpCircle, RefreshCw, Search, Tag, XCircle } from "lucide-react";
 import { useState } from "react";
 
-export default function ProductFilters({
-  onSearch,
-  onClear,
-  categories = [],
-  loading,
-}) {
+export default function ProductFilters({ onSearch, onClear, categories = [], loading }) {
   const [localSearch, setLocalSearch] = useState("");
   const [localCategory, setLocalCategory] = useState("");
   const [localStatus, setLocalStatus] = useState("");
@@ -74,9 +62,7 @@ export default function ProductFilters({
     >
       {/* Buscar Producto */}
       <div className="flex-1">
-        <label className="block mb-2 text-sm font-semibold text-slate-700 dark:text-slate-200">
-          Buscar Producto
-        </label>
+        <label className="block mb-2 text-sm font-semibold text-slate-700 dark:text-slate-200">Buscar Producto</label>
         <SearchInput
           placeholder="Buscar por nombre, SKU o código..."
           value={localSearch}

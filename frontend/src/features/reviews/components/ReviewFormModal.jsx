@@ -49,18 +49,14 @@ export default function ReviewFormModal({
               <MessageSquare size={20} />
               <div>
                 <h3 className="text-sm font-semibold">Tu Experiencia</h3>
-                <p className="text-xs text-slate-500">
-                  Ayuda a otros usuarios evaluando el servicio
-                </p>
+                <p className="text-xs text-slate-500">Ayuda a otros usuarios evaluando el servicio</p>
               </div>
             </div>
 
             <div className="space-y-5">
               {/* Selector de Estrellas Interactivo */}
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
-                  Calificación
-                </label>
+                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Calificación</label>
                 <div className="flex items-center gap-1.5">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <button
@@ -72,16 +68,12 @@ export default function ReviewFormModal({
                       <Star
                         size={28}
                         className={`transition-colors ${
-                          star <= rating
-                            ? "fill-amber-400 text-amber-400"
-                            : "text-slate-300 dark:text-slate-600"
+                          star <= rating ? "fill-amber-400 text-amber-400" : "text-slate-300 dark:text-slate-600"
                         }`}
                       />
                     </button>
                   ))}
-                  <span className="ml-2 text-sm font-semibold text-slate-600 dark:text-slate-400">
-                    ({rating} de 5)
-                  </span>
+                  <span className="ml-2 text-sm font-semibold text-slate-600 dark:text-slate-400">({rating} de 5)</span>
                 </div>
               </div>
 
@@ -102,22 +94,10 @@ export default function ReviewFormModal({
         {/* FOOTER */}
         <FooterModal>
           <div className="flex w-full items-center justify-end gap-3 pb-5">
-            <ModernButton
-              type="button"
-              text="Cancelar"
-              variant="outline"
-              icon={X}
-              onClick={onClose}
-            />
+            <ModernButton type="button" text="Cancelar" variant="outline" icon={X} onClick={onClose} />
 
             <SubmitButton
-              text={
-                loading
-                  ? "Guardando..."
-                  : isEdit
-                    ? "Actualizar Reseña"
-                    : "Publicar Reseña"
-              }
+              text={loading ? "Guardando..." : isEdit ? "Actualizar Reseña" : "Publicar Reseña"}
               loading={loading}
             />
           </div>

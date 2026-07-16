@@ -50,7 +50,7 @@ module.exports = (app) => {
 
       ],
 
-    })
+    }),
 
   );
 
@@ -70,7 +70,7 @@ module.exports = (app) => {
 
       crossOriginResourcePolicy: false,
 
-    })
+    }),
 
   );
 
@@ -90,7 +90,7 @@ module.exports = (app) => {
 
       limit: "10mb",
 
-    })
+    }),
 
   );
 
@@ -102,7 +102,7 @@ module.exports = (app) => {
 
       limit: "10mb",
 
-    })
+    }),
 
   );
 
@@ -111,7 +111,7 @@ module.exports = (app) => {
   // ========================================
 
   app.use(
-    morgan("dev")
+    morgan("dev"),
   );
 
 };

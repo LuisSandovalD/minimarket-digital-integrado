@@ -1,11 +1,11 @@
 // modules/database/neon/neon-branches.js
 
 const {
-    neonApi,
+  neonApi,
 } = require("./neon-api");
 
 const databaseConfig = require(
-    "../../../config/database.config"
+  "../../../config/database.config",
 );
 
 /*
@@ -16,13 +16,13 @@ const databaseConfig = require(
 
 async function getBranches() {
 
-    const response =
+  const response =
         await neonApi.get(
 
-            `/projects/${databaseConfig.neon.projectId}/branches`
+          `/projects/${databaseConfig.neon.projectId}/branches`,
         );
 
-    return response.data;
+  return response.data;
 }
 
 /*
@@ -32,27 +32,27 @@ async function getBranches() {
 */
 
 async function createBranch(
-    branchName
+  branchName,
 ) {
 
-    const response =
+  const response =
         await neonApi.post(
 
-            `/projects/${databaseConfig.neon.projectId}/branches`,
+          `/projects/${databaseConfig.neon.projectId}/branches`,
 
-            {
-                branch: {
-                    name: branchName,
-                },
-            }
+          {
+            branch: {
+              name: branchName,
+            },
+          },
         );
 
-    return response.data;
+  return response.data;
 }
 
 module.exports = {
 
-    getBranches,
+  getBranches,
 
-    createBranch,
+  createBranch,
 };

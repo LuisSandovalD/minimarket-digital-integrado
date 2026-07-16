@@ -3,14 +3,14 @@
 const axios = require("axios");
 
 const databaseConfig = require(
-    "../../../config/database.config"
+  "../../../config/database.config",
 );
 
 const {
-    buildNeonHeaders,
-    buildNeonUrl,
+  buildNeonHeaders,
+  buildNeonUrl,
 } = require(
-    "../utils/neon-utils"
+  "../utils/neon-utils",
 );
 
 /*
@@ -21,15 +21,15 @@ const {
 
 const neonApi = axios.create({
 
-    baseURL:
+  baseURL:
         "https://console.neon.tech/api/v2",
 
-    headers:
+  headers:
         buildNeonHeaders(
-            databaseConfig.neon.apiKey
+          databaseConfig.neon.apiKey,
         ),
 
-    timeout: 10000,
+  timeout: 10000,
 });
 
 /*
@@ -40,20 +40,20 @@ const neonApi = axios.create({
 
 async function getProject() {
 
-    const url =
+  const url =
         buildNeonUrl(
-            databaseConfig.neon.projectId
+          databaseConfig.neon.projectId,
         );
 
-    const response =
+  const response =
         await neonApi.get(url);
 
-    return response.data;
+  return response.data;
 }
 
 module.exports = {
 
-    neonApi,
+  neonApi,
 
-    getProject,
+  getProject,
 };

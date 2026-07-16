@@ -1,15 +1,7 @@
 // ========================================
 // features/dashboard/analytics/components/AnalyticsHeader.jsx
 // ========================================
-import {
-  Calendar,
-  DollarSign,
-  LineChart,
-  RefreshCw,
-  Scale,
-  ShoppingCart,
-  TrendingUp,
-} from "lucide-react";
+import { Calendar, DollarSign, LineChart, RefreshCw, Scale, ShoppingCart, TrendingUp } from "lucide-react";
 
 import { ModernButton } from "@/components/buttons";
 import { PageHeader } from "@/components/data-display";
@@ -52,13 +44,7 @@ export default function AnalyticsHeader({
         badge="Analítica"
         title="Analítica Comercial Avanzada"
         description="Auditoría de ingresos, egresos corporativos e historial del flujo de caja transaccional."
-        headerActions={
-          <ModernButton
-            icon={RefreshCw}
-            text="Actualizar Flujo"
-            onClick={onRefresh}
-          />
-        }
+        headerActions={<ModernButton icon={RefreshCw} text="Actualizar Flujo" onClick={onRefresh} />}
         stats={[
           {
             icon: TrendingUp,
@@ -75,10 +61,7 @@ export default function AnalyticsHeader({
             label: "Balance Neto",
             value: formatCurrency(netBalance),
             // Estilo dinámico si el balance es negativo o positivo
-            className:
-              netBalance >= 0
-                ? "text-emerald-600 font-bold"
-                : "text-rose-600 font-bold",
+            className: netBalance >= 0 ? "text-emerald-600 font-bold" : "text-rose-600 font-bold",
           },
           {
             icon: DollarSign,
@@ -107,11 +90,7 @@ export default function AnalyticsHeader({
               key={p.value}
               text={p.label}
               onClick={() => setPeriod(p.value)}
-              className={
-                period === p.value
-                  ? "bg-blue-600 text-white border-blue-600 hover:bg-blue-700"
-                  : ""
-              }
+              className={period === p.value ? "bg-blue-600 text-white border-blue-600 hover:bg-blue-700" : ""}
               variant="outline"
             />
           ))}
@@ -120,9 +99,7 @@ export default function AnalyticsHeader({
         {/* SELECTOR DE FECHAS PERSONALIZADO */}
         <div className="flex flex-wrap items-end gap-3">
           <div>
-            <label className="block mb-1 text-xs text-slate-500 font-medium">
-              Fecha inicio
-            </label>
+            <label className="block mb-1 text-xs text-slate-500 font-medium">Fecha inicio</label>
             <input
               type="date"
               value={draftStartDate || ""}
@@ -135,9 +112,7 @@ export default function AnalyticsHeader({
           </div>
 
           <div>
-            <label className="block mb-1 text-xs text-slate-500 font-medium">
-              Fecha fin
-            </label>
+            <label className="block mb-1 text-xs text-slate-500 font-medium">Fecha fin</label>
             <input
               type="date"
               value={draftEndDate || ""}
@@ -159,11 +134,7 @@ export default function AnalyticsHeader({
         </div>
       </div>
 
-      {dateError && (
-        <div className="text-sm font-semibold text-rose-600 animate-pulse">
-          ⚠️ {dateError}
-        </div>
-      )}
+      {dateError && <div className="text-sm font-semibold text-rose-600 animate-pulse">⚠️ {dateError}</div>}
     </div>
   );
 }

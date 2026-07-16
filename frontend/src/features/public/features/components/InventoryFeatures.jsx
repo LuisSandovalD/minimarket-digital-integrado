@@ -58,9 +58,8 @@ export default function InventoryFeatures() {
             variants={fastFadeUp}
             className="text-pretty text-base leading-relaxed text-slate-600 dark:text-[#cbd5e1] max-w-2xl"
           >
-            Mantén un rastreo impecable de tus productos. Reduce pérdidas por
-            mermas y optimiza tus almacenes mediante herramientas diseñadas para
-            un control quirúrgico de stock.
+            Mantén un rastreo impecable de tus productos. Reduce pérdidas por mermas y optimiza tus almacenes mediante
+            herramientas diseñadas para un control quirúrgico de stock.
           </motion.p>
         </motion.div>
 
@@ -98,12 +97,8 @@ export default function InventoryFeatures() {
 
                   {/* Textos descriptivos */}
                   <div className="space-y-2 mb-6 flex-1">
-                    <h3 className="text-lg font-black tracking-tight text-slate-900 dark:text-white">
-                      {group.title}
-                    </h3>
-                    <p className="text-sm leading-relaxed text-slate-500 dark:text-[#cbd5e1]/70">
-                      {group.description}
-                    </p>
+                    <h3 className="text-lg font-black tracking-tight text-slate-900 dark:text-white">{group.title}</h3>
+                    <p className="text-sm leading-relaxed text-slate-500 dark:text-[#cbd5e1]/70">{group.description}</p>
                   </div>
 
                   {/* Listado de sub-ítems inferiores */}
@@ -118,12 +113,8 @@ export default function InventoryFeatures() {
                             </div>
                           )}
                           <div className="space-y-0.5">
-                            <h4 className="text-xs font-bold text-slate-800 dark:text-slate-200">
-                              {item.title}
-                            </h4>
-                            <p className="text-[11px] leading-normal text-slate-400 dark:text-slate-400">
-                              {item.text}
-                            </p>
+                            <h4 className="text-xs font-bold text-slate-800 dark:text-slate-200">{item.title}</h4>
+                            <p className="text-[11px] leading-normal text-slate-400 dark:text-slate-400">{item.text}</p>
                           </div>
                         </div>
                       );

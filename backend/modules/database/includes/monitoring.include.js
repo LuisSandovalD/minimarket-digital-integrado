@@ -10,38 +10,38 @@
 */
 
 const monitoringRepository = require(
-    "../repositories/monitoring.repository"
+  "../repositories/monitoring.repository",
 );
 
 const databaseMonitoringService = require(
-    "../services/database-monitoring.service"
+  "../services/database-monitoring.service",
 );
 
 const databaseHealthService = require(
-    "../services/database-health.service"
+  "../services/database-health.service",
 );
 
 const {
-    prismaMonitoring,
+  prismaMonitoring,
 } = require(
-    "../prisma/prisma-monitor"
+  "../prisma/prisma-monitor",
 );
 
 const {
-    prismaHealthCheck,
+  prismaHealthCheck,
 } = require(
-    "../prisma/prisma-health"
+  "../prisma/prisma-health",
 );
 
 module.exports = {
 
-    monitoringRepository,
+  monitoringRepository,
 
-    databaseMonitoringService,
+  databaseMonitoringService,
 
-    databaseHealthService,
+  databaseHealthService,
 
-    prismaMonitoring,
+  prismaMonitoring,
 
-    prismaHealthCheck,
+  prismaHealthCheck,
 };

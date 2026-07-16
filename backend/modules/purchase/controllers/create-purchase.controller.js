@@ -13,7 +13,7 @@ async function createPurchaseController(req, res) {
     if (error) {
       return res.status(400).json({
         ok: false,
-        message: error.details[0].message
+        message: error.details[0].message,
       });
     }
 
@@ -22,7 +22,7 @@ async function createPurchaseController(req, res) {
       ...value, // 👈 Usamos obligatoriamente "value" (ya validado por Joi) y no req.body
       buyerId: req.user.id,
       companyId: req.user.companyId,
-      branchId: req.user.branchId // 🔥 Automático desde el Token
+      branchId: req.user.branchId, // 🔥 Automático desde el Token
     };
 
     console.log("USER BRANCH:", req.user.branchId);
@@ -33,18 +33,18 @@ async function createPurchaseController(req, res) {
     return res.status(201).json({
       ok: true,
       message: "Compra creada correctamente",
-      data: purchase
+      data: purchase,
     });
 
   } catch (error) {
     console.log(error);
     return res.status(500).json({
       ok: false,
-      message: error.message
+      message: error.message,
     });
   }
 }
 
 module.exports = {
-  createPurchaseController
+  createPurchaseController,
 };

@@ -2,15 +2,7 @@
 // features/movements/components/MovementsHeader.jsx
 // ========================================
 
-import {
-  ArrowDown,
-  ArrowUp,
-  History,
-  PackageX,
-  Plus,
-  RefreshCcw,
-  Warehouse,
-} from "lucide-react";
+import { ArrowDown, ArrowUp, History, PackageX, Plus, RefreshCcw, Warehouse } from "lucide-react";
 
 import { PageHeader } from "@/components/data-display/";
 
@@ -23,28 +15,19 @@ export default function MovementsHeader({
   // STATS
   // ========================================
 
-  const entries = movements.filter(
-    (movement) => movement.type === "ADD" || movement.type === "PURCHASE",
-  ).length;
+  const entries = movements.filter((movement) => movement.type === "ADD" || movement.type === "PURCHASE").length;
 
-  const outputs = movements.filter(
-    (movement) => movement.type === "REMOVE" || movement.type === "SALE",
-  ).length;
+  const outputs = movements.filter((movement) => movement.type === "REMOVE" || movement.type === "SALE").length;
 
-  const damaged = movements.filter(
-    (movement) => movement.type === "DAMAGED",
-  ).length;
+  const damaged = movements.filter((movement) => movement.type === "DAMAGED").length;
 
-  const transfers = movements.filter(
-    (movement) => movement.type === "TRANSFER",
-  ).length;
+  const transfers = movements.filter((movement) => movement.type === "TRANSFER").length;
 
   // ========================================
   // UNIQUE BRANCHES
   // ========================================
 
-  const branches = new Set(movements.map((movement) => movement.branch?.id))
-    .size;
+  const branches = new Set(movements.map((movement) => movement.branch?.id)).size;
 
   return (
     <PageHeader

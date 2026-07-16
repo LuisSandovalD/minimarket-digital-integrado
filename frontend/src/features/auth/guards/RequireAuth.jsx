@@ -45,8 +45,7 @@ export default function RequireAuth() {
 
   const session = getSession();
 
-  const sessionCompanySlug =
-    session?.user?.company?.slug || session?.company?.slug || "";
+  const sessionCompanySlug = session?.user?.company?.slug || session?.company?.slug || "";
 
   /* ======================================
    * SYNC USER DATA

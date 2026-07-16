@@ -2,15 +2,7 @@
 // features/product/components/ProductFormModal.jsx
 // ========================================
 
-import {
-  Boxes,
-  DollarSign,
-  Layers3,
-  Package,
-  Percent,
-  TrendingUp,
-  X,
-} from "lucide-react";
+import { Boxes, DollarSign, Layers3, Package, Percent, TrendingUp, X } from "lucide-react";
 
 import { FooterModal, HeaderModal, Modal } from "@/components/overlays/";
 
@@ -86,21 +78,12 @@ export default function ProductFormModal({
               <div>
                 <h3 className="text-sm font-semibold">Información General</h3>
 
-                <p className="text-xs text-slate-500">
-                  Datos principales del producto
-                </p>
+                <p className="text-xs text-slate-500">Datos principales del producto</p>
               </div>
             </div>
 
             <div className="grid gap-5 md:grid-cols-2">
-              <Input
-                label="Nombre"
-                name="name"
-                value={form?.name || ""}
-                onChange={onChange}
-                required
-                icon={Package}
-              />
+              <Input label="Nombre" name="name" value={form?.name || ""} onChange={onChange} required icon={Package} />
 
               <Select
                 label="Categoría"
@@ -128,9 +111,7 @@ export default function ProductFormModal({
               <div>
                 <h3 className="text-sm font-semibold">Gestión de Precios</h3>
 
-                <p className="text-xs text-slate-500">
-                  Cálculo automático en tiempo real
-                </p>
+                <p className="text-xs text-slate-500">Cálculo automático en tiempo real</p>
               </div>
             </div>
 
@@ -171,46 +152,34 @@ export default function ProductFormModal({
                 <div className="mt-2 flex items-center gap-2">
                   <DollarSign size={18} className="text-slate-400" />
 
-                  <p className="text-2xl font-bold text-slate-900 dark:text-white">
-                    S/ {cost.toFixed(2)}
-                  </p>
+                  <p className="text-2xl font-bold text-slate-900 dark:text-white">S/ {cost.toFixed(2)}</p>
                 </div>
               </div>
 
               {/* SALE */}
 
               <div className="rounded-2xl border border-green-200 bg-green-50 dark:bg-green-950/20 dark:border-green-900 p-5">
-                <p className="text-xs text-green-700 dark:text-green-400">
-                  Precio Venta
-                </p>
+                <p className="text-xs text-green-700 dark:text-green-400">Precio Venta</p>
 
                 <div className="mt-2 flex items-center gap-2">
                   <TrendingUp size={18} className="text-green-500" />
 
-                  <p className="text-2xl font-bold text-green-600">
-                    S/ {sale.toFixed(2)}
-                  </p>
+                  <p className="text-2xl font-bold text-green-600">S/ {sale.toFixed(2)}</p>
                 </div>
               </div>
 
               {/* PROFIT */}
 
               <div className="rounded-2xl border border-blue-200 bg-blue-50 dark:bg-blue-950/20 dark:border-blue-900 p-5">
-                <p className="text-xs text-blue-700 dark:text-blue-400">
-                  Ganancia
-                </p>
+                <p className="text-xs text-blue-700 dark:text-blue-400">Ganancia</p>
 
                 <div className="mt-2 flex items-center gap-2">
                   <Percent size={18} className="text-blue-500" />
 
                   <div>
-                    <p className="text-2xl font-bold text-blue-600">
-                      S/ {profit.toFixed(2)}
-                    </p>
+                    <p className="text-2xl font-bold text-blue-600">S/ {profit.toFixed(2)}</p>
 
-                    <p className="text-xs text-slate-500 mt-1">
-                      {margin.toFixed(2)}% margen
-                    </p>
+                    <p className="text-xs text-slate-500 mt-1">{margin.toFixed(2)}% margen</p>
                   </div>
                 </div>
               </div>
@@ -268,20 +237,9 @@ export default function ProductFormModal({
 
         <FooterModal>
           <div className="flex w-full items-center justify-end gap-3 pb-5">
-            <ModernButton
-              type="button"
-              text="Cancelar"
-              variant="outline"
-              icon={X}
-              onClick={onClose}
-            />
+            <ModernButton type="button" text="Cancelar" variant="outline" icon={X} onClick={onClose} />
 
-            <SubmitButton
-              text={
-                loading ? "Guardando..." : isEdit ? "Actualizar" : "Guardar"
-              }
-              loading={loading}
-            />
+            <SubmitButton text={loading ? "Guardando..." : isEdit ? "Actualizar" : "Guardar"} loading={loading} />
           </div>
         </FooterModal>
       </form>

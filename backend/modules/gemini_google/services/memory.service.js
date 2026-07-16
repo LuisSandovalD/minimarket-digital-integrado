@@ -5,43 +5,43 @@
 const conversations = new Map();
 
 const getConversation = (
-    conversationId
+  conversationId,
 ) => {
-    return (
-        conversations.get(conversationId) ||
+  return (
+    conversations.get(conversationId) ||
         []
-    );
+  );
 };
 
 const saveMessage = (
-    conversationId,
-    role,
-    text
+  conversationId,
+  role,
+  text,
 ) => {
-    const history =
+  const history =
         getConversation(conversationId);
 
-    history.push({
-        role,
-        parts: [{ text }],
-    });
+  history.push({
+    role,
+    parts: [{ text }],
+  });
 
-    conversations.set(
-        conversationId,
-        history
-    );
+  conversations.set(
+    conversationId,
+    history,
+  );
 };
 
 const clearConversation = (
-    conversationId
+  conversationId,
 ) => {
-    conversations.delete(
-        conversationId
-    );
+  conversations.delete(
+    conversationId,
+  );
 };
 
 module.exports = {
-    getConversation,
-    saveMessage,
-    clearConversation,
+  getConversation,
+  saveMessage,
+  clearConversation,
 };

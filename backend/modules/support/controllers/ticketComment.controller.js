@@ -1,88 +1,88 @@
 // controllers/ticketComment.controller.js
 
 const service = require(
-    "../services/ticketComment.service"
+  "../services/ticketComment.service",
 );
 
 const getComments =
     async (req, res, next) => {
-        try {
-            const data =
+      try {
+        const data =
                 await service.getComments(
-                    req.params.ticketId
+                  req.params.ticketId,
                 );
 
-            return res.json({
-                success: true,
-                data,
-            });
-        } catch (error) {
-            next(error);
-        }
+        return res.json({
+          success: true,
+          data,
+        });
+      } catch (error) {
+        next(error);
+      }
     };
 
 const createComment =
     async (req, res, next) => {
-        try {
-            const data =
+      try {
+        const data =
                 await service.createComment(
-                    {
-                        ticketId:
+                  {
+                    ticketId:
                             req.params.ticketId,
 
-                        userId:
+                    userId:
                             req.user.id,
 
-                        ...req.body,
-                    }
+                    ...req.body,
+                  },
                 );
 
-            return res.status(201).json({
-                success: true,
-                data,
-            });
-        } catch (error) {
-            next(error);
-        }
+        return res.status(201).json({
+          success: true,
+          data,
+        });
+      } catch (error) {
+        next(error);
+      }
     };
 
 const markAsRead =
     async (req, res, next) => {
-        try {
-            const data =
+      try {
+        const data =
                 await service.markAsRead(
-                    req.params.id
+                  req.params.id,
                 );
 
-            return res.json({
-                success: true,
-                data,
-            });
-        } catch (error) {
-            next(error);
-        }
+        return res.json({
+          success: true,
+          data,
+        });
+      } catch (error) {
+        next(error);
+      }
     };
 
 const deleteComment =
     async (req, res, next) => {
-        try {
-            await service.deleteComment(
-                req.params.id
-            );
+      try {
+        await service.deleteComment(
+          req.params.id,
+        );
 
-            return res.json({
-                success: true,
-                message:
+        return res.json({
+          success: true,
+          message:
                     "Comentario eliminado correctamente",
-            });
-        } catch (error) {
-            next(error);
-        }
+        });
+      } catch (error) {
+        next(error);
+      }
     };
 
 module.exports = {
-    getComments,
-    createComment,
-    markAsRead,
-    deleteComment,
+  getComments,
+  createComment,
+  markAsRead,
+  deleteComment,
 };

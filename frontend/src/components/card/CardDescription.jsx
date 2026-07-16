@@ -55,14 +55,7 @@ export default function CardDescription({
 
   return (
     <p
-      className={clsx(
-        sizes[size],
-        colors[color],
-        aligns[align],
-        leadings[leading],
-        lines && clamp[lines],
-        className,
-      )}
+      className={clsx(sizes[size], colors[color], aligns[align], leadings[leading], lines && clamp[lines], className)}
       {...props}
     >
       {children}
